@@ -2,7 +2,7 @@
 	This command is a demonstration of adding commas to a number - 1000 -> 1,000.
 	Usage: `-addCommas <number>`.
 
-	Recommended trigger: Regex trigger with trigger `^-add-?commas?`
+	Recommended trigger: Regex trigger with trigger `^-(add-?commas?)`
 */ -}}
 
 {{ with reFind `\d+` .StrippedMsg }}
