@@ -1,0 +1,9 @@
+# Unfinished Custom Commands
+util/server.cc.lua
+util/channel.cc.lua
+util/avatar.cc.lua
+
+fun/choose.cc.lua
+fun/deathmatch.cc.lua
+fun/hug.cc.lua
+fun/repeat.cc.lua
