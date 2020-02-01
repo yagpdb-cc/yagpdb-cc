@@ -1,9 +1,6 @@
 # Unfinished Custom Commands
 info/channel.cc.lua
 info/emoji.cc.lua
-info/user.cc.lua
-
-util/avatar.cc.lua
 
 fun/choose.cc.lua
 fun/deathmatch.cc.lua
