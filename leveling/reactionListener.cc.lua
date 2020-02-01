@@ -31,7 +31,7 @@
 					$display $rank .User.String (toInt (roundFloor (mult 0.1 (sqrt $xp)))) $xp
 				}} {{/* Format display */}}
 			{{- end -}}
-			{{ editMessage nil .Message.ID (cembed
+			{{ editMessage nil .ReactionMessage.ID (cembed
 				"title" "❯ Leaderboard"
 				"thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")
 				"color" 14232643
