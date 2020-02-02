@@ -35,6 +35,8 @@
 	{{ else }}
 		The syntax for this command is `-setxp <user> <xp>`.
 	{{ end }}
+{{ else }}
+	The syntax for this command is `-setxp/setlevel <user> <level|xp>`.
 {{ end }}
 {{/* Handle leveling up | Basically the same as whats in the message listener, so if you are curious look at that */}}
 {{ if $newLvl }}
