@@ -5,13 +5,31 @@
 	Recommended trigger: Command trigger with trigger `json`
 */ -}}
 
-{{ $targets := sdict "channel" .Channel "guild" .Guild "user" .User "member" .Member "message" .Message }}
+{{ $targets := sdict "Channel" .Channel "Guild" .Guild "User" .User "Member" .Member "Message" .Message }}
+{{ $resources := sdict
+	"Channel" "https://discordapp.com/developers/docs/resources/channel#channel-object"
+	"Guild" "https://discordapp.com/developers/docs/resources/guild#guild-resource"
+	"User" "https://discordapp.com/developers/docs/resources/user#user-object"
+	"Member" "https://discordapp.com/developers/docs/resources/guild#guild-member-object"
+	"Message" "https://discordapp.com/developers/docs/resources/channel#message-object"
+}}
 {{ $target := 0 }}
-{{ range $name, $v := $targets }}
-	{{ if eq $name .StrippedMsg }} {{ $target = $v }} {{ end }}
+{{ $name := "" }}
+{{ $input := .StrippedMsg }}
+{{ range $struct, $v := $targets }}
+	{{ if eq (lower $struct) $input }}
+		{{ $target = $v }}
+		{{ $name = $struct }}
+	{{ end }}
 {{ end }}
 {{ if $target}}
-	{{ printf "```%+v```" $target }}
+	{{ $json := printf "```go\n%+v```" $target }}
+	{{ sendMessage nil (cembed
+		"author" (sdict "name" (printf "%s Object" $name) "url" ($resources.Get $name))
+		"title" "❯ JSON"
+		"description" $json
+		"color" 14232643
+	) }}
 {{ else }}
 	Please provide a valid target to view.
 {{ end }}
