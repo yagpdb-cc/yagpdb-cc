@@ -14,6 +14,7 @@
 	"description" (joinStr "\n\n"
 		"`leveling use-default`: Use the default settings"
 		"`leveling set <key> <value>`: Sets the given settings to the value provided. Valid keys are \"min\", \"max\", and \"cooldown\" (duration)."
+		"`leveling set-channel <channel|none>`: Sets the channel where level up messages will be sent (defaults to current channel). If you want to make it the current channel, use `leveling set-channel none`."
 		"`leveling view`: Views the current settings."
 	)
 	"color" 14232643
@@ -51,11 +52,29 @@
 		{{ else }}
 			That was not a valid key. The only valid settings are "min", "max", and "cooldown".
 		{{ end }}
+	{{ else if and (eq (index .CmdArgs 0) "set-channel") (ge (len .CmdArgs) 2) }}
+		{{ $input := index .CmdArgs 1 }}
+		{{ with reFindAllSubmatches `<#(\d+)>` $input }} {{ $input = toInt64 (index . 0 1) }} {{ end }}
+		{{ $channel := getChannel $input }}
+		{{ if $channel }}
+			{{ $currentSettings.Set "channel" $channel.ID }}
+			{{ $s := dbSet 0 "xpSettings" $currentSettings }}
+			Successfully set channel to <#{{ $channel.ID }}>!
+		{{ else if eq $input "none" }}
+			{{ $currentSettings.Del "channel" }}
+			{{ $s := dbSet 0 "xpSettings" $currentSettings }}
+			Successfully set the channel for level up notifications to none.
+		{{ else }}
+			That was not a valid channel. Try again.
+		{{ end }}
 	{{ else if eq (index .CmdArgs 0) "view" }}
-		{{ $formatted := printf "**❯ Minimum XP:** %d\n**❯ Maximum XP:** %d\n**❯ Cooldown:** %s"
+		{{ $channel := "*None set*" }}
+		{{ with $currentSettings.channel }} {{ $channel = printf "<#%d>" . }} {{ end }}
+		{{ $formatted := printf "**❯ Minimum XP:** %d\n**❯ Maximum XP:** %d\n**❯ Cooldown:** %s\n**❯ Level-up Channel:** %s"
 			$currentSettings.min
 			$currentSettings.max
 			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration)) 
+			$channel
 		}} {{/* Construct the embed description */}}
 		{{ if $isSaved }} {{/* If the settings are in DB */}}
 			{{ sendMessage nil (cembed "title" "Level Settings" "description" $formatted "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")) }}
