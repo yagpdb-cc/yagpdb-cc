@@ -9,7 +9,15 @@
 	Recommended trigger: Regex trigger with trigger `^-(leveling|(level|lvl)-?conf|(level|lvl)=?settings)`.
 */ -}}
 {{/* Help message for convenience in sending */}}
-{{ $helpMsg := "That wasn't a valid method. The possible usage is below.\n**Note:** All commands must be started with your prefix, like `-leveling use-default`.\n\n```ini\n[leveling use-default]       | Uses the default settings.\n[leveling set <key> <value>] | Sets the given key to the value provided, where key is one of \"min\", \"max\", or \"cooldown\".\n[leveling view]              | Views the current settings.```"}}
+{{ $helpMsg := cembed
+	"title" "🏆 Leveling"
+	"description" (joinStr "\n\n"
+		"`leveling use-default`: Use the default settings"
+		"`leveling set <key> <value>`: Sets the given settings to the value provided. Valid keys are \"min\", \"max\", and \"cooldown\" (duration)."
+		"`leveling view`: Views the current settings."
+	)
+	"color" 14232643
+}}
 {{ if .CmdArgs }}
 	{{ $isSaved := false }} {{/* Whether the settings are saved */}}
 	{{ $currentSettings := sdict 

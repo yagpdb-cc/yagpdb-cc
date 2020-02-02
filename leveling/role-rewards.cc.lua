@@ -16,7 +16,17 @@
 	Recommended trigger: Regex trigger with trigger `^-(role-?rowards|rr)`
 */ -}}
 {{/* Help message */}}
-{{ $helpMsg := "That wasn't a valid method. The possible usage is below.\n**Note:** All commands must be started with your prefix, like `-rolerewards reset`.\n\n```ini\n[rolerewards view]               | Views the server's role rewards.\n[rolerewards add <level> <role>] | Sets a role to be given at a certain level. A max of 1 role is allowed per level.\n[rolerewards set-type <type>]    | Sets the server's role reward giving configuration. One of \"stack\" or \"highest\" (stack meaning just give roles, highest meaning only the last role reward less than the user's current level.\n[rolerewards reset]              | Resets the role reward settings for this server. Note: This is irreversible.\n[rolerewards remove <level>]     | Removes the role reward from a given level.```"}}
+{{ $helpMsg := cembed
+	"title" "🏆 Role Rewards"
+	"description" (joinStr "\n\n"
+		"`rolerewards add <level> <role>`: Adds a role reward at the given level"
+		"`rolerewards remove <level>`: Removes the role reward from the given level"
+		"`rolerewards set-type <highest|stack>`: Sets the role reward type. Highest means only the highest role reward less than or equal to the current level, stack is all role rewards up to that level."
+		"`rolerewards reset`: Resets role reward settings."
+		"`rolerewards view`: Views current settings for role rewards."
+	)
+	"color" 14232643
+}}
 {{ if .CmdArgs }}
 	{{ $roleRewards := sdict "type" "stack" }} {{/* The default setup */}}
 	{{ with (dbGet 0 "roleRewards") }}
