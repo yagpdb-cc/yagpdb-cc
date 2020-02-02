@@ -1,5 +1,5 @@
 {{- /*
-	This command shows all the avaliable properties and methods of a structure (not really JSON, but there you have it).
+	This command shows all the avaliable properties and methods of a structure (not really JSON, but there you have it) with a link to the Discord docs on that structure.
 	Usage: `-json <struct>`.
 
 	Recommended trigger: Command trigger with trigger `json`
