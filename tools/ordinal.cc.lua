@@ -5,17 +5,16 @@
 	Recommended trigger: Regex trigger with trigger `^-(ordinal|ord)`
 */ -}}
 
-{{ with reFind `\d+` .StrippedMsg }}
-	{{ $ord := "th" }}
-	{{ $int := toInt . }}
-	{{ $cent := toInt (mod $int 100) }}
-	{{ $dec := toInt (mod $int 10) }}
-	{{ if not (and (ge $cent 10) (le $cent 19)) }}
-		{{ if eq $dec 1 }} {{ $ord = "st" }}
-		{{ else if eq $dec 2 }} {{ $ord = "nd" }}
-		{{ else if eq $dec 3 }} {{ $ord = "rd" }}
-		{{ end }}
+
+{{ $ord := "th" }}
+{{ $int := (parseArgs 1 "**Syntax:** -ordinal <number>" (carg "int" "number")).Get 0 }}
+{{ $cent := toInt (mod $int 100) }}
+{{ $dec := toInt (mod $int 10) }}
+{{ if not (and (ge $cent 10) (le $cent 19)) }}
+	{{ if eq $dec 1 }} {{ $ord = "st" }}
+	{{ else if eq $dec 2 }} {{ $ord = "nd" }}
+	{{ else if eq $dec 3 }} {{ $ord = "rd" }}
 	{{ end }}
-	❯ **Ordinal**
-	`{{ . }}{{ $ord }}`
 {{ end }}
+❯ **Ordinal**
+`{{ $int }}{{ $ord }}`
