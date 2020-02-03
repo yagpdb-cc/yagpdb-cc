@@ -25,8 +25,8 @@
 {{ if $target}}
 	{{ $json := printf "```go\n%+v```" $target }}
 	{{ sendMessage nil (cembed
-		"author" (sdict "name" (printf "%s Object" $name) "url" ($resources.Get $name))
-		"title" "❯ JSON"
+		"title" (printf "❯ %s Object" $name)
+		"url" (index $resources $name)
 		"description" $json
 		"color" 14232643
 	) }}
