@@ -57,9 +57,4 @@
 	"thumbnail" (sdict "url" $asset.image)
 	"description" (printf "❯ **Time:** %s\n❯ **Date:** %s\n❯ **Weather:** %s (%s)" $time $date $weather $temp)
 }}
-{{ with .ExecData }}
-	{{ editMessage .Channel .Message $embed }}
-{{ else }}
-	{{ sendMessage nil $embed }}
-{{ end }}
-{{ execCC (toInt .CCID) nil 10 (sdict "Message" 671950051605610506 "Channel" 671949999172616197) }}
+{{ sendMessage nil $embed }}
