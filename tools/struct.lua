@@ -1,8 +1,8 @@
 {{- /*
-	This command shows all the avaliable properties and methods of a structure (not really JSON, but there you have it) with a link to the Discord docs on that structure.
-	Usage: `-json <struct>`.
+	This command shows all the avaliable properties and methods of a structure with a link to the Discord docs on that structure.
+	Usage: `-struct <struct>`.
 
-	Recommended trigger: Command trigger with trigger `json`
+	Recommended trigger: Regex trigger with trigger `^-(struct)(ture)?`
 */ -}}
 
 {{ $targets := sdict "Channel" .Channel "Guild" .Guild "User" .User "Member" .Member "Message" .Message }}
@@ -15,7 +15,7 @@
 }}
 {{ $target := 0 }}
 {{ $name := "" }}
-{{ $input := .StrippedMsg }}
+{{ $input := (parseArgs 1 "**Syntax:** -struct <struct>" (carg "string" "structure")).Get 0 | lower }}
 {{ range $struct, $v := $targets }}
 	{{ if eq (lower $struct) $input }}
 		{{ $target = $v }}
