@@ -14,7 +14,7 @@
 	Recommended trigger: StartsWith trigger with trigger `-`.
 */ -}}
 
-{{ $isCmd := reFind "^tags? +" .StrippedMsg }}
+{{ $isCmd := reFind "^tags? *" .StrippedMsg }}
 {{ $safeName := `^[^\|_%]{1,25}$` }}
 
 {{ define "getTag" }}
@@ -182,8 +182,22 @@
 			) }}
 			{{ addMessageReactions nil $id "◀️" "▶️" }}
 		{{ end }}
-	{{ end }}
 
+	{{ else }}
+		{{ sendMessage nil (cembed
+			"title" "🖊️ Tags"
+			"description" (joinStr "\n\n"
+				"`tag add <name> <content>`: Adds a tag with the given content."
+				"`tag del <name>`: Deletes the given tag."
+				"`tag addalias <name> <...aliases>`: Adds the given aliases to the tag provided."
+				"`tag delalias <name> <alias>`: Removes the given alias from the tag provided."
+				"`tag edit <name> <new-content>`: Edits the tag's content to the content provided."
+				"`tag info <tag>`: Info on a given tag."
+				"`tag list`: Lists all tags."
+			)
+			"color" 14232643
+		) }}
+	{{ end }}
 {{ else }}
 	{{ $tagName := reFind $safeName .StrippedMsg }}
 	{{ if $tagName }}
