@@ -30,9 +30,11 @@
 		{{ $isSaved = true }} {{/* Settings are in DB */}}
 		{{ $currentSettings = sdict .Value }} {{/* Convert value to sdict */}}
 	{{ end }}
+
 	{{ if eq (index .CmdArgs 0) "use-default" }}
 		{{ $s := dbSet 0 "xpSettings" $currentSettings }} {{/* Set defaults */}}
 		Done! You are now using the default settings for the leveling system.
+	
 	{{ else if and (eq (index .CmdArgs 0) "set") (ge (len .CmdArgs) 3) }}
 		{{ $key := index .CmdArgs 1 }} {{/* The key of the setting being set */}}
 		{{ $value := slice .CmdArgs 2 | joinStr " " }} {{/* The value of the new setting */}}
@@ -52,6 +54,7 @@
 		{{ else }}
 			That was not a valid key. The only valid settings are "min", "max", and "cooldown".
 		{{ end }}
+
 	{{ else if and (eq (index .CmdArgs 0) "set-channel") (ge (len .CmdArgs) 2) }}
 		{{ $input := index .CmdArgs 1 }}
 		{{ with reFindAllSubmatches `<#(\d+)>` $input }} {{ $input = toInt64 (index . 0 1) }} {{ end }}
@@ -67,6 +70,7 @@
 		{{ else }}
 			That was not a valid channel. Try again.
 		{{ end }}
+
 	{{ else if eq (index .CmdArgs 0) "view" }}
 		{{ $channel := "*None set*" }}
 		{{ with $currentSettings.channel }} {{ $channel = printf "<#%d>" . }} {{ end }}
@@ -79,7 +83,7 @@
 		{{ if $isSaved }} {{/* If the settings are in DB */}}
 			{{ sendMessage nil (cembed "title" "Level Settings" "description" $formatted "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")) }}
 		{{ else }}
-			This server has not set up it's leveling system. Run `-leveling use-default` to use the default settings or customize it using `-leveling set <key> <value>`.
+			This server has not set up the leveling system. Run `-leveling use-default` to use the default settings or customize it using `-leveling set <key> <value>`.
 		{{ end }}
 	{{ else }} {{/* Send help messages */}}
 		{{ sendMessage nil $helpMsg }} 

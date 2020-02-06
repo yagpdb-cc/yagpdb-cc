@@ -10,7 +10,7 @@
 	`-tag list`
 	`-tag info <name>`
 	`-<tag>` (i.e say you have tag with name `foobar`, `-foobar` would view that tag)
-	
+
 	Recommended trigger: StartsWith trigger with trigger `-`.
 */ -}}
 
@@ -30,6 +30,7 @@
 	{{ $args := cslice }}
 	{{ if gt (len .CmdArgs) 1 }} {{ $cmd = index .CmdArgs 1 }} {{ end }}
 	{{ if gt (len .CmdArgs ) 2 }}  {{ $args = slice .CmdArgs 2 }} {{ end }}
+
 	{{ if and (eq $cmd "add") (ge (len $args) 2) }}
 		{{ $tagName := index $args 0 | lower }}
 		{{ $tagContent := slice $args 1 | joinStr " " }}
@@ -45,6 +46,7 @@
 		{{ else }}
 			Tag names must not contain the `|`, `_`, or `%` character and be under 25 characters!
 		{{ end }}
+
 	{{ else if and (eq $cmd "del") (len $args) }}
 		{{ $toDelete := joinStr " " $args }}
 		{{ $data := sdict "Name" $toDelete }}
@@ -55,6 +57,7 @@
 		{{ else }}
 			Sorry, that tag does not exist.
 		{{ end }}
+
 	{{ else if and (eq $cmd "info") (len $args) }}
 		{{ $tagName := joinStr " " $args }}
 		{{ $data := sdict "Name" $tagName }}
@@ -83,6 +86,7 @@
 		{{ else }}
 			That tag does not exist. Try again?
 		{{ end }}
+
 	{{ else if and (eq $cmd "edit") (ge (len $args) 2) }}
 		{{ $tagName := index $args 0 }}
 		{{ $tagContent := slice $args 1 | joinStr " " }}
@@ -98,6 +102,7 @@
 		{{ else }}
 			That tag does not exist!
 		{{ end }}
+
 	{{ else if and (eq $cmd "addalias") (ge (len $args) 2) }}
 		{{ $tagName := index $args 0 }}
 		{{ $aliases := slice $args 1 }}
@@ -125,6 +130,7 @@
 		{{ else }}
 			Sorry, some aliases provided were not valid! Try again.
 		{{ end }}
+
 	{{ else if and (eq $cmd "delalias") (ge (len $args) 2) }}
 		{{ $tagName := index $args 0 }}
 		{{ $toRemove := slice $args 1 | joinStr " " | lower }}
@@ -149,6 +155,7 @@
 		{{ else }}
 			That tag does not exist.
 		{{ end }}
+
 	{{ else if eq $cmd "list" }}
 		{{ $page := 1 }}
 		{{ if eq (len $args) 1 }} {{ with reFind `^\d+$` (index $args 0) }} {{ $page = toInt . }} {{ end }} {{ end }}
@@ -176,6 +183,7 @@
 			{{ addMessageReactions nil $id "◀️" "▶️" }}
 		{{ end }}
 	{{ end }}
+
 {{ else }}
 	{{ $tagName := reFind $safeName .StrippedMsg }}
 	{{ if $tagName }}

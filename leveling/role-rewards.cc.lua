@@ -33,6 +33,7 @@
 		{{ $roleRewards = sdict .Value }} {{/* Update with DB entry if present */}}
 	{{ end }}
 	{{ $cmd := index .CmdArgs 0 }} {{/* The subcommand used for convenience */}}
+
 	{{ if and (eq $cmd "add") (ge (len .CmdArgs) 3) }}
 		{{ $level := index .CmdArgs 1 | toInt }} {{/* The level for this role reward */}}
 		{{ $search := slice .CmdArgs 2 | joinStr " " | lower }} {{/* The role name in lowercase */}}
@@ -58,6 +59,7 @@
 		{{ else }}
 			Sorry, I was unable to find the role you provided / the level provided was invalid.
 		{{ end }}
+
 	{{ else if and (eq $cmd "set-type") (ge (len .CmdArgs) 2) }}
 		{{ $type := index .CmdArgs 1 }}
 		{{ if not (in (cslice "stack" "highest") $type) }} {{/* Check whether type is valid */}}
@@ -67,9 +69,11 @@
 			{{ $s := dbSet 0 "roleRewards" $roleRewards }} {{/* Save settings */}}
 			Successfully set the role-giving type of this server to `{{ $type }}`.
 		{{ end }}
+
 	{{ else if eq $cmd "reset" }}
 		{{ $s := dbSet 0 "roleRewards" (sdict "type" "stack") }} {{/* We set the settings to default */}}
 		Alright, I cleared the role rewards for this server!
+
 	{{ else if and (eq $cmd "remove") (ge (len .CmdArgs) 2) }}
 		{{ with (reFind `\d+` (index .CmdArgs 1)) }} {{/* Find level to remove */}}
 			{{ if $roleRewards.Get . }}
@@ -82,6 +86,7 @@
 		{{ else }}
 			Please provide a valid level to remove the role reward from.
 		{{ end }}
+
 	{{ else if eq $cmd "view" }}
 		{{ if eq (len $roleRewards) 1 }} {{/* If it is still the default settings */}}
 			{{ sendMessage nil (cembed "title" "Role Rewards" "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png") "description" (joinStr "" "**❯ Role Rewards:** n/a\n**❯ Type:** " $roleRewards.type)) }}
@@ -95,6 +100,7 @@
 			{{/* Format and send embed */}}
 			{{ sendMessage nil (cembed "title" "Role Rewards" "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png") "description" (joinStr "" $out "\n\n" "**❯ Type:** " $roleRewards.type)) }}
 		{{ end }}
+
 	{{ else }}
 		{{ sendMessage nil $helpMsg }}
 	{{ end }}
