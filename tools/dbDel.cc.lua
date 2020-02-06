@@ -1,3 +1,10 @@
+{{- /*
+	This command is a tool for deleting DB entries by ID or key.
+	Usage: `-dbDel <userid> <id> -id` or `-dbDel <userid> <key>`.
+
+	Recommended trigger: Command trigger with trigger `dbDel`.
+*/ -}}
+
 {{ $args := parseArgs 2 "" (carg "int" "userID") (carg "int" "id") (carg "string" "type") }}
 {{ $isId := false }}
 {{ if $args.IsSet 2 }}
