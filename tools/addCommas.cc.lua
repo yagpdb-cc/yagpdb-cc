@@ -5,7 +5,7 @@
 	Recommended trigger: Regex trigger with trigger `^-(add-?commas?)`
 */ -}}
 {{ $str := (parseArgs 1 "**Syntax:** `-addCommas <int>`" (carg "int" "number")).Get 0 | toString }}
-{{ $offset := toInt (mod $str 3) }}
+{{ $offset := toInt (mod (len $str) 3) }}
 {{ $rest := "" }}
 {{ if ge (len $str) 3 }}
 	{{ $rest = slice $str $offset }}
