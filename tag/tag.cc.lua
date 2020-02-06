@@ -122,8 +122,13 @@
 			{{ template "getTag" $data }}
 			{{ with $data.Tag }}
 				{{ dbDelByID .UserID .ID }}
-				{{ dbSet 0 (joinStr "" $key "|") .Value }}
-				Successfully added {{ len $aliases }} aliases to the tag `{{ $tagName }}`!
+				{{ $newKey := joinStr "" $key "|" }}
+				{{ if gt (len $newKey) 256 }}
+					Sorry, that alias was too long. Try again.
+				{{ else }}
+					{{ dbSet 0 (joinStr "" $key "|") .Value }}
+					Successfully added {{ len $aliases }} aliases to the tag `{{ $tagName }}`!
+				{{ end }}
 			{{ else }}
 				Sorry, that tag does not exist.
 			{{ end }}
