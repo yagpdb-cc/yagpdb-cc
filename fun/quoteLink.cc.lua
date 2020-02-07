@@ -10,7 +10,7 @@
 {{ $msg := getMessage $channel $id }}
 {{ if and $msg (not $escaped) }}
 	{{ if $msg.Content }}
-		{{ $link := printf "https://discordapp.com/channels/%d/%d/%d" .Guild.ID $channel $id }}
+		{{ $link := printf "https://discordapp.com/channels/%d/%s/%s" .Guild.ID $channel $id }}
 		{{ $img := "" }}
 		{{ with $msg.Attachments }} {{ $img = (index . 0).URL }} {{ end }}
 		{{ sendMessage nil (cembed
