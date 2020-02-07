@@ -25,6 +25,8 @@
 		{{ else if not $skip }}
 			{{ $skip = false }}
 			{{ $message = joinStr " " $message $v }}
+		{{ else if $skip }}
+			{{ $skip = false }}
 		{{ end }}
 	{{- end -}}
 	{{ $parsedDur := 0 }}
