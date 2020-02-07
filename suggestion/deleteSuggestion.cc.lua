@@ -30,7 +30,7 @@
 	{{ else if eq $suggestion.Color $colors.approved }}
 		That suggestion was approved, therefore you cannot delete it.
 	{{ else }}
-		{{ deleteMessage $suggestions ($args.Get 0) }}
+		{{ deleteMessage $suggestions ($args.Get 0) 0 }}
 		Successfully deleted suggestion in <#{{ $suggestions }}>!
 	{{ end }}
 {{ else }}
