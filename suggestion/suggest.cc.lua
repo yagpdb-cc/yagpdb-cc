@@ -15,6 +15,8 @@
 
 {{ deleteTrigger 10 }}
 {{ deleteResponse 10 }}
+{{ $attachment := "" }}
+{{ with .Message.Attachments }} {{ $attachment = (index . 0).ProxyURL }} {{ end }}
 {{ if .StrippedMsg }}
 	{{ $id := sendMessageRetID $suggestions (cembed
 		"author" (sdict "name" (printf "Suggestion from %s" .User.String) "icon_url" (.User.AvatarURL "256"))
@@ -22,6 +24,7 @@
 		"description" .StrippedMsg
 		"footer" (sdict "text" (joinStr "" "User ID: " .User.ID))
 		"timestamp" currentTime
+		"image" (sdict "url" $attachment)
 	) }}
 	{{ addMessageReactions $suggestions $id "upvote:524907425531428864" "downvote:524907425032175638" }}
 	Successfully sent your suggestion to <#{{ $suggestions }}>!
