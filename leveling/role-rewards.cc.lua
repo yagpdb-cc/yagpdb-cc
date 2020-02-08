@@ -50,7 +50,7 @@
 		{{/* If there is both level and role */}}
 		{{ if and $level $role }}
 			{{ if and (ge $level 1) (le $level 200) }} {{/* If level is in correct range */}}
-				{{ $roleRewards.Set (toString $level) $role.ID }}
+				{{ $roleRewards.Set (str $level) $role.ID }}
 				{{ $s := dbSet 0 "roleRewards" $roleRewards }} {{/* Save settings */}}
 				Successfully set the role `{{ $role.Name }}` to be given at the level `{{ $level }}`.
 			{{ else }}
@@ -93,7 +93,7 @@
 		{{ else }}
 			{{ $out := "" }} {{/* The embed description */}}
 			{{- range $level := seq 1 201 -}} {{/* We can do this as we know level roles are in range 1-100 */}}
-				{{ with ($roleRewards.Get (toString $level)) }}
+				{{ with ($roleRewards.Get (str $level)) }}
 					{{ $out = printf "%s\n❯ **Level %d:** <@&%d>" $out $level . }}
 				{{ end }}
 			{{- end -}}
