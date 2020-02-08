@@ -1,6 +1,5 @@
 # Unfinished Custom Commands
 info/emoji.cc.lua
 
-fun/choose.cc.lua
 fun/hug.cc.lua
 fun/repeat.cc.lua
