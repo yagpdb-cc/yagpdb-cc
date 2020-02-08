@@ -28,6 +28,7 @@
 {{ end }}
 {{ $embedsEnabled := "No" }}
 {{ if .Guild.EmbedEnabled }} {{ $embedsEnabled = "Yes" }} {{ end }}
+{{ $createdAt := div .Guild.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
 
 {{ $infoEmbed := cembed
 	"author" (sdict "name" $name "icon_url" $icon)
@@ -42,6 +43,8 @@
 		(sdict "name" "❯ AFK" "value" $afk)
 		(sdict "name" "❯ Embeds Enabled" "value" $embedsEnabled)
 	)
+	"footer" (sdict "text" "Created at")
+	"timestamp" $createdAt
 }}
 
 {{ if .CmdArgs }}

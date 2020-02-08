@@ -16,7 +16,7 @@
 {{ $parent := "*None set*" }}
 {{ if $channel.NSFW }} {{ $nsfw = "Yes" }} {{ end }}
 {{ with $channel.ParentID }} {{ $parent = printf "<#%d>" . }} {{ end }}
-{{ $createdAt := div .Channel.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
+{{ $createdAt := div $channel.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
 {{ sendMessage nil (cembed
 	"title" (printf "❯ Info for #%s" $channel.Name)
 	"fields" (cslice
@@ -28,4 +28,6 @@
 		(sdict "name" "❯ Type" "value" (index $types $channel.Type) "inline" true)
 	)
 	"color" 14232643
+	"footer" (sdict "text" "Created at")
+	"timestamp" $createdAt
 ) }}
