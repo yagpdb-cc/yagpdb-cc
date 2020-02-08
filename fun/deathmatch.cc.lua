@@ -54,7 +54,7 @@
 	{{ $newHp := sub $target.HP $dmg }}
 	{{ if lt $newHp 0 }} {{ $newHp = 0 }} {{ end }}
 	{{ $target.Set "HP" $newHp }}
-	{{ $msgs = $msgs.Append (printf "%s **%s** attacked **%s** dealing %d damage!"
+	{{ $msgs = $msgs.Append (printf "%s **%s** attacked **%s**, dealing __%d__ damage!"
 		$emoji
 		$attacker.Name
 		$target.Name
