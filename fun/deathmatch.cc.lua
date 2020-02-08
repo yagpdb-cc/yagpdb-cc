@@ -73,9 +73,7 @@
 	{{ if gt (len $msgs) 3 }}
 		{{ $msgs = slice $msgs (sub (len $msgs) 3) (len $msgs) }}
 	{{ end }}
-	{{ $msg := "" }}
-	{{ range $msgs }} {{ $msg = joinStr "\n" $msg . }} {{ end }}
-	{{ $embed.Set "description" $msg }}
+	{{ $embed.Set "description" (joinStr "\n" $msgs.StringSlice) }}
 		
 	{{ $embed.fields.Set (index (sdict "UserA" 0 "UserB" 1) .Target) (sdict
 		"name" $target.Name
