@@ -39,7 +39,18 @@
 	{{ $target := index . .Target | sdict }}
 	{{ $emoji := $emojis.Get .Target }}
 
-	{{ $dmg := randInt 1 40 }}
+	{{ $rand := randInt 100 }}
+	{{ $dmg := 0 }}
+	{{ if lt $rand 5 }}
+		{{ $dmg = randInt 40 50 }}
+	{{ else if lt $rand 15 }}
+		{{ $dmg = randInt 30 40 }}
+	{{ else if lt $rand 45 }}
+		{{ $dmg = randInt 20 30 }}
+	{{ else }}
+		{{ $dmg = randInt 1 20 }}
+	{{ end }}
+
 	{{ $newHp := sub $target.HP $dmg }}
 	{{ if lt $newHp 0 }} {{ $newHp = 0 }} {{ end }}
 	{{ $target.Set "HP" $newHp }}
