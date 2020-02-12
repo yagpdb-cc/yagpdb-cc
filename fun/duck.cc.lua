@@ -1,4 +1,6 @@
-{{/* A simple command which generates random duck embedded pictures because ducks are important!! */}}
+{{/* A simple command which generates random duck embedded pictures because ducks are important!! 
+     Recommended trigger: Command trigger with trigger `randduck`
+*/}}
 
 {{$link := "https://random-d.uk/api/"}}
 {{$c := randInt 10}}
