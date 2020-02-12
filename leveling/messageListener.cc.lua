@@ -32,12 +32,13 @@
 			{{ else if and (hasRoleID $reward) (eq $type "highest") $toAdd }} {{ removeRoleID $reward }} {{ end }}
 		{{- end -}}
 		{{ if $toAdd }} {{ addRoleID $toAdd }} {{ end }}
-		{{ sendMessage $channel (cembed 
+		{{ $embed := cembed 
 			"title" "❯ Level up!"
 			"thumbnail" (sdict "url" "https://webstockreview.net/images/emoji-clipart-celebration-4.png")
 			"description" (printf "Congratulations **%s**! You've leveled up to level %d - keep it up!" .User.String (toInt $newLvl))
 			"color" 14232643
-		) }} {{/* Send levelup notification */}}
+		}}
+		{{ sendMessage $channel (complexMessage "content" .User.Mention "embed" $embed) }} {{/* Send levelup notification */}}
 	{{ end }}
 
 	{{ $cooldownSeconds := div $settings.cooldown 1000000000 }} {{/* Convert cooldown to seconds */}}
