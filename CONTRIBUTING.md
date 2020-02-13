@@ -13,13 +13,13 @@ There are four things I expect you to do:
 
 ### Leading comment syntax
 The following syntax is recommended for comemnts:
-```elm
+```go
 {{/*
 	<Comment>
 */}}
 ```
 Note the indent and the space right after the comment. The comment should be like this:
-```elm
+```go
 <Description> <Usage>
 
 Recommended trigger: <Trigger Type> trigger with trigger `<Trigger>`.
@@ -28,7 +28,7 @@ Recommended trigger: <Trigger Type> trigger with trigger `<Trigger>`.
 If you have any doubts, feel free to ask me or look at the syntax in the existing files.
 
 An example of a complete leading comment would be:
-```
+```go
 {{/*
 	This command sends the message "hello world" in the channel. Usage: `-helloworld`.
 
@@ -39,7 +39,7 @@ An example of a complete leading comment would be:
 ### Configuration
 If your command requires configuration, it should be done through appropriately named variables at the TOP of the file, right after the leading comment (above). For example:
 
-```
+```go
 <Leading comment>
 
 {{/* CONFIGURATION VALUES START */}}
