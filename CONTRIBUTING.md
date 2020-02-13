@@ -53,6 +53,8 @@ If your command requires configuration, it should be done through appropriately 
 That's all you need to do! Thanks for contributing, I appreciate it!
 
 ## My personal guidelines for CCs
+*Note: I DO NOT REQUIRE ANY OF THESE ITEMS IN YOUR PULL REQUEST, ONLY THE THINGS STATED ABOVE*
+
 This is the guidelines I use for the CCs I create. I may refactor your code when I'm doing a routine cleanup, so to avoid any confusion over what I'm doing:
 * `parseArgs` over manually parsing `.CmdArgs`
 * `printf` over `joinStr`
