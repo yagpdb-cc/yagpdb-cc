@@ -11,6 +11,8 @@ When you find a custom command you wish to add, the file will have a leading com
 If you spot an error, feel free to make a PR or open an issue. I'll get to it ASAP.
 If you wish to add your own command, feel free to make a PR as well. I'm open to all suggestions.
 
+*If you are adding a new CC, please read the [guidelines](./CONTRIBUTING.md)*.
+
 ## Disclaimer
 This repository and myself are not officially affiliated with YAGPDB in any shape or form. The YAGPDB creator and staff are not responsible for any difficulties caused by these custom commands.
 These commands are not guaranteed to be working. I strive to test all the custom commands here, but due to many reasons sometimes I am unable to.
