@@ -43,10 +43,14 @@
 	{{ $roleRewards := sdict "type" "stack" }}
 	{{ with dbGet 0 "roleRewards" }} {{ $roleRewards = sdict .Value }} {{ end }}
 	{{ $type := $roleRewards.type }}
-	{{ $toAdd := or ($roleRewards.Get (json $newLvl)) 0 }}
+	{{ $toAdd := 0 }}
+	{{ $dist := -1 }}
 	{{ range $level, $reward := $roleRewards }}
+		{{ if and (le (toInt $level) (toInt $newLvl)) (or (gt $dist (sub (toInt $newLvl) (toInt $level))) (eq $dist -1)) (eq $type "highest") }}
+			{{ $dist = sub $newLvl $level }} {{ $toAdd = $reward }}
+		{{ end }}
 		{{ if and (ge (toInt $newLvl) (toInt $level)) (not (hasRoleID $reward)) (eq $type "stack") (ne $level "type") }} {{ addRoleID $reward }}
-		{{ else if and (hasRoleID $reward) (eq $type "highest") $toAdd }} {{ removeRoleID $reward }} {{ end }}
+		{{ else if and (hasRoleID $reward) (eq $type "highest") }} {{ removeRoleID $reward }} {{ end }}
 	{{ end }}
 	{{ if $toAdd }} {{ addRoleID $toAdd }} {{ end }}
 {{ end }}
