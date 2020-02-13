@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	This command is a tool for editing messages sent by YAGPDB.
 	Usage: `-edit [channel] <msg> <new-content>`.
 
 	Recommended trigger: Command trigger with trigger `edit`.
-*/ -}}
+*/}}
 
 {{ $helpMsg := cembed
 	"title" "`-edit [channel] <msg> <new-content>`"

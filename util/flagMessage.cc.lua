@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command allows users to flag messages by reacting with a custom emoji.
 
 	Recommended trigger: Reaction trigger on REACTION ADD only.
-*/ -}}
+*/}}
 
 {{/* CONFIGURATION VARIABLES START */}}
 {{ $reportEmoji := 675512907391434759 }} {{/* ID of report emoji */}}

@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command sends a preview of a message link provided. Same behaviour as quote CC. Note that if message link is enclosed in < >, it will not be quoted (in line with Discord behaviour).
 
 	Recommended trigger: Regex trigger with trigger `<?https://discordapp.com/channels\/\d+\/\d+\/\d+>?`
-*/ -}}
+*/}}
 {{ $matches := index (reFindAllSubmatches `(<?)https://discordapp.com/channels\/\d+\/(\d+)\/(\d+)(>?)` .Cmd) 0 }}
 {{ $escaped := and (index $matches 1) (index $matches 4) }}
 {{ $channel := index $matches 2 }}

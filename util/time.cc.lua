@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	This command gets the time of your city, the weather of your city, and shows it in an embed with a different image / color depending on time.
 	Usage: `-time`.
 
 	Recommended trigger: Command trigger with trigger `time`
-*/ -}}
+*/}}
 
 {{/* CONFIGURATION VALUES START */}}
 {{ $assets := sdict

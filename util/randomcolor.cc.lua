@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	This command shows a random color.
 	Usage: `-randcolor`.
 
 	Recommended trigger: Regex trigger with trigger `^-(rand(om)?-?color)`
-*/ -}}
+*/}}
 
 {{ $dec := randInt 0 16777216 }}
 {{ $hex := printf "%06x" $dec }}

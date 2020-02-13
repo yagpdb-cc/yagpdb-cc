@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	This command allows you to preview how colors look. Converts hex to dec, vice versa.
 	Usage: `-preview <hex>` or `-preview <dec> -dec`.
 
 	Recommended trigger: Regex trigger with trigger `^-(preview|color)`
-*/ -}}
+*/}}
 
 {{ $multipliers := cslice 1048576 65536 4096 256 16 1 }}
 {{ $hex2dec := sdict "A" 10 "B" 11 "C" 12 "D" 13 "E" 14 "F" 15 }}

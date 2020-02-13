@@ -1,4 +1,4 @@
-{{- /*
+{{/*
 	This command manages the role rewards of the server.
 
 	Types of role giving:
@@ -14,7 +14,7 @@
 	-rr reset | Resets the settings
 
 	Recommended trigger: Regex trigger with trigger `^-(role-?rewards|rr)`
-*/ -}}
+*/}}
 {{/* Help message */}}
 {{ $helpMsg := cembed
 	"title" "🏆 Role Rewards"

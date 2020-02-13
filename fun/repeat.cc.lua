@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command repeats a given phrase. Usage: `-repeat <phrase>` or `-repeat <amount> <phrase>`.
 
 	Recommended trigger: Command trigger with trigger `repeat`
-*/ -}}
+*/}}
 
 {{ $msg := "" }}
 {{ if eq (len .CmdArgs) 1 }}

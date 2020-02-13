@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command makes YAGPDB choose a given item from the ones provided. Usage: `-choose <...items>`.
 
 	Recommended trigger: Command trigger with trigger `choose`.
-*/ -}}
+*/}}
 
 {{ if .CmdArgs }}
 	{{ .User.Mention }}, I choose **{{ index .CmdArgs (randInt (len .CmdArgs)) }}**!

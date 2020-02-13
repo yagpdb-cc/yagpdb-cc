@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	This command is a tool for viewing DB entries.
 	Usage: `-entries <pattern> [max] [skip]`.
 
 	Recommended trigger: Command trigger with trigger `entries`.
-*/ -}}
+*/}}
 
 {{ $args := parseArgs 1 "" (carg "string" "pattern") (carg "int" "max" 1 100) (carg "int" "skip") }}
 {{ $max := 10 }}

@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command quotes a given message with optional channel. Usage: `-quote [channel] <message>`.
 
 	Recommended trigger: Command trigger with trigger `quote`
-*/ -}}
+*/}}
 {{ $channel := .Channel }}
 {{ $id := joinStr " " .CmdArgs }}
 {{ if .CmdArgs }}

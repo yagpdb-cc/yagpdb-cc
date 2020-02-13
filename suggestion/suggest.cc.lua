@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command allows users to suggest suggestions for your server. Usage: `-suggest <suggestion>`.
 
 	Recommended trigger: Command trigger with trigger `suggest`
-*/ -}}
+*/}}
 
 {{/* CONFIGURATION VARIABLES START - THIS SHOULD BE THE SAME IN ALL FILES */}}
 {{ $suggestions := 671509095433371688 }} {{/* Suggestion channel ID */}}

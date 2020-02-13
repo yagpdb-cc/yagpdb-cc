@@ -1,9 +1,18 @@
-{{- /*
+{{/*
 	This command is a replica of the deathmatch command from Yggdrasil. Usage: `-deathmatch [user1] [user2]`.
 
 	Recommended trigger: Command trigger with trigger `deathmatch`.
-*/ -}}
+*/}}
 
+{{/* Magically makes this command lag less (thanks Satty) */}}
+{{ $channels := cslice
+	675217831234633730
+	675225901750812712
+	675491775598690335
+	675220923233730570
+	668142843612758046
+	668150205748871218
+}}
 {{ $emojis := sdict
 	"UserA" "<:battleForward:675127538095357993>"
 	"UserB" "<:battleBackwards:675127538455937024>"
@@ -19,7 +28,7 @@
 {{ if $args.IsSet 1 }} {{ $userB = userArg ($args.Get 1) }} {{ end }}
 
 {{ $embed := sdict 
-	"title" "💢 Deathmatch"
+	"title" "💢 Battle"
 	"description" "*Match starting in 3...*"
 	"color" 14232643
 	"fields" (cslice
@@ -83,14 +92,15 @@
 	{{ $data.Set "Embed" $embed }}
 
 	{{ if $target.HP }}
-		{{ execCC $cc nil 2 $data }}
+		{{ execCC $cc (index $channels (randInt (len $channels))) 2 $data }}
 	{{ end }}
 
-	{{ editMessage nil .MsgID (cembed $embed) }}
+	{{ editMessage .ChannelID .MsgID (cembed $embed) }}
+
 {{ else }}
 	{{ $initial := sendMessageRetID nil (cembed $embed) }}
 	{{ sleep 3 }}
-	{{ execCC $cc nil 2 (sdict
+	{{ execCC $cc (index $channels (randInt (len $channels))) 2 (sdict
 		"UserA" (sdict "Name" $userA.Username "HP" 100)
 		"UserB" (sdict "Name" $userB.Username "HP" 100)
 		"Embed" $embed
@@ -98,5 +108,6 @@
 		"Attacker" "UserB"
 		"MsgID" $initial
 		"IsFirst" true
+		"ChannelID" .Channel.ID
 	) }}
 {{ end }}

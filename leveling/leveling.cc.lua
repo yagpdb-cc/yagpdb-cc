@@ -1,4 +1,4 @@
-{{- /*
+{{/*
 	This command manages the general level settings of the guild.
 	Possible usage:
 
@@ -7,7 +7,7 @@
 	-leveling view | view settings
 
 	Recommended trigger: Regex trigger with trigger `^-(leveling|(level|lvl)-?conf|(level|lvl)=?settings)`.
-*/ -}}
+*/}}
 {{/* Help message for convenience in sending */}}
 {{ $helpMsg := cembed
 	"title" "🏆 Leveling"

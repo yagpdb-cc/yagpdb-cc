@@ -1,10 +1,10 @@
-{{- /*
+{{/*
 	This command manages viewing the rank of a given member.
 	Use by running `-rank [member]` where member is optional. Defaults to yourself.
 	You may also set a color for your rank card using `-rank set-color <hex>` or `-rank set-color default`.
 
 	Recommended trigger: Regex trigger with trigger `^-(rank|lvl|xp)`.
-*/ -}}
+*/}}
 {{/* Instantiate constants */}}
 {{ $barEmpty := "□" }}
 {{ $barFull := "■" }}

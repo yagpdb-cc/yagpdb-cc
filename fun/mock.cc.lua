@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command mocks text which is given (capitalizes every second letter, small-cases all other letters). Usage: `-mock <text>`. 
 
 	Recommended trigger: Command trigger with trigger `mock`
-*/ -}}
+*/}}
 {{ with .StrippedMsg }}
 	{{ $out := "" }}
 	{{- range $k, $v := split (lower .) "" -}}

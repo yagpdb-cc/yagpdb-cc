@@ -1,4 +1,4 @@
-{{- /*
+{{/*
 	This command manages the tag system.
 
 	Usage: 
@@ -12,7 +12,7 @@
 	`;<tag>` (i.e say you have tag with name `foobar`, `;foobar` would view that tag)
 
 	Recommended trigger: StartsWith trigger with trigger `;`.
-*/ -}}
+*/}}
 
 {{ $isCmd := reFind "^tags? *" .StrippedMsg }}
 {{ $safeName := `^[^\|_%]{1,25}$` }}

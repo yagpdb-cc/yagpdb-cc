@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command converts given text to emoji. Usage: `-tte <text>` (raw content with `-tteraw <text>`).
 
 	Recommended trigger: Regex trigger with trigger `^-(tte|emojify|emotify)(-raw)?`
-*/ -}}
+*/}}
 {{ $keycap := "⃣" }}
 {{ $emojis := sdict "#" "#⃣" "*" "*⃣" "!" "❗" "?" "❓" }}
 {{ $codeblock := reFind `raw` .Cmd }}

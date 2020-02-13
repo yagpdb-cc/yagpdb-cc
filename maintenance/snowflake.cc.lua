@@ -1,8 +1,8 @@
-{{- /*
+{{/*
 	This command calculates the timestamp of a Discord snowflake.
 
 	Recommended trigger: Command trigger with trigger `snowflake`.
-*/ -}}
+*/}}
 
 {{ $snowflake := (parseArgs 1 "**Syntax:** -snowflake <snowflake>" (carg "int" "snowflake")).Get 0 }}
 

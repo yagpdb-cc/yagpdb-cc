@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	This command allows you to view information about the server.
 	Usage: `-serverinfo`. (Use `-server icon` to view the server icon).
 
 	Recommended trigger: Regex trigger with trigger `^-(server|guild)(-?info)?`
-*/ -}}
+*/}}
 
 {{ $icon := "" }}
 {{ $name := printf "%s (%d)" .Guild.Name .Guild.ID }}

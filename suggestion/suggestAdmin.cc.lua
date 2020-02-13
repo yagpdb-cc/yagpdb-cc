@@ -1,4 +1,4 @@
-{{- /*
+{{/*
 	This command manages suggestions. You can deny, approve, or comment on suggestions.
 
 	Usage:
@@ -8,7 +8,7 @@
 	-sa comment <id> <comment>
 
 	Recommended trigger: Regex trigger with trigger `^-(sa|suggestion-?admin)`
-*/ -}}
+*/}}
 
 {{/* CONFIGURATION VARIABLES START - THIS SHOULD BE THE SAME IN ALL FILES */}}
 {{ $suggestions := 671509095433371688 }} {{/* Suggestion channel ID */}}

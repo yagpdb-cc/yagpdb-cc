@@ -1,4 +1,4 @@
-{{- /*
+{{/*
 	This command allows users to set an AFK message with optional duration.
 	Usage:
 
@@ -6,7 +6,7 @@
 	-afk <message> -d <duration>
 
 	Recommended trigger: Command trigger with trigger `-afk`
-*/ -}}
+*/}}
 {{ $time := 0 }}
 {{ if .CmdArgs }}
 	{{ $args := .CmdArgs }}

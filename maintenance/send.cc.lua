@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	This command allows you to send messages through YAGPDB, with optional channel.
 	You may send it as embed using `-send [channel] <content>` or as raw with `-send-raw [channel] <content>`.
 
 	Recommended trigger: Regex trigger with trigger `^-(send-?(raw)?)`
-*/ -}}
+*/}}
 
 {{ $type := or (reFind `raw` .Cmd) "" }}
 {{ $channel := .Channel }}

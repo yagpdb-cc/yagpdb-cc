@@ -1,9 +1,9 @@
-{{- /*
+{{/*
 	WARNING: this command may be extremely buggy as I was unable to test it with limited users.
 	This command manages the pagination of the leaderboard command.
 
 	Recommended trigger: Reaction trigger on Reaction Added only.
-*/ -}}
+*/}}
 {{ $action := .Reaction.Emoji.Name }} {{/* The action being ran */}}
 {{ $validEmojis := cslice "▶️" "◀️" }} {{/* Valid emojis */}}
 {{ $isValid := false }} {{/* Whether this is actually a valid embed / leaderboard embed */}}
