@@ -49,11 +49,11 @@ Code has inbuilt intuitive execCC support. ExecData for invoking command via exe
 
 Examples:
 
-* `{{execCC $CCID_for_category_command nil 0 "-giveaway start 1d Coins -w 1"}}` is equivalent to : `-giveaway start 1d Coins`
+* `{{execCC $CCID_for_giveaway_main_command nil 0 "-giveaway start 1d Coins -w 1"}}` is equivalent to : `-giveaway start 1d Coins`
 
   Above will start a giveaway in the same channel in which execCC is invoked with a duration of 1 day with max winners: 2 and pirze: Coins
 
-* `{{execCC $CCID_for_category_command nil 0 "-givewaway end 11106339"}}` is equivalent to : `-giveaway end 11106339`
+* `{{execCC $CCID_for_giveaway_main_command nil 0 "-givewaway end 11106339"}}` is equivalent to : `-giveaway end 11106339`
 
   Above will end the giveaway with ID = `11106339` immediately and announce the winners.
 
