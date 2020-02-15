@@ -2,7 +2,7 @@
 	This command shows all the avaliable properties and methods of a structure with a link to the Discord docs on that structure.
 	Usage: `-struct <struct>`.
 
-	Recommended trigger: Regex trigger with trigger `^-(struct)(ture)?`
+	Recommended trigger: Regex trigger with trigger `^-(struct)(ure)?`
 */}}
 
 {{ $targets := sdict "Channel" .Channel "Guild" .Guild "User" .User "Member" .Member "Message" .Message }}
