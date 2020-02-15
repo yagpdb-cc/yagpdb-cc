@@ -21,7 +21,7 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) 
 
                         eg: 1y7mo2w1d3h4m15s = 1 year 7 months 2 weeks 1 day 3 hours 4 minutes and 15 seconds.
 
-       *Note :* must not contain spaces in between and use the mentioned format only i.e d not days for specifying days so on.%
+       *Note :* must not contain spaces in between and use the mentioned format only i.e d not days for specifying days so on.
 
 2)  **g end \<ID\>**
    
