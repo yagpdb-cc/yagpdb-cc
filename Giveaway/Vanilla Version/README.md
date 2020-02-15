@@ -4,9 +4,9 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) 
 
 
 
-## Commands (precede all commands by the prefix for YOUR server to invoke them):
+## Sub-Commands (precede all commands by the prefix for YOUR server to invoke them):
 
-1) **g start \<Time\> [Prize]**
+1) **giveaway start \<Time\> [Prize]**
     
     * **Optional Flags**
     
@@ -23,20 +23,20 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) 
 
        *Note :* must not contain spaces in between and use the mentioned format only i.e d not days for specifying days so on.
 
-2)  **g end \<ID\>**
+2)  **giveaway end \<ID\>**
    
     Ends a giveaway with specified ID and will announce the winners instantly. Will update giveaway announcement message.
 
     *Note:* ID is the long number which can be obtained using:  `g list` command and is also mentioned in the giveaway announcement embed.
     
 
-3) **g cancel \<ID\>**
+3) **giveaway cancel \<ID\>**
 
     Cancels a giveaway with specified ID WITHOUT announcing winners. Will update giveaway announcement message.
 
     *Note:* ID is the long number which can be obtained using:  `g list` command and is also mentioned in the giveaway announcement embed.
 
-4) **g list**
+4) **giveaway list**
 
     Lists all active giveaways with their IDs , Prize and Ending Time.
 
