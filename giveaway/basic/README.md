@@ -1,4 +1,4 @@
-# Giveaway Package Vanilla Version
+# Giveaway Package (Basic Version)
 This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs).
 Both must be saved for it to work as expected.
 
