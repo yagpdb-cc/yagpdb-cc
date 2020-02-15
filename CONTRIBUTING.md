@@ -32,7 +32,7 @@ An example of a complete leading comment would be:
 {{/*
 	This command sends the message "hello world" in the channel. Usage: `-helloworld`.
 
-	Recommend trigger: Command trigger with trigger `hellworld`.
+	Recommend trigger: Command trigger with trigger `helloworld`.
 */}}
 ```
 
