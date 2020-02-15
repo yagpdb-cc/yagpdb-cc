@@ -8,13 +8,7 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) 
 
 1) **giveaway start \<Time\> [Prize]**
     
-    * **Optional Flags**
-    
-        | Flag    | Argument Type       |      Usage          |
-        | ------- |:-------------------:| :-------------------------------------------------------------------:|
-        | -p      | number              |  for specifying max number of participants( default is unlimited).   |
-        | -w      | number              |  for specifying number of winners ( default is 1)                    |
-        | -c      | Channel (ID/Mention)|  for specifying the channel for giveaway to take place ( default is current channel)|
+    Use : To start a new giveaway.
 
     * **\<Time\>**  It is specified as the amount of time after which giveaway winners will be announced or how long giveaway will be active.
                     Format is (num)y(num)mo(num)w(num)d(num)h(num)m(num)s.
@@ -22,6 +16,18 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) 
                         eg: 1y7mo2w1d3h4m15s = 1 year 7 months 2 weeks 1 day 3 hours 4 minutes and 15 seconds.
 
        *Note :* must not contain spaces in between and use the mentioned format only i.e d not days for specifying days so on.
+
+    * **[Prize]**   A string which will contain the prize of the giveaway , can be multiple words.
+
+    * **Optional Flags**
+    
+        | Flag    | Argument Type       |      Usage          |
+        | ------- |:-------------------:| :----------------------------------------------------------------------------------:|
+        | -p      | number              |  for specifying max number of participants( default is unlimited).                  |
+        | -w      | number              |  for specifying number of winners ( default is 1)                                   |
+        | -c      | Channel (ID/Mention)|  for specifying the channel for giveaway to take place ( default is current channel)|
+
+    Example: `(prefix)giveaway start 1d12h Ps4 Pro -p 50 -w 2 -c #giveaway-channel` will start a giveaway in the #giveaway-channel which will remain active for 1 day 12 hours with max participants as 50 and max winners as 2.
 
 2)  **giveaway end \<ID\>**
    
