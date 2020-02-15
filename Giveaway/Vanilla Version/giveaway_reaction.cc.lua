@@ -1,7 +1,12 @@
-{{/* Supporting Reaction Command for Giveaway Package.
-Recommended Trigger : Reaction Trigger ; Type : Added + Removed reactions */}}
+{{/* 
+        Supporting Reaction Command for Giveaway Package.
 
+        Recommended Trigger : Reaction Type with trigger `Added + Removed reactions` 
+*/}}
+
+{{/* CONFIGURATION VALUES START */}}
 {{$giveawayEmoji := `🎉`}} {{/* set giveaway emoji to be used */}}
+{{/* CONFIGURATION VALUES END */}}
 
 {{/* Actual Code , do not touch unless you know what youre doing */}}
 
