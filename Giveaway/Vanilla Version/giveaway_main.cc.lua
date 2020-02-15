@@ -1,7 +1,12 @@
-{{/*Main Giveaway CC. Supports execCC invoke.
-Recommended Trigger: Command (Can also work with regex and starts with if triggers are correctly set) */}}
-
+{{/*
+        Main Giveaway CC. Supports execCC invoke.
+        Recommended Trigger: Command trigger with trigger `giveaway`
+        (Can also work with regex and starts with if triggers are correctly set)
+*/}}
+     
+{{/* CONFIGURATION VALUES START */}}
 {{$giveawayEmoji := `🎉`}}{{/* set giveaway emoji to be used */}}
+{{/* CONFIGURATION VALUES END */}}
 
 {{/*Actual Code , do not touch unless you know what youre doing*/}}
 
