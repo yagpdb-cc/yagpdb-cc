@@ -6,7 +6,7 @@ Both must be saved for it to work as expected.
 
 1) **giveaway start \<Time\> [Prize]**
     
-    Use : To start a new giveaway.
+    Use: To start a new giveaway.
 
     * **\<Time\>**  It is specified as the amount of time after which giveaway winners will be announced or how long giveaway will be active.
                     Format is (num)y(num)mo(num)w(num)d(num)h(num)m(num)s.
@@ -45,26 +45,24 @@ Both must be saved for it to work as expected.
     Lists all active giveaways with their IDs , Prize and Ending Time.
 
 
-## Exec CC support: 
-
+## ExecCC support: 
 Code has inbuilt intuitive execCC support. ExecData for invoking command via execCC is simply : 
 
     "giveaway <Sub_Command> <argument_1> <argument_2> ..."
 
 Examples:
 
-* `{{execCC $CCID_for_giveaway_main_command nil 0 "-giveaway start 1d Coins -w 2"}}` is equivalent to : `-giveaway start 1d Coins`
+* `{{execCC $CCID_for_giveaway_cc nil 0 "-giveaway start 1d Coins -w 2"}}` is equivalent to : `-giveaway start 1d Coins`
 
   Above will start a giveaway in the same channel in which execCC is invoked with a duration of 1 day with max winners: 2 and prize: Coins
 
-* `{{execCC $CCID_for_giveaway_main_command nil 0 "-givewaway end 11106339"}}` is equivalent to : `-giveaway end 11106339`
+* `{{execCC $CCID_for_giveaway_cc nil 0 "-givewaway end 11106339"}}` is equivalent to : `-giveaway end 11106339`
 
   Above will end the giveaway with ID = `11106339` immediately and announce the winners.
 
 So in general you can pass the ExecData as simply trigger followed by Sub-Command and arguments separated by a space " " all joined into a single string.
 
 ## Inbuilt syntax displayer:
-
 The main command also has an inbuilt syntax displayer which can be invoked by simply typing the trigger without any arguments.
 
 ## Things which can be modified:
