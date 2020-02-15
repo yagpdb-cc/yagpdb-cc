@@ -4,7 +4,7 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) 
 
 
 
-## Commands (precede all commands by the prefix for YOUR server to invoke them) \:
+## Commands (precede all commands by the prefix for YOUR server to invoke them):
 
 1) **g start \<Time\> [Prize]**
     
@@ -59,7 +59,11 @@ Examples:
 
 So in general you can pass the ExecData as simply trigger followed by Sub-Command and arguments separated by a space " " all joined into a single string.
 
-## Things which can be modified :
+## Inbuilt syntax displayer:
+
+The main command also has an inbuilt syntax displayer which can be invoked by simply typing the trigger without any arguments.
+
+## Things which can be modified:
 The giveaway emoji is present as the Top of both commands and can be modified according to choice but remember!! needs to be modified for both commands (CCs).
 
 > Credits: Developed By [Satty #9361](https://github.com/Satty9361)
