@@ -1,8 +1,6 @@
 # Giveaway Package Vanilla Version
-
-This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) . Both must be saved for it to work as expected.
-
-
+This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs).
+Both must be saved for it to work as expected.
 
 ## Sub-Commands (precede all commands by the prefix for YOUR server to invoke them):
 

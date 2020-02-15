@@ -1,7 +1,7 @@
 {{/* 
-        Supporting Reaction Command for Giveaway Package.
+        Supporting Reaction CC for Giveaway Package.
 
-        Recommended Trigger : Reaction Type with trigger `Added + Removed reactions` 
+        Recommended trigger: Reaction trigger with option `Added + Removed reactions` selected.
 */}}
 
 {{/* CONFIGURATION VALUES START */}}
@@ -14,7 +14,7 @@
 {{ $data := sdict}}
 
 {{/* if reaction emoji matches giveaway emoji and user reacting is not a bot , proceed */}}
-{{if  and (eq .Reaction.Emoji.Name $giveawayEmoji) (not .User.Bot )}}
+{{if and (eq .Reaction.Emoji.Name $giveawayEmoji) (not .User.Bot )}}
 
 {{/* fetching active giveaways data */}}
 {{with ( dbGet 7777 "giveaway_active" ).Value}}{{$data = sdict .}}{{end}}
