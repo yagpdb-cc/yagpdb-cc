@@ -21,13 +21,13 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs) 
 
     * **Optional Flags**
     
-        | Flag    | Argument Type       |      Usage          |
+        | Flag    | Argument Type       |      Usage                                                                          |
         | ------- |:-------------------:| :----------------------------------------------------------------------------------:|
         | -p      | number              |  for specifying max number of participants( default is unlimited).                  |
         | -w      | number              |  for specifying number of winners ( default is 1)                                   |
         | -c      | Channel (ID/Mention)|  for specifying the channel for giveaway to take place ( default is current channel)|
 
-    Example: `(prefix)giveaway start 1d12h Ps4 Pro -p 50 -w 2 -c #giveaway-channel` will start a giveaway in the #giveaway-channel which will remain active for 1 day 12 hours with max participants as 50 and max winners as 2.
+    **Example:** `(prefix)giveaway start 1d12h Ps4 Pro -p 50 -w 2 -c #giveaway-channel` will start a giveaway in the #giveaway-channel which will remain active for 1 day 12 hours with max participants as 50 and max winners as 2.
 
 2)  **giveaway end \<ID\>**
    
