@@ -11,6 +11,8 @@
 {{ $starboard := 678379546218594304 }} {{/* ID of starboard channel */}}
 {{/* CONFIGURATION VALUES END */}}
 
+{{ $linkRegex := `https?:\/\/(?:\w+\.)?[\w-]+\.[\w]{2,3}(?:\/[\w-_.]+)+\.(?:png|jpg|jpeg|gif|webp)` }}
+
 {{ $count := 0 }}
 {{ range .ReactionMessage.Reactions }}
 	{{ if ge .Count $starLimit }} {{ $count = .Count }} {{ end }}
@@ -48,6 +50,7 @@
 		"footer" (sdict "text" (printf "%s %d | %d" $emoji $count .ReactionMessage.ID))
 	}}
 	{{ with .ReactionMessage.Content }}
+		{{ with reFind $linkRegex . }} {{ $embed.Set "image" (sdict "url" .) }} {{ end }}
 		{{ $content := . }}
 		{{ if gt (len .) 1000 }} {{ $content = slice . 0 1000 | printf "%s..." }} {{ end }}
 		{{ $embed.Set "fields" ($embed.fields.Append (sdict "name" "Message" "value" $content)) }}
