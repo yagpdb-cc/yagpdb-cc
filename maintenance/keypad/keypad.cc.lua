@@ -1,5 +1,5 @@
 {{/*
-	Working keypad using reactions as an interface.
+	Working keypad using reactions as an interface. Usage: `-keypad`.
 
 	Recommended trigger: Command trigger with trigger `keypad`.
 */}}
