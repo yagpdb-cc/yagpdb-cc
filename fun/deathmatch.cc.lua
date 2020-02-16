@@ -4,20 +4,20 @@
 	Recommended trigger: Command trigger with trigger `deathmatch`.
 */}}
 
-{{/* Magically makes this command lag less (thanks Satty) */}}
+{{/* CONFIGURATION VALUES START */}}
+{{/* Slice of random channel IDs in your server to decrease execCC lag */}}
 {{ $channels := cslice
-	675217831234633730
-	675225901750812712
-	675491775598690335
-	675220923233730570
-	668142843612758046
-	668150205748871218
+	670669801596649478
+	671509095433371688
+	677921750566043708
+	678379546218594304
 }}
 {{ $emojis := sdict
 	"UserA" "<:battleForward:675127538095357993>"
 	"UserB" "<:battleBackwards:675127538455937024>"
 }}
-{{ $yag := userArg 204255221017214977 }}
+{{ $yag := userArg 624608566426468373 }}
+{{/* CONFIGURATION VALUES END */}}
 
 {{ $args := parseArgs 0 "**Syntax:** -deathmatch [user1] [user2]" (carg "userid" "user1") (carg "userid" "user2") }}
 {{ $userA := $yag }}
@@ -28,7 +28,7 @@
 {{ if $args.IsSet 1 }} {{ $userB = userArg ($args.Get 1) }} {{ end }}
 
 {{ $embed := sdict 
-	"title" "💢 Battle"
+	"title" "💢 Deathmatch"
 	"description" "*Match starting in 3...*"
 	"color" 14232643
 	"fields" (cslice
