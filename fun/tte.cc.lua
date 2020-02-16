@@ -11,7 +11,7 @@
 		{{ $c := index . 0 }}
 		{{ if or (and (ge $c 65) (le $c 90)) (and (ge $c 97) (le $c 122)) }}
 			{{ $msg = joinStr "" $msg ":regional_indicator_" (lower .) ":" }}
-		{{ else if and (ge $c 48) (le $c 56) }}
+		{{ else if and (ge $c 48) (le $c 57) }}
 			{{ $msg = joinStr "" $msg . $keycap }}
 		{{ else }}
 			{{ $msg = joinStr "" $msg (or ($emojis.Get .) .) }}
