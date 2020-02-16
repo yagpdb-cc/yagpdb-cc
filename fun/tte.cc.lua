@@ -1,11 +1,10 @@
 {{/*
-	This command converts given text to emoji. Usage: `-tte <text>` (raw content with `-tteraw <text>`).
+	This command converts given text to emoji. Usage: `-tte <text>`.
 
-	Recommended trigger: Regex trigger with trigger `^-(tte|emojify|emotify)(-raw)?`
+	Recommended trigger: Regex trigger with trigger `^-(tte|emojify|emotify)`
 */}}
 {{ $keycap := "⃣" }}
 {{ $emojis := sdict "#" "#⃣" "*" "*⃣" "!" "❗" "?" "❓" }}
-{{ $codeblock := reFind `raw` .Cmd }}
 {{ if .StrippedMsg }}
 	{{ $msg := "" }}
 	{{- range (split .StrippedMsg "") -}}
@@ -18,14 +17,10 @@
 			{{ $msg = joinStr "" $msg (or ($emojis.Get .) .) }}
 		{{ end }}
 	{{- end -}}
-	{{ if $codeblock }}
-		{{ sendMessage nil (printf "**❯ Text to Emoji:**\n```\n%s```" $msg) }}
-	{{ else }}
-		{{ sendMessage nil (cembed
-			"title" "❯ Text to Emoji"
-			"description" $msg
-			"color" 14232643
-			"footer" (sdict "text" "Powered by YAGPDB.xyz")
-		) }}
-	{{ end }}
+	{{ sendMessage nil (cembed
+		"title" "❯ Text to Emoji"
+		"description" $msg
+		"color" 14232643
+		"footer" (sdict "text" "Powered by YAGPDB.xyz")
+	) }}
 {{ end }}
