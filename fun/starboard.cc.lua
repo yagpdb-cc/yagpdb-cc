@@ -54,7 +54,7 @@
 	{{ end }}
 	{{ with .ReactionMessage.Attachments }}
 		{{ $attachment := (index . 0).URL }}
-		{{ if reFind `^\.(png|jpg|jpeg|gif|webp)` $attachment }}
+		{{ if reFind `\.(png|jpg|jpeg|gif|webp)$` $attachment }}
 			{{ $embed.Set "image" (sdict "url" $attachment) }}
 		{{ end }}
 	{{ end }}
