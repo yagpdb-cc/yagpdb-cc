@@ -27,7 +27,7 @@
 	{{ end }}
 {{ end }}
 
-{{ if and $count (or .ReactionMessage.Content .ReactionMessage.Attachments) }}
+{{ if and $count (or .ReactionMessage.Content .ReactionMessage.Attachments) (eq .Reaction.Emoji.Name $starEmoji) }}
 	{{ $emoji := "🌠" }}
 	{{ if lt $count 5 }} {{ $emoji = "⭐" }}
 	{{ else if lt $count 10 }} {{ $emoji = "🌟" }}
