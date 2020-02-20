@@ -1,8 +1,8 @@
 {{/*
-	This command allows you to parse string to time. Is human friendly.
+  This command allows you to parse string to time. Is human friendly.
 
-	Recommended usage: As a part of a Larger Command. Can also be used standalone with -
-      trigger: Command trigger with trigger `time`
+  Recommended usage: As a part of a Larger Command. Can also be used standalone with -
+      Trigger: Command trigger with trigger `time`
 
   Usage: 
       String to be converted is fed to -> $timeString
