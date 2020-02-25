@@ -13,8 +13,8 @@
 	678379546218594304
 }}
 {{ $emojis := sdict
-	"UserA" "<:battleForward:675127538095357993>"
-	"UserB" "<:battleBackwards:675127538455937024>"
+	"UserA" "<:battleForward:681735565594460181>"
+	"UserB" "<:battleBackwards:681735538105253901>"
 }}
 {{ $yag := userArg 624608566426468373 }}
 {{/* CONFIGURATION VALUES END */}}
