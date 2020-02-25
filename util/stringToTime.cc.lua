@@ -21,7 +21,7 @@
   Credits: Developed by Satty#9361
 */}}
 
-{/* CONFIGURATION VALUES START */}}
+{{/* CONFIGURATION VALUES START */}}
 {{/*String to be converted is fed to $timeString variable*/}}
 {{$timeString := .StrippedMsg}}
 {{/* can be any string variable / string data but should contain only the time in the formats mentioned */}}
