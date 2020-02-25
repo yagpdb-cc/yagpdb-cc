@@ -14,7 +14,7 @@
              Format 2 :  String format with year mentioned with 4 digits and both short and long month names supported. Date components (i.e day , month , year) need not be present together. eg: 12 Feb 11:50 am , 2020 is supported.
              Format 3 :  Today and tomorrow is supported.
 
-      TimeZone: By default timezone is UTC. If user has timezone set using "setz" command, timezone adjustment is also possible.
+      TimeZone: By default timezone is UTC. If user has timezone set using "setz" command, timezone adjustment is also possible. UTC time is parsed if explicitly specified UTC in this case.
 
       Time: Time is mentioned as hh:mm:ss or hh:mm or hh. May or may not be followed by am or pm.
 
@@ -32,38 +32,28 @@
 {{$time := sdict "Day" $dTime.Day "Month" $dTime.Month "Year" $dTime.Year "Hour" 0 "Min" 0 "Sec" 0 }}
 {{$dateSet := false}} {{$timeSet := false}}
 {{$timeConverted := 0}}
+{{$months := sdict "jan" 1 "feb" 2 "mar" 3 "apr" 4 "may" 5 "jun" 6 "jul" 7 "aug" 8 "sep" 9 "oct" 10 "nov" 11 "dec" 12}}
 
 {{/* Actual Code */}}
+{{$timeString = lower $timeString}}
 {{/* Fetching Dates */}}
 {{/* Fetching dates written in format dd.mm.yyyy or dd/mm/yyyy or dd-mm-yyyy or dd,mm,yyyy */}} 
 {{with reFindAllSubmatches `((\s|^)((\d{1,2})(\-|\.|\/|\,)(\d{1,2})(\-|\.|\/|\,)(\d{1,4}))(\s|$))` $timeString}}
-{{$time.Set "Day" (toInt (index (index . 0) 4))}}
-{{$time.Set "Month" (toInt (index (index . 0) 6))}}
-{{$time.Set "Year" (toInt (index (index . 0) 8))}}
-{{$dateSet = true}}
+      {{$time.Set "Day" (toInt (index . 0 4))}}
+      {{$time.Set "Month" (toInt (index . 0 6))}}
+      {{$time.Set "Year" (toInt (index . 0 8))}}
+      {{$dateSet = true}}
 {{else}}
+
 {{/* Fetching dates written as a string with both long or short month names supported. Date , Month and Year need not be present together but year must be written in full form(with 4 digits) eg: 20 sept 1am ,2019 is supported */}}
-     {{ with (reFindAllSubmatches `(?:[^a-z]|^)(jan((uary)?)|feb((ruary)?)|mar((ch)?)|apr((il)?)|may|jun(e?)|jul(y?)|aug((ust)?)|sep((t(ember)?)?)|oct((ober)?)|nov((ember)?)|dec((ember)?))(?:[^a-z]|$)` (lower $timeString) ) }}
-     {{$month := index (index . 0) 1}}
-          {{if or (eq $month "jan") (eq $month "january")}}{{$time.Set "Month" 1}}
-          {{else if or (eq $month "feb") (eq $month "february")}}{{$time.Set "Month" 2}}
-          {{else if or (eq $month "mar") (eq $month "march")}}{{$time.Set "Month" 3}}
-          {{else if or (eq $month "apr") (eq $month "april")}}{{$time.Set "Month" 4}}
-          {{else if (eq $month "may")}}{{$time.Set "Month" 5}}
-          {{else if or (eq $month "jun") (eq $month "june")}}{{$time.Set "Month" 6}}
-          {{else if or (eq $month "jul") (eq $month "july")}}{{$time.Set "Month" 7}}
-          {{else if or (eq $month "aug") (eq $month "august")}}{{$time.Set "Month" 8}}
-          {{else if or (eq $month "sep") (eq $month "sept") (eq $month "september")}}{{$time.Set "Month" 9}}
-          {{else if or (eq $month "oct") (eq $month "october")}}{{$time.Set "Month" 10}}
-          {{else if or (eq $month "nov") (eq $month "november")}}{{$time.Set "Month" 11}}
-          {{else if or (eq $month "dec") (eq $month "december")}}{{$time.Set "Month" 12}}
-          {{end}}
-     {{$temp:= reReplace `(([^:]|^)((\d+)((:(\d+)){1,2}))((\s?(am|pm))?))|(((\d+))(\s?(am|pm)))` (lower $timeString) ""}}
+     {{ with (reFindAllSubmatches `(?:[^a-z]|^)(jan((uary)?)|feb((ruary)?)|mar((ch)?)|apr((il)?)|may|jun(e?)|jul(y?)|aug((ust)?)|sep((t(ember)?)?)|oct((ober)?)|nov((ember)?)|dec((ember)?))(?:[^a-z]|$)` $timeString)}}
+     {{$time.Set "Month" ($months.Get (slice (index . 0 1) 0 3))}}
+     {{$temp:= reReplace `(([^:]|^)((\d+)((:(\d+)){1,2}))((\s?(am|pm))?))|(((\d+))(\s?(am|pm)))` $timeString ""}}
      {{with (reFindAllSubmatches `(?:\D|^)(\d{1,2})(?:\D|$)` $temp)}}
-     {{$time.Set "Day" (toInt (index (index . 0) 1))}}
+     {{$time.Set "Day" (toInt (index . 0 1))}}
      {{end}}
      {{with (reFindAllSubmatches `(?:\D|^)(\d{4})(?:\D|$)` $temp)}}
-     {{$time.Set "Year" (toInt (index (index . 0) 1))}}
+     {{$time.Set "Year" (toInt (index . 0 1))}}
      {{end}}
      {{$dateSet = true}}
      {{end}}
@@ -75,7 +65,7 @@
 {{if not $time.Month}}{{$time.Set "Month" $dTime.Month}}{{end}}
 {{if not $time.Year}}{{$time.Set "Year" $dTime.Year}}{{end}}
 {{else}}
-{{with reFind `(today)|(tomorrow)` (lower $timeString)}}
+{{with reFind `(today)|(tomorrow)` $timeString}}
 {{if eq . "tomorrow"}}
 {{$time.Set "Day" (add $dTime.Day 1)}}
 {{end}}
@@ -83,14 +73,14 @@
 {{end}}
 
 {{/* Fetching time specified as hh:mm or hh:mm:ss or hh. Can be followed by am/pm as well. */}}
-{{with reFind `(([^:]|^)((\d+)((:(\d+)){1,2}))((\s?(am|pm))?))|(((\d+))(\s?(am|pm)))` (lower $timeString)}}
+{{with reFind `(([^:]|^)((\d+)((:(\d+)){1,2}))((\s?(am|pm))?))|(((\d+))(\s?(am|pm)))` $timeString}}
 {{with reFindAllSubmatches `(\d+)` .}}
-{{$time.Set "Hour" (toInt (index (index . 0) 0))}}
+{{$time.Set "Hour" (toInt (index . 0 0))}}
 {{if (gt (len .) 1)}}
-{{$time.Set "Min" (toInt (index (index . 1) 0) )}}
+{{$time.Set "Min" (toInt (index . 1 0) )}}
 {{end}}
 {{if (gt (len .) 2)}}
-{{$time.Set "Sec" (toInt (index (index . 2) 0))}}
+{{$time.Set "Sec" (toInt (index . 2 0))}}
 {{end}}
 {{end}}
 {{with reFind `(am|pm)` .}}
@@ -114,7 +104,7 @@
 {{$timeConverted = (newDate $time.Year $time.Month $time.Day $time.Hour $time.Min $time.Sec)}}
 
 {{/*timezone adjustment - Remove if you only want UTC times*/}}
-{{if or $timeSet $dateSet}}
+{{if and (or $timeSet $dateSet) (not (reFind `([^a-z]|^)utc([^a-z]|$)` $timeString ))}}
 {{$TimeHour := .TimeHour}}
 {{with (reFind `(\-)?\d+(:\d+)?` (exec "setz -u") )}}
 {{$timeConverted = $timeConverted.Add (toDuration (mult -1.0 (toFloat (reReplace ":" . ".")) $TimeHour))}}
