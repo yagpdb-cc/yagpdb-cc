@@ -1,6 +1,7 @@
-# YAGPDB Custom Commands
-This is a repository of all the custom commands I have made for the [YAGPDB](https://yagpdb.xyz) Discord bot.
+#
+<h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
+> <p align="center">Cool custom commands for YAGPDB</p>
 ## Adding these Custom Commands
 I assume you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
 There are some "systems" which require you to add *all* commands. This is detailed in the individual `README.md` of that section.
