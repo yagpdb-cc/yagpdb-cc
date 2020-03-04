@@ -1,6 +1,5 @@
 {{/* This is an API command, where you can generate pictures of ducks, foxes, goats, cats, shibas, and my personal favourite, http Cats. I will probably add more afterwards, but this is it for now
-     Recommended Trigger type: Command trigger, Trigger: animal.
-     Please note that the animal names are case sensitive, the first letter of the animal is capital. If you have any animal pictures or APIs, feel free to DM me (GenryMg#0001) I'll add them here. 
+     Recommended Trigger type: Command trigger, Trigger: animal. If you have any animal pictures or APIs, feel free to DM me (GenryMg#0001) I will look at them and might add them here. 
 */}}
 
 {{$args := parseArgs 0 "Usage: -animal <animal type>"
