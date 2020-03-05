@@ -8,6 +8,7 @@
 }}
 {{ $animal := $args.Get 0 | lower }}
 {{ $link := "" }}
+{{ $send := true }}
 {{ if eq $animal "fox" }} {{ $link = printf "https://randomfox.ca/images/%d.jpg" (randInt 1 123) }}
 {{ else if eq $animal "duck" }}
 	{{ $base := "https://random-d.uk/api/" }}
@@ -28,8 +29,12 @@
 	 {{ $link = printf "https://cdn.shibe.online/shibes/%s.jpg" (index $links (randInt (len $links))) }}
 {{ else if eq $animal "help" }}
 	{{ sendMessage nil (cembed "title" "List of avaliable animals" "color" 0x0070BB "description" "1. Duck\n2.Fox\n3. Cat\n4. Goat\n5. Shiba\n6. Httpcat") }}
+	{{ $send = false }}
+{{ else }}
+	Usage: `-animal <animal type>`. Usage `-animal help` to see the animal types avaliable.
+	{{ $send = false }}
 {{ end }}
-{{ if ne $animal "help" }}
+{{ if $send }}
 	{{ sendMessage nil (cembed
 		"title" (joinStr " " "Have a" $animal)
 		"color" (randInt 0 16777217)
