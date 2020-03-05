@@ -33,7 +33,7 @@ If you're just looking at this repo, and are interested, here's a short list of 
 	* Edit tags
 	* Delete tags
 	* View tags simply with `;(tag name)`
-* &&General utility commands**
+* **General utility commands**
 
 This is by no means an exhaustive list, nor is it meant to be. See the individual folders for details.
 
