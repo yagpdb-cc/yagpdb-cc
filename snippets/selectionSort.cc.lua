@@ -9,8 +9,8 @@
 {{ $len := len $arr }}
 {{- range seq 0 $len -}}
 	{{ $min := . }}
-		{{ range seq (add . 1) $len }}
-			{{ if lt (index $arr $min) (index $arr .) }} {{ $min = . }} {{ end }}
+	{{ range seq (add . 1) $len }}
+		{{ if lt (index $arr $min) (index $arr .) }} {{ $min = . }} {{ end }}
 	{{ end }}
 	{{ if ne $min . }}
 		{{ $ := index $arr . }}
