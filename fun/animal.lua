@@ -1,5 +1,8 @@
 {{/*
 	This CC generates random images of different animals. Usage: `-animal <animaltype>` where `animal` is one of `duck`, `fox`, `cat`, `goat`, `shiba`, and `httpcat`.
+	Recommended trigger: Command trigger with trigger `animal`.
+
+	Authored by GenryMg.
 */}}
 
 {{ $args := parseArgs 1 "Usage: `-animal <animal type>`. Usage `-animal help` to see the animal types avaliable." 
