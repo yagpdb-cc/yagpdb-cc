@@ -15,7 +15,9 @@
 
 {{ $count := 0 }}
 {{ range .ReactionMessage.Reactions }}
-	{{ if ge .Count $starLimit }} {{ $count = .Count }} {{ end }}
+	{{ if and (eq .Emoji.Name $starEmoji) (ge .Count $starLimit) }}
+		{{ $count = .Count }}
+	{{ end }}
 {{ end }}
 
 {{ $starboardMessage := 0 }}
