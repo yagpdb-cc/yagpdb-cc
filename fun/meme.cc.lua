@@ -33,5 +33,5 @@
 {{$msglink := joinStr "/" $link $meme $top $bottom}}
 {{$msglink = joinStr "" $msglink ".jpg"}}
 {{$col := randInt 111111 999999}}
-{{sendMessage nil (cembed "title" "Here is your meme" "image" (sdict "url" $msglink)) "color" $col }}
+{{sendMessage nil (cembed "title" "Here is your meme" "image" (sdict "url" $msglink) "color" $col) }}
 {{end}}
