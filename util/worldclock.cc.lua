@@ -4,11 +4,11 @@
 */}}
 
 {{ $clocks := sdict
-	"Vancouver" -8
-	"New York" -5
-	"London" 0
-	"Moscow" 3
-	"Tokyo" 9
+	"Vancouver" "America/Vancouver"
+	"New York" "America/New_York"
+	"London" "Europe/London"
+	"Moscow" "Europe/Moscow"
+	"Tokyo" "Asia/Tokyo"
 }}
 {{ $hour := .TimeHour }}
 
@@ -21,7 +21,7 @@
 }}
 
 {{ range $name, $ := $clocks }}
-	{{ $time := currentTime.Add (toDuration (mult . $hour)) }}
+	{{ $time := currentTime.In (newDate 0 0 0 0 0 0 .).Location }}
 	{{ $formatted := printf "%s, %s"
 		$time.Weekday.String
 		($time.Format "3:04:05 PM")
