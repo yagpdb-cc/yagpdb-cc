@@ -44,13 +44,8 @@
 {{ end }}
 
 {{ $asset := $assets.Get $marker }}
-{{ $after := "PM" }}
-{{ $formattedHour := sub $hr 12 }}
-{{ if lt $formattedHour 0 }} {{ $formattedHour = $hr }} {{ $after = "AM"}} {{ end }}
-{{ $time := printf "%d:%02d:%02d %s" $formattedHour $now.Minute $now.Second $after }}
-{{ $date := printf "%s, %s %d, %d"
-	$now.Weekday.String $now.Month.String $now.Day $now.Year
-}}
+{{ $time := printf ($now.Format "3:04:%d PM") $now.Second }}
+{{ $date := joinStr " " ($now.Format "Monday, January _2,") $now.Year }}
 {{ $embed := cembed
 	"title" (printf "Good %s, %s" $marker $name)
 	"color" $asset.color
