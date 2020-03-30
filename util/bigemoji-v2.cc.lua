@@ -15,7 +15,7 @@
 			{{ $url = joinStr "" $url $emoji_U ".png" }}
 			{{ $embed.Set "image"  (sdict "url" $url) }}
 		{{ else }}
-			{{ with reFindAllSubmatches `<(a)?:[\w|~]+:(\d+)>` $emoji }}
+			{{ with reFindAllSubmatches `<(a)?:[\w~]+:(\d+)>` $emoji }}
 				{{ $animated := index . 0 1 }}
 				{{ $id := index . 0 2 }}
 				{{ $ext := ".png" }}
