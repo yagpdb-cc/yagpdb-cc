@@ -24,7 +24,7 @@
 		"color" 1062054
 	)
 }} {{/* Only modify the individual sdicts, you should only be changing the image (url) or color (dec) */}}
-{{ $offset := -8 }} {{/* UTC offset in hours */}}
+{{ $location := "America/Vancouver" }} {{/* Avaliable from http://kevalbhatt.github.io/timezone-picker/ (same as setz) */}}
 {{ $name := "Joe" }} {{/* Your name */}}
 {{ $location := "Vancouver" }} {{/* City name */}}
 {{/* CONFIGURATION VALUES END */}}
@@ -36,7 +36,7 @@
 {{ $weather := slice (index $res 3) 15 }}
 {{ $temp := reReplace `\.\.` (reReplace ` \(.+$` (slice (index $res 4) 15) "") " - " }}
 
-{{ $now := currentTime.Add (toDuration (mult $offset .TimeHour)) }}
+{{ $now := currentTime.In (newDate 0 0 0 0 0 0 $location) }}
 {{ $hr := $now.Hour }}
 {{ if and (ge $hr 5) (lt $hr 12) }} {{ $marker = "morning" }}
 {{ else if and (ge $hr 12) (lt $hr 17) }} {{ $marker = "afternoon" }}
