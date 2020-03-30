@@ -5,8 +5,6 @@
 	Recommended trigger: Regex trigger with trigger `^-(user|member)(-?info)?`
 */}}
 
-triggered
-
 {{ $member := .Member }}
 {{ $user := .User }}
 {{ $args := parseArgs 0 "**Syntax:** `-userinfo [user]`" (carg "member" "target") }}
@@ -29,7 +27,7 @@ triggered
 	"fields" (cslice
 		(sdict "name" "❯ Nickname" "value" (or $member.Nick "*None set*"))
 		(sdict "name" "❯ Joined At" "value" ($member.JoinedAt.Parse.Format "Jan 02, 2006 3:04 AM"))
-		(sdict "name" "❯ Created At" "value" ($createdAt.Format "Jan 02, 2006 3:04 AM"))
+		(sdict "name" "❯ Created At" "value" ($createdAt.Format "Monday, January 2, 2006 at 3:04 AM"))
 		(sdict "name" (printf "❯ Roles (%d Total)" (len $member.Roles)) "value" (or $roles "n/a"))
 		(sdict "name" "❯ Bot" "value" $bot)
 	)
