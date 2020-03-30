@@ -36,7 +36,7 @@
 {{ $weather := slice (index $res 3) 15 }}
 {{ $temp := reReplace `\.\.` (reReplace ` \(.+$` (slice (index $res 4) 15) "") " - " }}
 
-{{ $now := currentTime.In (newDate 0 0 0 0 0 0 $location) }}
+{{ $now := currentTime.In (newDate 0 0 0 0 0 0 $location).Location }}
 {{ $hr := $now.Hour }}
 {{ if and (ge $hr 5) (lt $hr 12) }} {{ $marker = "morning" }}
 {{ else if and (ge $hr 12) (lt $hr 17) }} {{ $marker = "afternoon" }}
