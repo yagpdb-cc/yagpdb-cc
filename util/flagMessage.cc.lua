@@ -32,4 +32,5 @@
 			"timestamp" currentTime
 		) }}
 	{{ end }}
+	{{ deleteMessageReaction nil .ReactionMessage.ID .User.ID (printf "%s:%d" .Reaction.Emoji.Name $reportEmoji) }}
 {{ end }}

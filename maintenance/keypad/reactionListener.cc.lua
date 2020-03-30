@@ -19,7 +19,7 @@
 }}
 {{ $reaction := .Reaction.Emoji.Name }}
 {{ if and (in $reactionsList $reaction) ($data := (dbGet .ReactionMessage.ID "keypad").Value) }}
-	{{/* {{ deleteMessageReaction nil .ReactionMessage.ID .User.ID .Reaction.Emoji.Name }} */}}
+	{{ deleteMessageReaction nil .ReactionMessage.ID .User.ID .Reaction.Emoji.Name }}
 	{{ $embed := index .ReactionMessage.Embeds 0 }}
 	{{ $raw := sdict "title" $embed.Title "footer" (sdict "text" $embed.Footer.Text) "color" $embed.Color }}
 	{{ $current := joinStr "" $data.current (index $reactions $reaction) }}
