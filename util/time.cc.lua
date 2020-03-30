@@ -45,7 +45,7 @@
 
 {{ $asset := $assets.Get $marker }}
 {{ $time := $now.Format "3:04:05 PM" }}
-{{ $date := $now.Format "Monday, January _2, 2006" }}
+{{ $date := $now.Format "Monday, January 2, 2006" }}
 {{ $embed := cembed
 	"title" (printf "Good %s, %s" $marker $name)
 	"color" $asset.color
