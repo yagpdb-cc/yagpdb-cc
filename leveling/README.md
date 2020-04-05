@@ -13,4 +13,4 @@ As usual, there is a leading comment showing the trigger and description of the 
 * Get started with 1 command, no editing of source needed
 
 ## Getting Started
-Copy the commands given below, add them with the instructions given in the comment at the very TOP of the file, and run `-leveling use-default` to get started with the defualt settings!
+Copy the commands given below, add them with the instructions given in the comment at the very TOP of the file, and run `-leveling use-default` to get started with the default settings!
