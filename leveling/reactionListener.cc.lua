@@ -13,10 +13,10 @@
 	{{ if and (eq $embed.Title "❯ Leaderboard") $embed.Footer }} {{/* More checks */}}
 		{{ $page = reFind `\d+` $embed.Footer.Text }} {{/* We presume that this is valid, and get the page num */}}
 		{{ $isValid = true }} {{/* Yay, it is valid */}}
-		{{ deleteMessageReaction nil $.ReactionMessage.ID $.User.ID $action }}
 	{{ end }}
 {{ end }}
 {{ if and (in $validEmojis $action) $isValid $page }} {{/* Even more checks for validity... */}}
+	{{ deleteMessageReaction nil .ReactionMessage.ID .User.ID $action }}
 	{{ if eq $action "▶️" }} {{ $page = add $page 1 }} {{/* Update page according to emoji */}}
 	{{ else }} {{ $page = sub $page 1 }} {{ end }}
 	{{ if ge $page 1 }} {{/* Otherwise, dbTopEntries throws error due to negative skip */}}
