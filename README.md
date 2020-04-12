@@ -71,7 +71,7 @@ These commands are not guaranteed to be working. I strive to test all the custom
 
 ## Need help?
 If you are having difficulties with one of the custom commands here, please feel free to DM me on Discord or ping me in the [YAGPDB Support Server](https://discord.gg/5uVyq2E). 
-> Discord `Joe_#2447`.
+> Discord `Joe_#2898`.
 
 ## Author
 **yagpdb-cc** is authored and maintained by Joe.
