@@ -10,7 +10,6 @@
 {{ $barFull := "■" }}
 {{ $xp := 0 }} {{/* Xp of user */}}
 {{ $color := 14232643 }} {{/* Embed color */}} 
-{{ with dbGet .User.ID "xpColor" }} {{ $color = .Value }} {{ end }}
 {{ $user := .User }} {{/* Target user */}}
 {{ $colorSet := false }}
 
@@ -18,6 +17,7 @@
 	{{ $temp := userArg (index . 0) }}
 	{{ if $temp }}
 		{{ $user = $temp }}
+		{{ with dbGet $user.ID "xpColor" }} {{ $color = .Value }} {{ end }}
 	{{ else if and (eq (index . 0) "set-color") (ge (len .) 2) }}
 		{{ $colorSet = true }}
 		{{ $multipliers := cslice 1048576 65536 4096 256 16 1 }}
@@ -38,7 +38,11 @@
 		{{ else }}
 			Please provide a valid hex to set your rank card color to.
 		{{ end }}
+	{{ else if $db := dbGet .User.ID "xpColor" }}
+		{{ $color = $db.Value }}
 	{{ end }}
+{{ else }}
+	{{ with dbGet .User.ID "xpColor" }} {{ $color = .Value }} {{ end }}
 {{ end }} {{/* If user was provided, use that */}}
 {{ if not $colorSet }}
 	{{ with dbGet $user.ID "xp" }}
