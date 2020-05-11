@@ -13,15 +13,16 @@
 
 {{/* Actual CODE */}}
 {{$reaction_url := ""}}
+
 {{with .Reaction.Emoji.ID}}
     {{$ext := ".png"}}{{if $.Reaction.Emoji.Animated}}{{$ext = ".gif"}}{{end}}
     {{$reaction_url = printf "https://cdn.discordapp.com/emojis/%d%s" . $ext}}
 {{else}}
-            {{$emoji_U := ""}}
-            {{- range toRune .Reaction.Emoji.Name }}
-                {{- $emoji_U = joinStr "-" $emoji_U (printf "%04x" .) }}
-            {{- end -}}
-            {{ $reaction_url = print "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-google-136/" $emoji_U ".png" }}
+    {{$emoji_U := ""}}
+    {{- range toRune .Reaction.Emoji.Name }}
+        {{- $emoji_U = joinStr "-" $emoji_U (printf "%04x" .) }}
+    {{- end -}}
+    {{ $reaction_url = print "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-google-136/" $emoji_U ".png" }}
 {{end}}
 {{$addrem := "`Removed`"}}{{if .ReactionAdded}}{{$addrem = "`Added`"}}{{end}}
 
