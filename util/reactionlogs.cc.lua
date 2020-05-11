@@ -17,7 +17,7 @@
     {{$ext := ".png"}}{{if $.Reaction.Emoji.Animated}}{{$ext = ".gif"}}{{end}}
     {{$reaction_url = printf "https://cdn.discordapp.com/emojis/%d%s" . $ext}}
 {{else}}
-             {{$emoji_U := ""}}
+            {{$emoji_U := ""}}
             {{- range toRune .Reaction.Emoji.Name }}
                 {{- $emoji_U = joinStr "-" $emoji_U (printf "%04x" .) }}
             {{- end -}}
@@ -25,9 +25,7 @@
 {{end}}
 {{$addrem := "`Removed`"}}{{if .ReactionAdded}}{{$addrem = "`Added`"}}{{end}}
 
-
 {{sendMessage $logging_channel_id (cembed "description" (print "**Reaction:** "  $addrem "\n**By:**[ " .User "](https://discord.com/users/" .User.ID ")") "color" 0xFF0000  
-"fields" (cslice 
-    (sdict "name" "Message location: " "value" (joinStr "" "[<#" .Channel.ID ">](https://discordapp.com/channels/" .Guild.ID "/" .Channel.ID "/" .ReactionMessage.ID ")") "inline" false))
+"fields" (cslice (sdict "name" "Message location: " "value" (joinStr "" "[<#" .Channel.ID ">](https://discordapp.com/channels/" .Guild.ID "/" .Channel.ID "/" .ReactionMessage.ID ")") "inline" false))
 "thumbnail" (sdict "url" $reaction_url)
 )}}
