@@ -27,6 +27,6 @@
 {{$addrem := "`Removed`"}}{{if .ReactionAdded}}{{$addrem = "`Added`"}}{{end}}
 
 {{sendMessage $logging_channel_id (cembed "description" (print "**Reaction:** "  $addrem "\n**By:**[ " .User "](https://discord.com/users/" .User.ID ")") "color" 0xFF0000  
-"fields" (cslice (sdict "name" "Message location: " "value" (joinStr "" "[<#" .Channel.ID ">](https://discordapp.com/channels/" .Guild.ID "/" .Channel.ID "/" .ReactionMessage.ID ")") "inline" false))
+"fields" (cslice (sdict "name" "Message location: " "value" (joinStr "" "[#" .Channel.Name "](https://discordapp.com/channels/" .Guild.ID "/" .Channel.ID "/" .ReactionMessage.ID ")") "inline" false))
 "thumbnail" (sdict "url" $reaction_url)
 )}}
