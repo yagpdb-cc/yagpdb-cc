@@ -116,8 +116,8 @@
 	{{- end}}
 
 	{{if $embed}}
-		{{if $embed.Author}}{{$embed.Author.Set "Icon_URL" $embed.Author.IconURL}}{{end}}
-		{{if $embed.Footer}}{{$embed.Footer.Set "Icon_URL" $embed.Footer.IconURL}}{{end}}
+		{{if $embed.Author}}{{$embed.Set "Author" (sdict $embed.Author)}}{{$embed.Author.Set "Icon_URL" $embed.Author.IconURL}}{{end}}
+		{{if $embed.Footer}}{{$embed.Set "Footer" (sdict $embed.Footer)}}{{$embed.Footer.Set "Icon_URL" $embed.Footer.IconURL}}{{end}}
 	{{end}}
 	{{if (not $embedPresent)}}{{$embed = $.nil}}{{end}}
 
