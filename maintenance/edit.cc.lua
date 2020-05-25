@@ -1,6 +1,6 @@
 {{/*
 	This command is a tool for editing messages sent by YAGPDB.
-	Usage: `-edit [channel] <msg> <new-content>`.
+	Usage: `-edit [channel] <msg> <flags...>`.
 
 	Recommended trigger: Command trigger with trigger `edit`.
 	Flags:  -content : To Change Content
