@@ -6,15 +6,15 @@
 
 {{$globalSdict := sdict }}
 {{- define "standardize"}}
-{{- $value:= (.Get "val")}}{{$recursiveSdict := sdict}}{{$rangeVal := ""}}
-    {{- if (eq (printf "%T" $value) `map[string]interface {}`)}}{{$rangeVal = sdict $value}}
-    {{- else if (eq (printf "%T" $value) `templates.SDict`)}}{{$rangeVal = $value}}
-    {{- else if (eq (printf "%T" $value) `[]interface {}`)}}{{$rangeVal = cslice.AppendSlice $value}}
-    {{- else if (eq (printf "%T" $value) `templates.Slice`)}}{{$rangeVal = $value}}
+{{- $value:= (.Get "val")}}{{$t := printf "%T" $value}}{{$recursiveSdict := sdict}}{{$rangeVal := ""}}
+    {{- if (eq  $t `map[string]interface {}`)}}{{$rangeVal = sdict $value}}
+    {{- else if (eq $t `templates.SDict`)}}{{$rangeVal = $value}}
+    {{- else if (eq $t `[]interface {}`)}}{{$rangeVal = cslice.AppendSlice $value}}
+    {{- else if (eq $t `templates.Slice`)}}{{$rangeVal = $value}}
     {{- end}}
     {{- if (print $rangeVal)}}
         {{- range $k,$v := $rangeVal}}
-            {{- if in (cslice `map[string]interface {}` `[]interface {}` `templates.SDict` `templates.Slice`) (printf "%T" $value) }}
+            {{- if in (cslice `map[string]interface {}` `[]interface {}` `templates.SDict` `templates.Slice`) (printf "%T" $v) }}
                 {{- $recursiveSdict.Set "val" $v}}{{template "standardize" $recursiveSdict}}{{$rangeVal.Set $k ($recursiveSdict.Get "res")}}
             {{- end}}
         {{- end}}
@@ -22,4 +22,4 @@
         {{- $rangeVal = $value}}
     {{- end}}
 {{- (.Set "res" $rangeVal)}}
-{{- end}} 
+{{- end}}
