@@ -8,13 +8,12 @@
 {{- define "standardize"}}
 {{- $value:= (.Get "val")}}{{$t := printf "%T" $value}}{{$recursiveSdict := sdict}}{{$rangeVal := ""}}
     {{- if (eq  $t `map[string]interface {}`)}}{{$rangeVal = sdict $value}}
-    {{- else if (eq $t `templates.SDict`)}}{{$rangeVal = $value}}
     {{- else if (eq $t `[]interface {}`)}}{{$rangeVal = cslice.AppendSlice $value}}
-    {{- else if (eq $t `templates.Slice`)}}{{$rangeVal = $value}}
+    {{- else if (in (cslice `templates.SDict` `templates.Slice`) $t)}}{{$rangeVal = $value}} 
     {{- end}}
     {{- if (print $rangeVal)}}
         {{- range $k,$v := $rangeVal}}
-            {{- if in (cslice `map[string]interface {}` `[]interface {}` `templates.SDict` `templates.Slice`) (printf "%T" $v) }}
+            {{- if in (cslice `map[string]interface {}` `[]interface {}` `templates.SDict` `templates.Slice`) (printf "%T" $v)}}
                 {{- $recursiveSdict.Set "val" $v}}{{template "standardize" $recursiveSdict}}{{$rangeVal.Set $k ($recursiveSdict.Get "res")}}
             {{- end}}
         {{- end}}
