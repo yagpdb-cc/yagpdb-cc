@@ -61,7 +61,7 @@
 {{$uID:=index $CmdArgs 1}}
 {{with (dbGet 7777 "giveaway_active").Value}}
 {{$ID:=index (dbGet 7777 "giveaway_active_IDs").Value $uID}}
-{{with (index . (str $ID))}}{{cancelScheduledUniqueCC $.CCID .uID}}{{$s := sendTemplate .chan "g_end" "ID" (str $ID)}}
+{{with (index . (str $ID))}}{{cancelScheduledUniqueCC $.CCID .uID}}{{$s:=sendTemplate .chan "g_end" "ID" (str $ID)}}
 
 {{else}}
 **Error:** Invalid ID ``{{$uID}}``
@@ -109,8 +109,8 @@
 {{else if eq $subCmd "list"}}
 
 {{with (dbGet 7777 "giveaway_active").Value}}
-{{$count := 0}}
-{{range $k , $v:=.}}{{$count =add $count 1}}
+{{$count:=0}}
+{{range $k,$v:=.}}{{$count =add $count 1}}
 {{$count}}) **ID:** ``{{$v.uID}}``  **Prize:** ``{{$v.prize}}``
 **Ends AT:** ``{{formatTime $v.expiresAt}}``
 {{end}}
