@@ -138,7 +138,7 @@
 {{$chan:=.chan}}{{$prize:=.prize}}{{$host:=.host}}
 {{cancelScheduledUniqueCC $.CCID .uID}}
 {{$msg:=index ( split $ID (str $chan)) 1}}
-{{with (getMessage $chan $msg )}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Cancelled !!**🌟🌟" "description" (print ">>> **Prize:** "  $prize "\n\n**Hosted By : **" $host) "footer" (sdict "text" "Giveaway Cancelled") "color" 12257822 )}}{{end}}Done!
+{{with (getMessage $chan $msg )}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Cancelled !!**🌟🌟" "description" (print ">>> **Prize :** "  $prize "\n\n**Hosted By : **" $host) "footer" (sdict "text" "Giveaway Cancelled") "color" 12257822 )}}{{end}}Done!
 
 {{else}}
 **Error:** Invalid ID ``{{$uID}}``
@@ -242,7 +242,7 @@ No Active Giveaways.
 
 {{/*Announce winners*/}}
 {{if $countWinners}}
-{{sendMessage nil (print "**Prize:** " .prize "\n**Winner(s) :** " $winnerList)}}
+{{sendMessage nil (print "**Prize :** " .prize "\n**Winner(s) :** " $winnerList)}}
 {{else}}
 **Giveaway Ended, No participants :( !!**
 **Prize : {{.prize}}**
