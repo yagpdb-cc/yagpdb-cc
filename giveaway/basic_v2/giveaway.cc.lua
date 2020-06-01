@@ -42,20 +42,20 @@
 
 
 {{/*Handling flags, parsing data from input*/}}
-     {{with reFindAllSubmatches `(?i)-w (\d+)(?:\s+|\z)` $CmdArgs}}
-     	{{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}
+{{with reFindAllSubmatches `(?i)-w (\d+)(?:\s+|\z)` $CmdArgs}}
+        {{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}
         {{$maxW =toInt (index . 0 1)}}
-     {{end}}
+{{end}}
 
-     {{with reFindAllSubmatches `(?i)-p (\d+)(?:\s+|\z)` $CmdArgs}}
-     	{{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}
+{{with reFindAllSubmatches `(?i)-p (\d+)(?:\s+|\z)` $CmdArgs}}
+        {{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}
         {{$maxP = toInt (index . 0 1)}}
-     {{end}}
+{{end}}
 
-     {{with reFindAllSubmatches `(?i)(-c (?:<#)?(\d+)>?(?:\s+|$))` $CmdArgs}}
-     {{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}
+{{with reFindAllSubmatches `(?i)(-c (?:<#)?(\d+)>?(?:\s+|$))` $CmdArgs}}
+        {{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}
         {{$chan =index . 0 2}}
-     {{end}}
+{{end}}
 
 {{$temp:=split $CmdArgs  " "}}
 
