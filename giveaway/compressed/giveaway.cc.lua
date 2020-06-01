@@ -33,11 +33,11 @@
 {{if gt (len $temp) 1}}{{$prize =joinStr " " (slice $temp 1)}}{{end}}
 {{$prize =reReplace `\A\s+|\s+\z` $prize ""}}
 
-{{if and ($duration) ($prize)}}
+{{if and $duration $prize}}
 
 {{if or (ge $maxP $maxW) (eq $maxP -1)}}
 
-{{with (sendMessageNoEscapeRetID $chan cembed)}}
+{{with sendMessageNoEscapeRetID $chan cembed}}
 {{$ID =joinStr "" $chan .}}{{$giveawaySdict:=sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners" $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
 {{addMessageReactions $chan . $rEmoji}}{{$desc:=print `>>> **Prize : **` $prize "\n\n"}}
 {{if gt $maxW 0}}{{$desc =print $desc "**Max Winners :** " $maxW}}{{end}}{{if gt $maxP 0}}{{$desc =print $desc "⠀⠀⠀⠀⠀**Max Participants :** " $maxP}}{{end}}
@@ -76,9 +76,9 @@
 {{with (dbGet 7777 "giveaway_active").Value}}
 {{$dbID:=(dbGet 7777 "giveaway_active_IDs").Value}}{{$ID =index $dbID $uID}}
 
-{{with (index . (str $ID))}}
+{{with index . (str $ID)}}
 {{$chan:=.chan}}{{$prize:=.prize}}{{$host:=.host}}{{cancelScheduledUniqueCC $.CCID .uID}}{{$msg:=index (split $ID (str $chan)) 1}}
-{{with (getMessage $chan $msg)}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Cancelled !!**🌟🌟" "description" (print ">>> **Prize :** " $prize "\n\n**Hosted By : **" $host) "footer" (sdict "text" "Giveaway Cancelled") "color" 12257822)}}{{end}}Done!
+{{with getMessage $chan $msg}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Cancelled !!**🌟🌟" "description" (print ">>> **Prize :** " $prize "\n\n**Hosted By : **" $host) "footer" (sdict "text" "Giveaway Cancelled") "color" 12257822)}}{{end}}Done!
 
 {{else}}
 **Error:** Invalid ID ``{{$uID}}``
@@ -137,7 +137,7 @@ No Active Giveaways.
 {{$ID:=.TemplateArgs.ID}}{{$chan:=.Channel.ID}}{{$dbData:=or (dbGet 7777 "giveaway_active").Value (sdict (str $ID) .TemplateArgs.Data)}}
 
 {{if $dbData}}
-{{with (index $dbData $ID)}}
+{{with index $dbData $ID}}
 {{$countWinners:=toInt .maxWinners}}{{$count:=toInt .count}}
 
 {{if lt $count $countWinners}}{{$countWinners =$count}}{{end}}
@@ -151,7 +151,7 @@ No Active Giveaways.
 {{$desc:=print ">>> **Prize :** " .prize "\n\n**Winners :** "}}
 {{if $countWinners}}{{$desc =print $desc $winnerList}}{{else}}{{$desc =print $desc "No Participants :( "}}{{end}}
 {{$desc:=print $desc "\n\n**Hosted By :** " .host}}
-{{with (getMessage $chan $msg)}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Ended !!**🌟🌟" "description" $desc "footer" (sdict "text" "Giveaway Ended at ") "timestamp" currentTime "color" 12257822)}}{{end}}
+{{with getMessage $chan $msg}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Ended !!**🌟🌟" "description" $desc "footer" (sdict "text" "Giveaway Ended at ") "timestamp" currentTime "color" 12257822)}}{{end}}
 
 {{if $countWinners}}{{sendMessage nil (print "**Prize :** " .prize "\n**Winner(s) :** " $winnerList)}}
 {{else}}
