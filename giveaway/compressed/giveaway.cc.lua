@@ -13,7 +13,7 @@
 {{end}}
 {{end}}
 
-{{if  not $ExecData}}
+{{if not $ExecData}}
 
 {{if gt (len $CmdArgs) 0}}
 {{$subCmd:=lower (index $CmdArgs 0)}}
@@ -29,23 +29,23 @@
 {{with reFindAllSubmatches `(?i)-p (\d+)(?:\s+|\z)` $CmdArgs}}{{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}{{$maxP =toInt (index . 0 1)}}{{end}}
 {{with reFindAllSubmatches `(?i)(-c (?:<#)?(\d+)>?(?:\s+|$))` $CmdArgs}}{{$CmdArgs =reReplace (index . 0 0) $CmdArgs ""}}{{$chan =index . 0 2}}{{end}}
 
-{{$temp:=split $CmdArgs  " "}}{{$duration:=toDuration (index $temp 0)}}{{$prize := ""}}
+{{$temp:=split $CmdArgs " "}}{{$duration:=toDuration (index $temp 0)}}{{$prize:=""}}
 {{if gt (len $temp) 1}}{{$prize =joinStr " " (slice $temp 1)}}{{end}}
 {{$prize =reReplace `\A\s+|\s+\z` $prize ""}}
 
-{{if and ($duration)  ($prize)}}
+{{if and ($duration) ($prize)}}
 
 {{if or (ge $maxP $maxW) (eq $maxP -1)}}
 
 {{with (sendMessageNoEscapeRetID $chan cembed)}}
-{{$ID =joinStr "" $chan .}}{{$giveawaySdict:=sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners"  $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
-{{addMessageReactions $chan . $rEmoji}}{{$desc:=print  `>>> **Prize : **` $prize "\n\n"}}
-{{if gt $maxW 0}}{{$desc =print $desc "**Max Winners :** " $maxW }}{{end}}{{if gt $maxP 0}}{{$desc =print $desc "⠀⠀⠀⠀⠀**Max Participants :** " $maxP}}{{end}}
-{{$desc =print $desc "\n\n**Hosted By :** " $.User.Mention "\n\n**React with " $gEmoji " to enter GiveAway **"}}{{editMessage $chan . (cembed "title" "🌟🌟**GiveAway Started !!**🌟🌟" "description"  $desc "color" 16763170 "footer" (sdict "text" (print "ID: " $uID " | GiveAway Ends " )) "timestamp" $giveawaySdict.expiresAt)}}
+{{$ID =joinStr "" $chan .}}{{$giveawaySdict:=sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners" $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
+{{addMessageReactions $chan . $rEmoji}}{{$desc:=print `>>> **Prize : **` $prize "\n\n"}}
+{{if gt $maxW 0}}{{$desc =print $desc "**Max Winners :** " $maxW}}{{end}}{{if gt $maxP 0}}{{$desc =print $desc "⠀⠀⠀⠀⠀**Max Participants :** " $maxP}}{{end}}
+{{$desc =print $desc "\n\n**Hosted By :** " $.User.Mention "\n\n**React with " $gEmoji " to enter GiveAway **"}}{{editMessage $chan . (cembed "title" "🌟🌟**GiveAway Started !!**🌟🌟" "description" $desc "color" 16763170 "footer" (sdict "text" (print "ID: " $uID " | GiveAway Ends ")) "timestamp" $giveawaySdict.expiresAt)}}
 
 {{$dbData:=sdict (or (dbGet 7777 "giveaway_active").Value sdict)}}{{$dbData.Set $ID $giveawaySdict}}{{dbSet 7777 "giveaway_active" $dbData}}
 {{$dbData =sdict (or (dbGet 7777 "giveaway_active_IDs").Value sdict)}}{{$dbData.Set (str $uID) $ID}}{{dbSet 7777 "giveaway_active_IDs" $dbData}}
-{{scheduleUniqueCC $.CCID $chan $duration.Seconds $uID  $ID}}
+{{scheduleUniqueCC $.CCID $chan $duration.Seconds $uID $ID}}
 
 {{else}}
 **Invalid Channel !!**
@@ -77,8 +77,8 @@
 {{$dbID:=(dbGet 7777 "giveaway_active_IDs").Value}}{{$ID =index $dbID $uID}}
 
 {{with (index . (str $ID))}}
-{{$chan:=.chan}}{{$prize:=.prize}}{{$host:=.host}}{{cancelScheduledUniqueCC $.CCID .uID}}{{$msg:=index ( split $ID (str $chan)) 1}}
-{{with (getMessage $chan $msg )}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Cancelled !!**🌟🌟" "description" (print ">>> **Prize :** "  $prize "\n\n**Hosted By : **" $host) "footer" (sdict "text" "Giveaway Cancelled") "color" 12257822)}}{{end}}Done!
+{{$chan:=.chan}}{{$prize:=.prize}}{{$host:=.host}}{{cancelScheduledUniqueCC $.CCID .uID}}{{$msg:=index (split $ID (str $chan)) 1}}
+{{with (getMessage $chan $msg)}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Cancelled !!**🌟🌟" "description" (print ">>> **Prize :** " $prize "\n\n**Hosted By : **" $host) "footer" (sdict "text" "Giveaway Cancelled") "color" 12257822)}}{{end}}Done!
 
 {{else}}
 **Error:** Invalid ID ``{{$uID}}``
@@ -134,24 +134,24 @@ No Active Giveaways.
 {{end}}
 
 {{define "g_end"}}
-{{$ID:=.TemplateArgs.ID}}{{$chan:=.Channel.ID}}{{$dbData:=or (dbGet 7777 "giveaway_active" ).Value (sdict (str $ID) .TemplateArgs.Data)}}
+{{$ID:=.TemplateArgs.ID}}{{$chan:=.Channel.ID}}{{$dbData:=or (dbGet 7777 "giveaway_active").Value (sdict (str $ID) .TemplateArgs.Data)}}
 
 {{if $dbData}}
 {{with (index $dbData $ID)}}
 {{$countWinners:=toInt .maxWinners}}{{$count:=toInt .count}}
 
-{{if lt $count $countWinners}}{{$countWinners = $count}}{{end}}
-{{$msg:=index ( split $ID (str $chan)) 1}}{{$listID:=.listID}}
+{{if lt $count $countWinners}}{{$countWinners =$count}}{{end}}
+{{$msg:=index (split $ID (str $chan)) 1}}{{$listID:=.listID}}
 
 {{if and (gt $count .maxParticipants) (gt .maxParticipants 0)}}{{$count =.maxParticipants}}{{$listID =joinStr "," (slice (split $listID ",") 0 $count) ""}}{{end}}
 
 {{$winnerList:=""}}
-{{range seq 0 $countWinners}}{{$winner:=index (split $listID ",") (randInt 0 $count )}}{{$listID =reReplace (print $winner ",") $listID ""}}{{$count = add $count -1}}{{$winnerList =(print $winnerList "<@" $winner "> ")}}{{end}}
+{{range seq 0 $countWinners}}{{$winner:=index (split $listID ",") (randInt 0 $count)}}{{$listID =reReplace (print $winner ",") $listID ""}}{{$count =add $count -1}}{{$winnerList =(print $winnerList "<@" $winner "> ")}}{{end}}
 
 {{$desc:=print ">>> **Prize :** " .prize "\n\n**Winners :** "}}
-{{if  $countWinners }}{{$desc =print $desc $winnerList}}{{else}}{{$desc =print $desc "No Participants :( "}}{{end}}
+{{if $countWinners}}{{$desc =print $desc $winnerList}}{{else}}{{$desc =print $desc "No Participants :( "}}{{end}}
 {{$desc:=print $desc "\n\n**Hosted By :** " .host}}
-{{with (getMessage $chan $msg )}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Ended !!**🌟🌟" "description" $desc "footer" (sdict "text" "Giveaway Ended at ") "timestamp" currentTime "color" 12257822)}}{{end}}
+{{with (getMessage $chan $msg)}}{{editMessage $chan $msg (cembed "title" "🌟🌟**GiveAway Ended !!**🌟🌟" "description" $desc "footer" (sdict "text" "Giveaway Ended at ") "timestamp" currentTime "color" 12257822)}}{{end}}
 
 {{if $countWinners}}{{sendMessage nil (print "**Prize :** " .prize "\n**Winner(s) :** " $winnerList)}}
 {{else}}
@@ -162,7 +162,7 @@ No Active Giveaways.
 {{if not $.TemplateArgs.Data}}
 {{$newdbData:=sdict $dbData}}{{$newdbData.Del $ID}}{{dbSet 7777 "giveaway_active" $newdbData}}
 {{$newdbData =sdict (dbGet 7777 "giveaway_active_IDs").Value}}{{$newdbData.Del (str .uID)}}{{dbSet 7777 "giveaway_active_IDs" $newdbData}}
-{{$old:= cslice.AppendSlice (or (dbGet 7777 "giveaway_old").Value cslice)}}{{if gt (len $old) 9}}{{$old =slice $old 1}}{{end}}{{dbSet 7777 "giveaway_old" ($old.Append .)}}
+{{$old:=cslice.AppendSlice (or (dbGet 7777 "giveaway_old").Value cslice)}}{{if gt (len $old) 9}}{{$old =slice $old 1}}{{end}}{{dbSet 7777 "giveaway_old" ($old.Append .)}}
 {{end}}
 
 {{else}}`Warning:` Invoked CC : {{$.CCID}} using ExecCC with invalid Giveaway ID.
@@ -172,4 +172,4 @@ No Active Giveaways.
 
 {{end}}
 
-{{if $syntaxError}}{{sendMessage nil (print "__**Incorrect Syntax** __ \n**Commands are :** \n```elm\n" ($Cmd) " start <time : Duration> <prize : String> \n\noptional_flags \n-p (max participants : Number) \n-w (max winners : Number)\n-c (channel : Mention/ID)\n```\n```elm\n" ($Cmd) " end <id : Number>```\n```elm\n" ($Cmd) " cancel <id : Number>```\n```elm\n" ($Cmd) " reroll [id or n giveaways old : Number]```\n```elm\n"  ($Cmd) " list ``` ")}}{{end}}
+{{if $syntaxError}}{{sendMessage nil (print "__**Incorrect Syntax** __ \n**Commands are :** \n```elm\n" ($Cmd) " start <time : Duration> <prize : String> \n\noptional_flags \n-p (max participants : Number) \n-w (max winners : Number)\n-c (channel : Mention/ID)\n```\n```elm\n" ($Cmd) " end <id : Number>```\n```elm\n" ($Cmd) " cancel <id : Number>```\n```elm\n" ($Cmd) " reroll [id or n giveaways old : Number]```\n```elm\n" ($Cmd) " list ``` ")}}{{end}}
