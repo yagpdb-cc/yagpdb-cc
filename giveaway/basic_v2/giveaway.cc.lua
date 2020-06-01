@@ -8,7 +8,7 @@
 */}}
 
 {{/*CONFIGURATION VALUES START*/}}
-{{$giveawayEmoji := `🎉`}}{{/*Set Giveaway Emoji*/}}
+{{$giveawayEmoji:=`🎉`}}{{/*Set Giveaway Emoji*/}}
 {{/*CONFIGURATION VALUES END*/}}
 
 {{/*Actual Code*/}}
@@ -163,9 +163,9 @@
 {{$found:=false}}
 
 {{/*Search for giveaway*/}}
-{{with (dbGet 7777 "giveaway_old").Value}}
-{{range $i,$v:=.}}
-{{if or (eq (add $i 1) $ID) (eq (toInt $v.uID) $ID)}}
+{{if ($e:=(dbGet 7777 "giveaway_old").Value)}}
+{{range $i,$v:=$e}}
+{{if or (eq (sub (len $e) $i) $ID) (eq (toInt $v.uID) $ID)}}
 {{$found =true}}{{$s:= sendTemplate $v.chan "g_end" "ID" (str $v.ID) "Data" $v}}
 {{end}}
 {{end}}
