@@ -2,6 +2,13 @@
 This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs).
 Both must be saved for it to work as expected.
 
+Package Consists of 2 Custom Commands :
+
+* `giveaway.cc.lua`: Recommended Trigger: `Command Trigger` ; Trigger Text `giveaway`
+   (Can also work with `regex` and `starts with` triggers if triggers are correctly set)
+
+* `reactionListener.cc.lua`: Recommended Trigger: `Reaction Trigger` ; Type: `Reaction Added + Removed`
+
 ## Sub-Commands (precede all commands by the prefix for YOUR server to invoke them):
 
 1) **giveaway start \<Time\> \<Prize\>**
