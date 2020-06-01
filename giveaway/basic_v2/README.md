@@ -15,7 +15,7 @@ Both must be saved for it to work as expected.
 
        *Note :* must not contain spaces in between and use the mentioned format only i.e d not days for specifying days so on.
 
-    * **[Prize]**   A string which will contain the prize of the giveaway , can be multiple words.
+    * **\<Prize\>**   A string which will contain the prize of the giveaway , can be multiple words.
 
     * **Optional Flags**
     
@@ -40,7 +40,7 @@ Both must be saved for it to work as expected.
 
     *Note:* ID is the long number which can be obtained using:  `g list` command and is also mentioned in the giveaway announcement embed.
 
-4)  **giveaway reroll \[ID or N Giveaways Old\]**
+4)  **giveaway reroll [ID or N Giveaways Old]**
     
     Re-rolls an old giveaway, which was finished earlier, to find new winner(s). If no argument is passed, the most recently finished giveaway is re-rolled. 
 
