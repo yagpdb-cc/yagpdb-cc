@@ -5,7 +5,7 @@
 	Recommended trigger: Command trigger with trigger `edit`.
 	Flags:  -content : To Change Content
 		-title, -desc, -image, -thumbnail, -url, -author, -authoricon, -authorurl, -footer, -footericon, -color : To Edit Embed
-		-force : Makes a new embed with provided fields and discards previous embed (default behavior is simply editing provoded fields of embed while preserving other fields)
+		-force : Makes a new embed with provided fields and discards previous embed (default behavior is simply editing provided fields of embed while preserving other fields)
 		-clrembed : To remove the embed from a message previously containing embed (so that now it has only content. Note, You cant remove embed if content is also null)
 */}}
 
