@@ -9,7 +9,7 @@
 {{$args:=split .ExecData " "}}
 {{if gt (len $args) 1}}
 {{$StrippedMsg =reReplace `\A\s+|\s+\z` (joinStr " " (slice $args 1)) ""}}
-{{$Cmd =index $args 0}}{{range (reFindAllSubmatches `\x60(.*?)\x60|"(.*?)"|(\S+)` $StrippedMsg)}}{{$CmdArgs =$CmdArgs.Append (or (index . 1) (index . 2) (index . 3))}}{{end}}{{$CmdArgs =$CmdArgs.StringSlice}}
+{{$Cmd =index $args 0}}{{range reFindAllSubmatches `\x60(|.*?[^\\])\x60|"(|.*?[^\\])"|(\S+)` $StrippedMsg}}{{$CmdArgs =$CmdArgs.Append (or (index . 1) (index . 2) (index . 3))}}{{end}}{{$CmdArgs =$CmdArgs.StringSlice}}
 {{end}}
 {{end}}
 
