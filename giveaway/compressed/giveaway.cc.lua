@@ -134,7 +134,7 @@ No Active Giveaways.
 {{end}}
 
 {{define "g_end"}}
-{{$ID:=.TemplateArgs.ID}}{{$chan:=.Channel.ID}}{{$dbData:=or (dbGet 7777 "giveaway_active").Value (sdict (str $ID) .TemplateArgs.Data)}}
+{{$ID:=.TemplateArgs.ID}}{{$chan:=.Channel.ID}}{{$dbData:=(dbGet 7777 "giveaway_active").Value}}{{with .TemplateArgs.Data}}{{$dbData =sdict (str $ID) .}}{{end}}
 
 {{if $dbData}}
 {{with index $dbData $ID}}
