@@ -152,7 +152,7 @@
 			{{$out = "I will no longer congratulate people on their birthday."}}
 		{{else if reFind `start` .Cmd}}
 			{{with .CmdArgs}} {{with index . 0 | toDuration}} {{$delay = add $delay .Seconds}} {{end}} {{end}}
-			{{if ne (currentTime.Add (mult 1000000000 $delay | toDuration)).Day ((currentTime.Add (mult 24 .TimeHour | toDuration)).Day)}} {{$error = "Too long delay to start sending bday messages. You can only set delays up to tommorrow at 00:00 UTC"}}
+			{{if or (ne (currentTime.Add (mult 1000000000 $delay | toDuration)).Day ((currentTime.Add (mult 24 .TimeHour | toDuration)).Day)) (ge $delay 172800)}} {{$error = "Too long delay to start sending bday messages. You can only set delays up to tommorrow at 00:00 UTC"}}
 			{{else}}
 				{{execCC .CCID $channelID 1 $delay}}
 				{{$out = print "All set! Every day at **" ((currentTime.Add (mult 1000000000 $delay | toDuration)).Format "15:04 UTC") "** I will congratulate users if its their birthday."}}
