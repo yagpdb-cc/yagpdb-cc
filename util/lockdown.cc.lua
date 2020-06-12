@@ -72,7 +72,7 @@
                                         {{- end -}}
                                     {{- end -}}
                                     {{- $counter = add $counter 1 -}}
-								{{end}}
+				{{end}}
                                 {{$slice = slice $slice 0 (sub (len $slice) $amount)}}
                                 {{dbSet $channel "msg_tracker" $slice}}
                             {{end}}
