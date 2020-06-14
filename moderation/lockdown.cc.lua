@@ -1,5 +1,5 @@
 {{/*
-Lockdown CC
+     Lockdown CC
 	This code is to simulate a lockdown command.
 	What it does is delete every msg sent if the channel is locked, it doesnt actually change any permissions.
 	No role or channel restriction needed, unless you want it.
