@@ -162,8 +162,8 @@
 				{{with index . 0 | userArg}}
 					{{$user = .}}
 					{{with (dbGet .ID "bday").Value}}
-						{{if $invertedOrder}} {{$out = print "The bday of " $user.Mention " is " (.Format "01/02/2006")}}
-						{{else}} {{$out = print "The bday of " $user.Mention " is " (.Format "02/01/2006")}}
+						{{if $invertedOrder}} {{$out = print "The bday of " $user.Mention " is " (.UTC.Format "01/02/2006")}}
+						{{else}} {{$out = print "The bday of " $user.Mention " is " (.UTC.Format "02/01/2006")}}
 						{{end}}
 					{{else}}
 						{{$error = "This user does not have a bday set."}}
