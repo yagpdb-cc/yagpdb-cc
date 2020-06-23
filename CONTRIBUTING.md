@@ -32,7 +32,7 @@ An example of a complete leading comment would be:
 {{/*
 	This command sends the message "hello world" in the channel. Usage: `-helloworld`.
 
-	Recommend trigger: Command trigger with trigger `helloworld`.
+	Recommended trigger: Command trigger with trigger `helloworld`.
 */}}
 ```
 
@@ -40,14 +40,14 @@ An example of a complete leading comment would be:
 If your command requires configuration, it should be done through appropriately named variables at the TOP of the file, right after the leading comment (above). For example:
 
 ```go
-<Leading comment>
+// Leading comment
 
 {{/* CONFIGURATION VALUES START */}}
 {{ $location := "The moon" }} {{/* Appropriate description of what this variable does */}}
 <Other configuration values>
 {{/* CONFIGURATION VALUES END */}}
 
-<Your code>
+// The code
 ```
 
 That's all you need to do! Thanks for contributing, I appreciate it!
@@ -57,5 +57,5 @@ That's all you need to do! Thanks for contributing, I appreciate it!
 
 This is the guidelines I use for the CCs I create. I may refactor your code when I'm doing a routine cleanup, so to avoid any confusion over what I'm doing:
 * `parseArgs` over manually parsing `.CmdArgs`
-* `printf` over `joinStr`
+* `print` or `printf` for string concatenation rather than `joinStr` - joinStr should generally only be used for joining a string slice.
 * spaces after `{{` and before `}}` (only one, no spaces after `(` and `)` )
