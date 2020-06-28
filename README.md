@@ -3,7 +3,7 @@
 
 > <p align="center">Cool custom commands for YAGPDB maintained and contributed to by the community</p>
 ## Adding these Custom Commands
-I assume you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
+This assume you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
 There are some "systems" which require you to add *all* commands. This is detailed in the individual `README.md` of that section.
 
 When you find a custom command you wish to add, the file will have a leading comment explaining what it does and the recommended trigger type & trigger. You can add it in the YAGPDB dashboard with these attributes.
@@ -60,20 +60,19 @@ When you find a custom command you wish to add, the file will have a leading com
 *This is by no means an exhaustive list, nor is it meant to be. See the individual folders for details.*
 
 ## Contributing
-If you spot an error, feel free to make a PR or open an issue. I'll get to it ASAP.
-If you wish to add your own command, feel free to make a PR as well. I'm open to all suggestions.
+If you spot an error, feel free to make a PR or open an issue.
+If you wish to add your own command, feel free to make a PR as well. Note that not all CCs PRed will be added.
 
 *If you are adding a new CC, please read the [guidelines](./CONTRIBUTING.md)*.
 
 ## Disclaimer
-This repository and myself are not officially affiliated with YAGPDB in any shape or form. The YAGPDB creator and staff are not responsible for any difficulties caused by these custom commands.
-These commands are not guaranteed to be working. I strive to test all the custom commands here, but due to many reasons sometimes I am unable to.
+This repository and the author are not officially affiliated with YAGPDB. The YAGPDB creator and staff are not responsible for any difficulties caused by these custom commands.
+These commands are not guaranteed to be working.
 
 ## Need help?
-If you are having difficulties with one of the custom commands here, please feel free to DM me on Discord or ping me in the [YAGPDB Support Server](https://discord.gg/5uVyq2E). 
-> Discord `Joe_#2898`.
+If you are having difficulties with one of the custom commands here, please feel free to DM me on Discord (tag is `Joe_#6041`) or ping me in the [YAGPDB Support Server](https://discord.gg/5uVyq2E) (latter is recommended).
 
 ## Author
 **yagpdb-cc** is authored and maintained by Joe.
 Some CCs are created by other members of the YAGPDB Community. They are credited in the leading comment of the CC file if that is the case.
-> Github [@Jo3-L](https://github.com/Jo3-L)
+> Github [@Jo3-L](https://github.com/Jo3-L), Discord `Joe#6041`
