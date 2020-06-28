@@ -20,27 +20,27 @@
 }}
 
 {{ if .StrippedMsg }}
-  {{ $msg := .StrippedMsg }}
-  {{ range $old, $new := $replacements }}
-    {{- $msg = joinStr $new (split $msg $old) -}}
-  {{ end }}
+	{{ $msg := .StrippedMsg }}
+	{{ range $old, $new := $replacements }}
+		{{- $msg = joinStr $new (split $msg $old) -}}
+	{{ end }}
 
-  {{ $msg = reReplace `n([aeiou])` $msg "ny$1" }}
-  {{ $msg = reReplace `N([aeiou])` $msg "Ny$1" }}
-  {{ $msg = reReplace `N([AEIOU])` $msg "NY$1" }}
+	{{ $msg = reReplace `n([aeiou])` $msg "ny$1" }}
+	{{ $msg = reReplace `N([aeiou])` $msg "Ny$1" }}
+	{{ $msg = reReplace `N([AEIOU])` $msg "NY$1" }}
 
-  {{ $runes := toRune $msg }}
-  {{ $first := index $runes 0 }}
-  {{ $last := index $runes (sub (len $runes) 1) }}
-  {{ if or (and (ge $first 'a') (le $first 'z')) (and (ge $first 'A') (le $first 'Z')) }}
-    {{ $msg = print (str $first) "-" $msg }}
-  {{ end }}
+	{{ $runes := toRune $msg }}
+	{{ $first := index $runes 0 }}
+	{{ $last := index $runes (sub (len $runes) 1) }}
+	{{ if or (and (ge $first 'a') (le $first 'z')) (and (ge $first 'A') (le $first 'Z')) }}
+		{{ $msg = print (str $first) "-" $msg }}
+	{{ end }}
 
-  {{ if or (and (ge $last 'a') (le $last 'z')) (and (ge $last 'A') (le $last 'Z')) }}
-    {{ $msg = print $msg "~~" }}
-  {{ end }}
+	{{ if or (and (ge $last 'a') (le $last 'z')) (and (ge $last 'A') (le $last 'Z')) }}
+		{{ $msg = print $msg "~~" }}
+	{{ end }}
 
-  {{ $msg }}
+	{{ $msg }}
 {{ else }}
-  Please provide a message to uwuify.
+	  Please provide a message to uwuify.
 {{ end }}
