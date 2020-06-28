@@ -33,7 +33,7 @@
 	{{ $first := index $runes 0 }}
 	{{ $last := index $runes (sub (len $runes) 1) }}
 	{{ if or (and (ge $first 'a') (le $first 'z')) (and (ge $first 'A') (le $first 'Z')) }}
-		{{ $msg = print (str $first) "-" $msg }}
+		{{ $msg = print (slice $msg 0 1) "-" $msg }}
 	{{ end }}
 
 	{{ if or (and (ge $last 'a') (le $last 'z')) (and (ge $last 'A') (le $last 'Z')) }}
