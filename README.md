@@ -26,7 +26,7 @@ When you find a custom command you wish to add, the file will have a leading com
 	+ Cancel giveaways
 	+ List giveaways
 	+ Execute within CCs with execCC
-+ [Info commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/giveaway)
++ [Info commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/info)
 	+ Server info
 	+ Channel info
 	+ User info
@@ -50,7 +50,7 @@ When you find a custom command you wish to add, the file will have a leading com
 	+ Edit tags
 	+ Delete tags
 	+ View tags simply with `;(tag name)`
-+ [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/utility)
++ [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/util)
 	+ Preview colors
 	+ See time and weather in your location
 	+ World clock
