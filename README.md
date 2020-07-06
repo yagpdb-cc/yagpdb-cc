@@ -3,7 +3,7 @@
 
 > <p align="center">Cool custom commands for YAGPDB maintained and contributed to by the community</p>
 ## Adding these Custom Commands
-This assume you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
+This assumes you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
 There are some "systems" which require you to add *all* commands. This is detailed in the individual `README.md` of that section.
 
 When you find a custom command you wish to add, the file will have a leading comment explaining what it does and the recommended trigger type & trigger. You can add it in the YAGPDB dashboard with these attributes.
