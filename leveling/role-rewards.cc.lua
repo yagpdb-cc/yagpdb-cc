@@ -36,17 +36,27 @@
 
 	{{ if and (eq $cmd "add") (ge (len .CmdArgs) 3) }}
 		{{ $level := index .CmdArgs 1 | toInt }} {{/* The level for this role reward */}}
-		{{ $search := slice .CmdArgs 2 | joinStr " " | lower }} {{/* The role name in lowercase */}}
-		{{ $role := 0 }} {{/* Role variable */}}
-		{{/* Search for roles */}}
-		{{- range .Guild.Roles -}}
-			{{ if not $role }}
-				{{ $rName := lower .Name }}
-				{{ if or (eq $search $rName) (in $rName $search) }}
-					{{ $role = . }}
-				{{ end }}
+		{{ $input := slice .CmdArgs 2 | joinStr " " | lower }} {{/* The role name in lowercase */}}
+
+		{{/* Exact match (irregardless of case) */}}
+		{{ $exactRole := 0 }}
+		{{/* Match from inFold */}}
+		{{ $maybeRole := 0 }}
+		
+		{{ with reFindAllSubmatches `^<@&(\d{17,19})>|(\d{17,19})$` $input }}
+			{{ $id := toInt (or (index . 0 1) (index . 0 2)) }}
+			{{ range $.Guild.Roles }}
+				{{- if eq .ID $id }} {{ $exactRole = . }} {{ end -}}
 			{{ end }}
-		{{- end -}}
+		{{ else }}
+			{{ range .Guild.Roles }}
+				{{- if eq (lower .Name) (lower $input) }} {{ $exactRole = . }}
+				{{- else if inFold (lower .Name) (lower $input) }} {{ $maybeRole = . }}
+				{{- end -}}
+			{{ end }}
+		{{ end }}
+
+		{{ $role := or $exactRole $maybeRole }}
 		{{/* If there is both level and role */}}
 		{{ if and $level $role }}
 			{{ if and (ge $level 1) (le $level 200) }} {{/* If level is in correct range */}}
