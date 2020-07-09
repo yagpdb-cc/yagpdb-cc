@@ -1,51 +1,23 @@
-{{/* Birthday CC
-	This CC will allow the following:
-		-mybirthday 20/12/1998
-			The above command will set the users birthday to be that date, and the bot will congratulate them on that day.
-			Note: syntax is day/month/year if you want it to be month/day/year set $invertedOrder to true
-		-startbdays
-			Use this command at the time you want the bot to send the birthday msgs.
-			Example: if you use this at 1PM in your local time, the congratulations messages will always be sent at 1PM everyday.
-			Optional duration flag: -startbdays 1h12m
-			Using the command like that, the bday msg would be sent everyday at 1h and 12 minutes after this command was triggered.
-		-stopbdays
-			This will stop the bdays msgs from being sent
-		-setbday
-			This will set a targeted user birthday
-			Example: -set 20/12/1998 @Pedro
-		-getbday
-			This will tell you the birthday of the specified user
-			Example: -getbday @Pedro
-	All commands can be used with bday or birthday. Example: -getbday or -getbirthday
-	This code will also kick/ban users if they are under 13 years old, if you want it to.
-	Change ONLY the user variables, dont change ANYTHING else
-	$mods is the list of IDs of roles that should be able to use the start/stop/set/get commands.
-	User can only set their birthday once. After that, only mods will be able to change a users birthday by using the -setbday command
-	Trigger Type should be regex
-	The actual trigger should be: \A-(my|start|stop|set|get)b(irth)?days?
-*/}}
-
 {{/* User Variables */}}
 {{$mods := cslice 668707598870118403 673258482211749917}}
-{{$channelID := 655082852295376922}} {{/* Channel ID of where the bdays msgs should be sent to */}}
-{{$bdayMsg := "Congratulations for your birthday!!!"}}
+{{$channelID := 730216142924415006}} {{/* Channel ID to send the bday msgs */}}
+{{$bdayMsg := "Congratulations for your birthday!"}}
 {{$invertedOrder := false}}
 {{$kickUnderAge := false}}
 {{$banUnderAge := true}}
-{{/* End Of User Variables */}}
+{{/* End */}}
 
-
-
-{{/* ACTUAL CODE, DONT TOUCH */}}
+{{/* DONT TOUCH */}}
 {{/* Vars */}}
 {{$isMod := false}}{{$map := ""}}{{$error := ""}}{{$day := 0}}{{$month := 0}}{{$year := 0}}{{$isUnderAge := false}}{{$isValidDate := false}}{{$user := .User}}{{$checkDate := ""}}{{$insideMap := sdict}}{{$list := cslice}}{{$out := ""}}{{$send := false}}{{$userMonth := ""}}{{$today := sdict}}{{$delay := 86400}}
-{{$commonError := "Correct date syntax is day/month/year like: 20/12/1998"}}
-{{$commonErrorInverted := "Correct date syntax is month/day/year like: 12/20/1998"}}
+{{$commonError := "Correct date syntax is: `dd/mm/yyyy` - Example: `20/12/1998`"}}
+{{$commonErrorInverted := "Correct date syntax is: `mm/dd/yyyy` - Example: `12/20/1998`"}}
+{{$synt := "Correct usage: -getbday @user"}}
 
 {{/* Checks */}}
 {{range .Member.Roles}} {{if in $mods .}} {{$isMod = true}} {{end}} {{end}}
 {{if not .ExecData}}
-	{{if reFind `(?i)(my|set)b(irth)?days?` .Cmd}}
+	{{if reFind `(?i)(my|set)` .Cmd}}
 		{{with .CmdArgs}}
 			{{$map = split (index . 0) "/"}}
 			{{if and (eq (len .) 2) $isMod}} {{with index . 1 | userArg}} {{$user = .}} {{else}} {{$error = "Invalid User."}} {{end}} {{end}}
@@ -64,9 +36,7 @@
 				{{else if (or (not $error) (eq $error "Invalid User."))}} {{$error = print $error "\nInvalid Date (usually day 31 on a 30 day month, or 29 of Feb in a non leap year)"}}
 				{{end}}
 				{{if eq $counter 4}} {{$isValidDate = true}}
-					{{with reFind `\d+ years` (humanizeTimeSinceDays $checkDate) | reFind `\d+` | toInt}}
-						{{if lt . 13}} {{$isUnderAge = true}} {{end}}
-					{{end}}
+					{{if lt ((currentTime.Sub $checkDate).Hours | toInt) 113880}} {{$isUnderAge = true}} {{end}}
 				{{end}}
 			{{else}}
 				{{if $invertedOrder}} {{$error = $commonErrorInverted}}
@@ -80,7 +50,6 @@
 		{{end}}
 	{{end}}
 {{end}}
-
 {{if $isValidDate}}
 	{{$userMonth = printf "%d" $checkDate.Month | toInt}}
 	{{with (dbGet $userMonth "bdays").Value}}
@@ -88,9 +57,9 @@
 	{{end}}
 {{end}}
 
-{{/* Doing stuff */}}
-{{if and $isUnderAge $kickUnderAge (not $banUnderAge) (not $isMod)}} {{execAdmin "kick" $user "We do not allow users under 13 years old in this server."}} {{end}}
-{{if and $isUnderAge $banUnderAge (not $isMod)}} {{execAdmin "ban" $user "We do not allow users under 13 years old in this server."}} {{end}}
+{{/* Work */}}
+{{if and $isUnderAge $kickUnderAge (not $banUnderAge) (not $isMod)}} {{execAdmin "kick" $user "We do not allow users under 13 in this server."}} {{end}}
+{{if and $isUnderAge $banUnderAge (not $isMod)}} {{execAdmin "ban" $user "We do not allow users under 13 in this server."}} {{end}}
 {{with .ExecData}}
 	{{if eq (printf "%T" .) "int64"}} {{scheduleUniqueCC $.CCID $channelID . "bdays" true}} {{end}}
 	{{dbDel (currentTime.Add (mult -24 $.TimeHour | toDuration)).Day "bdayannounced"}}
@@ -104,7 +73,7 @@
 	{{if and $send (not (dbGet currentTime.Day "bdayannounced"))}} {{dbSet currentTime.Day "bdayannounced" true}} {{sendMessageNoEscape nil $bdayMsg}} {{end}}
 {{else}}
 	{{if $isMod}}
-		{{if and (reFind `set` .Cmd) $isValidDate (not $error)}}
+		{{if and (reFind `(?i)set` .Cmd) $isValidDate (not $error)}}
 			{{if eq (len .CmdArgs) 2}}
 				{{with $insideMap}}
 					{{with index . (str $checkDate.Day)}} {{$list = $list.AppendSlice .}} {{end}}
@@ -147,7 +116,7 @@
 				{{else}} {{$error = "Not enough arguments passed.\nCorrect usage is: `-set 20/12/1998 @user`"}}
 				{{end}}
 			{{end}}
-		{{else if reFind `stop` .Cmd}}
+		{{else if reFind `(?i)stop` .Cmd}}
 			{{cancelScheduledUniqueCC .CCID "bdays"}}
 			{{$out = "I will no longer congratulate people on their birthday."}}
 		{{else if reFind `start` .Cmd}}
@@ -157,7 +126,7 @@
 				{{execCC .CCID $channelID 1 $delay}}
 				{{$out = print "All set! Every day at **" ((currentTime.Add (mult 1000000000 $delay | toDuration)).Format "15:04 UTC") "** I will congratulate users if its their birthday."}}
 			{{end}}
-		{{else if reFind `get` .Cmd}}
+		{{else if reFind `(?i)get` .Cmd}}
 			{{with .CmdArgs}}
 				{{with index . 0 | userArg}}
 					{{$user = .}}
@@ -169,14 +138,14 @@
 						{{$error = "This user does not have a bday set."}}
 					{{end}}
 				{{else}}
-					{{$error = "Correct usage: -getbday @user"}}
+					{{$error = $synt}}
 				{{end}}
 			{{else}}
-				{{$error = "Correct usage: -getbday @user"}}
+				{{$error = $synt}}
 			{{end}}
 		{{end}}
 	{{end}}
-	{{if and (reFind `(?i)myb(irth)?day` .Cmd) $isValidDate (not $out)}}
+	{{if and (reFind `(?i)my` .Cmd) $isValidDate (not $out) (or (and (or $kickUnderAge $banUnderAge) (not $isUnderAge)) (and (not $kickUnderAge) (not $banUnderAge)))}}
 		{{if not (dbGet .User.ID "bday")}}
 			{{with $insideMap}}
 				{{with index . (str $checkDate.Day)}} {{$list = $list.AppendSlice .}}  {{end}}
@@ -198,8 +167,29 @@
 			{{$error = "Your birthday has already been set."}}
 		{{end}}
 	{{end}}
+	{{if and (reFind `(?i)del` .Cmd)}}
+		{{$user := .User}} {{with .CmdArgs}} {{with index . 0 | userArg}} {{if $isMod}} {{$user = .}} {{end}} {{else}} {{$error = print $error "\nInvalid user."}} {{end}} {{end}}
+		{{with (dbGet $user.ID "bday").Value}}
+			{{dbDel $user.ID "bday"}}
+			{{$listIn := cslice}}
+			{{$thisDay := str .Day}} {{$thisMonth := printf "%d" .Month | toInt}}
+			{{with sdict (dbGet (printf "%d" .Month | toInt) "bdays").Value}}
+				{{$needMap := .}}
+				{{range index . $thisDay}}
+					{{if ne . $user.ID}}
+						{{$listIn = $list.Append .}}
+					{{end}}
+				{{end}}
+				{{$needMap.Set $thisDay $listIn}}
+				{{dbSet $thisMonth "bdays" $needMap}}
+			{{end}}
+			{{$out = print "Successfully deleted the birthday from " $user.String}}
+		{{else}}
+			{{$error = print $user.String "doesnt have a birthday set."}}
+		{{end}}
+	{{end}}
 {{end}}
 
-{{/* Outputs */}}
+{{/* Outs */}}
 {{with $error}} {{.}} {{end}}
 {{with $out}} {{.}} {{end}}
