@@ -1,7 +1,7 @@
 #
 <h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
-> <p align="center">Cool custom commands for YAGPDB maintained and contributed to by the community</p>
+> <p align="center">A curated collection of CCs for your server</p>
 ## Adding these Custom Commands
 This assumes you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
 There are some "systems" which require you to add *all* commands. This is detailed in the individual `README.md` of that section.
@@ -66,7 +66,7 @@ If you wish to add your own command, feel free to make a PR as well. Note that n
 *If you are adding a new CC, please read the [guidelines](./CONTRIBUTING.md)*.
 
 ## Disclaimer
-This repository and the author are not officially affiliated with YAGPDB. The YAGPDB creator and staff are not responsible for any difficulties caused by these custom commands.
+The YAGPDB creator, staff, and/or support are not responsible for any difficulties caused by these custom commands.
 These commands are not guaranteed to be working.
 
 ## Need help?
