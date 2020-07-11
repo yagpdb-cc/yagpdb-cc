@@ -16,7 +16,7 @@
 	"UserA" "<:battleForward:681735565594460181>"
 	"UserB" "<:battleBackwards:681735538105253901>"
 }}
-{{ $yag := userArg 624608566426468373 }}
+{{ $yag := userArg 204255221017214977 }}
 {{/* CONFIGURATION VALUES END */}}
 
 {{ $args := parseArgs 0 "**Syntax:** -deathmatch [user1] [user2]" (carg "userid" "user1") (carg "userid" "user2") }}
