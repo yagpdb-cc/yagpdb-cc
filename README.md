@@ -72,7 +72,7 @@ These commands are not guaranteed to be working.
 ## Need help?
 If you are having difficulties with one of the custom commands here, please feel free to DM me on Discord (tag is `Joe_#6041`) or ping me in the [YAGPDB Support Server](https://discord.gg/5uVyq2E) (latter is recommended).
 
-## Author
-**yagpdb-cc** is authored and maintained by Joe.
-Some CCs are created by other members of the YAGPDB Community. They are credited in the leading comment of the CC file if that is the case.
-> Github [@Jo3-L](https://github.com/Jo3-L), Discord `Joe#6041`
+Please *do not* open an issue unless you are sure it is a bug in the code - questions will be directed to the server instead. Thanks!
+
+## Maintainers
+**yagpdb-cc** is maintained by [@Jo3-L](https://github.com/Jo3-L) (`Joe_#6041`) and [@Satty9361](https://github.com/Jo3-L) (`Satty#9361`).
