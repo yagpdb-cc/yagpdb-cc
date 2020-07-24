@@ -10,7 +10,7 @@
 {{/* DONT TOUCH BELOW UNLESS YOU KNOW WHAT YOU DO */}}
 
 {{ $embed := sdict}}
-{{{$url := ""}}
+{{$url := ""}}
 {{$animat := false}}
 {{$nume := ""}}
 {{$allowed := false}}
