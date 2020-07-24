@@ -13,6 +13,7 @@
 	{{ if not .ExecData }}
 		{{ with reFindAllSubmatches `\d+` .Message.Content }}
     			{{ if (eq (toInt (dbGet 0 "NR").Value) (toInt (index (index  . 0) 0))) }}
+				{{ dbDel 0 "NR" }} 
     				{{ $r := dbIncr $.User.ID $db $prize }}
    				{{ sendMessage nil (cembed 
     				"title" "**We have a winner**" 
