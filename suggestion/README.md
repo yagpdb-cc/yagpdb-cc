@@ -1,10 +1,3 @@
-# Suggestion System
-These commands are **not** standalone. Add all the commands if you wish to use it. Note that you will need configuration for each custom command which is noted by a comment.
-
-As usual, there is a leading comment showing the trigger and description of the CC.
-
-## Functionality
-* Add suggestion in embed format
-* Comment on suggestions
-* Deny or approve suggestions
-* Edit suggestions
+# Suggestion Systems
+- V1 is a simple Suggestion System with individual commands.
+- V2 is an integrated Suggetion System with all commands condensed into a Single CC. This is similar to the current system in use in YAGPDB Server.
