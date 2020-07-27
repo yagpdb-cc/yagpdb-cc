@@ -19,7 +19,7 @@
 	{{/* if current message is an active giveaway announcement message */}}
 	{{ if $giveawayData }}
 		{{ $giveawayData = sdict $giveawayData }}
-		{{/* Regex for the User ID */ }}
+		{{/* Regex for the User ID */}}
 		{{$IDregex:=print .User.ID ","}}
 		
 		{{if .ReactionAdded}}
@@ -35,7 +35,7 @@
 			{{/* if reaction was removed reduce count by 1 and remove user ID from ID list if user ID is present in list. Else do nothing. */}}
 			{{if reFind $IDregex $giveawayData.listID}}
 				{{$giveawayData.Set "listID" (reReplace $IDregex $giveawayData.listID "")}}
-				{{$giveawayData.Set "count" (add $giveawayData.count -1)}}{{end}}    
+				{{$giveawayData.Set "count" (add $giveawayData.count -1)}}    
 			{{end}}
 		{{end}}
 					
