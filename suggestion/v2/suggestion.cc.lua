@@ -106,7 +106,7 @@
 							{{if $globalDict.msg}}
 								{{$embed.Set "Description" (print $embed.Description "\n\n**This message has been marked as a dupe of:\n**https://discordapp.com/channels/" $.Guild.ID "/" $globalDict.chan "/" .)}}
 								{{deleteMessage $channel $message.ID 0}}
-								{{sendMessage $Logging_Channel (complexMessage "content" (print "<@" $authorID "> | The suggestion below has been marked as dupe!") "embed" $embed)}}
+								{{sendMessage $Logging_Channel (complexMessage "content" (print "<@" $authorID "> | The suggestion below has been marked as Dupe!") "embed" $embed)}}
 							{{else}}
 								{{$error = print "Invalid Original Suggestion Message ID : `" $rest "`"}}
 							{{end}}
@@ -121,7 +121,7 @@
 				{{end}}
 			{{else if eq $command "deny"}}
 				{{deleteMessage $channel $message.ID 0}}
-				{{sendMessage $Logging_Channel (complexMessage "content" (print "<@" $authorID "> | The suggestion below has been deleted for reason: " $rest) "embed" $embed)}}
+				{{sendMessage $Logging_Channel (complexMessage "content" (print "<@" $authorID "> | The suggestion below has been Deleted for reason: " $rest) "embed" $embed)}}
 			{{else if eq $command "comment"}}
 				{{template "handle-comments" (sdict "embed" $embed "comment" $rest "user" $.User)}}
 				{{editMessage $channel $message.ID (cembed $embed)}}
@@ -133,6 +133,7 @@
 				{{$embed.Footer.Set "Text" (print $command " By : " .User.Username " - " .User.ID " ● " $embed.Footer.Text)}}
 				{{deleteMessage $channel $message.ID 0}}
 				{{sendMessage  $chan (cembed $embed)}}
+				{{sendMessage $Logging_Channel (complexMessage "content" (print print "<@" $authorID "> | The suggestion below has been " $command) "embed" $embed)}}
 			{{end}}
 		{{else}}
 			{{$error = "Must be a Mod/Admin to use Suggest Admin commands"}}
