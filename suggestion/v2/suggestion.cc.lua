@@ -1,7 +1,7 @@
 {{/*
 	This command is the main suggestion command with suggestion create/edit/delete and suggestadmin commands. Usage: Refer README.md
 
-	Recommended trigger: Regex trigger with trigger `\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+(edit|dupe|markdupe|deny|implement(ed)?|archive))(\s+|\z)`
+	Recommended trigger: Regex trigger with non case sensitive and trigger `\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+(edit|dupe|markdupe|deny|implement(ed)?|archive))(\s+|\z)`
         Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix. 
 */}}
 
