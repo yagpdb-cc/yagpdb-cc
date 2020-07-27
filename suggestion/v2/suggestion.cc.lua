@@ -33,7 +33,7 @@
 		{{with (dbGet $.User.ID "suggestCld")}}
 			{{$error = print "This command is on cooldown for " (humanizeDurationSeconds (.ExpiresAt.Sub currentTime)) " to avoid spam."}}
 		{{else}}
-			{{if not $IS_Mod}}{{if $Cooldown}}{{dbSetExpire .User.ID "suggestCld" "cooldown" $Cooldown}}{{end}}{{end}}
+			{{if not $IS_Mod}}{{if $Cooldown}}{{dbSetExpire $.User.ID "suggestCld" "cooldown" $Cooldown}}{{end}}{{end}}
 			{{$embed :=	cembed
 						"description" .
 						"color" $col
