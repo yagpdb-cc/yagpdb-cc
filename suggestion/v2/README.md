@@ -25,18 +25,31 @@
          Syntax: `sa deny <Suggestion ID> <Optional Reason>`
          
          Use: Denies a suggestion, deletes it and tags the original person who posted the suggestion with reason for denial.
-  
-    - **Implement :**
-          
-         Syntax: `sa implement <Suggestion ID> <Optional Comment>`
-         
-         Use: Marks a suggestion as implemented by re-posting in implemented suggestions channel. Also keeps a record as to who implemented the suggestion.
-  
+	 
     - **Dupe :**
       
         Syntax: `sa dupe <Suggestion ID> <Original Suggestion ID>`
         
         Use: Marks a suggestion dupe of a previous suggestion, deletes it and informs the user who posted with a tag.
+	 
+    - **Approve :**
+          
+         Syntax: `sa approve <Suggestion ID> <Optional Comment>`
+         
+         Use: Marks a suggestion as approved by re-posting in approved suggestions channel. Also keeps a record as to who approved the suggestion in footer. Supports additional comments.
+  
+    - **Implement :**
+          
+         Syntax: `sa implement <Suggestion ID> <Optional Comment>`
+         
+         Use: Marks a suggestion as implemented by re-posting in implemented suggestions channel. Also keeps a record as to who implemented the suggestion in footer. Supports additional comments.
+  
 
-
+    - **Comment :**
+          
+         Syntax: `sa comment <Suggestion ID> <New Comment>`
+         
+         Use: Updates comment of a new/approved/implemented Suggestion.
+  
+    
 *Note:* Precede all commands with @YAGPDB.xyz or prefix to trigger them
