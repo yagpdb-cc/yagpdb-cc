@@ -10,7 +10,7 @@
 {{$Logging_Channel := 737324355784278186}}
 {{$Implemented_Channel := 737324417096482907}}
 {{$Approved_Channel := 737324384498221147}}
-{{$Mod_Roles := cslice 384008687951282177 419970533069815808}} 
+{{$Mod_Roles := cslice 384008687951282177 419970533069815808}} {{/* No need to add Admin roles. They are automatically detected given Yag has right Perms */}}
 {{$Cooldown := 600}} {{/* Can be set to 0 for no cooldown */}}
 {{$Upvote := "upvote:524907425531428864"}}
 {{$Downvote := "downvote:524907425032175638"}}
