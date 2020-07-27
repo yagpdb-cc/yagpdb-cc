@@ -19,16 +19,26 @@
 	{{/* if current message is an active giveaway announcement message */}}
 	{{ if $giveawayData }}
 		{{ $giveawayData = sdict $giveawayData }}
-		{{/* if reaction was added increase count by 1 and add user ID to ID list */}}
-		{{ if .ReactionAdded }}
-			{{ $giveawayData.Set "listID" (joinStr "" $giveawayData.listID  .User.ID "," ) }}
-			{{ $giveawayData.Set "count" (add $giveawayData.count 1) }}
-		{{ else }}
-			{{/* if reaction was removed reduce count by 1 and remove user ID from ID list */}}
-			{{ $IDregex := joinStr  ""  .User.ID `,` }}
-			{{ $giveawayData.Set "listID" (reReplace $IDregex $giveawayData.listID "") }}
-			{{ $giveawayData.Set "count" (add $giveawayData.count -1) }}          
-		{{ end }}
+		{{/* Regex for the User ID */ }}
+		{{$IDregex:=print .User.ID ","}}
+		
+		{{if .ReactionAdded}}
+			{{$amount := 1}}
+			{{/* If user is somwhow already present in list, dont increase count but update position in list */}}
+			{{if reFind $IDregex $giveawayData.listID}}
+				{{$giveawayData.Set "listID" (reReplace $IDregex $giveawayData.listID "")}}
+				{{$amount = 0}}
+			{{end}}
+			{{$giveawayData.Set "listID" (print $giveawayData.listID  $IDregex)}}
+			{{$giveawayData.Set "count" (add $giveawayData.count $amount)}}
+		{{else}}
+			{{/* if reaction was removed reduce count by 1 and remove user ID from ID list if user ID is present in list. Else do nothing. */}}
+			{{if reFind $IDregex $giveawayData.listID}}
+				{{$giveawayData.Set "listID" (reReplace $IDregex $giveawayData.listID "")}}
+				{{$giveawayData.Set "count" (add $giveawayData.count -1)}}{{end}}    
+			{{end}}
+		{{end}}
+					
 		{{/* update active giveaway database entry */}}
 		{{ $data.Set (joinStr ""  .Reaction.ChannelID .Reaction.MessageID) $giveawayData }}
 		{{ dbSet 7777 "giveaway_active" $data }}
