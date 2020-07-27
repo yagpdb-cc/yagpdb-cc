@@ -10,7 +10,7 @@
  
 	Syntax : `deletesuggest <Suggestion ID>`
   
-	Use : Delete your own suggestions. Can be used to mods to silently delete/remove suggestions.	
+	Use : Delete your own suggestions. Can be used by mods to silently delete/remove suggestions.	
 		
  3. **EditSuggest -**
  
