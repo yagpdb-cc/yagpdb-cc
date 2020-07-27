@@ -10,7 +10,7 @@
 {{$Logging_Channel := 737324355784278186}}
 {{$Implemented_Channel := 737324417096482907}}
 {{$Approved_Channel := 737324384498221147}}
-{{$Mod_Roles := cslice 384008687951282177 419970533069815808}} {{/* No need to add Admin roles. They are automatically detected given Yag has right Perms */}}
+{{$Mod_Roles := cslice  384008687951282177 419970533069815808}} {{/* No need to add Admin roles. They are automatically detected given Yag has right Perms */}}
 {{$Cooldown := 600}} {{/* Can be set to 0 for no cooldown */}}
 {{$Upvote := "upvote:524907425531428864"}}
 {{$Downvote := "downvote:524907425032175638"}}
@@ -123,7 +123,7 @@
 				{{deleteMessage $channel $message.ID 0}}
 				{{sendMessage $Logging_Channel (complexMessage "content" (print "<@" $authorID "> | The suggestion below has been deleted for reason: " $rest) "embed" $embed)}}
 			{{else if eq $command "comment"}}
-				{{if $rest}}{{template "handle-comments" (sdict "embed" $embed "comment" $rest "user" $.User)}}{{end}}
+				{{template "handle-comments" (sdict "embed" $embed "comment" $rest "user" $.User)}}
 				{{editMessage $channel $message.ID (cembed $embed)}}
 			{{else}}
 				{{$chan:=$Implemented_Channel}}
@@ -149,21 +149,21 @@ Done :+1:
 {{end}}
 
 {{define "handle-comments"}}
-	{{if not .embed.Fields}}{{.embed.Set "Description" (print .embed.Description "\n\n**__Comment:__**")}}{{end}}
-	{{.embed.Set "Fields" (cslice (sdict "name" (print "BY : " .user " - " .user.ID) "value" .comment))}}
+	{{if and (not .embed.Fields) .comment}}{{.embed.Set "Description" (print .embed.Description "\n\n**__Comment:__**")}}{{else if not .comment}}{{.embed.Set "Description" (reReplace  `\n\n\*\*__Comment:__\*\*\z` .embed.Description "")}}{{end}}
+	{{if .comment}}{{.embed.Set "Fields" (cslice (sdict "name" (print "BY : " .user " - " .user.ID) "value" .comment))}}{{else}}{{.embed.Set "Fields" cslice}}{{end}}
 {{end}}
 
 {{define "process-suggest-msg"}}
-	{{$dot := .}}{{$err:= ""}}
+	{{$err:= ""}}
 	{{range $k,$v:=.chans}}
-			{{if not $dot.msg}}{{with getMessage $k $dot.mID}}{{$dot.Set "msg" .}}{{$dot.Set "chan" $k}}{{end}}{{end}}
+			{{if not $.msg}}{{with getMessage $k $.mID}}{{$.Set "msg" .}}{{$.Set "chan" $k}}{{end}}{{end}}
 	{{end}}
 	
 	{{with .msg}}
 		{{with .Embeds}}
 			{{with (index . 0).Footer}}
 				{{with reFindAllSubmatches `(?s).*Author ID - (\d{17,19})\z` .Text}}
-					{{$dot.Set "authorID" (toInt64 (index . 0 1))}}  
+					{{$.Set "authorID" (toInt64 (index . 0 1))}}  
 				{{else}}
 					 {{$err = "Not a valid Suggestion Message"}}
 				{{end}}			
@@ -171,8 +171,8 @@ Done :+1:
 				{{$err = "Not a valid Suggestion Message"}}
 			{{end}}
 			{{with reFindAllSubmatches `\A(?:(Suggestion)|(Approved) Suggestion|(Implemented) Suggestion) #(\d+)\z` (index . 0).Title}}
-				{{$dot.Set "type"  (or (index . 0 1) (index . 0 2) (index . 0 3))}}
-				{{$dot.Set "SNum" (toInt (index . 0 4))}}
+				{{$.Set "type"  (or (index . 0 1) (index . 0 2) (index . 0 3))}}
+				{{$.Set "SNum" (toInt (index . 0 4))}}
 			{{else}}
 				{{$err = "Not a valid Suggestion Message"}}
 			{{end}}
@@ -180,7 +180,7 @@ Done :+1:
 			{{$err = "Not a valid Suggestion Message"}}
 		{{end}}
 	{{else}}
-		{{$err = print "Invalid Message ID : `" $dot.mID "`"}}
+		{{$err = print "Invalid Message ID : `" $.mID "`"}}
 	{{end}}
 	{{.Set "err" $err}}
 {{end}}
