@@ -11,6 +11,8 @@
 {{$Implemented_Channel := 532918109036740608}}
 {{$Mod_Roles := cslice 384008687951282177 419970533069815808}} 
 {{$Cooldown := 600}} {{/* Can be set to 0 for no cooldown */}}
+{{$Upvote := "upvote:524907425531428864"}}
+{{$Downvote := "downvote:524907425032175638"}}
 {{/* CONFIGURATION VARIABLES END */}}
  
 {{/* Actual Code Starts Here */}}
@@ -40,9 +42,9 @@
 						"footer" (sdict "text" (print "Submit your suggestion with " $Prefix "suggest - " $.User.ID))
 			}}
 			{{$ID := sendMessageRetID $Suggestion_Channel $embed}}
-			{{addMessageReactions $Suggestion_Channel $ID "upvote:524907425531428864" "downvote:524907425032175638"}}
+			{{addMessageReactions $Suggestion_Channel $ID $Upvote $Downvote}}
 			{{sendDM "Suggestion submitted successfully. If you want to discuss this or other suggestions, use the <#" $Logging_Channel "> channel. If you want to delete your suggestion, do so with `" $Prefix "deletesuggestion " $ID "` on the YAGPDB server."}}
-			{{addReactions "upvote:524907425531428864"}}
+			{{addReactions $Upvote}}
 		{{end}}
 	{{else}}
 		{{$error = "Insufficient Arguments."}}
