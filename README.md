@@ -75,4 +75,4 @@ If you are having difficulties with one of the custom commands here, please feel
 Please *do not* open an issue unless you are sure it is a bug in the code - questions will be directed to the server instead. Thanks!
 
 ## Maintainers
-**yagpdb-cc** is maintained by [@Jo3-L](https://github.com/Jo3-L) (`Joe_#6041`) and [@Satty9361](https://github.com/Jo3-L) (`Satty#9361`).
+**yagpdb-cc** is maintained by [@Jo3-L](https://github.com/Jo3-L) (`Joe_#6041`) and [@Satty9361](https://github.com/Satty9361) (`Satty#9361`).
