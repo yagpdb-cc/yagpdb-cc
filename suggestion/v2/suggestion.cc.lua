@@ -43,7 +43,7 @@
 						"footer" (sdict "text" (print "Author ID - " $.User.ID))
 			}}
 			
-			{{with .Message.Attachments}}{{range .}}{{if and (not $Img_Set) .Width}}{{$Img_Set =true}}{{$embed.Set "image" (sdict "url" .ProxyURL)}}{{else}}{{$Attachments =print $Attachments "\n[" .Filename "](" .ProxyURL ")"}}{{end}}{{end}}{{end}}
+			{{range .Message.Attachments}}{{if and (not $Img_Set) .Width}}{{$Img_Set =true}}{{$embed.Set "image" (sdict "url" .ProxyURL)}}{{else}}{{$Attachments =print $Attachments "\n[" .Filename "](" .ProxyURL ")"}}{{end}}{{end}}
 			{{if $Attachments}}{{$embed.Set "description" (print $embed.description "\n\n**__Attachments:__**" $Attachments)}}{{end}}
 			{{$ID:=sendMessageRetID $Suggestion_Channel (cembed $embed)}}
 			{{addMessageReactions $Suggestion_Channel $ID $Upvote $Downvote}}
