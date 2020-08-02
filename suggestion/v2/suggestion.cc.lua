@@ -104,7 +104,7 @@
 				{{$command ="Denied"}}
 			{{else if eq $command "approve" "approved"}}
 				{{$command ="Approved"}}{{$send_chan =$Approved_Channel}}
-			{{else}}
+			{{else ne $command "comment"}}
 				{{$command ="Implemented"}}{{$send_chan =$Implemented_Channel}}
 			{{end}}
 			{{$embed.Set "Title" (print $command " Suggestion #" $SNum)}}
