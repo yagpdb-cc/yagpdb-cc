@@ -140,8 +140,8 @@
 			{{else}}
 				{{$embed.Footer.Set "Text" (print $command " By : " .User.Username " - " .User.ID " ● " $embed.Footer.Text)}}
 				{{deleteMessage $channel $message.ID 0}}
-				{{sendMessage  $send_chan (cembed $embed)}}
-				{{if ne $send_chan $Logging_Channel}}{{sendMessage $Logging_Channel (complexMessage "content" (print print "<@" $authorID "> | The suggestion below has been " $command) "embed" $embed)}}{{end}}
+				{{if ne $send_chan $Logging_Channel}}{{sendMessage  $send_chan (cembed $embed)}}{{end}}
+				{{sendMessage $Logging_Channel (complexMessage "content" (print print "<@" $authorID "> | The suggestion below has been " $command) "embed" $embed)}}
 			{{end}}
 		{{else}}
 			{{$error ="Must be a Mod/Admin to use Suggest Admin commands"}}
