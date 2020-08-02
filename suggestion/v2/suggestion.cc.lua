@@ -2,7 +2,8 @@
 	This command is the main suggestion command with suggestion create/edit/delete and suggestadmin commands. Usage: Refer README.md
 
 	Recommended trigger: Regex trigger with non case sensitive and trigger `\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+(edit|(?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`
-        Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix. 
+        Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.
+	P.S. - REMOVE This comment so that you can save the command. Otherwise youll get an error!
 */}}
 
 {{/* CONFIGURATION AREA STARTS */}}
@@ -138,6 +139,7 @@
 				{{template "handle-comments" (sdict "embed" $embed "comment" $rest "user" $.User)}}
 				{{editMessage $channel $message.ID (cembed $embed)}}
 			{{else}}
+				{{template "handle-comments" (sdict "embed" $embed "comment" $rest "user" $.User)}}
 				{{$embed.Footer.Set "Text" (print $command " By : " .User.Username " - " .User.ID " ● " $embed.Footer.Text)}}
 				{{deleteMessage $channel $message.ID 0}}
 				{{if ne $send_chan $Logging_Channel}}{{sendMessage  $send_chan (cembed $embed)}}{{end}}
