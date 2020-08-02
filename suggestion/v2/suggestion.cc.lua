@@ -99,14 +99,16 @@
 			{{end}}
 		{{else if $IS_Mod}}
 			{{$send_chan:=$Logging_Channel}}
+			{{if ne $command "comment"}}
 			{{if eq $command "dupe" "markdupe"}}
 				{{$command ="Dupe"}}
 			{{else if eq $command "deny"}}
 				{{$command ="Denied"}}
 			{{else if eq $command "approve" "approved"}}
 				{{$command ="Approved"}}{{$send_chan =$Approved_Channel}}
-			{{else if ne $command "comment"}}
+			{{else}}
 				{{$command ="Implemented"}}{{$send_chan =$Implemented_Channel}}
+			{{end}}
 			{{end}}
 			{{$embed.Set "Title" (print $command " Suggestion #" $SNum)}}
 			{{if eq $command "Dupe"}}
