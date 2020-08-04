@@ -13,8 +13,10 @@
 {{ $newLvl := 0 }} {{/* Whether user leveled up with these changes */}}
 {{ with .CmdArgs }} {{ $user = index . 0 | userArg }} {{ end }} {{/* We try to resolve user from arguments given */}}
 {{ if and (eq $cmd "level") (eq (len .CmdArgs) 2) }}
-	{{ $level := index .CmdArgs 1 | toInt }} {{/* The new level */}}
-	{{ if and $level $user }}
+	{{ $level := $.nil }}
+	{{ $valid := false }}
+	{{ with reFind `\A\d+\z` (index .CmdArgs 1) }} {{ $valid = true }} {{ $level = toInt . }} {{ end }}
+	{{ if and $valid $user }}
 		{{ $calculated := mult 100 (mult $level $level) }} {{/* Calculate XP for this level */}}
 		{{ $s := dbSet $user.ID "xp" $calculated }} {{/* Update db */}}
 		{{ $newLvl = $level }} {{/* As user leveled up, we change newLvl */}}
@@ -23,8 +25,10 @@
 		The syntax for this command is `-setlevel <user> <level>`. 
 	{{ end }}
 {{ else if eq (len .CmdArgs) 2 }}
-	{{ $xp := index .CmdArgs 1 | toInt }} {{/* The new XP */}}
-	{{ if and $xp $user }}
+	{{ $xp := $.nil }}
+	{{ $valid := false }}
+	{{ with reFind `\A\d+\z` (index .CmdArgs 1) }} {{ $valid = true }} {{ $xp = toInt . }} {{ end }}
+	{{ if and $valid $user }}
 		{{ $oldXp := 0 }} {{/* Old XP */}}
 		{{ with (dbGet $user.ID "xp") }} {{ $oldXp = .Value }} {{ end }} {{/* Update old xp with db entry */}}
 		{{ $oldLvl := roundFloor (mult 0.1 (sqrt $oldXp)) }} {{/* Calculate old level */}}
