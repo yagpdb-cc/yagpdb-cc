@@ -109,8 +109,9 @@
 			{{else}}
 				{{$command ="Implemented"}}{{$send_chan =$Implemented_Channel}}
 			{{end}}
-			{{end}}
 			{{$embed.Set "Title" (print $command " Suggestion #" $SNum)}}
+			{{end}}
+				
 			{{if eq $command "Dupe"}}
 				{{$Syntax ="<Suggestion_ID> <Original_Suggestion_ID>"}} 
 				{{with $rest}}
