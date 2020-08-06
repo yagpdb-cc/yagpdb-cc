@@ -5,7 +5,7 @@ There Will be More Commands In the Future :)
 
 Simple Currency System with Changeable Name/Emoji Money.
 
-It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine.cc.lua
+It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine.cc.lua or guessNumber.cc.lua
 
     Some Current Commands It Have:
      !balance [User/Member] -It Gets The Current Balance of A User Member or if no arguments given, The Users Balance, ex: !balance
