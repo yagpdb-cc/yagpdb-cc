@@ -6,12 +6,6 @@
         Adds Money To a User, Usage "!addbalance <User/Member> <Amount>" 
 */}}
 
-
-{{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>" {{/*Check if We Have two Args*/}}
-    (carg "user" "channel to send to")
-    (carg "int" "Balance to Add")}}
-
-
 {{/*CONFIGURATION START*/}}
 
 {{ $currency := "💰" }} {{/*Currency Emoji/Name*/}}
@@ -19,7 +13,15 @@
 {{/*CONFIGURATION END*/}}
 
 
+
+
 {{/*MAIN CODE !!!*/}}
+
+
+{{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>" {{/*Check if We Have two Args*/}}
+    (carg "user" "channel to send to")
+    (carg "int" "Balance to Add")}}
+
 
 {{ $dbHandName := "HAND" }} {{/* Database Name To Add The Currency (is UserID + $dbHandName)*/}}
 
