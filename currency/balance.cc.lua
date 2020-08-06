@@ -3,7 +3,7 @@
         
         Recommended Trigger: Command (mention/cmd prefix): "balance"
         
-        Gets Your Money and The Money From Others Users/Members, Usage "!balance [User/Member]" (If no args given, Get Trigger User balance) 
+        Gets Your Money and The Money From Others Users/Members, Usage "!balance [User/Member]" (If no args given, Get Users balance) 
 */}}
 
 {{/* CONFIGURATION START*/}}
