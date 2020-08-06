@@ -2,7 +2,9 @@
 Help Site: [This is Optional]/<> <-This is Not Optional
 
 There Will be More Commands In the Future :)
+
 Simple Currency System with Changeable Name/Emoji Money.
+
 It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine.cc.lua
 
     Some Current Commands It Have:
