@@ -1,5 +1,5 @@
 # Simple Currency System
-Help Site: [This is Optional]/<This is Not Optional>
+Help Site: [This is Optional]/<User> <-This is Not Optional
 
 There Will be More Commands In the Future :)
 Simple Currency System with Changeable Name/Emoji Money.
