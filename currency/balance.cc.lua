@@ -12,6 +12,9 @@
 
 {{/*CONFIGURATION END*/}}
 
+
+{{/*MAIN CODE !!!*/}}
+
 {{ $dbHandName := "HAND" }} {{/* Current Money In Hand Database(This is for using with other Fun Things, Like Slots) */}}
 {{ $dbBankName := "GBANK" }} {{/* Bank Name Database(This is for Depositing Money in the bank) */}}
 {{ $dbNetworthName := "NETWORTH" }} {{/* Networth Database(If The Server have a sort of clans or something)*/}}
