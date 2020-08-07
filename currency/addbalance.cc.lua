@@ -19,7 +19,7 @@
 
 
 {{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>" {{/*Check if We Have two Args*/}}
-    (carg "user" "channel to send to")
+    (carg "user" "User To Give")
     (carg "int" "Balance to Add")}}
 
 
