@@ -19,7 +19,7 @@
 
 
 {{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>" {{/*Check if We Have two Args*/}}
-    (carg "user" "User To Give")
+    (carg "user" "channel to send to")
     (carg "int" "Balance to Add")}}
 
 
@@ -31,4 +31,4 @@
 
 {{ $newamount := dbIncr ($args.Get 0).ID $dbHandName ($args.Get 1) }}
 
-{{sendMessage .Channel.ID (joinStr "" "**Added " ($args.Get 1) " to **" ($args.Get 0).Mention) }}
+{{sendMessage .Channel.ID (joinStr "" "**Added " ($args.Get 1) $currency " to **" ($args.Get 0).Mention) }}
