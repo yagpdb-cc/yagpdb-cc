@@ -8,5 +8,7 @@ Simple Currency System with Changeable Name/Emoji Money.
 It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine.cc.lua or guessNumber.cc.lua
 
    #Some Current Commands It Have:
-     1. **!balance [User/Member] -It Gets The Current Balance of A User Member or if no arguments given, The Users Balance, ex: !balance**
-     1. **!addbalance <User/Member> <Amount> - It adds Balance To A User Member, ex: !addbalance @Gas_Infinity 100**
+1. **-balance [User/Member]**
+   It Gets The Current Balance of A User Member or if no arguments given, The Users Balance, ex: !balance
+1. **-addbalance <User/Member> <Amount>** 
+   It adds Balance To A User Member, ex: !addbalance @Gas_Infinity 100
