@@ -19,7 +19,7 @@
 
 {{ $dbHandName := "HAND" }} 
 {{ $dbBankName := "GBANK" }}
-{{$error1 := "**Error, Syntax is !deposit <all> or <amount>**"}}
+{{$error1 := "**Error, Syntax is -deposit <all> or <amount>**"}}
 {{$error2 := "**Error, You Need At Least: **"}}
 {{$depall := "all"}}
 
