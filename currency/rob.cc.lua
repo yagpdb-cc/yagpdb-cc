@@ -12,7 +12,7 @@
 {{/*CONFIGURATION START*/}}
 {{ $dbHandName := "HAND" }} {{/*Database Entry To rob*/}}
 {{ $currency := "💰" }} {{/*Currency Emoji/Name*/}}
-{{ $minamounttorob := 1000}} {{/*MinAmount the Player Needs To Rob*/}}
+{{ $minamounttorob := 1000}} {{/*MinAmount the Player Gets and Needs To Rob*/}}
 {{ $maxamounttorob := 2000}} {{/*MaxAmount the Player Gets When Robbing*/}}
 {{$cooldown := 3600}} {{/*Cooldown "In Seconds": 60secs = 1 min, 3600secs = 1h, 86400 = 1day*/}}
 {{/*CONFIGURATION END*/}}
