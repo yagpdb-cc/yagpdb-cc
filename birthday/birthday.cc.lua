@@ -7,7 +7,7 @@
 {{$banUnderAge := false}}
 {{$moneytogiveonbday := 100}} {{/* Money To Give On Birthdays */}}
 {{$moneyMsg := "Congratulations, You Gained "}} {{/* Money Msg To Send */}}
-{{$moneyonbday := true}} {{/* Give Money OnBirthday? */}}
+{{$moneyonbday := false}} {{/* Give Money OnBirthday? */}}
 {{ $dbHandName := "HAND" }} {{/* Database Entry To Put Currency, The entries are: UserID+$dbHandName */}}
 {{/* End */}}
 
