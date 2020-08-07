@@ -13,7 +13,7 @@ It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine
 1. **-addbalance <User/Member> <Amount>** 
    It adds Balance To A User/Member, ex: !addbalance @Gas_Infinity 100
 1. **-rob <User/Member>** 
-   It robs a Random Amount from 1 to 2000 of a Player, It Detects if you or The Player Have The Min Amount and If you`re Robbing to Yourself, Also it Have A Very Simple         Cooldown System. ex: !rob @Gas_Infinity
+   It robs a Random Amount from 1000 to 2000 of a Player, It Detects if you or The Player Have The Min Amount and If you`re Robbing to Yourself, Also it Have A Very Simple         Cooldown System. ex: !rob @Gas_Infinity
 1. **-work** 
    Get A Random Amount with Configurable MinAmount or MaxAmount Given, Configurable WinMsg And LoseMsg. ex: -work
 1. **-deposit <all> or <amount>** 
