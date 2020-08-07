@@ -17,4 +17,4 @@ It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine
 1. **-work** 
    Get A Random Amount with Configurable MinAmount or MaxAmount Given, Configurable WinMsg And LoseMsg. ex: !work
 1. **"Birthday Update":**
-   BirthDay Update For Give An Amount of Money in The Birthday Of A Person, You Can Activate it Or Deactivate It 
+   BirthDay Update For Give An Amount of Money in The Birthday Of A Person, You Can Activate it Or Deactivate It (In BirthDay Folder)
