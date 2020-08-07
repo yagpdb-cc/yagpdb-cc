@@ -2,6 +2,7 @@
 
 ## Info
 Update: It Adds Balance To a Given Database entry, You can activate it or Deactivate it, The Order is: UserID+DatabaseEntry
+
 All commands can be used with bday or birthday. Example: -getbday or -getbirthday<p>
 This code will also kick/ban users if they are under 13 years old, if you want it to.<p>
 Change ONLY the user variables<p>
