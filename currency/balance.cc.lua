@@ -9,6 +9,7 @@
 {{/* CONFIGURATION START*/}}
 
 {{ $currency := "💰" }} {{/* Currency Emoji/Name */}}
+{{ $bankName := "**GBank**" }}
 
 {{/*CONFIGURATION END*/}}
 
@@ -35,7 +36,7 @@
 "author" (sdict "name" (joinStr "" (userArg (index .Args 1)).Username) "url" "" "icon_url" ((userArg (index .Args 1)).AvatarURL "512"))
 "fields" (cslice 
         (sdict "name" "**In Hand**" "value" $handamount "inline" false) 
-        (sdict "name" "**GBank**" "value" $bankamount "inline" false) 
+        (sdict "name" $bankName "value" $bankamount "inline" false) 
         (sdict "name" "**Networth**" "value" $networthamount "inline" false) 
     ) 
 }}
@@ -58,7 +59,7 @@
 "author" (sdict "name" (joinStr "" .User.Username) "url" "" "icon_url" (.User.AvatarURL "512"))
 "fields" (cslice 
         (sdict "name" "**In Hand**" "value" $handamount "inline" false) 
-        (sdict "name" "**GBank**" "value" $bankamount "inline" false) 
+        (sdict "name" $bankName "value" $bankamount "inline" false) 
         (sdict "name" "**Networth**" "value" $networthamount "inline" false) 
     ) 
 }}
