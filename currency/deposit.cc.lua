@@ -3,7 +3,7 @@
         
         Recommended Trigger: Command (mention/cmd prefix): "deposit"
         
-        Deposit Your Money To The Bank, Usage "!deposit <all> or <amount>" (If all, Deposit all The Money of The Player To The Bank) 
+        Deposit Your Money To The Bank, Usage "-deposit <all> or <amount>" (If all, Deposit all The Money of The Player To The Bank) 
 */}}
 
 
