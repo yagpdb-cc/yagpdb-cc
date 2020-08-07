@@ -3,7 +3,7 @@
         
         Recommended Trigger: Command (mention/cmd prefix): "addbalance"
         
-        Adds Money To a User, Usage "!addbalance <User/Member> <Amount>" 
+        Adds Money To a User,Also Removes It, Usage "!addbalance <User/Member> <Amount>" 
 */}}
 
 {{/*CONFIGURATION START*/}}
@@ -19,7 +19,7 @@
 
 
 {{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>" {{/*Check if We Have two Args*/}}
-    (carg "user" "User To Give Money")
+    (carg "user" "User To Send Balance")
     (carg "int" "Balance to Add")}}
 
 
@@ -31,4 +31,8 @@
 
 {{ $newamount := dbIncr ($args.Get 0).ID $dbHandName ($args.Get 1) }}
 
+{{if gt ($args.Get 1) 0}}
 {{sendMessage .Channel.ID (joinStr "" "**Added " ($args.Get 1) $currency " to **" ($args.Get 0).Mention) }}
+{{else}}
+{{sendMessage .Channel.ID (joinStr "" "**Removed " ($args.Get 1) $currency " to **" ($args.Get 0).Mention) }}
+{{end}}

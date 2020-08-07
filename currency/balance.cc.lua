@@ -17,12 +17,13 @@
 
 {{ $dbHandName := "HAND" }} {{/* Current Money In Hand Database(This is for using with other Fun Things, Like Slots) */}}
 {{ $dbBankName := "GBANK" }} {{/* Bank Name Database(This is for Depositing Money in the bank) */}}
-{{ $dbNetworthName := "NETWORTH" }} {{/* Networth Database(If The Server have a sort of clans or something)*/}}
+{{ $dbNetworthName := "NETWORTH" }} {{/* Networth Database(Bank + Hand)*/}}
 
 {{if eq (len .Args) 2}}
 
 {{ $handbal := toInt (dbGet (userArg (index .Args 1)).ID $dbHandName).Value }}
 {{ $bankbal := toInt (dbGet (userArg (index .Args 1)).ID $dbBankName).Value }}
+{{ $newnetworthbal := dbSet (userArg (index .Args 1)).ID $dbNetworthName (add $bankbal $handbal) }}
 {{ $networthbal := toInt (dbGet (userArg (index .Args 1)).ID $dbNetworthName).Value }}
 
 {{ $handamount := (joinStr $currency " " $handbal)}}
@@ -45,6 +46,7 @@
 
 {{ $handbal := toInt (dbGet .User.ID $dbHandName).Value }}
 {{ $bankbal := toInt (dbGet .User.ID $dbBankName).Value }}
+{{ $newnetworthbal := dbSet  .User.ID $dbNetworthName (add $bankbal $handbal) }}
 {{ $networthbal := toInt (dbGet .User.ID $dbNetworthName).Value }}
 
 {{ $handamount := (joinStr $currency " " $handbal)}}
