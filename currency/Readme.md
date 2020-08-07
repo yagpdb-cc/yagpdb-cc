@@ -12,3 +12,5 @@ It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine
    It Gets The Current Balance of A User Member or if no arguments given, The Users Balance, ex: !balance
 1. **-addbalance <User/Member> <Amount>** 
    It adds Balance To A User/Member, ex: !addbalance @Gas_Infinity 100
+1. **-rob <User/Member>** 
+   It robs a Random Amount from 1 to 2000 of a Player, It Detects if you or The Player Have The Min Amount and Idf you`re Robbing to Yourself, Also it Have A Very Simple         Cooldown System
