@@ -39,7 +39,6 @@
 {{sendMessageNoEscape nil $error4}}
 {{else}}
 {{/* Create cooldown entry */}}
-{{dbSetExpire (toInt64 $id) $key "cooldown" $lengthSec}}
 
 {{/* Rob Main Code */}}
 {{$error1 := "**The User Doesn`t Have at Least 1000 to Rob, Is Not Worth It!!**"}}
@@ -67,7 +66,7 @@
 		{{ $newrobbedmoneyamount := dbIncr ($args.Get 0).ID $dbHandName (mult -1 $amounttowinorlose) }} {{/*Quit Users Money*/}}
 		{{ $newmoneyamount := dbIncr .User.ID $dbHandName $amounttowinorlose }}
 		{{ $winmsg := print "**" $winmsg $amounttowinorlose $currency " of " ($args.Get 0).Mention "!!**"}}
-		
+		{{dbSetExpire (toInt64 $id) $key "cooldown" $lengthSec}}
 		{{sendMessageNoEscape nil $winmsg}}
 
 {{else}}
@@ -76,7 +75,7 @@
 {{end}}
 	{{ $newmoneyamount := dbIncr .User.ID $dbHandName (mult -1 $amounttowinorlose) }} {{/*Quit Users Money*/}}
 	{{ $losemsg := print "**" $losemsg $amounttowinorlose $currency "!!**"}}
-
+    {{dbSetExpire (toInt64 $id) $key "cooldown" $lengthSec}}
 	{{sendMessageNoEscape nil $losemsg}}
 {{end}}
 {{else}}
