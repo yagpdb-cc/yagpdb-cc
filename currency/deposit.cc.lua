@@ -3,7 +3,7 @@
         
         Recommended Trigger: Command (mention/cmd prefix): "deposit"
         
-        Deposit Your Money To The Bank, Usage "-deposit <all> or <amount>" (If all, Deposit all The Money of The Player To The Bank) 
+        Deposit Your Money To The Bank, Usage "!deposit <all> or <amount>" (If all, Deposit all The Money of The Player To The Bank) 
 */}}
 
 
@@ -19,7 +19,7 @@
 
 {{ $dbHandName := "HAND" }} 
 {{ $dbBankName := "GBANK" }}
-{{$error1 := "**Error, Syntax is -deposit <all> or <amount>**"}}
+{{$error1 := "**Error, Syntax is !deposit <all> or <amount>**"}}
 {{$error2 := "**Error, You Need At Least: **"}}
 {{$depall := "all"}}
 

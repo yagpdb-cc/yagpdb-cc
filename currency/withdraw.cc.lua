@@ -3,7 +3,7 @@
         
         Recommended Trigger: Command (mention/cmd prefix): "withdraw"
         
-        Withdraw Your Money from The Bank, Usage "-withdraw <all> or <amount>" (If all, Withdraw all The Money of The Player To The Hand) 
+        Withdraw Your Money from The Bank, Usage "!withdraw <all> or <amount>" (If all, Withdraw all The Money of The Player To The Hand) 
 */}}
 
 
@@ -18,7 +18,7 @@
 {{ $dbHandName := "HAND" }} 
 {{ $dbBankName := "GBANK" }}
 
-{{$error1 := "**Error, Syntax is -withdraw <all> or <amount>**"}}
+{{$error1 := "**Error, Syntax is !withdraw <all> or <amount>**"}}
 {{$error2 := "**Error, You Need At Least: **"}}
 {{$withall := "all"}}
 

@@ -7,13 +7,12 @@
 */}}
 
 {{$args := parseArgs 1 "Syntax is !rob <User>"
-    (carg "user" "channel to send to")}}
+    (carg "user" "User To Rob")}}
 
 {{/*CONFIGURATION START*/}}
 {{ $dbHandName := "HAND" }} {{/*Database Entry To rob*/}}
 {{ $currency := "💰" }} {{/*Currency Emoji/Name*/}}
 {{ $minamounttorob := 1000}} {{/*MinAmount the Player Gets and Needs To Rob*/}}
-{{ $maxamounttorob := 2000}} {{/*MaxAmount the Player Gets When Robbing*/}}
 {{$cooldown := 3600}} {{/*Cooldown "In Seconds": 60secs = 1 min, 3600secs = 1h, 86400 = 1day*/}}
 {{/*CONFIGURATION END*/}}
 
@@ -50,10 +49,11 @@
 {{$winmsg := "You Stealed: "}}
 
 {{ $winorlose := randInt 4 }} {{/* 0  - Lose / 1 or more - Win */}}
-{{ $amounttowinorlose := randInt $minamounttorob $maxamounttorob }}
 
 {{ $handbal := toInt (dbGet .User.ID $dbHandName).Value }}
 {{ $userhandbal := toInt (dbGet ($args.Get 0).ID $dbHandName).Value}}
+
+{{ $amounttowinorlose := randInt $minamounttorob $userhandbal }}
 
 {{if ne .User.ID ($args.Get 0).ID }}
 {{if ge $handbal $minamounttorob}}
