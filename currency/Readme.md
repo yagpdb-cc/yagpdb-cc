@@ -15,6 +15,10 @@ It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine
 1. **-rob <User/Member>** 
    It robs a Random Amount from 1 to 2000 of a Player, It Detects if you or The Player Have The Min Amount and If you`re Robbing to Yourself, Also it Have A Very Simple         Cooldown System. ex: !rob @Gas_Infinity
 1. **-work** 
-   Get A Random Amount with Configurable MinAmount or MaxAmount Given, Configurable WinMsg And LoseMsg. ex: !work
+   Get A Random Amount with Configurable MinAmount or MaxAmount Given, Configurable WinMsg And LoseMsg. ex: -work
+1. **-deposit <all> or <amount>** 
+   Deposit Money To The Bank, You can change the minamount required for Deposit. ex: -deposit 10
+1. **-withdraw <all> or <amount>** 
+   Withdraw Money from The Bank, You can change the minamount required for withdraw. ex: -withdraw 10
 1. **"Birthday Update":**
    BirthDay Update For Give An Amount of Money in The Birthday Of A Person, You Can Activate it Or Deactivate It (In BirthDay Folder)
