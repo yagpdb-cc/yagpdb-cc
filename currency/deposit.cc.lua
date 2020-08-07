@@ -8,8 +8,6 @@
 
 
 {{/* CONFIGURATION START*/}}
-{{ $dbHandName := "HAND" }} 
-{{ $dbBankName := "GBANK" }}
 {{ $currency := "💰" }}
 {{$bankName := "GBank"}}
 {{$minAmountToDeposit := 1}}
@@ -18,6 +16,9 @@
 
 
 {{/*MAIN CODE!!*/}}
+
+{{ $dbHandName := "HAND" }} 
+{{ $dbBankName := "GBANK" }}
 {{$error1 := "**Error, Syntax is !deposit <all> or <amount>**"}}
 {{$error2 := "**Error, You Need At Least: **"}}
 {{$depall := "all"}}
