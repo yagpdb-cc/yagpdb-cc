@@ -40,11 +40,21 @@
 {{sendMessage .Channel.ID $withMsg}}
 {{else if gt (toInt $arg1) 0}}
 
+{{if gt (toInt $arg1) $bankbal}}
+
+{{ $newamount := dbIncr .User.ID $dbHandName  $bankbal}}
+{{ $newbankamount := dbIncr .User.ID $dbBankName  (mult -1 $bankbal)}}
+
+{{$withMsg := print $withMsg $bankbal $currency $withMsg2}}
+{{sendMessage .Channel.ID $withMsg}}
+
+{{else}}
 {{ $newamount := dbIncr .User.ID $dbHandName  (toInt $arg1)}}
 {{ $newbankamount := dbIncr .User.ID $dbBankName  (mult -1 (toInt $arg1))}}
 
 {{$withMsg := print $withMsg (toInt $arg1) $currency $withMsg2}}
 {{sendMessage .Channel.ID $withMsg}}
+{{end}}
 {{else}}
 {{sendMessage .Channel.ID $error1}}
 {{end}}

@@ -19,6 +19,7 @@
 
 {{ $dbHandName := "HAND" }} 
 {{ $dbBankName := "GBANK" }}
+
 {{$error1 := "**Error, Syntax is !deposit <all> or <amount>**"}}
 {{$error2 := "**Error, You Need At Least: **"}}
 {{$depall := "all"}}
@@ -39,13 +40,26 @@
 
 {{$depMsg := print $depMsg $handbal $currency $depMsg2}}
 {{sendMessage .Channel.ID $depMsg}}
+
 {{else if gt (toInt $arg1) 0}}
+
+{{if ge (toInt $arg1) $handbal}}
+{{$all := $handbal}}
+
+{{ $newbankamount := dbIncr .User.ID $dbBankName  $handbal}}
+{{ $newamount := dbIncr .User.ID $dbHandName  (mult -1 $handbal)}}
+
+{{$depMsg := print $depMsg $handbal $currency $depMsg2}}
+{{sendMessage .Channel.ID $depMsg}}
+
+{{else}}
 
 {{ $newbankamount := dbIncr .User.ID $dbBankName  (toInt $arg1)}}
 {{ $newamount := dbIncr .User.ID $dbHandName  (mult -1 (toInt $arg1))}}
 
 {{$depMsg := print $depMsg (toInt $arg1) $currency $depMsg2}}
 {{sendMessage .Channel.ID $depMsg}}
+{{end}}
 {{else}}
 {{sendMessage .Channel.ID $error1}}
 {{end}}
