@@ -21,6 +21,6 @@ It Works With Some Of The Fun Commands that work with Currency, ex: slotsMachine
 1. **-withdraw < all > or < amount >** 
    Withdraw Money from The Bank, You can change the minamount required for withdraw. ex: -withdraw 10
 1. **-money-leaderboard < Module > [Page]** 
-   Check The Money Leaderboards. The Modules are: In Hand(-h), In The Bank(-b) and Networth[Bank+Hand](-n). ex: -money-leaderboards -n
+   Check The Money Leaderboards. The Modules are: In Hand(-h), In The Bank(-b) and Networth [Bank+Hand] (-n). ex: -money-leaderboards -n
 1. **"Birthday Update":**
    BirthDay Update For Give An Amount of Money in The Birthday Of A Person, You Can Activate it Or Deactivate It (In BirthDay Folder)
