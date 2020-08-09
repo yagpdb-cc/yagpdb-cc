@@ -1,9 +1,9 @@
 {{/*
 		Simple Currency System By GasInfinity
         
-        Recommended Trigger: Command (mention/cmd prefix): "addbalance"
+        Recommended Trigger: Regex: "^-(addbalance|addbal)"
         
-        Adds Money To a User,Also Removes It, Usage "!addbalance <User/Member> <Amount>" 
+        Adds Money To a User,Also Removes It, Usage "-addbalance <User/Member> <Amount>" 
 */}}
 
 {{/*CONFIGURATION START*/}}
@@ -18,7 +18,7 @@
 {{/*MAIN CODE !!!*/}}
 
 
-{{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>" {{/*Check if We Have two Args*/}}
+{{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>"
     (carg "user" "User To Send Balance")
     (carg "int" "Balance to Add")}}
 
