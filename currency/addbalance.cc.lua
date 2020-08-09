@@ -3,12 +3,12 @@
         
         Recommended Trigger: Regex: "^-(addbalance|addbal)"
         
-        Adds Money To a User,Also Removes It, Usage "!addbalance <User/Member> <Amount>" 
+        Adds Money To a User,Also Removes It, Usage "-addbalance <User/Member> <Amount>" 
 */}}
 
 {{/*CONFIGURATION START*/}}
 
-{{ $currency := "🍟" }} {{/*Currency Emoji/Name*/}}
+{{ $currency := "💰" }} {{/*Currency Emoji/Name*/}}
 
 {{/*CONFIGURATION END*/}}
 
