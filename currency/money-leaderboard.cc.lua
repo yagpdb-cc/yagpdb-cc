@@ -7,7 +7,7 @@
 */}}
 
 {{/* CONFIGURATION START*/}}
-{{ $currency := "🍟" }}
+{{ $currency := "💰" }}
 {{/*CONFIGURATION END*/}}
 
 
