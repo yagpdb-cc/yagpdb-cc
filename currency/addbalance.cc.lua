@@ -18,7 +18,7 @@
 {{/*MAIN CODE !!!*/}}
 
 
-{{$args := parseArgs 2 "Syntax is !addbalance <User> <Amount>"
+{{$args := parseArgs 2 "Syntax is -addbalance <User> <Amount>"
     (carg "string" "User To Send Balance")
     (carg "int" "Balance to Add")}}
 
