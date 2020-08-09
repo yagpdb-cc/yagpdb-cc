@@ -1,11 +1,10 @@
 {{/*
 		Simple Currency System By GasInfinity
         
-        Recommended Trigger: Command (mention/cmd prefix): "withdraw"
+        Recommended Trigger: Regex: "^-(withdraw|with)"
         
-        Withdraw Your Money from The Bank, Usage "!withdraw <all> or <amount>" (If all, Withdraw all The Money of The Player To The Hand) 
+        Withdraw Your Money from The Bank, Usage "-withdraw <Amount> or all " 
 */}}
-
 
 {{/* CONFIGURATION START*/}}
 {{ $currency := "💰" }}
@@ -25,8 +24,8 @@
 {{ $handbal := toInt (dbGet .User.ID $dbHandName).Value }}
 {{ $bankbal := toInt (dbGet .User.ID $dbBankName).Value }}
 
-{{ $withMsg := "Successfully Withdrawed "}}
-{{ $withMsg2 := print " of The " $bankName}}
+{{ $withMsg := "**Successfully Withdrawed "}}
+{{ $withMsg2 := print " of The " $bankName "**"}}
 
 {{if eq (len .Args) 2}}
 {{if gt $bankbal 0}}

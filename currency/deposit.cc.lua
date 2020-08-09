@@ -1,19 +1,16 @@
 {{/*
 		Simple Currency System By GasInfinity
         
-        Recommended Trigger: Command (mention/cmd prefix): "deposit"
+        Recommended Trigger: Regex: "^-(deposit|dep)"
         
-        Deposit Your Money To The Bank, Usage "!deposit <all> or <amount>" (If all, Deposit all The Money of The Player To The Bank) 
+        Deposit Your Money To The Bank, Usage "-deposit <Amount> or all " 
 */}}
-
 
 {{/* CONFIGURATION START*/}}
 {{ $currency := "💰" }}
 {{$bankName := "GBank"}}
 {{$minAmountToDeposit := 1}}
 {{/*CONFIGURATION END*/}}
-
-
 
 {{/*MAIN CODE!!*/}}
 
@@ -27,8 +24,8 @@
 {{ $handbal := toInt (dbGet .User.ID $dbHandName).Value }}
 {{ $bankbal := toInt (dbGet .User.ID $dbBankName).Value }}
 
-{{ $depMsg := "Successfully Deposited "}}
-{{ $depMsg2 := print " to The " $bankName}}
+{{ $depMsg := "**Successfully Deposited "}}
+{{ $depMsg2 := print " to The " $bankName "**"}}
 
 {{if eq (len .Args) 2}}
 {{if gt $handbal 0}}
