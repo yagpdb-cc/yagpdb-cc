@@ -13,13 +13,13 @@
 	{{ if not .ExecData }}
 		{{ with reFindAllSubmatches `\d+` .Message.Content }}
     			{{ if (eq (toInt (dbGet 0 "NR").Value) (toInt (index (index  . 0) 0))) }}
-				{{ dbDel 0 "NR" }} 
     				{{ $r := dbIncr $.User.ID $db $prize }}
    				{{ sendMessage nil (cembed 
     				"title" "**We have a winner**" 
     				"description" (print "Congrats " $.User.Username " you won!\nFor prize you won **" $prize "** credits !\nNow you have **" (toInt (dbGet $.User.ID $db).Value) "** credits.\nThe number was **" ( toInt (dbGet 0 "NR").Value) "** \nAnother number will be generated shortly !")
     				"thumbnail" (sdict "url" "https://cdn.discordapp.com/attachments/656522874491895808/673899344033742848/lottery-png-4.png")
     				"color" 34749 )}}
+				{{ dbDel 0 "NR" }} 
 				{{ execCC $.CCID $channel 10 (sdict "value" "true") }}
 			{{ end }}
 		{{ end }}
