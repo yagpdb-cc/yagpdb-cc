@@ -31,7 +31,7 @@ Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?2
 
 *Note:* Among the **above** variables all channels can be separate or same. All combinations are possible. 
 
-**IMPORTANT - DO NOT LEAVE ANY CHANNEL ID AS BLANK. YOU CAN PUT ALL IDS SAME BUT NEVER LEAVE THEM BLANK!! **
+**IMPORTANT - DO NOT LEAVE ANY CHANNEL ID AS BLANK. YOU CAN PUT ALL IDS SAME BUT NEVER LEAVE THEM BLANK!!**
 
 5. `$Mod_Roles` -
 
