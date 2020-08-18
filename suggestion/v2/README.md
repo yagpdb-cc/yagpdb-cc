@@ -1,3 +1,53 @@
+# Trigger 
+
+### Type - Regex
+
+### Trigger -
+
+	 (?i)\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)
+
+**Note:** If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.
+
+Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`
+
+
+# Configuration Variables
+
+1. `$Suggestion_Channel` -
+
+	The channel where the suggestions are sent.
+
+2. `$Logging_Channel` - 
+
+	The channel where messages regarding denied/approved/implemented and suggestions marked as dupe are sent. It us suggested to keep it separate from the $Suggestion_Channe to reduce clutter but depends on personal taste. 
+
+3. `$Implemented_Channel` -
+	
+	The channel where suggestions which have been marked as implemented are sent. This provides a good way to organise all implemnted suggestions into a separate channel.
+	
+4. `$Approved_Channel` -
+	
+	The channel where suggestions which have been marked as approved are sent. This provides a good way to organise all approved suggestions. This provides a good way to organise all implemnted suggestions into a separate channel. It is very much possible to set the same channel for tracking approved+implemented suggestions by using the same channel id in both variables.
+
+*Note:* Among the **above** variables all channels can be separate or same. All combinations are possible. 
+
+5. `$Mod_Roles` -
+
+	List of all role ids of moderators who shpuld have access to all the suggestadmin commands.
+
+6. `$Cooldown` -
+
+	Colldown in seconds between consucutive suggestions. This prevents suggestion misuse/spam. Can be set to 0 to disable. Mods/Admins can bypass the cooldown.
+
+7. `$Upvote` -
+
+	The emoji for upvote reaction. Supports both custom as well as inbuilt emojis. For inbuilt emojis, it is recommended to use corresponding unicode characters. Example : "👍".
+	
+8. `$Downvote` -
+
+	The emoji for downvote reaction. Supports both custom as well as inbuilt emojis. For inbuilt emojis, it is recommended to use corresponding unicode characters. Example : "👎".
+
+
 # Commands
 
  1. **Suggest -**
