@@ -33,7 +33,7 @@ Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?2
 
 5. `$Mod_Roles` -
 
-	List of all role ids of moderators who shpuld have access to all the suggestadmin commands.
+	List of all role ids of moderators who shpuld have access to all the suggestadmin commands. You do no need to specify roles who have `administrator` permissions in your server. They will have access by default.
 
 6. `$Cooldown` -
 
