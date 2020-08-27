@@ -4,6 +4,8 @@
 	Recommended trigger: Regex trigger with trigger .*
 		
 	V2 by Dav!dﾉᵈᶻ#8302 (555791735607787580)
+
+	To start the game just write "31"
 */}}
  
 {{/* CONFIGURATION VALUES START */}}
@@ -31,7 +33,7 @@
 {{/* End of some variables :D */}}
  
 {{ if eq .Channel.ID $channel }}
-	{{ $nr := (toInt (dbGet 0 "NR").Value) }}
+	{{ $nr := or (toInt (dbGet 0 "NR").Value) 31 }}
 	{{ if not .ExecData }}
 		{{ with reFindAllSubmatches `\d+` .Message.Content }}
     			{{ if (eq $nr (toInt (index (index  . 0) 0))) }}
