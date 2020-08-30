@@ -4,6 +4,8 @@
 	Recommended trigger: Regex trigger with trigger .*
 		
 	V2 by Dav!dﾉᵈᶻ#8302 (555791735607787580)
+
+	To start the game just type 31
 */}}
  
 {{/* CONFIGURATION VALUES START */}}
@@ -31,11 +33,11 @@
 {{/* End of some variables :D */}}
  
 {{ if eq .Channel.ID $channel }}
-	{{ $nr := (toInt (dbGet 0 "NR").Value) }}
+	{{ $nr := or (toInt (dbGet 0 "NR").Value) 31 }}
 	{{ if not .ExecData }}
 		{{ with reFindAllSubmatches `\d+` .Message.Content }}
     			{{ if (eq $nr (toInt (index (index  . 0) 0))) }}
-				    {{ dbDel 0 "NR" }} 
+				    {{ dbSet 0 "NR" (randInt 12345678) }} 
     				    {{ $r := dbIncr $.User.ID $db $prize }}
 				    {{ $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "256")) }}
 				    {{ $embed.Set "color" ($col.Get "finish") }}
