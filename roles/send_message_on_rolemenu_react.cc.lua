@@ -6,9 +6,9 @@
 */}}
 
 {{/* CONFIGURATION VALUES START */}}
-{{ $rolemenu_message_id := ########### }} {{/* The message id of the rolemenu */}}
-{{ $welcome_channel_id := ########### }} {{/* The channel to send a message to when the user reacts to the rolemenu with $emoji_name }}
-{{ $emoji_name := "xxxxxx" }} {{/* The name of the emoji reaction that triggers the message */}}
+{{ $rolemenu_message_id := ########### }} {{/* The message id of the message/rolemenu */}}
+{{ $welcome_channel_id := ########### }} {{/* The channel to send a welcome message to when the user reacts to the message/rolemenu with $emoji_name }}
+{{ $emoji_name := "xxxxxx" }} {{/* The name of the emoji reaction that triggers the welcome message */}}
 {{/* CONFIGURATION VALUES END */}}
 
 {{ if and (eq .Message.ID $rolemenu_message_id) (eq .Reaction.Emoji.Name $emoji_name) }} 
