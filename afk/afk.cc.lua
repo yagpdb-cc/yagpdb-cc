@@ -5,7 +5,7 @@
 	-afk <message>
 	-afk <message> -d <duration>
 
-	Recommended trigger: Command trigger with trigger `-afk`
+	Recommended trigger: Command trigger with trigger `afk`
 */}}
 {{ $time := 0 }}
 {{ if .CmdArgs }}
