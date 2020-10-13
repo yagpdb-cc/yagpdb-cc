@@ -43,11 +43,11 @@ Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?2
 
 7. `$Upvote` -
 
-	The emoji for upvote reaction. Supports both custom as well as inbuilt emojis, for which it is recommended to use corresponding unicode characters. Example : "👍".
+	The emoji for upvote reaction. Supports both custom as well as inbuilt emojis. For inbuilt emojis, it is recommended to use corresponding unicode characters. Example : "👍".
 	
 8. `$Downvote` -
 
-	The emoji for downvote reaction. Supports both custom as well as inbuilt emojis, for which it is recommended to use corresponding unicode characters. Example : "👎".
+	The emoji for downvote reaction. Supports both custom as well as inbuilt emojis. For inbuilt emojis, it is recommended to use corresponding unicode characters. Example : "👎".
 
 
 # Commands
