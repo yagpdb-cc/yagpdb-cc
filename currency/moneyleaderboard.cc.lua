@@ -82,7 +82,7 @@
 	) }} 
 {{ end }}
 
-{{else if eq (lower $args.Get 1) (lower$networth) }}
+{{else if eq (lower $args.Get 1) (lower $networth) }}
 {{ $users := dbTopEntries "NETWORTH" 10 $skip }}
 
 {{ if not $users }}
