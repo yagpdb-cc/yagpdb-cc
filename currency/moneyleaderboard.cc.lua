@@ -7,7 +7,7 @@
 */}}
 
 {{/* CONFIGURATION START*/}}
-{{ $currency := "💰" }}
+{{ $currency := "💰" }}  {{/*Currency name/Icon*/}}
 
 {{ $dbHandName := "HAND" }} {{/* Current Money In Hand Database(-h module) */}}
 {{ $dbBankName := "GBANK" }} {{/* Bank Name Database(-b Module) */}}
