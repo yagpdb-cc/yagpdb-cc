@@ -32,7 +32,7 @@
 {{ $inbank := "-b"}}
 {{ $networth := "-n"}}
 
-{{ if eq (lower $args.Get 1) (lower $inhand) }}
+{{ if eq (lower ($args.Get 0)) (lower $inhand) }}
 
 {{ $users := dbTopEntries $dbHandName 10 $skip }}
 
@@ -57,7 +57,7 @@
 	) }} 
 {{ end }}
 
-{{ else if eq (lower $args.Get 1) (lower $inbank) }}
+{{ else if eq (lower ($args.Get 0)) (lower $inbank) }}
 
 {{ $users := dbTopEntries "GBANK" 10 $skip }}
 
@@ -82,7 +82,7 @@
 	) }} 
 {{ end }}
 
-{{else if eq (lower $args.Get 1) (lower $networth) }}
+{{else if eq (lower ($args.Get 0)) (lower $networth) }}
 {{ $users := dbTopEntries "NETWORTH" 10 $skip }}
 
 {{ if not $users }}
