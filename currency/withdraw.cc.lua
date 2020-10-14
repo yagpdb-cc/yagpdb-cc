@@ -18,7 +18,7 @@
 
 {{/*MAIN CODE!!*/}}
 
-{{$error1 := "**Error, Syntax is -withdraw <all> or <amount>**"}}
+{{$error1 := print "**Error, Syntax is -withdraw <" $withall "> or <amount>**"}}
 {{$error2 := "**Error, You Need At Least: **"}}
 
 {{ $handbal := toInt (dbGet .User.ID $dbHandName).Value }}

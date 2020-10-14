@@ -17,7 +17,7 @@
 
 {{/*MAIN CODE!!*/}}
 
-{{$error1 := "**Error, Syntax is -deposit <all> or <amount>**"}}
+{{$error1 := print "**Error, Syntax is -deposit <" $depall "> or <amount>**"}}
 {{$error2 := "**To Deposit Money to the bank, you need at Least: **"}}
 
 {{ $handbal := toInt (dbGet .User.ID $dbHandName).Value }}
