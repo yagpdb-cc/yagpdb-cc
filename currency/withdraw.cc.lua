@@ -35,8 +35,7 @@
 {{ $newamount := dbIncr .User.ID $dbHandName  $bankbal}}
 {{ $newbankamount := dbIncr .User.ID $dbBankName  (mult -1 $bankbal)}}
 
-{{$withMsg := print $withMsg $bankbal $currency $withMsg2}}
-{{$withMsg}}
+{{print $withMsg $bankbal $currency $withMsg2}}
 {{else if gt (toInt $arg1) 0}}
 
 {{if gt (toInt $arg1) $bankbal}}
