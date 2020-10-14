@@ -1,16 +1,10 @@
 {{/* User Variables */}}
-{{$mods := cslice 681482833944117250 740593852833857557}}
-{{$channelID := 740590114861744250}} {{/* Channel ID to send the bday msgs */}}
-{{$bdayMsg := "**Congratulations for your birthday!**"}}
+{{$mods := cslice 668707598870118403 673258482211749917}}
+{{$channelID := 730216142924415006}} {{/* Channel ID to send the bday msgs */}}
+{{$bdayMsg := "Congratulations for your birthday!"}}
 {{$invertedOrder := false}}
 {{$kickUnderAge := false}}
-{{$banUnderAge := false}}
-
-{{$moneytogiveonbday := 1000}} {{/* Money To Give On Birthdays */}}
-{{$currency := "💰"}}
-{{$moneyMsg := "**Congratulations, You Gained "}}
-{{$moneyonbday := false}} {{/* Give Money OnBirthday? */}}
-{{ $dbHandName := "HAND" }} {{/* Database Entry To Put Currency, The entries are: UserID+$dbHandName */}}
+{{$banUnderAge := true}}
 {{/* End */}}
 
 {{/* DONT TOUCH */}}
@@ -76,7 +70,7 @@
 			{{$send = true}}
 		{{end}}
 	{{end}}
-	{{if and $send (not (dbGet currentTime.Day "bdayannounced"))}} {{dbSet currentTime.Day "bdayannounced" true}} {{if $moneyonbday}}{{$moneyMsg = print $moneyMsg $moneytogiveonbday $currency " For Your Bday**"}}{{ $increasemoney := dbIncr $user.ID $dbHandName $moneytogiveonbday }} {{sendMessageNoEscape nil $moneyMsg}} {{end}} {{sendMessageNoEscape nil $bdayMsg}} {{end}}
+	{{if and $send (not (dbGet currentTime.Day "bdayannounced"))}} {{dbSet currentTime.Day "bdayannounced" true}} {{sendMessageNoEscape nil $bdayMsg}} {{end}}
 {{else}}
 	{{if $isMod}}
 		{{if and (reFind `(?i)set` .Cmd) $isValidDate (not $error)}}
