@@ -1,7 +1,7 @@
 {{/*
 		Simple Currency System By GasInfinity
         
-        Recommended Trigger: Regex: "^-(balance|bal)"
+        Recommended Trigger: Regex: "\A-(bal(ance)?)"
         
         Gets Your Money and The Money From Others Users/Members, Usage "-balance [User/Member]" (If no args given, Get Users balance) 
 */}}
@@ -9,62 +9,40 @@
 {{/* CONFIGURATION START*/}}
 
 {{ $currency := "💰" }} {{/* Currency Emoji/Name */}}
-{{ $bankName := "**GBank**" }}
+{{ $bankName := "**GBank**" }} {{/* Bank Name where do you deposit / withdraw (This doesnt affect other cc's) */}}
+{{ $dbHandName := "HAND" }} {{/* Current Money In Hand Database(This is for using with other Fun Things, Like Slots) */}}
+{{ $dbBankName := "GBANK" }} {{/* Bank Name Database(This is for Depositing Money in the bank) */}}
+{{ $dbNetworthName := "NETWORTH" }} {{/* Networth Database(Bank + Hand)*/}}
 
 {{/*CONFIGURATION END*/}}
 
 
 {{/*MAIN CODE !!!*/}}
 
-{{ $dbHandName := "HAND" }} {{/* Current Money In Hand Database(This is for using with other Fun Things, Like Slots) */}}
-{{ $dbBankName := "GBANK" }} {{/* Bank Name Database(This is for Depositing Money in the bank) */}}
-{{ $dbNetworthName := "NETWORTH" }} {{/* Networth Database(Bank + Hand)*/}}
+
+{{ $args := parseArgs 0 "-balance [User] to see your balance or a user balance" (carg "member" "User to see balance of") }}
+{{ $member := or ($args.Get 0) .Member }}
+{{ $user := $member.User }}
 
 
-{{if eq (len .Args) 2}}
 
-{{$user := (userArg (index .Args 1))}}
 {{ $handbal := toInt (dbGet $user.ID $dbHandName).Value }}
 {{ $bankbal := toInt (dbGet $user.ID $dbBankName).Value }}
-{{ $newnetworthbal := dbSet $user.ID $dbNetworthName (add $bankbal $handbal) }}
+{{ dbSet $user.ID $dbNetworthName (add $bankbal $handbal) }}
 {{ $networthbal := toInt (dbGet $user.ID $dbNetworthName).Value }}
 
-{{ $handamount := (joinStr $currency " " $handbal)}}
-{{ $bankamount := (joinStr $currency " " $bankbal)}}
-{{ $networthamount := (joinStr $currency " " $networthbal)}}
+{{ $handamount := print $currency " " $handbal}}
+{{ $bankamount := print $currency " " $bankbal}}
+{{ $networthamount := print $currency " " $networthbal}}
 
 {{ $embed := cembed
 "color" 6123007
-"author" (sdict "name" (joinStr "" (userArg (index .Args 1)).Username) "url" "" "icon_url" ((userArg (index .Args 1)).AvatarURL "512"))
+"author" (sdict "name" (joinStr "" ($user.Username)) "icon_url" (($user).AvatarURL "512"))
 "fields" (cslice 
-        (sdict "name" "**In Hand**" "value" $handamount "inline" false) 
-        (sdict "name" $bankName "value" $bankamount "inline" false) 
-        (sdict "name" "**Networth**" "value" $networthamount "inline" false) 
+        (sdict "name" "**In Hand**" "value" $handamount) 
+        (sdict "name" $bankName "value" $bankamount) 
+        (sdict "name" "**Networth**" "value" $networthamount) 
     ) 
 }}
 
-{{sendMessage .Channel.ID $embed}}
-
-{{else}}
-
-{{ $handbal := toInt (dbGet .User.ID $dbHandName).Value }}
-{{ $bankbal := toInt (dbGet .User.ID $dbBankName).Value }}
-{{ $newnetworthbal := dbSet  .User.ID $dbNetworthName (add $bankbal $handbal) }}
-{{ $networthbal := toInt (dbGet .User.ID $dbNetworthName).Value }}
-
-{{ $handamount := (joinStr $currency " " $handbal)}}
-{{ $bankamount := (joinStr $currency " " $bankbal)}}
-{{ $networthamount := (joinStr $currency " " $networthbal)}}
-
-{{ $embed := cembed
-"color" 6123007
-"author" (sdict "name" (joinStr "" .User.Username) "url" "" "icon_url" (.User.AvatarURL "512"))
-"fields" (cslice 
-        (sdict "name" "**In Hand**" "value" $handamount "inline" false) 
-        (sdict "name" $bankName "value" $bankamount "inline" false) 
-        (sdict "name" "**Networth**" "value" $networthamount "inline" false) 
-    ) 
-}}
-{{sendMessage .Channel.ID $embed}}
-
-{{end}}
+{{sendMessage nil $embed}}

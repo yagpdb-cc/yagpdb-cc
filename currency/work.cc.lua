@@ -12,9 +12,9 @@
 {{ $currency := "💰" }} {{/*Currency Emoji/Name*/}}
 {{ $minAmount := 5}} {{/*Minimum Money Given*/}}
 {{ $maxAmount := 50}} {{/*Maximum Money Given*/}}
-{{$cooldown := 3600}} {{/*Cooldown "In Seconds": 60secs = 1 min, 3600secs = 1h, 86400 = 1day*/}}
-{{ $winMsg := "You Worked Hard And Gained: "}}
-{{ $loseMsg := "You Losed Your Hammer and Payed For Replace it: "}}
+{{ $cooldown := 3600}} {{/*Cooldown "In Seconds": 60secs = 1 min, 3600secs = 1h, 86400 = 1day*/}}
+{{ $winMsg := "You Worked Hard And Gained: "}} {{/*Win Message*/}}
+{{ $loseMsg := "You Losed Your Hammer and Payed For Replace it: "}} {{/*Lose Message*/}}
 {{/*CONFIGURATION END*/}}
 
 
@@ -53,17 +53,13 @@
 
 {{ $newamount := dbIncr .User.ID $dbHandName $winorloseamount }}
 
-{{ $winMsg := print $winMsg $winorloseamount $currency}}
-
-{{sendMessageNoEscape nil $winMsg}}
+{{ print $winMsg $winorloseamount $currency}}
 
 {{else}}
 
 {{ $newamount := dbIncr .User.ID $dbHandName (mult $winorloseamount -1) }}
 
-{{ $loseMsg := print $loseMsg $winorloseamount $currency}}
-
-{{sendMessageNoEscape nil $loseMsg}}
+{{ print $loseMsg $winorloseamount $currency}}
 
 {{end}}
 {{end}}

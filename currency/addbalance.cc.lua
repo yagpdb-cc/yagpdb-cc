@@ -1,7 +1,7 @@
 {{/*
 		Simple Currency System By GasInfinity
         
-        Recommended Trigger: Regex: "^-(addbalance|addbal)"
+        Recommended Trigger: Regex: "\A-(addbal(ance)?)"
         
         Adds Money To a User,Also Removes It, Usage "-addbalance <User/Member> <Amount>" 
 */}}
@@ -9,6 +9,7 @@
 {{/*CONFIGURATION START*/}}
 
 {{ $currency := "💰" }} {{/*Currency Emoji/Name*/}}
+{{ $dbHandName := "HAND" }} {{/* Database Name To Add The Currency (is UserID + $dbHandName)*/}}
 
 {{/*CONFIGURATION END*/}}
 
@@ -19,21 +20,17 @@
 
 
 {{$args := parseArgs 2 "Syntax is -addbalance <User> <Amount>"
-    (carg "string" "User To Send Balance")
+    (carg "member" "User To Send Balance")
     (carg "int" "Balance to Add")}}
 
-{{$user := (userArg ($args.Get 0))}}
+{{ $member := ($args.Get 0)}}
+{{ $balinput := ($args.Get 1)}}
 
-{{ $dbHandName := "HAND" }} {{/* Database Name To Add The Currency (is UserID + $dbHandName)*/}}
+{{ $handbal := toInt (dbGet ($member.User).ID $dbHandName).Value }}
+{{ $newamount := dbIncr ($member.User).ID $dbHandName $balinput }}
 
-{{ $handbal := toInt (dbGet $user.ID $dbHandName).Value }}
-
-{{ $handamount := (joinStr $currency " " $handbal)}}
-
-{{ $newamount := dbIncr $user.ID $dbHandName ($args.Get 1) }}
-
-{{if gt ($args.Get 1) 0}}
-{{sendMessage .Channel.ID (joinStr "" "**Added " ($args.Get 1) $currency " to **" $user.Mention) }}
+{{if gt $balinput 0}}
+**Added {{$balinput}} {{$currency}} to **  {{ ($member.User).Mention }}
 {{else}}
-{{sendMessage .Channel.ID (joinStr "" "**Removed " ($args.Get 1) $currency " to **" $user.Mention) }}
+**Removed {{mult ($balinput) -1}} {{$currency}} from ** {{ ($member.User).Mention }}
 {{end}}
