@@ -25,4 +25,4 @@ These Commands Are Standalone, You can add Only one, all or two
 7. **-money-leaderboard < Module > [Page]** 
    Check The Money Leaderboards. The Modules are: In Hand(-h), In The Bank(-b) and Networth [Bank+Hand] (-n). ex: -money-leaderboards -n
 8. **"Birthday Update":**
-   BirthDay Update For Giving An Amount of Money in The Birthday Of A Person, You Can Activate it Or Deactivate It (In BirthDay Folder)
+   BirthDay Update For Giving An Amount of Money in The Birthday Of A Person, You Can Activate it Or Deactivate It
