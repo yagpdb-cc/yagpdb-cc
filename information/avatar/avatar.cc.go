@@ -1,10 +1,3 @@
-{{/*
-	This command allows you to view the avatar of a given user defaulting to yourself.
-	Usage: `-avatar [user]`.
-
-	Recommended trigger: Regex trigger with trigger `^-(avatar|av|pfp)`
-*/}}
-
 {{ $user := .User }}
 {{ $args := parseArgs 0 "**Syntax:** `-avatar [user]`" (carg "userid" "user") }}
 {{ if $args.IsSet 0 }}
