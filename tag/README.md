@@ -11,4 +11,4 @@ These commands allow you to create a simple tag system for your server.
 * View tags
 * Get tag info
 
-As usual, there is a leading comment showing the trigger and description of the CC.
+As usual, there is a README.md for each command folder showing the trigger and description of the CC, as well as other important information.
