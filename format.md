@@ -10,7 +10,6 @@ The following CC has a known bug with [how it does X](issue-link-here).
 	* [Restrictions](#Restrictions)
 * [Description](#Description)
 	* [Usage](##Usage)
-	* [Restrictions](#Restrictions)
 * [Code](#Code)
 
 # Options
