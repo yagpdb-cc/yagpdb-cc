@@ -1,8 +1,3 @@
-{{/*
-	Simple world clock. Usage: `-worldclock`.
-	Recommended trigger: Command trigger with trigger `worldclock`.
-*/}}
-
 {{ $clocks := sdict
 	"Vancouver" "America/Vancouver"
 	"New York" "America/New_York"
