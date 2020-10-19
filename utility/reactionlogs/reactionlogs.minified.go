@@ -1,0 +1,4 @@
+{{$a:=.Channel.ID}}{{$b:=""}}{{with .Reaction.Emoji.ID}}{{$e:=".png"}}{{if $.Reaction.Emoji.Animated}}{{$e =".gif"}}{{end}}{{$b =printf "https://cdn.discordapp.com/emojis/%d%s" . $e}}{{else}}{{$c:=""}}{{range toRune .Reaction.Emoji.Name}}{{$c =joinStr "-" $c (printf "%04x" .)}}{{end}}{{$b =print "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-google-136/" $c ".png"}}{{end}}{{$d:="`Removed`"}}{{if .ReactionAdded}}{{$d ="`Added`"}}{{end}}{{sendMessage $a (cembed "description" (print "**Reaction:** "  $d "\n**By:**[ " .User "](https://discord.com/users/" .User.ID ")") "color" 0xFF0000  
+"fields" (cslice (sdict "name" "Message location: " "value" (joinStr "" "[#" .Channel.Name "](https://discordapp.com/channels/" .Guild.ID "/" .Channel.ID "/" .ReactionMessage.ID ")") "inline" false))
+"thumbnail" (sdict "url" $b)
+)}}
