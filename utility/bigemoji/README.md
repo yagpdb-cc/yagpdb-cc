@@ -7,6 +7,7 @@
 	* [Trigger](##Trigger)
 	* [Restrictions](##Restrictions)
 * [Description](#Description)
+  * [Usage](##Usage)
 * [Code](#Code)
 
 # Options
