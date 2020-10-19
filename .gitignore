@@ -2,3 +2,6 @@
 info/emoji.cc.lua
 
 fun/hug.cc.lua
+
+minify.js
+run.sh
