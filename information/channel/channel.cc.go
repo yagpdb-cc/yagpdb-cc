@@ -1,10 +1,3 @@
-{{/*
-	This command allows you to view information about a given channel (defaulting to the current channel).
-	Usage: `-channelinfo [channel]`.
-
-	Recommended trigger: Regex trigger with trigger `^-(channel)(-?info)?`
-*/}}
-
 {{ $channel := .Channel }}
 {{ $args := parseArgs 0 "**Syntax:** -channel [channel]" (carg "channel" "channel") }}
 {{ if $args.IsSet 0 }}
