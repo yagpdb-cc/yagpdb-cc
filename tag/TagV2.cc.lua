@@ -219,6 +219,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 				(print "`{{User-Username}}`: User's username **" .User.Username "**")
 				(print "`{{User-Discrminator}}`: 4 digits after username **" .User.Discriminator "**")
 				(print "`{{User-ID}}`: User's ID **" .User.ID "**")
+				(print "`{{User-Age}}`: User's age **" currentUserAgeHuman "**")
 				(print "`{{User-Mention}}`:Mentions triggering user " .User.Mention)
 				"**CHANNEL**"
 				(print "`{{Channel-Name}}`: Channel name of channel **" .Channel.Name "**" )
@@ -249,7 +250,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 	{{ sendMessage nil "This command can only be used by admin/mod" }}
 {{ else }}
 	{{ $syntax := sdict 
-			"user" (sdict "string" .User.String "username" .User.Username "discriminator" .User.Discriminator "id" (toString .User.ID) "nickname" .Member.Nick ) 
+			"user" (sdict "age" currentUserAgeHuman "string" .User.String "username" .User.Username "discriminator" .User.Discriminator "id" (toString .User.ID) "nickname" .Member.Nick ) 
 			"channel" (sdict "name" .Channel.Name "id" (toString .Channel.ID) "topic" .Channel.Topic)
 	 }}
 	{{ $tagName := reFind $safeName .StrippedMsg }}
