@@ -25,7 +25,7 @@
 Edit, addalias, deletealias, add, and delete all tags*/}}
 {{ $tagCreator := cslice 770291866208829470 }}
 
-{{CUSTOMIZATION ENDS}}
+{{/*CUSTOMIZATION ENDS*/}}
  
 {{ $isCreator := false }}
 {{ range .Member.Roles }} {{ if in $tagCreator . }}{{ $isCreator = true }}{{ end }}{{ end }} 
