@@ -1,4 +1,4 @@
-{{/*
+{{/* YOU WILL HAVE TO DELETE THIS COMMENT FOR THE COMMAND TO WORK
 	Made by Joe_#0001 and Crenshaw#1312
 	This command manages the tag system.
 	Changes: Syntax
@@ -20,6 +20,7 @@
 
 	Recommended trigger: StartsWith trigger with trigger `;`.
 */}}
+
 {{/*CUSTOMIZATION*/}}
 {{/*The people with the following roleIDs will be able to:
 Edit, addalias, deletealias, add, and delete all tags*/}}
@@ -30,7 +31,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 {{ range .Member.Roles }} {{ if in $tagCreator . }}{{ $isCreator = true }}{{ end }}{{ end }} 
  
 {{ $isCmd := reFind "^tags? *" .StrippedMsg }}
-{{ $safeName := `^[^\|_%<>]{1,25}$` }}
+{{ $safeName := `^[^\|_%<>/]{1,25}$` }}
  
 {{ define "getTag" }}
 	{{ $tagName := lower .Name }}
@@ -62,7 +63,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 				That tag already exists.
 			{{ end }}
 		{{ else }}
-			Tag names must not contain the `|`, `_`, `<`,`>` or `%` character and be under 25 characters!
+			Tag names must not contain the `|`, `_`, `<`, `>`, `/`, or `%` character and be under 25 characters!
 		{{ end }}
  
 	{{ else if and $isCreator (reFind `(del(ete)?|remove)$` $cmd) (len $args) }}
@@ -194,7 +195,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 				{{ $tagName := title (index (split (slice .Key 4 (sub (len .Key) 1)) "|") 0) }}
 				{{ $tagIndex := add $skip $k 1 }}
 				{{ $tagDate := .CreatedAt.Format "Jan 02 3:04 PM" }}
-				{{ $tagLine := print "#" $tagIndex "-" $tagName " " (joinStr ", " (split (slice .Key 4 (sub (len .Key) 1)) "|")) " [" $tagDate "]\n" }}
+				{{ $tagLine := print "#" $tagIndex "-" $tagName " " (joinStr ", " (split (slice .Key 4 (sub (len .Key) 1)) "|")) " [" $tagDate "]\n\n" }}
 				{{ if eq $k (sub $total 1) }}
 					{{ $display = print $display $tagLine "```\n For more results: `-tag list <page num>`" }}
 				{{ else if $k }}
