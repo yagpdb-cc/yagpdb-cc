@@ -1,14 +1,8 @@
 {{/* YOU WILL HAVE TO DELETE THIS COMMENT FOR THE COMMAND TO WORK
 	Made by Joe_#0001 and Crenshaw#1312
 	This command manages the tag system.
-	Changes: Syntax
-			 better color (indigo)
-			 new `;tag list` appearence
-			 RoleFilterilter on tag management
-			 Response is now an embed
-			 Each sub command has more options
+			 
 	Usage: 
-
 	`;tag add/create <name> <value>`
 	`;tag del/delete/remove <name>`
 	`;tag (add/create)alias(es) <name> <...aliases>`
