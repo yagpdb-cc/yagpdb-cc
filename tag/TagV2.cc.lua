@@ -241,8 +241,10 @@
 		) }}
 		{{deleteMessage nil $id 25}}
 	{{end}}
+
 {{else if and ($isCmd) (not $isCreator)}}
-	{{sendMessage nil "This command can only be used by admin/mod" }}
+	This command can only be used by admin/mod!
+
 {{else}}
 	{{$syntax:=sdict 
 			"user" (sdict "age" currentUserAgeHuman "string" .User.String "username" .User.Username "discriminator" .User.Discriminator "id" (toString .User.ID) "nickname" .Member.Nick ) 
