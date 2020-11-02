@@ -24,20 +24,22 @@
 {{/*The people with the following roleIDs will be able to:
 Edit, addalias, deletealias, add, and delete all tags*/}}
 {{ $tagCreator := cslice 770291866208829470 }}
-
 {{/*CUSTOMIZATION ENDS*/}}
  
 {{ $isCreator := false }}
 {{ range .Member.Roles }} {{ if in $tagCreator . }}{{ $isCreator = true }}{{ end }}{{ end }} 
  
 {{ $isCmd := reFind "^tags? *" .StrippedMsg }}
-{{ $safeName := `^[^\|_%]{1,25}$` }}
+{{ $safeName := `^[^\|_%<>]{1,25}$` }}
  
 {{ define "getTag" }}
 	{{ $tagName := lower .Name }}
 	{{ $tag := 0 }}
 	{{ $entries := dbTopEntries (printf "tg.%%|%s|%%" $tagName) 1 0 }}
-	{{ if len $entries }} {{ $tag = index $entries 0 }} {{ end }}
+	{{ if len $entries }} 
+		{{ $tag = index $entries 0 }}
+		{{ .Set "Aliases" (joinStr "/" (split (slice $tag.Key 4 (sub (len $tag.Key) 1)) "|")) }}
+	{{ end }}
 	{{ .Set "Tag" $tag }}
 {{ end }}
  
@@ -60,7 +62,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 				That tag already exists.
 			{{ end }}
 		{{ else }}
-			Tag names must not contain the `|`, `_`, or `%` character and be under 25 characters!
+			Tag names must not contain the `|`, `_`, `<`,`>` or `%` character and be under 25 characters!
 		{{ end }}
  
 	{{ else if and $isCreator (reFind `(del(ete)?|remove)$` $cmd) (len $args) }}
@@ -79,7 +81,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 		{{ $data := sdict "Name" $tagName }}
 		{{ template "getTag" $data }}
 		{{ with $data.Tag }}
-			{{ $aliases := split (slice .Key 4 (sub (len .Key) 1)) "|" }}
+			{{ $aliases := split $data.Aliases "/" }}
 			{{ $list := "" }}
 			{{ if ge (len $aliases) 2 }}
 				{{- range $k, $ := slice $aliases 1 -}}
@@ -159,7 +161,7 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 		{{ $data := sdict "Name" $tagName }}
 		{{ template "getTag" $data }}
 		{{ with $data.Tag }}
-			{{ $aliases := split (slice .Key 4 (sub (len .Key) 1)) "|" }}
+			{{ $aliases := split $data.Aliases "/" }}
 			{{ $tagName := printf "tg." }}
 			{{ if eq (len $aliases) 1 }}
 				Sorry, you cannot remove an alias from a tag with only 1 alias.
@@ -191,14 +193,14 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 			{{- range $k, $ := $tags -}}
 				{{ $tagName := title (index (split (slice .Key 4 (sub (len .Key) 1)) "|") 0) }}
 				{{ $tagIndex := add $skip $k 1 }}
-				{{ $aliases := reReplace `,\s$`  (joinStr ", " (split (slice .Key 4 (sub (len .Key) 1)) "|")) "" }}
 				{{ $tagDate := .CreatedAt.Format "Jan 02 3:04 PM" }}
+				{{ $tagLine := print "#" $tagIndex "-" $tagName " " (joinStr ", " (split (slice .Key 4 (sub (len .Key) 1)) "|")) " [" $tagDate "]\n" }}
 				{{ if eq $k (sub $total 1) }}
-					{{ $display = print $display "#" $tagIndex "-" $tagName " " $aliases " [" $tagDate "]\n```\n For more results: `-tag list <page num>`" }}
+					{{ $display = print $display $tagLine "```\n For more results: `-tag list <page num>`" }}
 				{{ else if $k }}
-					{{ $display = print $display "#" $tagIndex "-" $tagName " " $aliases " [" $tagDate "]\n" }}
+					{{ $display = print $display $tagLine }}
 				{{ else }}
-					{{ $display = print "```css\n#" $tagIndex "-" $tagName " " $aliases " [" $tagDate "]\n" }}
+					{{ $display = print "```css\n" $tagLine }}
 				{{ end }}
 			{{ end }}
 			{{ sendMessage nil (cembed
@@ -265,9 +267,8 @@ Edit, addalias, deletealias, add, and delete all tags*/}}
 				{{ $result := ($syntax.Get (lower (index $split 0))).Get (lower (index $split 1)) }}
 				{{ if $result }}{{ $tagValue = reReplace . $tagValue $result }}{{ end }}
 			{{- end -}}
-			{{ $aliases := joinStr "/" (split (slice .Key 4 (sub (len .Key) 1)) "|") }}
 			{{ sendMessage nil (cembed
-				"title" (title (print "**" $aliases "**"))
+				"title" (title (print "**" $data.Aliases "**"))
 				"description" $tagValue
 				"footer" (sdict "text" (print "Requested by " $.User.Username) "icon_url" ($.User.AvatarURL "256"))
 				"color" 0x4B0082
