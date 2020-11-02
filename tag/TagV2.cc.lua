@@ -20,7 +20,7 @@
 
 	Recommended trigger: StartsWith trigger with trigger `;`.
 */}}
-{{/*CONFUGURATION VALUES START*/}}
+{{/*CONFIGURATION VALUES START*/}}
 {{$tagCreator:=cslice 770291866208829470}}{{/*ROLES allowed to manage tags*/}}
 {{/*CONFIGURATION VALUES END*/}}
 
@@ -33,11 +33,8 @@
 {{define "getTag"}}
 	{{$tagName:=lower .Name}}
 	{{$tag:=0}}
-	{{$entries:=dbTopEntries (printf "tg.%%|%s|%%" $tagName) 1 0}}
-	{{if len $entries}} 
-		{{$tag =index $entries 0}}
-		{{.Set "Aliases" (joinStr "/" (split (slice $tag.Key 4 (sub (len $tag.Key) 1)) "|"))}}
-	{{end}}
+	{{$tagEntries:=dbTopEntries (printf "tg.%%|%s|%%" $tagName) 1 0}}
+	{{if len $tagEntries}} {{$tag =index $tagEntries 0}}{{.Set "Aliases" (joinStr "/" (split (slice $tag.Key 4 (sub (len $tag.Key) 1)) "|"))}}{{end}}
 	{{.Set "Tag" $tag}}
 {{end}}
  
@@ -54,7 +51,9 @@
 			{{$data := sdict "Name" $tagName}}
 			{{template "getTag" $data}}
 			{{if not $data.Tag}}
-				{{dbSet 0 (printf "tg.|%s|" $tagName) $tagContent}}
+				{{$attachment:=""}}
+				{{with .Message.Attachments}}{{$attachment =(index . 0).URL}}{{end}}
+				{{dbSet 0 (printf "tg.|%s|" $tagName) (sdict "Tag" $tagContent "Attachment" $attachment)}}
 				Successfully added a tag with the name `{{$tagName}}`.
 			{{else}}
 				That tag already exists.
@@ -111,7 +110,9 @@
 			{{$data:=sdict "Name" $tagName}}
 			{{template "getTag" $data}}
 			{{with $data.Tag}}
-				{{dbSet 0 .Key $tagContent}}
+				{{$attachment:=""}}
+				{{with .Message.Attachments}}{{$attachment =(index . 0).URL}}{{end}}
+				{{dbSet 0 .Key (sdict "Tag" $tagContent "Attachment" $attachment)}}
 				Successfully edited the content of the tag `{{ $tagName }}`.
 			{{else}}
 				Sorry, that tag does not exist!
@@ -258,7 +259,8 @@
 		{{$data:=sdict "Name" $tagName}}
 		{{template "getTag" $data}}
 		{{with $data.Tag}}
-			{{$tagValue := .Value}}
+			{{$tagValue:=(sdict .Value).Tag}}
+			{{$attachment:=(sdict .Value).Attachment}}
 			{{$tagSyntaxFound := reFindAll `(?i)\{\{\s?(channel|user)\s?-\s?([^\}]+)\}\}` $tagValue}}
 			{{- range $tagSyntaxFound -}}
 				{{ $split:=split (reReplace `(\{\{|\}\})` . "") "-" }}
@@ -270,6 +272,7 @@
 				"description" $tagValue
 				"footer" (sdict "text" (print "Requested by " $.User.Username) "icon_url" ($.User.AvatarURL "256"))
 				"color" 0x4B0082
+				"image" (sdict "url" $attachment)
 			) }}
 		{{end}}
 	{{end}}
