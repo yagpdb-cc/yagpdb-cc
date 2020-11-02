@@ -103,9 +103,9 @@
 		{{if reFind $safeName $tagName}}
 			{{$data:=sdict "Name" $tagName}}
 			{{template "getTag" $data}}
+			{{$attachment:=""}}
+			{{with .Message.Attachments}}{{$attachment =(index . 0).URL}}{{end}}
 			{{with $data.Tag}}
-				{{$attachment:=""}}
-				{{with .Message.Attachments}}{{$attachment =(index . 0).URL}}{{end}}
 				{{dbSet 0 .Key (sdict "Tag" $tagContent "Attachment" $attachment)}}
 				Successfully edited the content of the tag `{{ $tagName }}`.
 			{{else}}
