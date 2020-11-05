@@ -22,7 +22,7 @@
 		{{ $colorSet = true }}
 		{{ $multipliers := cslice 1048576 65536 4096 256 16 1 }}
 		{{ $hex2dec := sdict "A" 10 "B" 11 "C" 12 "D" 13 "E" 14 "F" 15 }}
-		{{ with reFindAllSubmatches `(?:#?default|([a-fA-F\d]{1,6}))` (joinStr " " (slice . 1)) }}
+		{{ with reFindAllSubmatches `\A(?:#?default|([a-fA-F\d]{1,6}))\z` (joinStr " " (slice . 1)) }}
 			{{ $hex := "D92C43" }}
 			{{ with index . 0 1 }}
 				{{ $hex = (printf "%06s" .) | upper }}
