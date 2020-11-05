@@ -86,7 +86,7 @@ These commands are not guaranteed to be working, use them at your own risk.
 
 ## Need help?
 
-If you are having difficulties with one of the custom commands here, please get in touch via the [YAGPDB Support Server](https://discord.gg/5uVyq2E) (latter is recommended).
+If you are having difficulties with one of the custom commands here, please get in touch via the [YAGPDB Support Server](https://discord.gg/5uVyq2E), where we can help you further. You can also open an issue on the issue tracker if that's what you prefer.
 
 ## Author
 
