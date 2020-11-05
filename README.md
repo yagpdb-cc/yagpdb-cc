@@ -1,14 +1,27 @@
 #
 <h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
-> <p align="center">A curated collection of CCs for your server</p>
-## Adding these Custom Commands
-This assumes you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
-There are some "systems" which require you to add *all* commands. This is detailed in the individual `README.md` of that section.
+> <p align="center">An up-to-date collection of CCs for your server</p>
 
-When you find a custom command you wish to add, the file will have a leading comment explaining what it does and the recommended trigger type & trigger. You can add it in the YAGPDB dashboard with these attributes.
+# Table of Contents
 
-## What Custom Commands are Avaliable Here?
+- [Adding these Custom Commands](#adding-these-custom-commands)
+- [Custom commands available](#custom-commands-available)
+- [Contributing](#contributing)
+- [Disclaimer](#disclaimer)
+- [Need help?](#need-help)
+- [Author](#author)
+
+## Adding these custom commands
+
+This assumes you know how to create a custom command, if you aren't too familiar with that or just need a refresher, [this article](https://learn.yagpdb.xyz/the-custom-command-interface) explains it well.
+
+The **yagpdb-cc** repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues. There are, however, some "systems" which require you to add all commands in that section. This is detailed in the individual `README.md` of that section.
+
+When you find a custom command you wish to add, the file will have a leading comment explaining what it does and the recommended trigger type & trigger value. You can add it in the YAGPDB dashboard with these attributes.
+
+## Custom commands available
+
 <details>
 <summary>List of Custom Commands</summary>
 
@@ -60,19 +73,21 @@ When you find a custom command you wish to add, the file will have a leading com
 *This is by no means an exhaustive list, nor is it meant to be. See the individual folders for details.*
 
 ## Contributing
-If you spot an error, feel free to make a PR or open an issue.
-If you wish to add your own command, feel free to make a PR as well. Note that not all CCs PRed will be added.
 
-*If you are adding a new CC, please read the [guidelines](./CONTRIBUTING.md)*.
+If you spot an error, feel free to make a PR or open an issue.
+If you wish to add your own command, feel free to make a PR as well. Note that not all CCs PRed will be added; merging is up to maintainers. Don't take it personally if your PR didn't make it through - we only accept custom commands that we feel will be useful to many people.
+
+*If you are adding a new CC, please read the [guidelines](./CONTRIBUTING.md). We don't have too many hard-and-fast conventions in place other than some about documentation*.
 
 ## Disclaimer
-The YAGPDB creator, staff, and/or support are not responsible for any difficulties caused by these custom commands.
-These commands are not guaranteed to be working.
+
+The YAGPDB developer, staff, and/or support are not responsible for any difficulties caused by these custom commands.
+These commands are not guaranteed to be working, use them at your own risk.
 
 ## Need help?
-If you are having difficulties with one of the custom commands here, please feel free to DM me on Discord (tag is `Joe_#6041`) or ping me in the [YAGPDB Support Server](https://discord.gg/5uVyq2E) (latter is recommended).
 
-Please *do not* open an issue unless you are sure it is a bug in the code - questions will be directed to the server instead. Thanks!
+If you are having difficulties with one of the custom commands here, please get in touch via the [YAGPDB Support Server](https://discord.gg/5uVyq2E) (latter is recommended).
 
-## Maintainers
-**yagpdb-cc** is maintained by [@Jo3-L](https://github.com/Jo3-L) (`Joe_#6041`) and [@Satty9361](https://github.com/Satty9361) (`Satty#9361`).
+## Author
+
+**yagpdb-cc** was originally authored by [@Jo3-L](https://github.com/Jo3-L) (`Joe_#0001`) and is maintained by [@Jo3-L](https://github.com/Jo3-L) and [@Satty9361](https://github.com/Satty9361) (`Satty#9361`). It is licensed under the MIT License.
