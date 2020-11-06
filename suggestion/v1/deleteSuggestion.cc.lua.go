@@ -1,7 +1,7 @@
 {{/*
 	This command deletes a given suggestion. Usage: `-deletesuggestion <id>`.
 
-	Recommended trigger: Regex trigger with trigger `^-(delete-?(suggestion|sgt))`
+	Recommended trigger: Regex trigger with trigger `\A-(delete-?(suggestion|sgt))`
 */}}
 
 {{/* CONFIGURATION VARIABLES START - THIS SHOULD BE THE SAME IN ALL FILES */}}

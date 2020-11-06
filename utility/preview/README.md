@@ -11,7 +11,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(preview|color)`<br>
+**Trigger Value:** `\A-(preview|color)`<br>
 
 
 # Description

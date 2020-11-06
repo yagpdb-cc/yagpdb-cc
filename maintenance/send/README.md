@@ -12,7 +12,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(send-?(raw)?)`<br>
+**Trigger Value:** `\A-(send-?(raw)?)`<br>
 
 
 ## Restrictions

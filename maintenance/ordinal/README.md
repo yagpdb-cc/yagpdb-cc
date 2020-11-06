@@ -12,7 +12,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(ordinal|ord)`<br>
+**Trigger Value:** `\A-(ordinal|ord)`<br>
 
 
 ## Restrictions

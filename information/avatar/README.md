@@ -13,7 +13,7 @@
 # Options
 ## Trigger
 **Trigger Type:** `Regex`<br>
-**Trigger Value:** `^-(avatar|av|pfp)`
+**Trigger Value:** `\A-(avatar|av|pfp)`
 
 ## Restrictions
 * No restrictions

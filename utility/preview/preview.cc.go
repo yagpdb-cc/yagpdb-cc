@@ -2,7 +2,7 @@
 	This command allows you to preview how colors look. Converts hex to dec, vice versa.
 	Usage: `-preview <hex>` or `-preview <dec> -dec`.
 
-	Recommended trigger: Regex trigger with trigger `^-(preview|color)`
+	Recommended trigger: Regex trigger with trigger `\A-(preview|color)`
 */}}
 
 {{ $multipliers := cslice 1048576 65536 4096 256 16 1 }}

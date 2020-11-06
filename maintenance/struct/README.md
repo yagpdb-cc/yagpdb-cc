@@ -12,7 +12,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(struct)(ure)?`<br>
+**Trigger Value:** `\A-(struct)(ure)?`<br>
 
 
 ## Restrictions

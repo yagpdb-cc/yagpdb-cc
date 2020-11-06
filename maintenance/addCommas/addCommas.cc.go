@@ -2,7 +2,7 @@
 	This command is a demonstration of adding commas to a number - 1000 -> 1,000.
 	Usage: `-addCommas <number>`.
 
-	Recommended trigger: Regex trigger with trigger `^-(add-?commas?)`
+	Recommended trigger: Regex trigger with trigger `\A-(add-?commas?)`
 */}}
 {{ $str := (parseArgs 1 "**Syntax:** `-addCommas <int>`" (carg "int" "number")).Get 0 | str }}
 {{ $offset := toInt (mod (len $str) 3) }}

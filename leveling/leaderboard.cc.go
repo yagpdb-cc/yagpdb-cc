@@ -1,7 +1,7 @@
 {{/*
 	This command manages the leaderboard. Usage is -leaderboard [page] where page is optional.
 
-	Recommended trigger: Regex trigger with trigger `^-(leaderboard|lb|top)`.
+	Recommended trigger: Regex trigger with trigger `\A-(leaderboard|lb|top)`.
 */}}
 {{ $page := 1 }} {{/* Default page to start at */}}
 {{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }} {{/* If the user provided a page, change $page variable to that */}}

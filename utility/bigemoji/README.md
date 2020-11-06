@@ -13,7 +13,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(be|big-?emo(te|ji))`<br>
+**Trigger Value:** `\A-(be|big-?emo(te|ji))`<br>
 
 
 # Description

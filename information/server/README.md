@@ -12,7 +12,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(server|guild)(-?info)?`<br>
+**Trigger Value:** `\A-(server|guild)(-?info)?`<br>
 
 
 ## Restrictions

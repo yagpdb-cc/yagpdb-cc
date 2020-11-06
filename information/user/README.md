@@ -11,7 +11,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(user|member)(-?info)?`<br>
+**Trigger Value:** `\A-(user|member)(-?info)?`<br>
 
 
 # Description

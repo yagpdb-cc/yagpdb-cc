@@ -12,7 +12,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(add-?commas?)`<br>
+**Trigger Value:** `\A-(add-?commas?)`<br>
 
 
 ## Restrictions

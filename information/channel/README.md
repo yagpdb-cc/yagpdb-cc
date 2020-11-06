@@ -11,7 +11,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(channel)(-?info)?`<br>
+**Trigger Value:** `\A-(channel)(-?info)?`<br>
 
 
 # Description

@@ -11,7 +11,7 @@
 # Options
 ## Trigger
 **Trigger Type:** Regex<br>
-**Trigger Value:** `^-(rand(om)?-?color)`<br>
+**Trigger Value:** `\A-(rand(om)?-?color)`<br>
 
 # Description
 This command shows a random color

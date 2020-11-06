@@ -1,7 +1,7 @@
 {{/*
 	This command converts given text to emoji. Usage: `-tte <text>`.
 
-	Recommended trigger: Regex trigger with trigger `^-(tte|emojify|emotify)`
+	Recommended trigger: Regex trigger with trigger `\A-(tte|emojify|emotify)`
 */}}
 {{ $keycap := "⃣" }}
 {{ $emojis := sdict "#" "#⃣" "*" "*⃣" "!" "❗" "?" "❓" }}
