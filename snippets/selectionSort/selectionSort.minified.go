@@ -1,0 +1,1 @@
+{{$a:=cslice 1 5 23 5 6 7}}{{$b:=len $a}}{{range seq 0 $b}}{{$c:=.}}{{range seq (add . 1) $b}}{{if lt (index $a $c) (index $a .)}}{{$c =.}}{{end}}{{end}}{{if ne $c .}}{{$ := index $a .}}{{$a.Set . (index $a $c)}}{{$a.Set $c $}}{{end}}{{end}}{{$a}}
