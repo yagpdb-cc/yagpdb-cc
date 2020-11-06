@@ -15,7 +15,6 @@ Currently, it sorts in DESC order, but this may be changed simply by changing th
 # Code
 * [Full](./selectionSort/selectionSort.cc.go) | 620
  characters total<br>
-Note that the code is over 10k characters and is only for viewing purposes. Use the minified version when adding instead.
 
 * [Minified](./selectionSort.minified.go) | 248
  characters total<br>

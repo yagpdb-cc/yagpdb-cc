@@ -12,7 +12,6 @@ The array is $arr, number is $num. Result is stored in $res.
 # Code
 * [Full](./closestTo/closestTo.cc.go) | 514
  characters total<br>
-Note that the code is over 10k characters and is only for viewing purposes. Use the minified version when adding instead.
 
 * [Minified](./closestTo.minified.go) | 241
  characters total<br>

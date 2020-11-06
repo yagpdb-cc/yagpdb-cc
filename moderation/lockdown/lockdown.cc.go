@@ -1,23 +1,3 @@
-{{/*
-     Lockdown CC
-	This code is to simulate a lockdown command.
-	What it does is delete every msg sent if the channel is locked, it doesnt actually change any permissions.
-	No role or channel restriction needed, unless you want it.
-	You only need to change the role IDs for you mods inside the CC, and NOTHING else.
-
-	Trigger type: regex
-	Trigger: .*
-
-	Usage 1: -lock <channelID> <amount>
-	ChannelID can be any channel in your server, and can also be nil
-	Amount is the amount of msgs that will get deleted when you use the command (the most recent ones). It can be 0 or up to 50.
-	Notice: Msg from moderators (if their roles ID is correctly listed) and pinned msgs wont be deleted.
-
-	Usage 2: -unlock <channelID>
-	Same principles as above, but it now unlocks the channel.
-*/}}
-
-
 {{/* USER VARIABLES */}}
 {{$ModsRoles := cslice 674429313097007106 673258482211749917}}
 {{/* END OF USER VARIABLES */}}

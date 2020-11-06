@@ -48,7 +48,7 @@ User can only set their birthday once. After that a mod will have to set a new o
 # Code
 * [Full](./birthday/birthday.cc.go) | 8875
  characters total<br>
-Note that the code is over 10k characters and is only for viewing purposes. Use the minified version when adding instead.
+Note that the code is over 8k characters and is only for viewing purposes. Use the minified version when adding instead.
 
 * [Minified](./birthday.minified.go) | 6362
  characters total<br>

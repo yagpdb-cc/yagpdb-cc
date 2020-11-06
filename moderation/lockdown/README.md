@@ -33,7 +33,7 @@ Usage 2: -unlock <channelID>
 # Code
 * [Full](./lockdown/lockdown.cc.go) | 4671
  characters total<br>
-Note that the code is over 10k characters and is only for viewing purposes. Use the minified version when adding instead.
+Note that the code is over 4k characters and is only for viewing purposes. Use the minified version when adding instead.
 
 * [Minified](./lockdown.minified.go) | 2282
  characters total<br>
