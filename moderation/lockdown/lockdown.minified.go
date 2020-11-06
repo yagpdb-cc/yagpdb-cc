@@ -1,0 +1,11 @@
+{{$a:=cslice 674429313097007106 673258482211749917}}{{$f:=false}}{{range .Member.Roles}}{{if in $a .}}{{$f =true}}{{end}}{{end}}{{$g:=false}}{{if (and (reFind `\A-(un)?lock` (lower .Cmd)) ($f))}}{{$g =true}}{{end}}{{if and (dbGet .Channel.ID "is_blocked") (not $f)}}{{deleteTrigger 1}}{{else}}{{if not $f}}{{with (dbGet .Channel.ID "msg_tracker").Value}}{{$h:=cslice.AppendSlice .}}{{if lt (len $h) 50}}{{$h =$h.Append $.Message.ID}}{{dbSet $.Channel.ID "msg_tracker" $h}}{{else}}{{$h =slice $h 1}}{{$h =$h.Append $.Message.ID}}{{dbSet $.Channel.ID "msg_tracker" $h}}{{end}}{{else}}{{$b:=cslice .Message.ID}}{{dbSet .Channel.ID "msg_tracker" $b}}{{end}}{{end}}{{end}}{{if $g}}{{$i:=split .Cmd " "}}{{if ge (len $i) 2}}{{$c:=reReplace `<|>|#` (index $i 1) ""}}{{if eq (lower $c) "nil"}}{{$c =.Channel.ID}}{{else if reFind `\d{17,19}` $c}}{{$c =toInt $c}}{{end}}{{if getChannel $c}}{{if not (reFind `^-un` (lower .Cmd))}}{{if eq (len $i) 3}}{{$e:=(toInt (index $i 2))}}{{if dbGet $c "is_blocked"}}
+                        The channel <#{{$c}}> is already blocked.
+                    {{else}}{{dbSet $c "is_blocked" true}}{{with (dbGet $c "msg_tracker").Value}}{{$h:=cslice.AppendSlice .}}{{if gt $e (len $h)}}{{$e =sub (len $h) 1}}{{end}}{{if gt $e 0}}{{$d:=1}}{{range seq 0 $e}}{{with (getMessage $c (index $h (sub (len $h) $d)))}}{{if not .Pinned}}{{deleteMessage $c .ID 1}}{{end}}{{end}}{{$d =add $d 1}}{{end}}{{$h =slice $h 0 (sub (len $h) $e)}}{{dbSet $c "msg_tracker" $h}}{{end}}{{end}}
+                        The channel <#{{$c}}> is now blocked.
+                    {{end}}{{else}}{{print "Correct usage is: -lock <channelID> <amount of msgs to del>\n``ChannelID`` can be nil and ``amount of msgs`` can be 0."}}{{end}}{{else}}{{if eq (len $i) 2}}{{if dbGet $c "is_blocked"}}
+                        The channel <#{{$c}}> is no longer blocked.
+                        {{dbDel $c "is_blocked"}}{{else}}
+                        The channel <#{{$c}}> is not blocked.
+                    {{end}}{{else}}{{print "Correct usage is: -unlock <channelID>\n``ChannelID`` can be nil"}}{{end}}{{end}}{{else}}
+            Thats not a valid channel.
+        {{end}}{{else}}{{print "**Correct usage is:**\n`-unlock <channelID>`\n`-lock <channelID> <amount of msgs to del>`"}}{{end}}{{end}}
