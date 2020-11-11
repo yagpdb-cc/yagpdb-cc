@@ -39,7 +39,7 @@
 	{{ else if lt $count 20 }} {{ $emoji = "💫" }}
 	{{ else if lt $count 30 }} {{ $emoji = "🎇" }}
 	{{ else if lt $count 40 }} {{ $emoji = "🎆" }}
-	{{ else if lt $count 50 }} {{ $eomji = "☄️" }}
+	{{ else if lt $count 50 }} {{ $emoji = "☄️" }}
 	{{ end }}
 	{{ $embed := sdict
 		"color" 0xFFAC33
