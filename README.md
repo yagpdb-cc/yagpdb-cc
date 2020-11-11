@@ -6,13 +6,13 @@
 This assumes you know how to create a custom command. This repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues.
 There are some "systems" which require you to add *all* commands. This is detailed in the individual `README.md` of that section.
 
-When you find a custom command you wish to add, the file will have a leading comment explaining what it does and the recommended trigger type & trigger. You can add it in the YAGPDB dashboard with these attributes.
+When you find a custom command you wish to add, the file will a README.md file in its folder explaining what it does and the recommended trigger type & trigger. You can add it in the YAGPDB dashboard with these attributes.
 
 ## What Custom Commands are Avaliable Here?
 <details>
 <summary>List of Custom Commands</summary>
 
-+ [AFK system](https://github.com/Jo3-L/yagpdb-cc/tree/master/afk)
++ [AFK system](https://github.com/Jo3-L/yagpdb-cc/tree/master/utility/afk)
 	+ Set AFK with optional duration and message
 	+ When pinged, shows AFK message and duration if avaliable
 + [Fun commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/fun)
@@ -20,18 +20,18 @@ When you find a custom command you wish to add, the file will have a leading com
 	+ Starboard
 	+ Random animals
 	+ And more!
-+ [Giveaway system](https://github.com/Jo3-L/yagpdb-cc/tree/master/giveaway)
++ [Giveaway system](https://github.com/Jo3-L/yagpdb-cc/tree/master/misc/giveaway)
 	+ Create giveaways with time, prize, max number of partcipants, and amount of winners
 	+ End giveaways
 	+ Cancel giveaways
 	+ List giveaways
 	+ Execute within CCs with execCC
-+ [Info commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/info)
++ [Info commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/information)
 	+ Server info
 	+ Channel info
 	+ User info
 	+ Avatar CC
-+ [Leveling system](https://github.com/Jo3-L/yagpdb-cc/tree/master/leveling)
++ [Leveling system](https://github.com/Jo3-L/yagpdb-cc/tree/master/misc/leveling)
 	+ Create/view/edit role rewards which are given on levelup
 	+ View leaderboard
 	+ Give variable amount of XP with variable cooldowns on messages
@@ -41,16 +41,16 @@ When you find a custom command you wish to add, the file will have a leading com
 	+ Selection sort (sort an array ASC-DESC)
 	+ Convert string to time
 	+ Find closest number from provided number in cslice
-+ [Suggestion system](https://github.com/Jo3-L/yagpdb-cc/tree/master/suggestion)
++ [Suggestion system](https://github.com/Jo3-L/yagpdb-cc/tree/master/misc/suggestion)
 	+ Create suggestions
 	+ Comment, approve, or deny them
 	+ Edit and remove them
-+ [Tag system](https://github.com/Jo3-L/yagpdb-cc/tree/master/tag)
++ [Tag system](https://github.com/Jo3-L/yagpdb-cc/tree/master/utility/tag)
 	+ Create tags with aliases
 	+ Edit tags
 	+ Delete tags
 	+ View tags simply with `;(tag name)`
-+ [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/util)
++ [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/utility)
 	+ Preview colors
 	+ See time and weather in your location
 	+ World clock
