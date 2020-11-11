@@ -1,20 +1,3 @@
-{{/*
-	This command manages the role rewards of the server.
-
-	Types of role giving:
-	- stack: Users get all roles up to current level [DEFAULT]
-	- highest: Users get the last role reward closet to current level [MAY BE BUGGY]
-
-	Usage:
-
-	-rr add <level> <role name> | Adds a role reward to given level in range 1-100. Max 1 per level.
-	-rr remove <level> | Removes role reward from level.
-	-rr set-type <stack|highest> | Sets type of role giving.
-	-rr view | Views current setup
-	-rr reset | Resets the settings
-
-	Recommended trigger: Regex trigger with trigger `\A-(role-?rewards|rr)`
-*/}}
 {{/* Help message */}}
 {{ $helpMsg := cembed
 	"title" "🏆 Role Rewards"
