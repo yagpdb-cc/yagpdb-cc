@@ -1,8 +1,3 @@
-{{/*
-	This command manages messages - setting cooldowns, giving role rewards when users level up, and giving XP.
-	
-	Recommended trigger: Regex trigger with trigger `.*`.
-*/}}
 {{ $settings := 0 }} {{/* Instantiate settings at nil value */}}
 {{ $roleRewards := sdict "type" "stack" }} {{/* Default role reward settings */}}
 {{ with (dbGet 0 "xpSettings") }} {{ $settings = sdict .Value }} {{ end }} {{/* If in db, then we update value */}}
