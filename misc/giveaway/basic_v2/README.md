@@ -1,15 +1,38 @@
-# Giveaway Package (Compressed Version)
+# Giveaway Package (Basic Version 2)
+
+Giveaways in YAGPDB - Basic Version 2
+
+> Credits: Developed By [Satty #9361](https://github.com/Satty9361)
+
+# Table of Contents
+* [Options](#Options)
+	* [Trigger](##Trigger)
+	* [Customization](##Customization)
+* [Description](#Description)
+  * [Usage](##Usage)
+  * [ExecCC Support](##ExecCC%20Support)
+* [Code](#Code)
+
+# Options
+## Trigger
+
+### `giveaway`
+**Trigger Type:** Command<br>
+**Trigger Value:** `giveaway`<br>
+
+### `reactionListener`
+**Trigger Type:** Reaction<br>
+**Trigger Value:** `Added + Removed reactions`<br>
+
+## Customization
+The giveaway emoji is present at the top of both commands and can be modified according to choice but __remember__, you need to modify for **both commands (CCs).
+
+# Description
 This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs).
 Both must be saved for it to work as expected.
 
-Package Consists of 2 Custom Commands :
 
-* `giveaway.cc.lua`: Recommended Trigger: `Command Trigger` ; Trigger Text `giveaway`
-   (Can also work with `regex` and `starts with` triggers if triggers are correctly set)
-
-* `reactionListener.cc.lua`: Recommended Trigger: `Reaction Trigger` ; Type: `Reaction Added + Removed`
-
-## Sub-Commands (precede all commands by the prefix for YOUR server to invoke them):
+## Usage
 
 1) **giveaway start \<Time\> \<Prize\>**
     
@@ -77,14 +100,16 @@ Examples:
 
 So in general you can pass the ExecData as simply trigger followed by Sub-Command and arguments separated by a space " " all joined into a single string.
 
-## Inbuilt syntax displayer:
-The main command also has an inbuilt syntax displayer which can be invoked by simply typing the trigger without any arguments.
+# Code
+## `giveaway`
+* [Full](./giveaway/giveaway.cc.go) | 9494 characters total<br>
 
-## Things which can be modified:
-The giveaway emoji is present as the Top of both commands and can be modified according to choice but remember!! needs to be modified for both commands (CCs).
+* [Minified](./giveaway/giveaway.minified.go) | 6715 characters total<br>
 
-### Custom Emoji Support:
-This version supports usage of custom emojis as long as YAGPDB has access to them.
-Write the full emoji name, that is, <:emoji_name:emoji_id> OR <a:emoji_name:emoji_id> at the top configuration area (`$gEmoji` variable).
+Note that the code is over 9k characters and is only for viewing purposes. Use the minified version when adding instead.
+## `reactionListener`
+* [Full](./reactionListener/reactionListener.cc.go) | 1796 characters total<br>
 
-> Credits: Developed By [Satty #9361](https://github.com/Satty9361)
+* [Minified](./reactionListener/reactionListener.minified.go) | 709 characters total<br>
+
+Note that the code is over 1k characters and is only for viewing purposes. Use the minified version when adding instead.

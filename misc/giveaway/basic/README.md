@@ -1,10 +1,40 @@
-# Giveaway Package (Basic Version 2)
+# Giveaway Package (Basic Version)
+
+Giveaways in YAGPDB - Basic Version
+
+> Credits: Developed By [Satty #9361](https://github.com/Satty9361)
+
+# Table of Contents
+* [Options](#Options)
+	* [Trigger](##Trigger)
+	* [Customization](##Customization)
+* [Description](#Description)
+  * [Usage](##Usage)
+  * [ExecCC Support](##ExecCC%20Support)
+* [Code](#Code)
+
+# Options
+## Trigger
+
+### `giveaway`
+**Trigger Type:** Command<br>
+**Trigger Value:** `giveaway`<br>
+
+### `reactionListener`
+**Trigger Type:** Reaction<br>
+**Trigger Value:** `Added + Removed reactions`<br>
+
+## Customization
+The giveaway emoji is present at the top of both commands and can be modified according to choice but __remember__, you need to modify for **both commands (CCs).
+
+# Description
 This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs).
 Both must be saved for it to work as expected.
 
-## Sub-Commands (precede all commands by the prefix for YOUR server to invoke them):
 
-1) **giveaway start \<Time\> \<Prize\>**
+## Usage
+
+1) **giveaway start \<Time\> [Prize]**
     
     Use: To start a new giveaway.
 
@@ -15,7 +45,7 @@ Both must be saved for it to work as expected.
 
        *Note :* must not contain spaces in between and use the mentioned format only i.e d not days for specifying days so on.
 
-    * **\<Prize\>**   A string which will contain the prize of the giveaway , can be multiple words.
+    * **[Prize]**   A string which will contain the prize of the giveaway , can be multiple words.
 
     * **Optional Flags**
     
@@ -40,23 +70,15 @@ Both must be saved for it to work as expected.
 
     *Note:* ID is the long number which can be obtained using:  `g list` command and is also mentioned in the giveaway announcement embed.
 
-4)  **giveaway reroll [ID or N Giveaways Old]**
-    
-    Re-rolls an old giveaway, which was finished earlier, to find new winner(s). If no argument is passed, the most recently finished giveaway is re-rolled. 
-
-    Accpets an optional argument which could be either the ID of the older giveaway or you can specify the nth previously finished giveaway (between 1 - 10). 
-  
-    For example, if 2 is passed, it will re-roll the giveaway finished before the most recently finished giveaway.
-
-5) **giveaway list**
+4) **giveaway list**
 
     Lists all active giveaways with their IDs , Prize and Ending Time.
 
 
-## ExecCC support: 
+## ExecCC Support 
 Code has inbuilt intuitive execCC support. ExecData for invoking command via execCC is simply : 
 
-    "giveaway <Sub_Command> <argument_1> <argument_2> ..."
+    giveaway <Sub_Command> <argument_1> <argument_2> ...
 
 Examples:
 
@@ -70,10 +92,17 @@ Examples:
 
 So in general you can pass the ExecData as simply trigger followed by Sub-Command and arguments separated by a space " " all joined into a single string.
 
-## Inbuilt syntax displayer:
-The main command also has an inbuilt syntax displayer which can be invoked by simply typing the trigger without any arguments.
 
-## Things which can be modified:
-The giveaway emoji is present as the Top of both commands and can be modified according to choice but remember!! needs to be modified for both commands (CCs).
+# Code
+## `giveaway`
+* [Full](./giveaway/giveaway.cc.go) | 9275 characters total<br>
 
-> Credits: Developed By [Satty #9361](https://github.com/Satty9361)
+* [Minified](./giveaway/giveaway.minified.go) | 5989 characters total<br>
+
+Note that the code is over 9k characters and is only for viewing purposes. Use the minified version when adding instead.
+## `reactionListener`
+* [Full](./reactionListener/reactionListener.cc.go) | 1721 characters total<br>
+
+* [Minified](./reactionListener/reactionListener.minified.go) | 709 characters total<br>
+
+Note that the code is over 1k characters and is only for viewing purposes. Use the minified version when adding instead.

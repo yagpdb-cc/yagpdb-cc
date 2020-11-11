@@ -1,9 +1,3 @@
-{{/* 
-        Supporting Reaction CC for Giveaway Package.
-
-        Recommended trigger: Reaction trigger with option `Added + Removed reactions` selected.
-*/}}
-
 {{/* CONFIGURATION VALUES START */}}
 {{ $giveawayEmoji := `🎉` }} {{/* set giveaway emoji to be used */}}
 {{/* CONFIGURATION VALUES END */}}
