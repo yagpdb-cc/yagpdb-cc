@@ -7,7 +7,7 @@ First, you will need to follow the instructions **below**. Then, open a pull req
 ## What you need to do
 There are four things I expect you to do:
 * add a leading comment at the top of your file
-* add your CC in the appropriate section, named `<ccName>.cc.lua` where ccName is your CC name
+* add your CC in its own folder in the appropriate section, named `<ccName>.cc.go` where ccName is your CC name
 * If your command requires any configuration (variables, etc.) explain that in the syntax provided below.
 * If it's a system of commands, add a new folder and add a `README.md` file in it.
 
