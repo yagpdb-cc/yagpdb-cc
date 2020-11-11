@@ -3,5 +3,6 @@ info/emoji.cc.lua
 
 fun/hug.cc.lua
 
+# Shadow's tools
 minify.js
 run.sh
