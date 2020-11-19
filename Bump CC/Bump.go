@@ -3,6 +3,7 @@
   This command runs successfully if you bump at the right time
   Make sure to put all the CC's when you are sure that you can Bump Successfully with Disboard and then use `!d bump`
   */}}
+
 {{/* Configuration Values */}}
 {{$channel := 774658131204505610}} {{/*Channel where Bump Notification needs to appear*/}}
 {{$success := sendMessageRetID nil (cembed "title" "DISBOARD: The Public Server List" "url" "https://disboard.org/server/721592235359207545" 
