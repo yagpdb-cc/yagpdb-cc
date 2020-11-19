@@ -1,3 +1,8 @@
+{{/*
+    Trigger Regex
+          `!d (lb|top|leaderboard)`
+*/}}
+
 {{execAdmin "clean" 1}} {{/*Optional to clean Disboard's Message*/}}
 {{/* Don't change anything */}}
 {{$rank := 0}}
