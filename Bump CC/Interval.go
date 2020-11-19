@@ -1,3 +1,6 @@
+{{/* Trigger :- Minute Interval 
+	10min
+*/}}
 {{/*Update the IDs*/}}
 {{$vcid := 774645677590446083}} {{/*Voice Channel which shows the Bump Time Remaining*/}}
 {{$channelid := 774658131204505610}} {{/*Channel where Bump Notifications need to appear*/}}
