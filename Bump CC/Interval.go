@@ -12,6 +12,6 @@ HELP
 {{deleteResponse 0}}
 {{else}}
 {{$message := "<@&778219294986207232> 🔔 You can Bump again Now!"}} {{/*Update the RoleID*/}}
-{{$id := sendMessageRetID $channelid $message}}
+{{$id := sendMessageNoEscapeRetID $channelid $message}}
 {{dbSet 1 "Bump" (str $id)}}
 {{end}}
