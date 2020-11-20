@@ -1,5 +1,5 @@
-{{/* Trigger :- Minute Interval 
-	10min
+{{/* Trigger :- Hourly Interval 
+	2 hours
 */}}
 
 {{/*Update the IDs*/}}
