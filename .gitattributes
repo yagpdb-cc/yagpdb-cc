@@ -1,1 +1,1 @@
-*.lua linguist-vendored=false
+*.lua linguist-detectable=false
