@@ -1,4 +1,5 @@
 #
+
 <h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
 > <p align="center">An up-to-date collection of CCs for your server</p>
@@ -25,59 +26,55 @@ When you find a custom command you wish to add, the file will have a leading com
 <details>
 <summary>List of Custom Commands</summary>
 
-+ [AFK system](https://github.com/Jo3-L/yagpdb-cc/tree/master/afk)
-	+ Set AFK with optional duration and message
-	+ When pinged, shows AFK message and duration if avaliable
-+ [Fun commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/fun)
-	+ Deathmatch / battle others
-	+ Starboard
-	+ Random animals
-	+ And more!
-+ [Giveaway system](https://github.com/Jo3-L/yagpdb-cc/tree/master/giveaway)
-	+ Create giveaways with time, prize, max number of partcipants, and amount of winners
-	+ End giveaways
-	+ Cancel giveaways
-	+ List giveaways
-	+ Execute within CCs with execCC
-+ [Info commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/info)
-	+ Server info
-	+ Channel info
-	+ User info
-	+ Avatar CC
-+ [Leveling system](https://github.com/Jo3-L/yagpdb-cc/tree/master/leveling)
-	+ Create/view/edit role rewards which are given on levelup
-	+ View leaderboard
-	+ Give variable amount of XP with variable cooldowns on messages
-	+ View user profiles
-	+ And others!
-+ [Useful snippets](https://github.com/Jo3-L/yagpdb-cc/tree/master/snippets) for your own custom commands
-	+ Selection sort (sort an array ASC-DESC)
-	+ Convert string to time
-	+ Find closest number from provided number in cslice
-+ [Suggestion system](https://github.com/Jo3-L/yagpdb-cc/tree/master/suggestion)
-	+ Create suggestions
-	+ Comment, approve, or deny them
-	+ Edit and remove them
-+ [Tag system](https://github.com/Jo3-L/yagpdb-cc/tree/master/tag)
-	+ Create tags with aliases
-	+ Edit tags
-	+ Delete tags
-	+ View tags simply with `;(tag name)`
-+ [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/util)
-	+ Preview colors
-	+ See time and weather in your location
-	+ World clock
-	+ Big emoji
+- [AFK system](https://github.com/Jo3-L/yagpdb-cc/tree/master/afk)
+  - Set AFK with optional duration and message
+  - When pinged, shows AFK message and duration if avaliable
+- [Fun commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/fun)
+  - Deathmatch / battle others
+  - Starboard
+  - Random animals
+  - And more!
+- [Giveaway system](https://github.com/Jo3-L/yagpdb-cc/tree/master/giveaway)
+  - Create giveaways with time, prize, max number of partcipants, and amount of winners
+  - End giveaways
+  - Cancel giveaways
+  - List giveaways
+  - Execute within CCs with execCC
+- [Info commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/info)
+  - Server info
+  - Channel info
+  - User info
+  - Avatar CC
+- [Leveling system](https://github.com/Jo3-L/yagpdb-cc/tree/master/leveling)
+  - Create/view/edit role rewards which are given on levelup
+  - View leaderboard
+  - Give variable amount of XP with variable cooldowns on messages
+  - View user profiles
+  - And others!
+- [Useful snippets](https://github.com/Jo3-L/yagpdb-cc/tree/master/snippets) for your own custom commands
+  - Selection sort (sort an array ASC-DESC)
+  - Convert string to time
+  - Find closest number from provided number in cslice
+- [Suggestion system](https://github.com/Jo3-L/yagpdb-cc/tree/master/suggestion)
+  - Create suggestions
+  - Comment, approve, or deny them
+  - Edit and remove them
+- [Tag system](https://github.com/Jo3-L/yagpdb-cc/tree/master/tag)
+  - Create tags with aliases
+  - Edit tags
+  - Delete tags
+  - View tags simply with `;(tag name)`
+- [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/util) + Preview colors + See time and weather in your location + World clock + Big emoji
 </details>
 
-*This is by no means an exhaustive list, nor is it meant to be. See the individual folders for details.*
+_This is by no means an exhaustive list, nor is it meant to be. See the individual folders for details._
 
 ## Contributing
 
 If you spot an error, feel free to make a PR or open an issue.
 If you wish to add your own command, feel free to make a PR as well. Note that not all CCs PRed will be added; merging is up to maintainers. Don't take it personally if your PR didn't make it through - we only accept custom commands that we feel will be useful to many people.
 
-*If you are adding a new CC, please read the [guidelines](./CONTRIBUTING.md). We don't have too many hard-and-fast conventions in place other than some about documentation*.
+_If you are adding a new CC, please read the [guidelines](./CONTRIBUTING.md). We don't have too many hard-and-fast conventions in place other than some about documentation_.
 
 ## Disclaimer
 

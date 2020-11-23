@@ -1,4 +1,5 @@
 # Fun Commands
+
 These commands are standalone. Pick and choose which CCs you wish to add.
 These commands are all based around fun concepts, i.e quoting messages, text to emoji, etc.
 
