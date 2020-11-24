@@ -13,7 +13,7 @@
 	-rr view | Views current setup
 	-rr reset | Resets the settings
 
-	Recommended trigger: Regex trigger with trigger `^-(role-?rewards|rr)`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(role-?rewards|rr)(\s+|\z)`
 */}}
 {{/* Help message */}}
 {{ $helpMsg := cembed

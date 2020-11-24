@@ -6,7 +6,7 @@
 	-leveling use-default | use default settings 
 	-leveling view | view settings
 
-	Recommended trigger: Regex trigger with trigger `^-(leveling|(level|lvl)-?conf|(level|lvl)-?settings)`.
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(leveling|(level|lvl)-?conf|(level|lvl)-?settings)(\s+|\z)`.
 */}}
 {{/* Help message for convenience in sending */}}
 {{ $helpMsg := cembed
