@@ -64,7 +64,7 @@ When you find a custom command you wish to add, the file will have a leading com
   - Edit tags
   - Delete tags
   - View tags simply with `;(tag name)`
-- [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/util) + Preview colors + See time and weather in your location + World clock + Big emoji
+- [General utility commands](https://github.com/Jo3-L/yagpdb-cc/tree/master/util) + Preview colors + See time and weather in your location + World clock + Big emoji + Quote
 </details>
 
 _This is by no means an exhaustive list, nor is it meant to be. See the individual folders for details._
