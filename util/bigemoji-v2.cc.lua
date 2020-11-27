@@ -1,7 +1,7 @@
 {{/*
 	This command allows you to enlarge emojis - version 2. Usage: `-bigemoji <emoji>`.
 
-	Recommended trigger: Regex trigger with trigger `^-(be|big-?emo(te|ji))`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(be|big-?emo(te|ji))(\s+|\z)(\s+|\z)`
 */}}
 
 {{ if .CmdArgs }}
