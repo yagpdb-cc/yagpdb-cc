@@ -6,7 +6,7 @@
 	-setxp <user> <xp>
 	-setlevel <user> <level>
 
-	Recommended trigger: Regex trigger with trigger `^-(set-?(xp|level))`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(set-?(xp|level))(\s+|\z)`
 */}}
 {{ $cmd := reFind `(?i)xp|level` .Cmd }} {{/* The type of command used */}}
 {{ $user := 0 }} {{/* Target user */}}

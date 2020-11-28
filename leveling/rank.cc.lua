@@ -3,7 +3,7 @@
 	Use by running `-rank [member]` where member is optional. Defaults to yourself.
 	You may also set a color for your rank card using `-rank set-color <hex>` or `-rank set-color default`.
 
-	Recommended trigger: Regex trigger with trigger `^-(rank|lvl|xp)`.
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rank|lvl|xp)(\s+|\z)`.
 */}}
 {{/* Instantiate constants */}}
 {{ $barEmpty := "□" }}

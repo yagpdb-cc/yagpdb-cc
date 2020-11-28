@@ -2,7 +2,7 @@
 	This command allows you to view information about a given channel (defaulting to the current channel).
 	Usage: `-channelinfo [channel]`.
 
-	Recommended trigger: Regex trigger with trigger `^-(channel)(-?info)?`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(channel)(-?info)?(\s+|\z)`
 */}}
 
 {{ $channel := .Channel }}

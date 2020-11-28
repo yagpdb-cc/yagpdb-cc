@@ -7,7 +7,7 @@
 	-sa approve <id> [reason]
 	-sa comment <id> <comment>
 
-	Recommended trigger: Regex trigger with trigger `^-(sa|suggestion-?admin)`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(sa|suggestion-?admin)(\s+|\z)`
 */}}
 
 {{/* CONFIGURATION VARIABLES START - THIS SHOULD BE THE SAME IN ALL FILES */}}

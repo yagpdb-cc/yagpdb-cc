@@ -1,7 +1,7 @@
 {{/*
 	This command edits a given suggestion. Usage: `-editsuggestion <id> <new content>`. Only usable by author of suggestion.
 
-	Recommended trigger: Regex trigger with trigger `^-(edit-?(suggestion|sgt))`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(edit-?(suggestion|sgt))(\s+|\z)`
 */}}
 
 {{/* CONFIGURATION VARIABLES START - THIS SHOULD BE THE SAME IN ALL FILES */}}

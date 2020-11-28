@@ -2,7 +2,7 @@
 	This command shows a random color.
 	Usage: `-randcolor`.
 
-	Recommended trigger: Regex trigger with trigger `^-(rand(om)?-?color)`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rand(om)?-?color)(\s+|\z)`
 */}}
 
 {{ $dec := randInt 0 16777216 }}

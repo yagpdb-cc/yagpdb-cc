@@ -2,7 +2,7 @@
 	This command allows you to view information about a given user defaulting to yourself.
 	Usage: `-userinfo [user]`.
 
-	Recommended trigger: Regex trigger with trigger `^-(user|member)(-?info)?`
+	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(user|member)(-?info)?(\s+|\z)`
 */}}
 
 {{ $member := .Member }}
