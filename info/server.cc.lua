@@ -8,8 +8,11 @@
 {{ $icon := "" }}
 {{ $name := printf "%s (%d)" .Guild.Name .Guild.ID }}
 {{ if .Guild.Icon }}
-	{{ $icon = printf "https://cdn.discordapp.com/icons/%d/%s.webp" .Guild.ID .Guild.Icon }}
+	{{ $ext := "webp" }}
+	{{ if eq (slice .Guild.Icon 0 2) "a_" }} {{ $ext = "gif" }} {{ end }}
+	{{ $icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext }}
 {{ end }}
+
 {{ $owner := userArg .Guild.OwnerID }}
 {{ $levels := cslice
 	"None: Unrestricted"
