@@ -2,11 +2,12 @@
 	This command manages viewing the rank of a given member.
 	Use by running `-rank [member]` where member is optional. Defaults to yourself.
 	You may also set a color for your rank card using `-rank set-color <hex>` or `-rank set-color default`.
+	You may also set a background for your rank card (if enabled) using `-rank set-background <link>` or `-rank set-background del`.
 
 	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rank|lvl|xp)(\s+|\z)`.
 */}}
 {{/* CONFIGURATION AREA STARTS */}}
-{{ $rankcard := 1 }} {{/* set to `1` for a rank card */}}
+{{ $rankcard := false }} {{/* set to `true` for a rank card */}}
 {{ $background := "https://xbox-store-checker.com/assets/upload/game/2020/06/optimize/9n5qmw0x81jm-background.jpg" }}{{/* background for rankcard, dont edit if you dont use it */}}
 {{/* CONFIGURATION AREA ENDS*/}}
 {{/* Instantiate constants */}}
@@ -16,8 +17,8 @@
 {{ $color := 14232643 }} {{/* Embed color */}} 
 {{ $user := .User }} {{/* Target user */}}
 {{ $colorSet := false }}
-{{ if (dbGet .User.ID "background") }}
-{{ $background = ((dbGet .User.ID "background").Value) }} {{end}}
+{{ with dbGet .User.ID "background" }}
+{{ $background = .Value }} {{end}}
 
 {{ with .CmdArgs }}
 	{{ $temp := userArg (index . 0) }}
@@ -32,7 +33,7 @@
 			{{ $hex := "D92C43" }}
 			{{ with index . 0 1 }}
 				{{ $hex = (printf "%06s" .) | upper }}
-			{{ end }}
+						{{ end }}
 			{{ $dec := 0 }}
 			{{ range $k, $v := split $hex "" -}}
 				{{- $multiplier := index $multipliers $k }}
@@ -40,6 +41,7 @@
 				{{- $dec = add $dec (mult $num $multiplier) -}}
 			{{ end }}
 			{{ dbSet $user.ID "xpColor" $dec }}
+			{{ dbSet $user.ID "hex" $hex }}
 			{{ $user.Mention }}, I set your rank card color to `#{{ $hex }}`.
 		{{ else }}
 			Please provide a valid hex to set your rank card color to.
@@ -90,11 +92,26 @@
 			$embed.description
 		) }} {{/* If user in top 100, update the description */}}
 	{{ end }}
-{{ if $rankcard}}
-{{ if not $rank }} {{ $rank = urlescape "100" }} {{ end }}
+{{ $bg := true }}
+{{ with .CmdArgs }}
+{{ $bg = false }}
+{{ if and (eq (index . 0) "set-background") (ge (len .) 2) }}
+			  {{ if eq (index . 1) "del" }} {{ dbDel $.User.ID "background" }} deleted
+			{{ else if (reFindAllSubmatches `https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,63}\b(?:(?:(?:,?[-a-zA-Z0-9@:%_\+.~#?!&/=*]*)|(?:,?\([-a-zA-Z0-9@:%_\+.~#?!&/=*]*\))*|\[\])*)` (index . 1)) }} 
+			{{ dbSet $.User.ID "background" (index . 1) }} doneso 
+	{{ else }} thats not a valid link!
+{{ end }}
+{{ end }}
+{{ end }}
+{{ if ($rankcard) }}
+{{ if not $rank }} {{ $rank = "100" }} {{ end }}
 {{ $username := urlescape ($user.Username) }}
-{{ $pfp := ($user.AvatarURL "256") }}
-	{{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=fc1d04"))) }} {{ else }}
+{{$pfp := ($user.AvatarURL "256")}}
+{{ if $bg }}
+{{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=" ((dbGet $user.ID "hex").Value)))) }}
+{{ end }}
+	 {{ else }}
 	{{ sendMessage nil (cembed $embed) }}
 {{ end }}
 {{ end }}
+
