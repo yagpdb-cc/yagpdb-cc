@@ -5,6 +5,10 @@
 
 	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rank|lvl|xp)(\s+|\z)`.
 */}}
+{{/* CONFIGURATION AREA STARTS */}}
+{{ $rankcard := 1 }} {{/* set to `1` for a rank card */}}
+{{ $background := "https://xbox-store-checker.com/assets/upload/game/2020/06/optimize/9n5qmw0x81jm-background.jpg" }}{{/* background for rankcard, dont edit if you dont use it */}}
+{{/* CONFIGURATION AREA ENDS*/}}
 {{/* Instantiate constants */}}
 {{ $barEmpty := "□" }}
 {{ $barFull := "■" }}
@@ -12,6 +16,8 @@
 {{ $color := 14232643 }} {{/* Embed color */}} 
 {{ $user := .User }} {{/* Target user */}}
 {{ $colorSet := false }}
+{{ if (dbGet .User.ID "background") }}
+{{ $rankbackground = ((dbGet .User.ID "background").Value) }} {{end}}
 
 {{ with .CmdArgs }}
 	{{ $temp := userArg (index . 0) }}
@@ -84,6 +90,11 @@
 			$embed.description
 		) }} {{/* If user in top 100, update the description */}}
 	{{ end }}
-
+{{ if $rankcard}}
+{{ if not $rank }} {{ $rank = urlescape "100" }} {{ end }}
+{{ $username := urlescape ($user.Username) }}
+{{ $pfp := ($user.AvatarURL "256") }}
+	{{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=fc1d04"))) }} {{ else }}
 	{{ sendMessage nil (cembed $embed) }}
+{{ end }}
 {{ end }}
