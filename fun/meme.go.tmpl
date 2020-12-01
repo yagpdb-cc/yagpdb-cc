@@ -19,11 +19,11 @@
 {{ $meme := $args.Get 0 }}
 {{ $top := $args.Get 1 }}
 {{ $bottom := $args.Get 2 }}
-{{- range $i, $ := $replacers }}
-	{{ $meme = split $meme . | joinStr (index $replacements $i) }}
-	{{ $top = split $top . | joinStr (index $replacements $i) }}
-	{{ $bottom = split $bottom . | joinStr (index $replacements $i) }}
-{{- end }}
+{{ range $i, $ := $replacers }}
+	{{- $meme = split $meme . | joinStr (index $replacements $i) }}
+	{{- $top = split $top . | joinStr (index $replacements $i) }}
+	{{- $bottom = split $bottom . | joinStr (index $replacements $i) -}}
+{{ end }}
 {{if $args.IsSet 3 }}
 	{{ $cuslink := $args.Get 3 }}
 	{{ $msglink := joinStr "/" $link $meme $top $bottom }}

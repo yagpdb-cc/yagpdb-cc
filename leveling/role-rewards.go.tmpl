@@ -102,11 +102,11 @@
 			{{ sendMessage nil (cembed "title" "Role Rewards" "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png") "description" (joinStr "" "**❯ Role Rewards:** n/a\n**❯ Type:** " $roleRewards.type)) }}
 		{{ else }}
 			{{ $out := "" }} {{/* The embed description */}}
-			{{- range $level := seq 1 201 -}} {{/* We can do this as we know level roles are in range 1-100 */}}
-				{{ with ($roleRewards.Get (str $level)) }}
-					{{ $out = printf "%s\n❯ **Level %d:** <@&%d>" $out $level . }}
-				{{ end }}
-			{{- end -}}
+			{{ range $level := seq 1 201 }} {{- /* We can do this as we know level roles are in range 1-100 */}}
+				{{- with ($roleRewards.Get (str $level)) }}
+					{{- $out = printf "%s\n❯ **Level %d:** <@&%d>" $out $level . }}
+				{{- end -}}
+			{{ end }}
 			{{/* Format and send embed */}}
 			{{ sendMessage nil (cembed "title" "Role Rewards" "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png") "description" (joinStr "" $out "\n\n" "**❯ Type:** " $roleRewards.type)) }}
 		{{ end }}

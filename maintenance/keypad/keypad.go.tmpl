@@ -20,7 +20,7 @@
 {{ else }}
 	{{ $generated := "" }}
 	{{ range seq 0 4 }}
-		{{ $generated = joinStr "" $generated (randInt 1 10) }}
+		{{- $generated = joinStr "" $generated (randInt 1 10) -}}
 	{{ end }}
 	{{ $ret := sendMessageRetID nil (cembed
 		"title" (printf "❯ Keypad: %s" $generated)

@@ -27,10 +27,10 @@
 	{{ if ne $newLvl $currentLvl }} {{/* If the level changed / user ranked up */}}
 		{{ $type := $roleRewards.type }} {{/* Type of role giving (highest / stack) */}}
 		{{ $toAdd := or ($roleRewards.Get (json $newLvl)) 0 }} {{/* Try to get the role reward for this level */}}
-		{{- range $level, $reward := $roleRewards -}} {{/* Loop over role rewards */}}
-			{{ if and (ge (toInt $newLvl) (toInt $level)) (not (hasRoleID $reward)) (eq $type "stack") (ne $level "type") }} {{ addRoleID $reward }}
-			{{ else if and (hasRoleID $reward) (eq $type "highest") $toAdd }} {{ removeRoleID $reward }} {{ end }}
-		{{- end -}}
+		{{ range $level, $reward := $roleRewards }} {{/* Loop over role rewards */}}
+			{{- if and (ge (toInt $newLvl) (toInt $level)) (not (hasRoleID $reward)) (eq $type "stack") (ne $level "type") }} {{- addRoleID $reward }}
+			{{- else if and (hasRoleID $reward) (eq $type "highest") $toAdd }} {{- removeRoleID $reward }} {{- end -}}
+		{{ end }}
 		{{ if $toAdd }} {{ addRoleID $toAdd }} {{ end }}
 		{{ $embed := cembed 
 			"title" "❯ Level up!"

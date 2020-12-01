@@ -22,9 +22,9 @@
 	{{ end }}
 	{{ if not $dec }}
 		{{ range $k, $v := split $hex "" }}
-			{{ $multiplier := index $multipliers $k }}
-			{{ $num := or ($hex2dec.Get $v) $v}}
-			{{ $dec = add $dec (mult $num $multiplier) }}
+			{{- $multiplier := index $multipliers $k }}
+			{{- $num := or ($hex2dec.Get $v) $v}}
+			{{- $dec = add $dec (mult $num $multiplier) -}}
 		{{ end }}
 	{{ end }}
 	{{ sendMessage nil (cembed

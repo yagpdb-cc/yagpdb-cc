@@ -14,10 +14,10 @@
 {{ end }}
 
 {{ $roles := "" }}
-{{- range $k, $v := $member.Roles -}}
-	{{ if eq $k 0 }} {{ $roles = printf "<@&%d>" . }}
-	{{ else }} {{ $roles = printf "%s, <@&%d>" $roles . }} {{ end }}
-{{- end -}}
+{{ range $k, $v := $member.Roles }}
+	{{- if eq $k 0 }} {{- $roles = printf "<@&%d>" . }}
+	{{- else }} {{- $roles = printf "%s, <@&%d>" $roles . }} {{- end -}}
+{{ end }}
 {{ $bot := "No" }}
 {{ if $user.Bot }} {{ $bot = "Yes" }} {{ end }}
 {{ $createdAt := div $user.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}

@@ -12,10 +12,10 @@
 {{ end }}
 {{ $result := "" }}
 {{ if $offset }} {{ $result = slice $str 0 $offset }} {{ end }}
-{{- range $k, $ := (split $rest "") -}}
-	{{ if not (mod $k 3) }} {{ $result = joinStr "" $result (and $result ",") . }}
-	{{ else }} {{ $result = joinStr "" $result . }} {{ end }}
-{{- end -}}	
+{{ range $k, $ := (split $rest "") }}
+	{{- if not (mod $k 3) }} {{- $result = joinStr "" $result (and $result ",") . }}
+	{{- else }} {{- $result = joinStr "" $result . }} {{- end -}}
+{{ end }}	
 ❯ **Add commas**
 Input: `{{ $str }}`
 Output: `{{ $result }}`

@@ -66,12 +66,12 @@
 			{{ $aliases := split (slice .Key 4 (sub (len .Key) 1)) "|" }}
 			{{ $list := "" }}
 			{{ if ge (len $aliases) 2 }}
-				{{- range $k, $ := slice $aliases 1 -}}
-					{{ if $k }}
-						{{ $list = joinStr "" $list ", `" . "`" }}
-					{{ else if . }}
-						{{ $list = printf "`%s`" . }}
-					{{ end }}
+				{{ range $k, $ := slice $aliases 1 }}
+					{{- if $k }}
+						{{- $list = joinStr "" $list ", `" . "`" }}
+					{{- else if . }}
+						{{- $list = printf "`%s`" . }}
+					{{- end -}}
 				{{ end }}
 			{{ end }}
 			{{ sendMessage nil (cembed
@@ -108,14 +108,14 @@
 		{{ $aliases := slice $args 1 }}
 		{{ $valid := true }}
 		{{ $key := printf "tg.|%s|" $tagName }}
-		{{- range $k, $ := $aliases -}}
-			{{ if not (reFind $safeName .) }}
-				{{ $valid = false }}
-			{{ else if $k }}
-				{{ $key = joinStr "" $key "|" (lower .) }}
-			{{ else }}
-				{{ $key = joinStr "" $key (lower .) }}
-			{{ end }}
+		{{ range $k, $ := $aliases }}
+			{{- if not (reFind $safeName .) }}
+				{{- $valid = false }}
+			{{- else if $k }}
+				{{- $key = joinStr "" $key "|" (lower .) }}
+			{{- else }}
+				{{- $key = joinStr "" $key (lower .) }}
+			{{- end -}}
 		{{ end }}
 		{{ if and (reFind $safeName $tagName) $valid }}
 			{{ $data := sdict "Name" $tagName }}
@@ -148,9 +148,9 @@
 				Sorry, you cannot remove an alias from a tag with only 1 alias.
 			{{ else }}
 				{{ range $aliases }}
-					{{ if ne $toRemove . }}
-						{{ $tagName = joinStr "" $tagName "|" . }}
-					{{ end }}
+					{{- if ne $toRemove . }}
+						{{- $tagName = joinStr "" $tagName "|" . }}
+					{{- end -}}
 				{{ end }}
 				{{ $tagName = joinStr "" $tagName "|" }}
 				{{ dbDelByID .UserID .ID }}
@@ -171,13 +171,13 @@
 		{{ else }}
 			{{ $number := $skip }}
 			{{ $display := "" }}
-			{{- range $k, $ := $tags -}}
-				{{ $tagName := index (split (slice .Key 4 (sub (len .Key) 1)) "|") 0 }}
-				{{ if $k }}
-					{{ $display = joinStr "" $display ", `" $tagName "`" }}
-				{{ else }}
-					{{ $display = printf "`%s`" $tagName }}
-				{{ end }}
+			{{ range $k, $ := $tags }}
+				{{- $tagName := index (split (slice .Key 4 (sub (len .Key) 1)) "|") 0 }}
+				{{- if $k }}
+					{{- $display = joinStr "" $display ", `" $tagName "`" }}
+				{{- else }}
+					{{- $display = printf "`%s`" $tagName }}
+				{{- end -}}
 			{{ end }}
 			{{ $id := sendMessageRetID nil (cembed
 				"title" "❯ Tags"

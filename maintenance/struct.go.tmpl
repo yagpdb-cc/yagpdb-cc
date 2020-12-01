@@ -17,10 +17,10 @@
 {{ $name := "" }}
 {{ $input := (parseArgs 1 "**Syntax:** -struct <struct>" (carg "string" "structure")).Get 0 | lower }}
 {{ range $struct, $v := $targets }}
-	{{ if eq (lower $struct) $input }}
-		{{ $target = $v }}
-		{{ $name = $struct }}
-	{{ end }}
+	{{- if eq (lower $struct) $input }}
+		{{- $target = $v }}
+		{{- $name = $struct }}
+	{{- end -}}
 {{ end }}
 {{ if $target}}
 	{{ $json := printf "```go\n%+v```" $target }}

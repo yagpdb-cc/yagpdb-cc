@@ -21,15 +21,15 @@
 }}
 
 {{ range $name, $ := $clocks }}
-	{{ $time := currentTime.In (newDate 0 0 0 0 0 0 .).Location }}
-	{{ $formatted := printf "%s, %s"
+	{{- $time := currentTime.In (newDate 0 0 0 0 0 0 .).Location }}
+	{{- $formatted := printf "%s, %s"
 		$time.Weekday.String
 		($time.Format "3:04:05 PM")
 	}}
-	{{ $embed.fields.Append (sdict
+	{{- $embed.fields.Append (sdict
 		"name" $name
 		"value" $formatted
-	) | $embed.Set "fields" }}
+	) | $embed.Set "fields" -}}
 {{ end }}
 
 {{ sendMessage nil (cembed $embed) }}

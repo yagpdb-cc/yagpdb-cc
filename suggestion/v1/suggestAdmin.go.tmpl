@@ -58,12 +58,12 @@
 		{{ if $archived }}
 			{{ $ups := 0 }}
 			{{ $downs := 0 }}
-			{{- range $suggestionMsg.Reactions -}}
-				{{ $id := or .Emoji.ID 0 }}
-				{{ if eq $id 524907425531428864 }} {{ $ups = .Count }}
-				{{ else if eq $id 524907425032175638 }} {{ $downs = .Count }}
-				{{ end }}
-			{{- end -}}
+			{{ range $suggestionMsg.Reactions }}
+				{{- $id := or .Emoji.ID 0 }}
+				{{- if eq $id 524907425531428864 }} {{- $ups = .Count }}
+				{{- else if eq $id 524907425032175638 }} {{- $downs = .Count }}
+				{{- end -}}
+			{{ end }}
 			{{ $embed.Set "footer" (sdict "text" (printf "✔️ %d | ❌ %d " $ups $downs)) }}
 			{{ deleteAllMessageReactions $suggestions $id }}
 		{{ end }}

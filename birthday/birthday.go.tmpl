@@ -15,7 +15,7 @@
 {{$synt := "Correct usage: -getbday @user"}}
 
 {{/* Checks */}}
-{{range .Member.Roles}} {{if in $mods .}} {{$isMod = true}} {{end}} {{end}}
+{{range .Member.Roles}} {{- if in $mods .}} {{- $isMod = true}} {{- end -}} {{end}}
 {{if not .ExecData}}
 	{{if reFind `(?i)(my|set)` .Cmd}}
 		{{with .CmdArgs}}
@@ -65,10 +65,10 @@
 	{{dbDel (currentTime.Add (mult -24 $.TimeHour | toDuration)).Day "bdayannounced"}}
 	{{with (dbGet (printf "%d" currentTime.Month | toInt) "bdays").Value}} {{$today = sdict .}} {{end}}
 	{{range (index $today (str currentTime.Day))}}
-		{{if getMember .}}
-			{{$bdayMsg = print $bdayMsg "\n<@" . ">"}}
-			{{$send = true}}
-		{{end}}
+		{{- if getMember .}}
+			{{- $bdayMsg = print $bdayMsg "\n<@" . ">"}}
+			{{- $send = true}}
+		{{- end -}}
 	{{end}}
 	{{if and $send (not (dbGet currentTime.Day "bdayannounced"))}} {{dbSet currentTime.Day "bdayannounced" true}} {{sendMessageNoEscape nil $bdayMsg}} {{end}}
 {{else}}
@@ -94,9 +94,9 @@
 						{{with sdict (dbGet (printf "%d" .Month | toInt) "bdays").Value}}
 							{{$needMap := .}}
 							{{range index . $thisDay}}
-								{{if ne . $user.ID}}
-									{{$listIn = $list.Append .}}
-								{{end}}
+								{{- if ne . $user.ID}}
+									{{- $listIn = $list.Append .}}
+								{{- end -}}
 							{{end}}
 							{{$needMap.Set $thisDay $listIn}}
 							{{dbSet $thisMonth "bdays" $needMap}}
@@ -176,9 +176,9 @@
 			{{with sdict (dbGet (printf "%d" .Month | toInt) "bdays").Value}}
 				{{$needMap := .}}
 				{{range index . $thisDay}}
-					{{if ne . $user.ID}}
-						{{$listIn = $list.Append .}}
-					{{end}}
+					{{- if ne . $user.ID}}
+						{{- $listIn = $list.Append .}}
+					{{- end -}}
 				{{end}}
 				{{$needMap.Set $thisDay $listIn}}
 				{{dbSet $thisMonth "bdays" $needMap}}

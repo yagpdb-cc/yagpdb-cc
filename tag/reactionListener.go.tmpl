@@ -25,13 +25,13 @@
 		{{ if (len $tags) }}
 			{{ $number := $skip }}
 			{{ $display := "" }}
-			{{- range $k, $ := $tags -}}
-				{{ $tagName := index (split (slice .Key 4 (sub (len .Key) 1)) "|") 0 }}
-				{{ if $k }}
-					{{ $display = joinStr "" $display ", `" $tagName "`" }}
-				{{ else }}
-					{{ $display = printf "`%s`" $tagName }}
-				{{ end }}
+			{{ range $k, $ := $tags }}
+				{{- $tagName := index (split (slice .Key 4 (sub (len .Key) 1)) "|") 0 }}
+				{{- if $k }}
+					{{- $display = joinStr "" $display ", `" $tagName "`" }}
+				{{- else }}
+					{{- $display = printf "`%s`" $tagName }}
+				{{- end -}}
 			{{ end }}
 			{{ editMessage nil .ReactionMessage.ID (cembed
 				"title" "❯ Tags"

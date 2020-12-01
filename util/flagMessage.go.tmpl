@@ -12,7 +12,7 @@
 {{ if eq .Reaction.Emoji.ID $reportEmoji }}
 	{{ $isFirst := true }}
 	{{ range .ReactionMessage.Reactions }}
-		{{ if and (eq .Emoji.ID $reportEmoji) (gt .Count 1) }} {{ $isFirst = false }} {{ end }}
+		{{- if and (eq .Emoji.ID $reportEmoji) (gt .Count 1) }} {{- $isFirst = false }} {{- end -}}
 	{{ end }}
 	{{ if $isFirst }}
 		{{ $attachment := "" }}

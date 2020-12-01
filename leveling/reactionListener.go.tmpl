@@ -25,13 +25,13 @@
 		{{ if (len $users) }} {{/* If there are users on this page, proceed */}}
 			{{ $rank := $skip }}
 			{{ $display := "" }} {{/* Display for leaderboard embed */}}
-			{{- range $users -}} {{/* Loop over users and format */}}
-				{{ $xp := toInt .Value }} {{/* The user XP */}}
-				{{ $rank = add $rank 1 }} {{/* The user rank */}}
-				{{ $display = printf "%s\n• **%d.** [%s](https://yagpdb.xyz) :: Level %d (%d XP)"
+			{{ range $users }} {{- /* Loop over users and format */}}
+				{{- $xp := toInt .Value }} {{- /* The user XP */}}
+				{{- $rank = add $rank 1 }} {{- /* The user rank */}}
+				{{- $display = printf "%s\n• **%d.** [%s](https://yagpdb.xyz) :: Level %d (%d XP)"
 					$display $rank .User.String (toInt (roundFloor (mult 0.1 (sqrt $xp)))) $xp
-				}} {{/* Format display */}}
-			{{- end -}}
+				}} {{- /* Format display */ -}}
+			{{ end }}
 			{{ editMessage nil .ReactionMessage.ID (cembed
 				"title" "❯ Leaderboard"
 				"thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")

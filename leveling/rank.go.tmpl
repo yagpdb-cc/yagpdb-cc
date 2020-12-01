@@ -59,10 +59,10 @@
 	{{ $percentage = div $percentage 10 | toInt }} {{/* Percentage out of 10 */}}
 
 	{{ $bar := "" }} {{/* The progress bar */}}
-	{{- range seq 1 11 -}}
-		{{ if ge $percentage . }} {{ $bar = joinStr "" $bar $barFull }} {{/* We join with full bar unicode if percentage > current iteration */}}
-		{{ else }} {{ $bar = joinStr "" $bar $barEmpty }} {{ end }} {{/* Otherwise, join with empty bar */}}
-	{{- end -}}
+	{{ range seq 1 11 }}
+		{{- if ge $percentage . }} {{- $bar = joinStr "" $bar $barFull }} {{/* We join with full bar unicode if percentage > current iteration */}}
+		{{- else }} {{- $bar = joinStr "" $bar $barEmpty }} {{- end -}} {{/* Otherwise, join with empty bar */}}
+	{{ end }}
 
 	{{ $embed := sdict 
 		"title" (printf "❯ %s's Rank" $user.String)
@@ -73,9 +73,9 @@
 	}} {{/* Format embed */}}
 
 	{{ $rank := 0 }} {{/* Current rank of user */}}
-	{{- range $index, $entry := dbTopEntries "xp" 100 0 -}} {{/* Loop over top 100 entries - see if user is in top 100 */}}
-		{{ if eq .UserID $user.ID }} {{ $rank = add $index 1 }} {{ end }}
-	{{- end -}}
+	{{ range $index, $entry := dbTopEntries "xp" 100 0 }} {{/* Loop over top 100 entries - see if user is in top 100 */}}
+		{{- if eq .UserID $user.ID }} {{- $rank = add $index 1 }} {{- end -}}
+	{{ end }}
 
 	{{ if $rank }}
 		{{ $embed.Set "description" (printf 
