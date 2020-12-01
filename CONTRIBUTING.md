@@ -53,7 +53,7 @@ Extract all configuration data in your code to local variables defined at the to
 {{ $ROLE_ID := 123 }} {{/* The role ID you want to check. */}}
 {{/* Configuration variables end */}}
 
-{{ if hasRoleID 123 }}
+{{ if hasRoleID $ROLE_ID }}
 	Yes, you have the role.
 {{ else }}
 	No, you do not have the role.
