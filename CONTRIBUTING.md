@@ -73,11 +73,11 @@ Don't worry about code length if it's long - we run a minifier on code after it 
 
 After you've followed these steps, you are now ready to make a **Pull Request** to this repository. Take a look at [this article](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) if you aren't quite familiar with PRs or need a refresher. We have a PR template in place that we recommend you follow.
 
-If you're PRing a single command, all you have to do is add it in the appropriate folder (for example, a send message command might go in `tools/`) and then add an appropriately named file, i.e `sendMessage.gotmpl`.
+If you're PRing a single command, all you have to do is add it in the appropriate folder (for example, a send message command might go in `tools/`) and then add an appropriately named file, i.e `sendMessage.go.tmpl`.
 
 If you're PRing a system of commands (i.e. a leveling system), then it's slightly more complicated. You should find an appropriate folder to place your code in (a leveling system would fit right in at `fun/`, for example) and then add a subfolder. In this case, we might want to call it `leveling`, so our file path at this point would be `fun/leveling/`.
 
-You should then add a `README.md` describing your system and then add your individual files with appropriate names (for example, `manageSystem.gotmpl` and `giveExperience.gotmpl` might be good names for some components of a leveling system).
+You should then add a `README.md` describing your system and then add your individual files with appropriate names (for example, `manageSystem.go.tmpl` and `giveExperience.go.tmpl` might be good names for some components of a leveling system).
 
 ### What then?
 
