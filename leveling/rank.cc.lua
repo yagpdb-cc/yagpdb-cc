@@ -17,7 +17,7 @@
 {{ $user := .User }} {{/* Target user */}}
 {{ $colorSet := false }}
 {{ if (dbGet .User.ID "background") }}
-{{ $rankbackground = ((dbGet .User.ID "background").Value) }} {{end}}
+{{ $background = ((dbGet .User.ID "background").Value) }} {{end}}
 
 {{ with .CmdArgs }}
 	{{ $temp := userArg (index . 0) }}
