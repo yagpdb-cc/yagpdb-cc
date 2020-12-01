@@ -1,13 +1,10 @@
 {{/*
 	This command is a demonstration of adding the ordinal to a number. 1 -> 1st, 11 -> 11th, 122 -> 122nd.
-	Usage: `-ordinal <number>`.
-
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(ordinal|ord)(\s+|\z)`
 */}}
 
+{{/* Let $int be the integer. */}}
 
 {{ $ord := "th" }}
-{{ $int := (parseArgs 1 "**Syntax:** -ordinal <number>" (carg "int" "number")).Get 0 }}
 {{ $cent := toInt (mod $int 100) }}
 {{ $dec := toInt (mod $int 10) }}
 {{ if not (and (ge $cent 10) (le $cent 19)) }}
@@ -16,5 +13,5 @@
 	{{ else if eq $dec 3 }} {{ $ord = "rd" }}
 	{{ end }}
 {{ end }}
-❯ **Ordinal**
-`{{ $int }}{{ $ord }}`
+
+{{/* $ord is the ordinal for $int. */}}
