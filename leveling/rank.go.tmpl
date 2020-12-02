@@ -2,11 +2,12 @@
 	This command manages viewing the rank of a given member.
 	Use by running `-rank [member]` where member is optional. Defaults to yourself.
 	You may also set a color for your rank card using `-rank set-color <hex>` or `-rank set-color default`.
+	You may also set a background for your rank card (if enabled) using `-rank set-background <link>` or `-rank set-background del`.
 
 	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rank|lvl|xp)(\s+|\z)`.
 */}}
 {{/* CONFIGURATION AREA STARTS */}}
-{{ $rankcard := 1 }} {{/* set to `1` for a rank card */}}
+{{ $rankcard := true }} {{/* set to `true` for a rank card */}}
 {{ $background := "https://xbox-store-checker.com/assets/upload/game/2020/06/optimize/9n5qmw0x81jm-background.jpg" }}{{/* background for rankcard, dont edit if you dont use it */}}
 {{/* CONFIGURATION AREA ENDS*/}}
 {{/* Instantiate constants */}}
@@ -16,8 +17,8 @@
 {{ $color := 14232643 }} {{/* Embed color */}} 
 {{ $user := .User }} {{/* Target user */}}
 {{ $colorSet := false }}
-{{ if (dbGet .User.ID "background") }}
-{{ $rankbackground = ((dbGet .User.ID "background").Value) }} {{end}}
+{{ with dbGet .User.ID "background" }}
+{{ $background = .Value }} {{end}}
 
 {{ with .CmdArgs }}
 	{{ $temp := userArg (index . 0) }}
@@ -32,7 +33,7 @@
 			{{ $hex := "D92C43" }}
 			{{ with index . 0 1 }}
 				{{ $hex = (printf "%06s" .) | upper }}
-			{{ end }}
+						{{ end }}
 			{{ $dec := 0 }}
 			{{ range $k, $v := split $hex "" -}}
 				{{- $multiplier := index $multipliers $k }}
@@ -40,6 +41,7 @@
 				{{- $dec = add $dec (mult $num $multiplier) -}}
 			{{ end }}
 			{{ dbSet $user.ID "xpColor" $dec }}
+			{{ dbSet $user.ID "hex" $hex }}
 			{{ $user.Mention }}, I set your rank card color to `#{{ $hex }}`.
 		{{ else }}
 			Please provide a valid hex to set your rank card color to.
@@ -65,10 +67,10 @@
 	{{ $percentage = div $percentage 10 | toInt }} {{/* Percentage out of 10 */}}
 
 	{{ $bar := "" }} {{/* The progress bar */}}
-	{{ range seq 1 11 }}
-		{{- if ge $percentage . }} {{- $bar = joinStr "" $bar $barFull }} {{/* We join with full bar unicode if percentage > current iteration */}}
-		{{- else }} {{- $bar = joinStr "" $bar $barEmpty }} {{- end -}} {{/* Otherwise, join with empty bar */}}
-	{{- end -}}
+	{{- range seq 1 11 -}}
+		{{ if ge $percentage . }} {{ $bar = joinStr "" $bar $barFull }} {{/* We join with full bar unicode if percentage > current iteration */}}
+		{{ else }} {{ $bar = joinStr "" $bar $barEmpty }} {{ end }} {{/* Otherwise, join with empty bar */}}
+	{{ end }}
 
 	{{ $embed := sdict 
 		"title" (printf "❯ %s's Rank" $user.String)
@@ -79,9 +81,9 @@
 	}} {{/* Format embed */}}
 
 	{{ $rank := 0 }} {{/* Current rank of user */}}
-	{{- range $index, $entry := dbTopEntries "xp" 100 0 -}} {{/* Loop over top 100 entries - see if user is in top 100 */}}
-		{{- if eq .UserID $user.ID }} {{- $rank = add $index 1 }} {{- end -}}
-	{{- end -}}
+	{{ range $index, $entry := dbTopEntries "xp" 100 0 }} {{- /* Loop over top 100 entries - see if user is in top 100 */}}
+		{{ if eq .UserID $user.ID }} {{ $rank = add $index 1 }} {{ end }}
+	{{ end }}
 
 	{{ if $rank }}
 		{{ $embed.Set "description" (printf 
@@ -90,11 +92,26 @@
 			$embed.description
 		) }} {{/* If user in top 100, update the description */}}
 	{{ end }}
-{{ if $rankcard}}
-{{ if not $rank }} {{ $rank = urlescape "100" }} {{ end }}
+{{ $bg := true }}
+{{ with .CmdArgs }}
+{{ $bg = false }}
+{{ if and (eq (index . 0) "set-background") (ge (len .) 2) }}
+			  {{ if eq (index . 1) "del" }} {{ dbDel $.User.ID "background" }} deleted
+			{{ else if (reFindAllSubmatches `https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,63}\b(?:(?:(?:,?[-a-zA-Z0-9@:%_\+.~#?!&/=*]*)|(?:,?\([-a-zA-Z0-9@:%_\+.~#?!&/=*]*\))*|\[\])*)` (index . 1)) }} 
+			{{ dbSet $.User.ID "background" (index . 1) }} doneso 
+	{{ else }} thats not a valid link!
+{{ end }}
+{{ end }}
+{{ end }}
+{{ if ($rankcard) }}
+{{ $rank = or $rank "100" }}
 {{ $username := urlescape ($user.Username) }}
-{{ $pfp := ($user.AvatarURL "256") }}
-	{{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=fc1d04"))) }} {{ else }}
+{{$pfp := ($user.AvatarURL "256")}}
+{{ if $bg }}
+{{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=" ((dbGet $user.ID "hex").Value)))) }}
+{{ end }}
+	 {{ else }}
 	{{ sendMessage nil (cembed $embed) }}
 {{ end }}
 {{ end }}
+
