@@ -1,24 +1,38 @@
 {{/* 
-        This is a snippet which converts all internal maps/slices in a multi layered data structure to sdict/cslice respectively.
-        It is recommended to use $globalSdict for passing values to and retrieving results from the template. 
-        Example use: {{$globalSdict.Set "val" $value}}{{template "standardize" $globalSdict}}{{$value = $globalSdict.Get "res"}}
+    This is a snippet which converts all internal maps/slices in a multi layered data structure to sdict/cslice respectively.
+	It is most useful when retrieving deserialized data from the database which needs to be converted.
+
+	Example usage:
+	
+	{{ template "standardize" ($data := sdict "Value" $MY_VALUE) }}
+	{{ $standardized := $data.Result }}
 */}}
 
-{{$globalSdict:= sdict }}
-{{- define "standardize"}}
-{{- $value:= .Get "val"}}{{$t:= printf "%T" $value}}{{$recursiveSdict:= sdict}}{{$rangeVal:= ""}}
-    {{- if (eq  $t `map[string]interface {}`)}}{{$rangeVal = sdict $value}}
-    {{- else if (eq $t `[]interface {}`)}}{{$rangeVal = cslice.AppendSlice $value}}
-    {{- else if (in (cslice `templates.SDict` `templates.Slice`) $t)}}{{$rangeVal = $value}} 
-    {{- end}}
-    {{- if (print $rangeVal)}}
-        {{- range $k,$v:= $rangeVal}}
-            {{- if in (cslice `map[string]interface {}` `[]interface {}` `templates.SDict` `templates.Slice`) (printf "%T" $v)}}
-                {{- $recursiveSdict.Set "val" $v}}{{template "standardize" $recursiveSdict}}{{$rangeVal.Set $k ($recursiveSdict.Get "res")}}
-            {{- end}}
-        {{- end}}
-    {{- else}}
-        {{- $rangeVal = $value}}
-    {{- end}}
-{{- .Set "res" $rangeVal}}
-{{- end}}
+{{ define "standardize" }}
+    {{- $kind := kindOf .Value true }}
+    {{- $typ := printf "%T" .Value }}
+    {{- $arg := sdict }}
+    {{- $result := "" }}
+
+    {{- if and (eq $kind "map") (not (eq $typ "templates.Dict" "templates.SDict")) }}
+        {{- $result = dict }}
+        {{- range $k, $v := .Value }} {{- $result.Set $k $v -}} {{- end }}
+    {{- else if and (eq $kind "array" "slice") (ne $typ "templates.Slice") }}
+        {{= $result = cslice.AppendSlice .Value }}
+    {{- else if eq $typ "templates.Dict" "templates.SDict" "templates.Slice" }}
+      {{- $result = .Value }}
+    {{- end }}
+
+    {{- if print $result }}
+        {{- range $k, $v := $result }}
+            {{- $kind := kindOf $v true }}
+            {{- if eq $kind "array" "slice" "map" }}
+                {{- $arg.Set "Value" $v -}}
+                {{- template "standardize" $arg -}}
+                {{- $result.Set $k $arg.Result }}
+            {{- end -}}
+        {{- end }}
+    {{- else }} {{- $result = .Value }} {{- end }}
+
+    {{- .Set "Result" $result -}}
+{{ end }}
