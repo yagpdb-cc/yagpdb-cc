@@ -5,34 +5,6 @@
 
 	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rank|lvl|xp)(\s+|\z)`.
 */}}
-{{/* Instantiate constants */}}
-{{ $barEmpty := "□" }}
-{{ $barFull := "■" }}
-{{ $xp := 0 }} {{/* Xp of user */}}
-{{ $color := 14232643 }} {{/* Embed color */}} 
-{{ $user := .User }} {{/* Target user */}}
-{{ $colorSet := false }}
-
-{{ with .CmdArgs }}
-	{{ $temp := userArg (index . 0) }}
-	{{ if $temp }}
-		{{ $user = $temp }}
-		{{ with dbGet $user.ID "xpColor" }} {{ $color = .Value }} {{ end }}
-	{{ else if and (eq (index . 0) "set-color") (ge (len .) 2) }}
-		{{ $colorSet = true }}
-		{{ $multipliers := cslice 1048576 65536 4096 256 16 1 }}
-		{{ $hex2dec := sdict "A" 10 "B" 11 "C" 12 "D" 13 "E" 14 "F" 15 }}
-		{{ with reFindAllSubmatches `\A(?:#?default|([a-fA-F\d]{1,6}))\z` (joinStr " " (slice . 1)) }}
-			{{ $hex := "D92C43" }}
-			{{ with index . 0 1 }}
-				{{ $hex = (printf "%06s" .) | upper }}
-{{/*
-	This command manages viewing the rank of a given member.
-	Use by running `-rank [member]` where member is optional. Defaults to yourself.
-	You may also set a color for your rank card using `-rank set-color <hex>` or `-rank set-color default`.
-
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rank|lvl|xp)(\s+|\z)`.
-*/}}
 {{/* CONFIGURATION AREA STARTS */}}
 {{ $rankcard := 1 }} {{/* set to `1` for a rank card */}}
 {{ $background := "https://xbox-store-checker.com/assets/upload/game/2020/06/optimize/9n5qmw0x81jm-background.jpg" }}{{/* background for rankcard, dont edit if you dont use it */}}
@@ -93,7 +65,7 @@
 	{{ $percentage = div $percentage 10 | toInt }} {{/* Percentage out of 10 */}}
 
 	{{ $bar := "" }} {{/* The progress bar */}}
-	{{- range seq 1 11 -}}
+	{{ range seq 1 11 }}
 		{{- if ge $percentage . }} {{- $bar = joinStr "" $bar $barFull }} {{/* We join with full bar unicode if percentage > current iteration */}}
 		{{- else }} {{- $bar = joinStr "" $bar $barEmpty }} {{- end -}} {{/* Otherwise, join with empty bar */}}
 	{{- end -}}
