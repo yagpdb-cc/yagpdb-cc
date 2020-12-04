@@ -106,7 +106,9 @@
 {{ if ($rankcard) }}
 {{ $rank = or $rank "100" }}
 {{ $username := urlescape ($user.Username) }}
-{{$pfp := ($user.AvatarURL "256")}}
+{{$pfp := "https://discord.com/assets/322c936a8c8be1b803cd94861bdfa868.png"}}
+{{if $user.Avatar}} {{$pfp = ($user.AvatarURL "256")}} {{end}}
+
 {{ if $bg }}
 {{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=" ((dbGet $user.ID "hex").Value)))) }}
 {{ end }}
