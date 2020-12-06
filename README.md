@@ -11,7 +11,7 @@
 - [Contributing](#contributing)
 - [Disclaimer](#disclaimer)
 - [Need help?](#need-help)
-- [Author](#author)
+- [Contributors](#contributors)
 
 ## Adding these custom commands
 
@@ -85,6 +85,13 @@ These commands are not guaranteed to be working, use them at your own risk.
 
 If you are having difficulties with one of the custom commands here, please get in touch via the [YAGPDB Support Server](https://discord.gg/5uVyq2E), where we can help you further. You can also open an issue on the issue tracker if that's what you prefer.
 
-## Author
+## Contributors
 
-**yagpdb-cc** was originally authored by [@Jo3-L](https://github.com/Jo3-L) (`Joe_#0001`) and is maintained by [@Jo3-L](https://github.com/Jo3-L) and [@Satty9361](https://github.com/Satty9361) (`Satty#9361`). It is licensed under the MIT License.
+**yagpdb-cc** is currently maintained by [@Jo3-L](https://github.com/Jo3-L) and [@Satty9361](https://github.com/Satty9361).<br>
+It is licensed under the MIT License.
+
+We would also like to acknowledge the many contributors, seen below. Thank you!
+
+<a href="https://github.com/yagpdb-cc/yagpdb-cc/graphs/contributors">
+<img src="https://contributors-img.web.app/image?repo=yagpdb-cc/yagpdb-cc" />
+</a>
