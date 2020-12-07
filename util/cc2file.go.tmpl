@@ -24,5 +24,11 @@
 		)}}
 	{{- end}}
 {{else}}
-	{{exec "cc"}}
+	{{with (exec "cc")}}
+		{{if gt (len .) 2000}}
+			Use `-cc` command to generate CC list. You shouldn't need to do this, I have to fix that
+		{{else}}
+			{{.}}
+		{{end}}
+	{{end}}
 {{end}}
