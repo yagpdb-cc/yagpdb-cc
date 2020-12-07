@@ -1,20 +1,39 @@
-{{/* Trigger Type: regex, Trigger: .* this command doesnt let people talk until their cooldown is over users with ManageMessages perms can set cooldown and remove it as well as people with manage messages perms bypass the cooldown */}}
-{{ if (in (split (index (split (exec "viewperms") "\n") 2) ", ") "ManageMessages") }}
+{{/*
+	This commans helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it 
+ 
+	Usage: "-slowmode on (time in seconds) / -slowmode off "
+ 
+	Recommended trigger: ".*"
+	Trigger type: Regex
+ 
+	Credits:
+	Sponge :D
+*/}}
+ 
+{{/* CONFIGURATION VALUES START */}}
+{{$bypassperms := "ManageMessages"}}
+{{$usageperms := "ManageMessages"}}
+{{/* put in the permissions you want the use to have in order to use or bypass the command */}}
+{{/* available perms: Administrator, ManageServer, ReadMessages, SendMessages, SendTTSMessages, ManageMessages, EmbedLinks, AttachFiles, ReadMessageHistory, MentionEveryone, VoiceConnect, VoiceSpeak, VoiceMuteMembers, VoiceDeafenMembers, VoiceMoveMembers, VoiceUseVAD, ManageNicknames, ManageRoles, ManageWebhooks, ManageEmojis, CreateInstantInvite, KickMembers, BanMembers, ManageChannels, AddReactions, ViewAuditLogs  */}}
+{{/* CONFIGURATION VALUES END */}}
+ 
+{{/* ACTUAL CODE */}}
+{{ if (in (split (index (split (exec "viewperms") "\n") 2) ", ") $usageperms) }}
 {{ if $refind := reFindAllSubmatches `-slowmode on (\d+)` .Message.Content }}
 {{ dbSet 55 .Channel.ID (toInt (index $refind 0 1)) }}
 {{ sendMessage nil (print "done! slowmode has been set to `" (index $refind 0 1) "`") }}
 {{ else if reFindAllSubmatches `-slowmode off` .Message.Content }}
 {{ dbDel 55 .Channel.ID }}
 the slowmode has been removed from this channel
-{{ end }}
-{{ end }}
-{{ if (not (in (split (index (split (exec "viewperms") "\n") 2) ", ") "ManageMessages")) }}
+{{ if (not (in (split (index (split (exec "viewperms") "\n") 2) ", ") $bypassperms)) }}
 {{ if (dbGet 55 .Channel.ID) }}
 {{ if $slowmode := dbGet .User.ID .Channel.ID }}
 {{ deleteTrigger 0 }}
 {{ sendDM (print "slowmode is currently active for another " (humanizeDurationSeconds ($slowmode.ExpiresAt.Sub currentTime))) }}
 {{ else }}
 {{ dbSetExpire .User.ID .Channel.ID "epic" (toInt ((dbGet 55 .Channel.ID).Value)) }}
+{{ end }}
+{{ end }}
 {{ end }}
 {{ end }}
 {{ end }}
