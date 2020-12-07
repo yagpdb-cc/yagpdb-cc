@@ -1,0 +1,20 @@
+{{/* Trigger Type: regex, Trigger: .* this command doesnt let people talk until their cooldown is over users with ManageMessages perms can set cooldown and remove it as well as people with manage messages perms bypass the cooldown */}}
+{{ if (in (split (index (split (exec "viewperms") "\n") 2) ", ") "ManageMessages") }}
+{{ if $refind := reFindAllSubmatches `-slowmode on (\d+)` .Message.Content }}
+{{ dbSet 55 .Channel.ID (toInt (index $refind 0 1)) }}
+{{ sendMessage nil (print "done! slowmode has been set to `" (index $refind 0 1) "`") }}
+{{ else if reFindAllSubmatches `-slowmode off` .Message.Content }}
+{{ dbDel 55 .Channel.ID }}
+the slowmode has been removed from this channel
+{{ end }}
+{{ end }}
+{{ if (not (in (split (index (split (exec "viewperms") "\n") 2) ", ") "ManageMessages")) }}
+{{ if (dbGet 55 .Channel.ID) }}
+{{ if $slowmode := dbGet .User.ID .Channel.ID }}
+{{ deleteTrigger 0 }}
+{{ sendDM (print "slowmode is currently active for another " (humanizeDurationSeconds ($slowmode.ExpiresAt.Sub currentTime))) }}
+{{ else }}
+{{ dbSetExpire .User.ID .Channel.ID "epic" (toInt ((dbGet 55 .Channel.ID).Value)) }}
+{{ end }}
+{{ end }}
+{{ end }}
