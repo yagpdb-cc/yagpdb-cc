@@ -8,18 +8,21 @@
 */}}
 
 
-{{/*Executing -cc command with input arguments*/}}
-{{$args := parseArgs 1 ""
-	(carg "int" "CC ID")
-}}
-{{$CCanswer:= (exec "cc" ($args.Get 0))}}
+{{range .CmdArgs}}
+	{{- $exec_cc_Answer:= exec "cc" .}}
+	{{- $answerLines:= split $exec_cc_Answer "\n"}}
 
-{{/*If said command throws an error, I'll send its original output. If not, I'll send what I want: Its output in a file*/}}
-{{if reFind "here is a list of" $CCanswer}}
-	{{sendMessage nil $CCanswer}}
+	{{- $extractedCode:= slice $answerLines 2 (sub (len $answerLines) 1)}}
+	{{- $firstLine:= index $answerLines 0}}
+
+	{{- if reFind "here is a list of" $firstLine}}
+		{{- sendMessage nil (printf "❌ CC `%s` not found" .)}}
+	{{- else}}
+		{{- sendMessage nil (complexMessage
+			"content" $firstLine
+			"file" (joinStr "\n" $extractedCode)
+		)}}
+	{{- end}}
 {{else}}
-	{{sendMessage nil (complexMessage
-		"content" (printf "**CC #%d** successfully exported to file:" ($args.Get 0))
-		"file" $CCanswer
-	)}}
+	{{exec "cc"}}
 {{end}}
