@@ -1,3 +1,12 @@
+{{/*
+	This command sends your CC code in a text file, rather than "plain" Discord messages, preserving Tabs, markdown, etc. 
+	If input ID is invalid (i.e. CC doesn't exist), bot will send a message listing all CCs (usual `-cc` output)
+	
+	Usage: `-cc2file <ID_of_CC>`. For example: `-cc2file 10`
+	Recommended trigger: Command trigger with trigger `cc2file`.
+*/}}
+
+
 {{/*Executing -cc command with input arguments*/}}
 {{$args := parseArgs 1 ""
 	(carg "int" "CC ID")
