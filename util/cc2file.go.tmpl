@@ -1,0 +1,15 @@
+{{/*Executing -cc command with input arguments*/}}
+{{$args := parseArgs 1 ""
+	(carg "int" "CC ID")
+}}
+{{$CCanswer:= (exec "cc" ($args.Get 0))}}
+
+{{/*If said command throws an error, I'll send its original output. If not, I'll send what I want: Its output in a file*/}}
+{{if reFind "here is a list of" $CCanswer}}
+	{{sendMessage nil $CCanswer}}
+{{else}}
+	{{sendMessage nil (complexMessage
+		"content" (printf "**CC #%d** successfully exported to file:" ($args.Get 0))
+		"file" $CCanswer
+	)}}
+{{end}}
