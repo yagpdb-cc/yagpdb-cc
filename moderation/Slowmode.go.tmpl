@@ -18,7 +18,7 @@
 {{/* CONFIGURATION VALUES END */}}
  
 {{/* ACTUAL CODE */}}
-{{ dbSet 59 .Channel.ID $bypassperms }}
+{{ dbSet 59 "bypass" $bypassperms }}
 {{ if (in (split (index (split (exec "viewperms") "\n") 2) ", ") $usageperms) }}
 {{ if $refind := reFindAllSubmatches `\A-slowmode on (\d+)` .Message.Content }}
 {{ dbSet 55 .Channel.ID (toInt (index $refind 0 1)) }}
@@ -28,7 +28,7 @@
 the slowmode has been removed from this channel
 {{ end }}
 {{ end }}
-{{ if (not (in (split (index (split (exec "viewperms") "\n") 2) ", ") ((dbGet 59 .Channel.ID).Value))) }}
+{{ if (not (in (split (index (split (exec "viewperms") "\n") 2) ", ") ((dbGet 59 "bypass").Value))) }}
 {{ if (dbGet 55 .Channel.ID) }}
 {{ if $slowmode := dbGet .User.ID .Channel.ID }}
 {{ deleteTrigger 0 }}
