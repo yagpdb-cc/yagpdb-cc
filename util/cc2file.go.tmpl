@@ -15,7 +15,7 @@
 	{{- $extractedCode:= slice $answerLines 2 (sub (len $answerLines) 1)}}
 	{{- $firstLine:= index $answerLines 0}}
 
-	{{- if reFind "here is a list of" $firstLine}}
+	{{- if in $firstLine "here is a list of" }}
 		{{- sendMessage nil (printf "❌ CC `%s` not found" .)}}
 	{{- else}}
 		{{- sendMessage nil (complexMessage
