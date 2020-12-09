@@ -9,13 +9,11 @@
 
 
 {{range .CmdArgs}}
-	{{- $exec_cc_Answer:= exec "cc" .}}
-	{{- $answerLines:= split $exec_cc_Answer "\n"}}
-
+	{{- $answerLines:= split (exec "cc" .) "\n"}}
 	{{- $extractedCode:= slice $answerLines 2 (sub (len $answerLines) 1)}}
 	{{- $firstLine:= index $answerLines 0}}
 
-	{{- if in $firstLine "here is a list of" }}
+	{{- if in $firstLine "here is a list of"}}
 		{{- sendMessage nil (printf "❌ CC `%s` not found" .)}}
 	{{- else}}
 		{{- sendMessage nil (complexMessage
