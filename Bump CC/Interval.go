@@ -7,7 +7,7 @@
 
 {{/* Dont edit unless you know what you're doing. Better not edit, if you do, you need to change the Database and other things in the other CC's too*/}}
 
-{{if $db := dbGet 0 "cooldown"}}
+{{if $db := dbGet 0 "Cooldown"}}
 HELP
 {{deleteResponse 0}}
 {{else}}
