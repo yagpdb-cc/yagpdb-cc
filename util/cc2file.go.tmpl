@@ -50,7 +50,8 @@
 	{{- if in $firstLine "here is a list of"}}
 		{{- sendMessage nil (printf "❌ CC `%s` not found" .)}}
 	{{- else if in $firstLine "More than 1 matched command"}}
-		{{- template "sendLongMessage" (cslice nil (printf "`%s`: %s" . $answer) "\n")}}
+		{{- $msj:= reReplace "``" (printf "`%s`: %s" . $answer) "`<Empty trigger specified>`"}}
+		{{- template "sendLongMessage" (cslice nil $msj "\n")}}
 	{{- else}}
 		{{- sendMessage nil (complexMessage
 			"content" $firstLine
