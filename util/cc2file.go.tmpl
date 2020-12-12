@@ -63,17 +63,5 @@
 {{end}}
 
 {{if gt $numArgs 5}}
-	{{$nextArgs:= slice $args 5 $numArgs}}
-
-	{{if lt (toInt .StackDepth) 2}}
-		{{execCC .CCID nil 0 $nextArgs}}
-	{{else}}
-		{{$error:= "⚠️ WARNING: More than 15 CCs were processed. Run this command to process remaining ones: `-cc2file "}}
-		{{- range $nextArgs}}
-			{{$error = printf "%s \"%s\"" $error .}}
-		{{- end}}
-		{{$error = print $error "`"}}
-
-		{{template "sendLongMessage" (cslice nil $error " ")}}
-	 {{end}}
+	{{scheduleUniqueCC .CCID nil 1 "cc2file - remaining args" (slice $args 5 $numArgs)}}
 {{end}}
