@@ -8,13 +8,49 @@
 */}}
 
 
-{{range .CmdArgs}}
-	{{- $answerLines:= split (exec "cc" .) "\n"}}
+{{define "sendLongMessage"}}	{{/*INPUT: cslice channelIDToSend textToSend stringSeparator*/}}
+	{{$channelID:= index . 0}} {{$text:= index . 1}} {{$separator:= index . 2}}
+	{{$outStr:= ""}}
+
+	{{- range (split $text $separator)}}
+		{{- if gt (add (len $outStr) (len .)) 2000}}
+			{{- sendMessage $channelID $outStr}}
+			{{- $outStr = .}}
+		{{- else}}
+			{{- $outStr = (joinStr $separator $outStr .)}}
+		{{- end}}
+	{{- end}}
+	{{sendMessage $channelID $outStr}}
+{{end}}
+
+{{$args:= cslice}} {{$selectedArgs:= cslice}}
+{{with .ExecData}}
+	{{$args = .}}
+{{else}}
+	{{range .CmdArgs}}
+		{{- if not (in $args .)}}
+			{{- $args = $args.Append .}}
+		{{- end}}
+	{{- end}}
+{{end}}
+{{$numArgs:= len $args}}
+
+{{if gt $numArgs 5}}
+	{{$selectedArgs = slice $args 0 5}}
+{{else}}
+	{{$selectedArgs = $args}}
+{{end}}
+
+{{range $selectedArgs}}
+	{{- $answer:= exec "cc" .}}
+	{{- $answerLines:= split $answer "\n"}}
 	{{- $extractedCode:= slice $answerLines 2 (sub (len $answerLines) 1)}}
 	{{- $firstLine:= index $answerLines 0}}
 
 	{{- if in $firstLine "here is a list of"}}
 		{{- sendMessage nil (printf "❌ CC `%s` not found" .)}}
+	{{- else if in $firstLine "More than 1 matched command"}}
+		{{- template "sendLongMessage" (cslice nil (printf "`%s`: %s" . $answer) "\n")}}
 	{{- else}}
 		{{- sendMessage nil (complexMessage
 			"content" $firstLine
@@ -22,11 +58,21 @@
 		)}}
 	{{- end}}
 {{else}}
-	{{with (exec "cc")}}
-		{{if gt (len .) 2000}}
-			Use `-cc` command to generate CC list. You shouldn't need to do this, I have to fix that
-		{{else}}
-			{{.}}
-		{{end}}
-	{{end}}
+	{{template "sendLongMessage" (cslice nil (exec "cc") "\n")}}
+{{end}}
+
+{{if gt $numArgs 5}}
+	{{$nextArgs:= slice $args 5 $numArgs}}
+
+	{{if lt (toInt .StackDepth) 2}}
+		{{execCC .CCID nil 0 $nextArgs}}
+	{{else}}
+		{{$error:= "⚠️ WARNING: More than 15 CCs were processed. Run this command to process remaining ones: `-cc2file "}}
+		{{- range $nextArgs}}
+			{{$error = printf "%s \"%s\"" $error .}}
+		{{- end}}
+		{{$error = print $error "`"}}
+
+		{{template "sendLongMessage" (cslice nil $error " ")}}
+	 {{end}}
 {{end}}
