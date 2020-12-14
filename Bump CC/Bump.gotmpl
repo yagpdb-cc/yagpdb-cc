@@ -14,7 +14,7 @@
 {{$bumprole := 787355830399270963}}
 {{/*Configuration Values End*/}}
 
-{{$args := parseArgs 1 "" (carg "string" "Function Type")}}
+{{$args := parseArgs 1 "You need to specify either `!d bump` or `!d help` or `!d lb` or `!d rank`" (carg "string" "Function Type")}}
 {{$BumpXP := dbGet .User.ID "BumpXP"}}
 {{if eq ($args.Get 0) "bump"}}
     {{if $cooldown := dbGet 0 "Cooldown"}}
