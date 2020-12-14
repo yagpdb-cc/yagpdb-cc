@@ -3,6 +3,8 @@
    This is a Bump CC made by WickedWizard#3588
    
    Add all the CC's above if you wish to use this. Also, set a channel in the Interval CC or it won't work
+   
+   Also, try to make the CC's as synchrous as possible with the Interval CC.
 
 ## Functionality
 
