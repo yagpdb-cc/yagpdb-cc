@@ -1,11 +1,11 @@
-These all commands are **Not** Standalone and you need to add each one of them for the System to Work.
+# Bump CC
 
+       This is a Bump CC made by WickedWizard#3588
 
+## Functionality
 
-_Functionality_  
-       ! Helps give a Bump System to your Server with a Cooldown  
-       ! Gives a Level in the Bump LeaderBoard for Bumping
- 
- 
-                
-                        There's the Leading Comment Showing the Trigger and Description of the CC
+   1. Reminds you every 2 hours to Bump, by pinging the Bumping Role
+   
+   2. Strikes out the old message as soon as the Bump Occurs.
+   
+   3. Shows a Bump Leaderboard of the top 10 (Can be changed to top `yourwish` also) and your rank
