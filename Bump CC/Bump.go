@@ -4,6 +4,7 @@
   Recommended trigger: `!d`
 	Trigger type: Regex
   Credits: WickedWizard#3588  
+  Also, please change the ROLEID on line 31.
   Please read through the code properly and try to learn, rather than copying
   
   */}}
