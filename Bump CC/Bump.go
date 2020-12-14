@@ -10,12 +10,12 @@
 
 {{/*Configuration Variables Start*/}}
 {{$url := "https://disboard.org/server/721592235359207545"}} {{/*Your Servers Disboard URL*/}}
-{{$BumpXP := dbGet .User.ID "BumpXP"}}
 {{$reminderchannel := 786145239466639360}}{{/*Channel ID where Remainders are to be sent every hour*/}}
 {{$bumprole := 787355830399270963}}
 {{/*Configuration Values End*/}}
 
 {{$args := parseArgs 1 "" (carg "string" "Function Type")}}
+{{$BumpXP := dbGet .User.ID "BumpXP"}}
 {{if eq ($args.Get 0) "bump"}}
     {{if $cooldown := dbGet 0 "Cooldown"}}
         HELP
