@@ -1,17 +1,18 @@
-{{/* Trigger :- Hourly Interval 
-	2 hours
+{{/* 
+	Trigger
+		Interval - 10m
+	
+		Made by WickedWizard#3588
+	
 */}}
 
-{{/*Update the IDs*/}}
-{{$channelid := 774658131204505610}} {{/*Channel where Bump Notifications need to appear*/}}
-
-{{/* Dont edit unless you know what you're doing. Better not edit, if you do, you need to change the Database and other things in the other CC's too*/}}
-
+{{$vcid := 783324374051848265}}{{/*Channel where the time remaining for next bump is displayed*/}}
+{{$reminderchannel := 786145239466639360}} {{/*This should be same as the other file*/}}
 {{if $db := dbGet 0 "Cooldown"}}
-HELP
-{{deleteResponse 0}}
+{{editChannelName $vcid (print "Next Bump in " (($db.ExpiresAt.Sub currentTime).Round .TimeSecond))}}
 {{else}}
-{{$message := "<@&778219294986207232> 🔔 You can Bump again Now!"}} {{/*Update the RoleID*/}}
-{{$id := sendMessageNoEscapeRetID $channelid $message}}
+{{editChannelName $vcid (print "You can Bump Now")}}
+{{$message := "<@&787355830399270963> 🔔 You can Bump again Now!"}} {{/*Update the RoleID. Make sure this is the same as Bump.gotmpl file.*/}}
+{{$id := sendMessageNoEscapeRetID $reminderchannel $message}}
 {{dbSet 1 "Bump" (str $id)}}
 {{end}}
