@@ -4,7 +4,6 @@
   Recommended trigger: `!d`
 	Trigger type: Regex
   Credits: WickedWizard#3588  
-  Also, please change the ROLEID on line 31.
   Please read through the code properly and try to learn, rather than copying. Same goes for the other cc's here too.
   
   */}}
@@ -28,7 +27,7 @@
         {{$success := sendMessageRetID nil (cembed "title" "DISBOARD: The Public Server List" "url" $url "description" (print .User.Mention ", \nBump Done👍\n[Check it Here](" $url ") \nYou are bump level " $BumpXP.Value) "color" 4229631  "image" (sdict "url" "https://i.imgur.com/PvJZE7j.png") "footer" (sdict "text" "React with 🔔 to configure your Bump Pings"))}}
         {{addMessageReactions nil $success "🔔"}}
         {{$t1 := dbIncr .User.ID "BumpXP" 1}}
-        {{editMessage $reminderchannel (toInt (dbGet 1 "Bump").Value) "~~<@&787355830399270963> 🔔 You can Bump again Now!~~"}} {{/*Update the RoleID here*/}}
+        {{editMessage $reminderchannel (toInt (dbGet 1 "Bump").Value) (print "~~<@&" $bumprole "> 🔔 You can Bump again Now!~~")}} {{/*Update the RoleID here*/}}
     {{end}}
 {{else if eq ($args.Get 0) "lb"}}
         {{$rank := 0}}
