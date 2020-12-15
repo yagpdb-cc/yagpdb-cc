@@ -20,7 +20,8 @@
         {{- end -}}
     {{- else -}}
         {{- .Set "Result" -1 -}}{{- .Set "Found" false -}}
-    {{- end -}} 
+    {{- end -}}
+{{- end -}} 
 {{ end }}
 {{ $arr := cslice 2 5 6 7 9 10 15 }}
 {{ $element := 15 }}
