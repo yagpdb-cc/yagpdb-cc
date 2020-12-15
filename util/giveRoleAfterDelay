@@ -1,0 +1,37 @@
+{{/*
+	This command gives a role *after* delay
+	Usage: "-timedrole @user [time] role_name" [time] can be 10d, 10m, 10s etc.
+ 
+	Recommended trigger: timedrole
+	Trigger type: Command
+ 
+	
+*/}}
+{{/*ACTUAL CODE, DO NOT TOUCH*/}}
+{{ if not .ExecData }}
+{{ $args := parseArgs 3 "Wrong usage: `-timedrole (@user) (time) (role name)`" 
+ (carg "userid" "member to give role" )
+ (carg "duration" "time till role" )
+ (carg "string" "role name" ) }}
+{{ $search := slice .CmdArgs 2 | joinStr "" | lower }} 
+ {{ $role := 0 }} {{/* Role variable */}}
+ {{/* Search for roles */}}
+ {{- range .Guild.Roles -}}
+ {{ if not $role }}
+ {{ $rName := lower .Name }}
+ {{ if or (eq $search $rName) (in $rName $search) }}
+ {{ $role = . }}
+ {{ end }}
+ {{ end }}
+ {{- end -}}
+{{ if $role }}
+{{ $a := (toDuration ($args.Get 1)).Seconds }}
+{{ if not (hasRoleName ($args.Get 2)) }}
+{{ execCC .CCID nil $a (sdict "user" ($args.Get 0) "role" ($args.Get 2)) }}
+the role: {{ $role.Name }} will be given in {{$args.Get 1}} 
+{{ else }} The user has this role already {{ end }} 
+{{ else }} Role not found, make sure its correct {{ end }}
+{{ else }} {{ $user := .ExecData.user }}
+{{ $role := .ExecData.role }}
+{{ giveRoleName $user $role }}
+role has been given to <@{{$user}}> {{end}}
