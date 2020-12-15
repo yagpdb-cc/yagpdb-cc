@@ -18,7 +18,7 @@
 			{{- $outStr = .}}
 		{{- else}}
 			{{- $outStr = (joinStr $separator $outStr .)}}
-		{{- end}}
+		{{- end -}}
 	{{ end}}
 	{{sendMessage $channelID $outStr}}
 {{end}}
