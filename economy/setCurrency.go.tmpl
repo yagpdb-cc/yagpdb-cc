@@ -1,0 +1,19 @@
+{{/*
+	This command sets the amount of money of a user
+	**IMPORTANT** have this custom command require certain roles to be used (for example admin roles) TO PREVENT USERS FROM USING IT!!
+	Usage: "-set @user value"
+ 
+	Recommended trigger: -set(name of currency) 
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordii
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{/* Configuration variables end */}}
+{{ $args := parseArgs 2 "usage is: -set @user amount"
+(carg "userid" "user to give currency to")
+    (carg "int" "amount of currency") }}
+{{ dbSet ($args.Get 0) "coins" ($args.Get 1) }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Set Currency" "color" 3014151 "description" (print $name " total has been set to " ($args.Get 1) " for <@" ($args.Get 0) ">")) }} 

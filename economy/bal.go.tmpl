@@ -1,0 +1,20 @@
+{{/*
+	This command gives you the current amount of money of the user
+	Usage: "-bal" or "-balance"
+ 
+	Recommended trigger: `\A(-|<@!?204255221017214977>\s*)(bal|balance)(\s+|\z)`
+	Trigger type: regex
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{/* Configuration variables end */}}
+
+{{ $args := parseArgs 0 "`-bal user`" (carg "userid" "userid") }}
+{{ $user := .User.Username }}
+{{ $userID := .User.ID }}
+{{ if .CmdArgs }} {{ $user = ((userArg ($args.Get 0)).Username) }} {{ $userID = ($args.Get 0) }}
+{{ end}}
+{{ sendMessage nil (cembed "title" (print $user "'s balance") "description" (print "Cash: " (humanizeThousands (dbGet $userID "coins").Value) "\nBank: " (humanizeThousands (dbGet $userID "bank").Value)) "author" (sdict "name" "Balance" "icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png?width=475&height=475") "footer" (sdict "text" "Economy system" "icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png?width=475&height=475") "thumbnail" (sdict "url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png?width=475&height=475") "color" 4645612)}}

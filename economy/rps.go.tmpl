@@ -1,0 +1,36 @@
+{{/*
+	Rock-Paper-Scissor game
+	Usage: "-rps"
+ 
+	Recommended trigger: rps
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{ $bet := 75 }} {{/* amount to bet */}}
+{{ $cooldown := 120 }} {{/* cooldown in seconds */}}
+{{/* Configuration variables end */}}
+
+{{ $var := randInt 3 }}
+{{ $newcoins := sub ((dbGet .User.ID "coins").Value) $bet }}
+ 
+{{ $args := parseArgs 1 "usage is: -rps [rock/paper/scissor]"
+(carg "string" "choice") }}
+{{ if (dbGet .User.ID "rpscooldown") }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "RPS" "color" 16647943 "description" (print "You have to wait " (humanizeDurationSeconds ((dbGet .User.ID "rpscooldown").ExpiresAt.Sub currentTime)) " before you can play again")) }} {{ else }} {{ dbSetExpire .User.ID "rpscooldown" 1 $cooldown }}
+{{ if lt (toInt (dbGet .User.ID "coins").Value) $bet }}
+not enough coins {{ else }}
+	{{ if eq ($args.Get 0) "rock" }}
+        {{ if eq $var 1 }} you won! added {{ $bet }} {{ $name }} {{ $a := dbIncr .User.ID "coins" $bet }}
+         {{ else if  eq $var 2 }} you lost {{ $bet }} {{ $name }} because YAGPDB took paper {{ dbSet .User.ID "coins" $newcoins }} {{ else }} it was a tie! {{ end }} {{ end }} {{ if eq ($args.Get 0) "paper" }}
+		{{ if eq $var 1 }} you lost {{ $bet }} {{ $name }} because YAGPDB took  scissor {{ dbSet .User.ID "coins" $newcoins }} 
+		{{ else if eq $var 2 }}  you won! added {{ $bet }} {{ $name }} {{ $a := dbIncr .User.ID "coins" $bet }} {{ else }} it was a tie {{ end }}        {{ end }}
+			{{ if eq ($args.Get 0) "scissor" }}
+			{{ if eq $var 1 }}you lost {{ $bet }} {{ $name }} because YAGPDB took rock! {{ dbSet .User.ID "coins" $newcoins }} 
+			{{ else if eq $var 2 }} you won! added {{ $bet }} {{ $name }} {{ $a := dbIncr .User.ID "coins" $bet }} {{ else }} it was a tie {{ end }} 
+{{ end }}
+{{ end }}
+{{ end }}

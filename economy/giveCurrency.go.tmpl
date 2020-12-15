@@ -1,0 +1,27 @@
+{{/*
+	This command gives currency to another user
+	Usage: "-give"
+ 
+	Recommended trigger: give
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{/* Configuration variables end */}}
+{{ $args := parseArgs 2 "usage is: -give @user amount"
+(carg "userid" "user to give currency to")
+    (carg "int" "amount of currency") }}
+{{ if gt ($args.Get 1) 1 }}
+{{ if gt (toInt (dbGet .User.ID "coins").Value) ($args.Get 1) }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Set Currency" "color" 3014151 "description" (print .User " has given <@" ($args.Get 0) "> " $name)) }} 
+{{ $givecoins := dbIncr ($args.Get 0) "coins" ($args.Get 1) }} 
+{{ $newcoins := sub (toInt (dbGet .User.ID "coins").Value) ($args.Get 1) }}
+{{ dbSet .User.ID "coins" $newcoins }}
+{{ else }} 
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Set Currency" "color" 14232643 "description" (print "You do not have " (humanizeThousands ($args.Get 1)) " " $name)) }} 
+{{ end }}
+{{ else }} {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Set Currency" "color" 14232643 "description" (print "Number has to be above 1")) }} 
+{{ end }}

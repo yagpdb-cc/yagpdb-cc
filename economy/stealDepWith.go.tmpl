@@ -1,0 +1,41 @@
+{{/*
+	This command sets the amount of money of a user
+	Usage: `-dep` or `-deposit`
+	`-with` or `-withdraw`
+	`-steal` or `-rob`
+ 
+	Recommended trigger: \A(-|<@!?204255221017214977>\s*)(rob|steal|with|dep|withdraw|deposit)(\s+|\z)
+	Trigger type: regex
+ 
+	Credits:
+	Made by Jordi
+{{/* Configuration variables start */}} 
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{ $cooldown := 21600 }} {{/* Cooldown in seconds before someone can rob/get robbed */}}
+{{/* Configuration variables end */}}
+{{if reFindAllSubmatches `\A(-|<@!?204255221017214977>\s*)(rob|steal)(\s+|\z)` .Message.Content}}
+{{ $args := parseArgs 1 "-steal user" (carg "userid" "user") }}
+{{ $lost1W := mult 0.1 (toInt (dbGet ($args.Get 0) "coins").Value) }}
+{{ $lostW := sub (toInt (dbGet ($args.Get 0) "coins").Value) (toInt $lost1W) }}
+{{ if (dbGet .User.ID "stealcooldown") }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "steal" "color" 16647943 "description" (print "You have to wait " (humanizeDurationMinutes ((dbGet .User.ID "stealcooldown").ExpiresAt.Sub currentTime)) " before you can steal again!")) }} {{ else if (dbGet ($args.Get 0) "stealcooldown2") }} the user you are trying to steal from, has a cooldown! {{ else }} {{ dbSetExpire .User.ID "stealcooldown" 1 $cooldown }} {{ dbSetExpire ($args.Get 0) "stealcooldown2" 1 $cooldown}} {{ $crime := randInt 1 100 }}
+{{ if lt $crime 75 }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Steal" "color" 16647943 "description" (print "You failed robbing " (userArg ($args.Get 0)).Mention ", try better next time!")) }} 
+{{ else }} {{ $frick := dbIncr .User.ID "coins" $lost1W }} {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Steal" "color" 3014151 "description" (print "You robbed " (userArg ($args.Get 0)).Mention " and got " (humanizeThousands $lost1W) " " $name)) }} {{ dbSet ($args.Get 0) "coins" $lostW }} {{ end }} {{ end }}
+{{else if reFindAllSubmatches `\A(-|<@!?204255221017214977>\s*)(with|withdraw)(\s+|\z)` .Message.Content}}
+{{ $args := parseArgs 1 "usage is: -withdraw amount" (carg "int" "amount of coins") }}
+{{ if ge ($args.Get 0) 1 }}
+{{ if ge (toInt (dbGet .User.ID "bank").Value) ($args.Get 0) }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Deposit" "color" 3014151 "description" (print .User " has withdrawn " ($args.Get 0) " " $name)) }} {{ $up := dbIncr .User.ID "coins" ($args.Get 0) }} 
+{{ $newcoins := sub (toInt (dbGet .User.ID "bank").Value) ($args.Get 0) }}
+{{ dbSet .User.ID "bank" $newcoins }}
+{{ else }} you dont have {{ humanizeThousands ($args.Get 0) }} {{ $name }} {{ end }} {{ else }} number has to be above 1 {{ end }}
+{{else if reFindAllSubmatches `\A(-|<@!?204255221017214977>\s*)(dep|deposit)(\s+|\z)` .Message.Content}}
+{{ $args := parseArgs 1 "usage is: -deposit amount" (carg "int" "amount of coins") }}
+{{ if ge ($args.Get 0) 1 }}
+{{ if ge (toInt (dbGet .User.ID "coins").Value) ($args.Get 0) }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Deposit" "color" 3014151 "description" (print .User " has stored " ($args.Get 0) " " $name)) }}  {{ $up := dbIncr .User.ID "bank" ($args.Get 0) }} 
+{{ $newcoins := sub (toInt (dbGet .User.ID "coins").Value) ($args.Get 0) }}
+{{ dbSet .User.ID "coins" $newcoins }}
+{{ else }} you dont have {{ humanizeThousands ($args.Get 0)}} {{ $name }} {{ end }} {{ else }} number has to be above 1 {{ end }}
+{{end}}

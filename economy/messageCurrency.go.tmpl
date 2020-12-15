@@ -1,0 +1,21 @@
+{{/*
+	This command gives currency for sending messages
+ 
+	Recommended trigger: .*
+	Trigger type: regex
+*Note: if you already have a .* regex command, just simply add this command at the bottom of it!*
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $min := 1 }} {{/* the minimum amount people should get for typing*/}}
+{{ $max := 5}} {{/* the maximum amount people should get for typing*/}}
+{{ $cooldown := 20}} {{/* the cooldown before users can receive currency again*/}}
+{{/* Configuration variables end */}}
+ 
+{{ if not (dbGet .User.ID "messagecooldown") }}
+{{ $subt := randInt $min $max }}
+{{ $givecoins := dbIncr .User.ID "coins" $subt }}
+{{ dbSetExpire .User.ID "messagecooldown" 1 $cooldown }}
+{{ end }}

@@ -1,0 +1,29 @@
+{{/*
+	This command begs for money
+	Usage: "-beg"
+ 
+	Recommended trigger: beg
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{ $people := (cslice "Ziyech" "Promes" "Obama" "Trump" "Van Basten" "Hank" "Dest" "Vertonghen" "Son" "Ben Yedder" "Kent" "Musa" "Alex" "Jordi" "David" "Tijl" "Log1c" "Jake" "Joe" "Tadic" "Vaclav Cerny") }} {{/* Names of random people that could give you coins, you can add as many as you like*/}}
+{{ $cooldown := 120 }} {{/* cooldown in seconds*/}}
+{{ $minW := 5 }} {{/* minimum amount of currency to get*/}}
+{{ $maxW := 120 }} {{/* maximum amount of currency to get*/}}
+{{/* Configuration variables end */}}
+{{ $person := (index (shuffle $people) 0) }}
+{{ $bal := dbGet .User.ID "coins" }}
+{{ $newc := randInt $minW $maxW }}
+{{ if (dbGet .User.ID "begcooldown") }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Beg" "color" 16647943 "description" (print "You have to wait " (humanizeDurationSeconds ((dbGet .User.ID "begcooldown").ExpiresAt.Sub currentTime)) " before you can beg again")) }} 
+{{ else }} {{ dbSetExpire .User.ID "begcooldown" 1 $cooldown }} {{ $rand := randInt 1 100 }}
+{{ if lt $rand 15 }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Beg" "color" 16647943 "description" (print "You begged " $person " said no" )) }}
+{{ else }}
+{{ $win := randInt $minW $maxW }} {{ $shush := dbIncr .User.ID "coins" $win }} {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Beg" "color" 3014151 "description" (print "You begged for coins and " $person " gave you " $win " " $name)) }}
+ {{ end }}
+ {{ end }}

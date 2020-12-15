@@ -1,0 +1,28 @@
+{{/*
+	This command lets you work.
+	Usage: "-work"
+ 
+	Recommended trigger: work
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{ $min := 500 }} {{/* the minimum amount people should get for working*/}}
+{{ $max := 1000}} {{/* the maximum amount people should get for working*/}}
+{{ $cooldown := 20}} {{/* the cooldown before users can work again*/}}
+{{/* Configuration variables end */}}
+
+{{ $subt := randInt $min $max }}
+{{ $sub := sub (toInt (dbGet .User.ID "coins").Value) $subt }}
+{{ if (dbGet .User.ID "workcooldown") }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Work" "color" 16647943 "description" (print "You have to wait " (humanizeDurationMinutes ((dbGet .User.ID "workcooldown").ExpiresAt.Sub currentTime)) " before you can work again")) }}
+{{ else }} {{dbSetExpire .User.ID "workcooldown" 1 $cooldown }} {{ $negative := randInt 1 100 }}
+{{ if lt $negative 10 }} 
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Work" "color" 16647943 "description" (print "You messed up at work and  your boss did not pay you")) }}  
+{{ else }}
+{{ $fick := dbIncr .User.ID "coins" $subt }} {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Work" "color" 3014151 "description" (print "You worked and your boss was happy about your work you earned " (humanizeThousands $subt) " " $name)) }} 
+{{ end }}
+{{ end }} 

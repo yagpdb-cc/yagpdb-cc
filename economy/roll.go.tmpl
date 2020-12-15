@@ -1,0 +1,25 @@
+{{/*
+	This command rolls a number.
+	Usage: "-roll"
+  *Note: i recommend disabling the inbuilt roll command*
+ 
+	Recommended trigger: roll
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{ $bet := 75 }} {{/* Amount to bet */}}
+{{/* Configuration variables end */}}
+{{ $newcoins := sub ((dbGet .User.ID "coins").Value) 75 }}
+{{ $roll := randInt 1 25 }}
+{{ if lt (toInt (dbGet .User.ID "coins").Value) $bet }}
+You dont have {{$bet}} {{$name}}!{{else}}
+	{{ if ( ge $roll 18 ) }}
+		{{ sendMessage nil (print "You rolled **" $roll "** and won **" $bet "**" $name) }}{{ $a := dbIncr .User.ID "coins" $bet }}
+	{{ else }} {{ dbSet .User.ID "coins" $newcoins }}
+		{{ sendMessage nil (print "You rolled **" $roll "** and lost **" $bet "** coins") }}
+	{{ end }}
+{{ end }}

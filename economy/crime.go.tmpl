@@ -1,0 +1,32 @@
+{{/*
+	This command lets you commit a crime
+	Usage: "-crime"
+ 
+	Recommended trigger: crime
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{ $cooldown := 1200 }} {{/* cooldown in seconds before being able to do another crime */}}
+{{ $minW := 1000 }} {{/* minimum amount to win when completing crime */}}
+{{ $maxW := 2500}} {{/* maximum amount to win when completing crime */}}
+{{ $minL:= 200}} {{/* minimum amount to lose when failing crime */}}
+{{ $maxL := 400}} {{/* maximum amount to win when failingcrime */}}
+{{/* Configuration variables end */}}
+
+{{ $newc := randInt $minW $maxW }}
+{{ $lost1 := randInt $minL $maxW }}
+{{ $lost := sub (toInt (dbGet .User.ID "coins").Value) (toInt $lost1) }}
+{{ if (dbGet .User.ID "crimecooldown") }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Crime" "color" 16647943 "description" (print "You have to wait " (humanizeDurationMinutes ((dbGet .User.ID "crimecooldown").ExpiresAt.Sub currentTime)) " before you can commit another crime!")) }} 
+{{ else }} {{ dbSetExpire .User.ID "crimecooldown" 1 $cooldown }} {{ $crime := randInt 1 100 }}
+{{ if lt $crime 31 }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Crime" "color" 16647943 "description" (print "You failed committing a crime and lost " (humanizeThousands $newc) " " $name)) }} {{ dbSet .User.ID "coins" $lost }}  
+{{ else }}
+{{ $shush := dbIncr .User.ID "coins" $newc }}
+ {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Crime" "color" 3014151 "description" (print "You commited a crime and gained " (humanizeThousands $newc) " " $name)) }} 
+{{ end }} 
+{{ end }}

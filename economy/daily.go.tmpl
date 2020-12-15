@@ -1,0 +1,22 @@
+{{/*
+	This command lets users claim their daily amount.
+	Usage: "-daily"
+ 
+	Recommended trigger: daily
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{ $daily := 500 }} {{/* amount of  currency to receive when claiming daily bonus*/}}
+{{/* Configuration variables end */}}
+
+{{ if eq (toInt (dbGet .User.ID "dailycooldown").Value) 0 }}
+{{ $silents:= dbIncr .User.ID "coins" $daily }} 
+{{ dbSetExpire .User.ID "dailycooldown" 1 86400 }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Daily" "color" 3014151 "description" (print "You claimed your daily bonus of " $daily " " $name)) }}
+{{ else }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Daily" "color" 16647943 "description" (print "You have to wait " (humanizeDurationMinutes ((dbGet .User.ID "dailycooldown").ExpiresAt.Sub currentTime)) " before you can claim your daily amount again.")) }}
+{{ end }}
