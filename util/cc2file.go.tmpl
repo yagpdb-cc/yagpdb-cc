@@ -12,7 +12,7 @@
 	{{$channelID:= index . 0}} {{$text:= index . 1}} {{$separator:= index . 2}}
 	{{$outStr:= ""}}
 
-	{{- range (split $text $separator)}}
+	{{ range (split $text $separator)}}
 		{{- if gt (add (len $outStr) (len .)) 2000}}
 			{{- sendMessage $channelID $outStr}}
 			{{- $outStr = .}}
