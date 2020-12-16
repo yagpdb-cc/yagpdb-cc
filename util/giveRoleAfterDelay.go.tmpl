@@ -34,4 +34,4 @@ the role: {{ $role.Name }} will be given in {{$args.Get 1}}
 {{ else }} {{ $user := .ExecData.user }}
 {{ $role := .ExecData.role }}
 {{ giveRoleName $user $role }}
-role has been given to <@{{$user}}> {{end}}
+{{end}}
