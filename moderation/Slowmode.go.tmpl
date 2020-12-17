@@ -29,10 +29,10 @@
 {{$db := (dbGet 660 "channels").Value}}
 {{with $db}}
 {{$value := sdict .}}
-{{$value.Set (str $.Channel.ID) (str 5)}}
+{{$value.Set (str $.Channel.ID) (str $slowmodeduration)}}
 {{dbSet 660 "channels" $value}}
 {{else}}
-{{dbSet 660 "channels" (sdict (str $.Channel.ID) (str 5))}}
+{{dbSet 660 "channels" (sdict (str $.Channel.ID) (str $slowmodeduration))}}
 {{end}}
 {{ sendMessage nil (print "done! slowmode has been set to `" $slowmodeduration "`") }}
 {{ else if reFind `\A-slowmode off` .Message.Content }}
