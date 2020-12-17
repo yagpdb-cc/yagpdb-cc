@@ -1,5 +1,5 @@
 {{/*
-	This commans helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it 
+	This command helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it 
  
 	Usage: "-slowmode on (time in seconds) / -slowmode off "
  
@@ -11,31 +11,50 @@
 */}}
  
 {{/* CONFIGURATION VALUES START */}}
-{{$bypassperms := "ManageMessages"}}
-{{$usageperms := "ManageMessages"}}
+{{$bypassperms := "ManageMessages"}}{{/* perms needed to bypass slowmode */}}
+{{$usageperms := "ManageMessages"}}{{/* perms needed for slowmode commands */}}
 {{/* put in the permissions you want the use to have in order to use or bypass the command */}}
 {{/* available perms: Administrator, ManageServer, ReadMessages, SendMessages, SendTTSMessages, ManageMessages, EmbedLinks, AttachFiles, ReadMessageHistory, MentionEveryone, VoiceConnect, VoiceSpeak, VoiceMuteMembers, VoiceDeafenMembers, VoiceMoveMembers, VoiceUseVAD, ManageNicknames, ManageRoles, ManageWebhooks, ManageEmojis, CreateInstantInvite, KickMembers, BanMembers, ManageChannels, AddReactions, ViewAuditLogs  */}}
 {{/* CONFIGURATION VALUES END */}}
  
 {{/* ACTUAL CODE */}}
-{{ dbSet 59 "bypass" $bypassperms }}
-{{ if (in (split (index (split (exec "viewperms") "\n") 2) ", ") $usageperms) }}
-{{ if $refind := reFindAllSubmatches `\A-slowmode on (\d+)` .Message.Content }}
-{{ dbSet 55 .Channel.ID (toInt (index $refind 0 1)) }}
-{{ sendMessage nil (print "done! slowmode has been set to `" (index $refind 0 1) "`") }}
-{{ else if reFindAllSubmatches `\A-slowmode off` .Message.Content }}
-{{ dbDel 55 .Channel.ID }}
+{{ $usageaccess := false }}
+{{ $bypassaccess := false }}
+{{ $viewperms := (split (index (split (exec "viewperms") "\n") 2) ", ") }}
+{{ if (in $viewperms $usageperms)}}{{ $usageaccess = true }}{{end}}
+{{ if (in $viewperms $bypassperms)}}{{ $bypassaccess = true }} {{ end }}
+{{if $usageaccess}}
+{{ if $matches := reFindAllSubmatches `\A-slowmode on (\d+)` .Message.Content }}
+{{$slowmodeduration := (index $matches 0 1)}}
+{{$db := (dbGet 660 "channels").Value}}
+{{with $db}}
+{{$noob := sdict .}}
+{{$noob.Set (str $.Channel.ID) (str 5)}}
+{{dbSet 660 "channels" $noob}}
+{{else}}
+{{dbSet 660 "channels" (sdict (str $.Channel.ID) (str 5))}}
+{{end}}
+{{ sendMessage nil (print "done! slowmode has been set to `" $slowmodeduration "`") }}
+{{ else if reFind `\A-slowmode off` .Message.Content }}
+{{$db := (dbGet 660 "channels").Value}}
+{{if $db}}
+{{$value := sdict $db}}
+{{$value.Del (str $.Channel.ID)}}
+{{dbSet 660 "channels" $value}}
+{{end}}
 the slowmode has been removed from this channel
 {{ end }}
 {{ end }}
-{{ if (not (in (split (index (split (exec "viewperms") "\n") 2) ", ") ((dbGet 59 "bypass").Value))) }}
-{{ if (dbGet 55 .Channel.ID) }}
+{{ if not $bypassaccess}}
+{{$db := (dbGet 660 "channels").Value}}
+{{$value := sdict $db}}
+{{$get := $value.Get (str .Channel.ID)}}
+{{if $get}}
 {{ if $slowmode := dbGet .User.ID .Channel.ID }}
 {{ deleteTrigger 0 }}
 {{ sendDM (print "slowmode is currently active for another " (humanizeDurationSeconds ($slowmode.ExpiresAt.Sub currentTime))) }}
 {{ else }}
-{{ dbSetExpire .User.ID .Channel.ID "epic" (toInt ((dbGet 55 .Channel.ID).Value)) }}
+{{ dbSetExpire .User.ID .Channel.ID "epic" (toInt $get) }}
 {{ end }}
 {{ end }}
 {{ end }}
-
