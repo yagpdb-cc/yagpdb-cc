@@ -43,6 +43,7 @@ the slowmode has been removed from this channel
 {{ end }}
 {{ if not $bypassaccess}}
 {{$db := (dbGet 660 "channels").Value}}
+{{if $db}}
 {{$value := sdict $db}}
 {{$get := $value.Get (str .Channel.ID)}}
 {{if $get}}
@@ -50,6 +51,7 @@ the slowmode has been removed from this channel
 {{ deleteTrigger 0 }}
 {{ else }}
 {{ dbSetExpire .User.ID (str .Channel.ID) "epic" (toInt $get) }}
+{{ end }}
 {{ end }}
 {{ end }}
 {{ end }}
