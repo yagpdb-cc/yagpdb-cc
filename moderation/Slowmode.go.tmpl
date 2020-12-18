@@ -1,4 +1,4 @@
-{{/*
+	{{/*
 	This command helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it 
  
 	Usage: "-slowmode on (time in seconds) / -slowmode off "
@@ -18,26 +18,22 @@
 {{/* CONFIGURATION VALUES END */}}
  
 {{/* ACTUAL CODE */}}
-{{ $usageaccess := false }}
-{{ $bypassaccess := false }}
 {{ $viewperms := (split (index (split (exec "viewperms") "\n") 2) ", ") }}
-{{ if (in $viewperms $usageperms)}}{{ $usageaccess = true }}{{end}}
-{{ if (in $viewperms $bypassperms)}}{{ $bypassaccess = true }} {{ end }}
+{{ $usageaccess := in $viewperms $usageperms }}
+{{ $bypassaccess := in $viewperms $bypassperms }}
 {{if $usageaccess}}
 {{ if $matches := reFindAllSubmatches `\A-slowmode on (\d+)` .Message.Content }}
 {{$slowmodeduration := (index $matches 0 1)}}
-{{$db := (dbGet 660 "channels").Value}}
-{{with $db}}
+{{with (dbGet 660 "channels").Value}}
 {{$value := sdict .}}
 {{$value.Set (str $.Channel.ID) (str $slowmodeduration)}}
 {{dbSet 660 "channels" $value}}
 {{else}}
 {{dbSet 660 "channels" (sdict (str $.Channel.ID) (str $slowmodeduration))}}
 {{end}}
-{{ sendMessage nil (print "done! slowmode has been set to `" $slowmodeduration "`") }}
+done! slowmode has been set to `{{ $slowmodeduration }}`
 {{ else if reFind `\A-slowmode off` .Message.Content }}
-{{$db := (dbGet 660 "channels").Value}}
-{{if $db}}
+{{if $db := (dbGet 660 "channels").Value }}
 {{$value := sdict $db}}
 {{$value.Del (str $.Channel.ID)}}
 {{dbSet 660 "channels" $value}}
@@ -50,11 +46,10 @@ the slowmode has been removed from this channel
 {{$value := sdict $db}}
 {{$get := $value.Get (str .Channel.ID)}}
 {{if $get}}
-{{ if $slowmode := dbGet .User.ID .Channel.ID }}
+{{ if $slowmode := dbGet .User.ID (str .Channel.ID) }}
 {{ deleteTrigger 0 }}
-{{ sendDM (print "slowmode is currently active for another " (humanizeDurationSeconds ($slowmode.ExpiresAt.Sub currentTime))) }}
 {{ else }}
-{{ dbSetExpire .User.ID .Channel.ID "epic" (toInt $get) }}
+{{ dbSetExpire .User.ID (str .Channel.ID) "epic" (toInt $get) }}
 {{ end }}
 {{ end }}
 {{ end }}
