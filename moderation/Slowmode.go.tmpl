@@ -42,8 +42,7 @@ the slowmode has been removed from this channel
 {{ end }}
 {{ end }}
 {{ if not $bypassaccess}}
-{{$db := (dbGet 660 "channels").Value}}
-{{if $db}}
+{{if $db := (dbGet 660 "channels").Value}}
 {{$value := sdict $db}}
 {{$get := $value.Get (str .Channel.ID)}}
 {{if $get}}
