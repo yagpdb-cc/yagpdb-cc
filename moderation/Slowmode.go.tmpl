@@ -31,7 +31,7 @@
 {{else}}
 {{dbSet 660 "channels" (sdict (str $.Channel.ID) (str $slowmodeduration))}}
 {{end}}
-done! slowmode has been set to `{{ $slowmodeduration }}`
+done! slowmode has been set to `{{ $slowmodeduration }}s`
 {{ else if reFind `\A-slowmode off` .Message.Content }}
 {{if $db := (dbGet 660 "channels").Value }}
 {{$value := sdict $db}}
