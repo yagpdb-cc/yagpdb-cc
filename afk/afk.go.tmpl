@@ -14,7 +14,6 @@
 {{ $removeAfkOnMessage := false }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
 {{/* CONFIGURATION VALUE ENDS HERE */}}
 
-{{/* Dont edit below if you don't know what you're doing ! */}}
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}
 {{ if $args := .Args }}
     {{ if eq (lower (index $args 0)) "?afk" }}
