@@ -5,41 +5,68 @@
 	-afk <message>
 	-afk <message> -d <duration>
 
-	Recommended trigger: Command trigger with trigger `afk`
+	Recommended trigger: Regex trigger with trigger `.*`
+
+    Made by Dav!dﾉᵈᶻ#0003 (555791735607787580)
 */}}
-{{ $time := 0 }}
-{{ if .CmdArgs }}
-	{{ $args := .CmdArgs }}
-	{{ $message := "" }}
-	{{ $duration := 0 }}
-	{{ $skip := false }}
-	{{ range $i, $v := $args }}
-		{{- if and (gt (len $v) 1) (not $skip) }}
-			{{- if and (eq $v "-d") (gt (len $args) (add $i 1)) }}
-				{{- $duration = index $args (add $i 1) }}
-				{{- $skip = true }}
-			{{- else }}
-				{{- $message = joinStr " " $message $v }}
-				{{- $skip = false }}
-			{{- end }}
-		{{- else if not $skip }}
-			{{- $skip = false }}
-			{{- $message = joinStr " " $message $v }}
-		{{- else if $skip }}
-			{{- $skip = false }}
-		{{- end -}}
-	{{ end }}
-	{{ $parsedDur := 0 }}
-	{{ with and $duration (toDuration $duration) }} {{ $parsedDur = . }} {{ end }}
-	{{ if $parsedDur }}
-		{{ dbSetExpire .User.ID "afk" $message (div $parsedDur 1000000000) }}
-	{{ else }} {{ dbSet .User.ID "afk" $message }} {{ end }}
-	{{ .User.Mention }}, I set your AFK to `{{ $message }}`.
-{{ else }}
-	{{ if dbGet .User.ID "afk" }}
-		{{ dbDel .User.ID "afk" }}
-		{{ .User.Mention }}, I removed your AFK.
-	{{ else }}
-		Please either provide an afk message with `-afk <reason>`, with a duration `-afk -d <duration> <reason>` or you can remove your AFK with `-afk` (you either did not provide a message or you tried to turn off AFK when you were not).
-	{{ end }}
+
+{{/* CONFIGURATION VALUE STARTS HERE */}}
+{{ $removeAfkOnMessage := false }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
+{{/* CONFIGURATION VALUE ENDS HERE */}}
+
+{{/* Dont edit below if you don't know what you're doing ! */}}
+{{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}
+{{ if .Args }}
+    {{ $args := .Args }}
+    {{ if eq (lower (index $args 0)) "?afk" }}
+        {{ if and (ge (len $args) 2) (not $afk) }}
+            {{ $args = (slice .Args 1) }}
+            {{ $message := "" }}
+            {{ $duration := 0 }}
+            {{ $skip := false }}
+            {{ range $i, $v := $args }}
+                {{- if and (gt (len $v) 1) (not $skip) }}
+                    {{- if and (eq $v "-d") (gt (len $args) (add $i 1)) }}
+                        {{- $duration = index $args (add $i 1) }}
+                        {{- $skip = true }}
+                    {{- else }}
+                        {{- $message = joinStr " " $message $v }}
+                        {{- $skip = false }}
+                    {{- end }}
+                {{- else if not $skip }}
+                    {{- $skip = false }}
+                    {{- $message = joinStr " " $message $v }}
+                {{- else if $skip }}
+                    {{- $skip = false }}
+                {{- end -}}
+            {{ end }}
+            {{ $parsedDur := 0 }}
+            {{ with and $duration (toDuration $duration) }} {{ $parsedDur = . }} {{ end }}
+            {{ if $parsedDur }}
+                {{ dbSetExpire .User.ID "afk" $message (div $parsedDur 1000000000) }}
+            {{ else }} {{ dbSet .User.ID "afk" $message }} {{ end }}
+            {{ .User.Mention }}, I set your AFK to `{{ $message }}`.
+        {{ else if $afk }}
+            Welcome back, {{ .User.Mention }}, I removed your AFK.
+            {{ dbDel .User.ID "afk" }}
+        {{ else }}
+            Please either provide an afk message with `-afk <reason>`, with a duration `-afk -d <duration> <reason>` or you can remove your AFK with `-afk` (you either did not provide a message or you tried to turn off AFK when you were not).
+        {{ end }}
+    {{ else if .Message.Mentions }}
+        {{ with (dbGet (index .Message.Mentions 0).ID "afk") }}
+            {{ $user := userArg .UserID }}
+            {{ $eta := "" }}
+            {{ if gt .ExpiresAt.Unix 0 }} {{ $eta = humanizeDurationSeconds (.ExpiresAt.Sub currentTime) | printf "*%s will be back in around %s.*" $user.Username }} {{ end }}
+            {{ sendMessage nil (cembed
+                "author" (sdict "name" (printf "%s is AFK" $user.String) "icon_url" ($user.AvatarURL "256"))
+                "description" (joinStr "\n\n" $eta .Value)
+                "color" (randInt 0 16777216)
+                "footer" (sdict "text" "Away since")
+                "timestamp" .UpdatedAt
+            ) }}
+        {{ end }}
+    {{ else if and $afk $removeAfkOnMessage }}
+        Welcome back, {{ .User.Mention }}, I removed your AFK.
+        {{ dbDel .User.ID "afk" }}
+    {{ end }}
 {{ end }}
