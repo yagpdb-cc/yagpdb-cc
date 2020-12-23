@@ -16,8 +16,7 @@
 
 {{/* Dont edit below if you don't know what you're doing ! */}}
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}
-{{ if .Args }}
-    {{ $args := .Args }}
+{{ if $args := .Args }}
     {{ if eq (lower (index $args 0)) "?afk" }}
         {{ if and (ge (len $args) 2) (not $afk) }}
             {{ $args = (slice .Args 1) }}
@@ -43,7 +42,7 @@
             {{ $parsedDur := 0 }}
             {{ with and $duration (toDuration $duration) }} {{ $parsedDur = . }} {{ end }}
             {{ if $parsedDur }}
-                {{ dbSetExpire .User.ID "afk" $message (div $parsedDur 1000000000) }}
+                {{ dbSetExpire .User.ID "afk" $message (toInt $parsedDur.Seconds) }}
             {{ else }} {{ dbSet .User.ID "afk" $message }} {{ end }}
             {{ .User.Mention }}, I set your AFK to `{{ $message }}`.
         {{ else if $afk }}
