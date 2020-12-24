@@ -77,14 +77,14 @@
         {{ $input := index .CmdArgs 1 | lower }}
         {{ if eq $input "true" "y" }}
             {{ $currentSettings.Set "announcements" true }}
-            Successfully set the value for announcements to `{{ $input }}` 
+            Successfully set the value for announcements to `true` 
             {{ dbSet 0 "xpSettings" $currentSettings }}
-        {{ else if eq $input "false" "y" }}
+        {{ else if eq $input "false" "n" }}
             {{ $currentSettings.Set "announcements" false }}
-            Successfully set the value for announcements to `{{ $input }}` 
+            Successfully set the value for announcements to `false` 
             {{ dbSet 0 "xpSettings" $currentSettings }}
         {{ else }}
-            That was not a valid option. The only valid options are "true", "false", "y" and "n".
+            That was not a valid value. The only valid settings are "true" and "false".
         {{ end }}
 
 	{{ else if eq (index .CmdArgs 0) "view" }}
@@ -95,7 +95,7 @@
 			$currentSettings.max
 			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration)) 
 			$channel
-           		 $currentSettings.announcements
+           		$currentSettings.announcements
 		}} {{/* Construct the embed description */}}
 		{{ if $isSaved }} {{/* If the settings are in DB */}}
 			{{ sendMessage nil (cembed "title" "Level Settings" "description" $formatted "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")) }}
