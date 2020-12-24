@@ -84,7 +84,7 @@
             Successfully set the value for announcements to `false` 
             {{ dbSet 0 "xpSettings" $currentSettings }}
         {{ else }}
-            That was not a valid setting. The only valid settings are "true" and "false".
+            That was not a valid option. The only valid options are "true" and "false".
         {{ end }}
 
 	{{ else if eq (index .CmdArgs 0) "view" }}
