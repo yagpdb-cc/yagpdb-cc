@@ -12,8 +12,11 @@
 {{$display := ""}}
 {{$page := 1}} {{/* Default page to start at */}}
 {{if ($args.IsSet 1)}}
+{{if ge ($args.Get 1) 0}}
 {{$page = ($args.Get 1)}}
-{{end}}
+{{else}}
+{{$page = 1}}
+{{end}}{{end}}
 {{$skip := mult (sub $page 1) 10}}
 {{$cases := dbTopEntries $id 10 $skip}} 
 {{- range $cases -}}
