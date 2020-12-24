@@ -1,0 +1,67 @@
+{{/*
+	This command sends your CC(s) code in a text file, rather than "plain" Discord messages, preserving Tabs, markdown, etc. 
+	You can especify more than one ID or trigger, and bot will generate one file per input parameter. If none are provided, output will be CC list
+	
+	Usage: `-cc2file <ID or Trigger> [ID or Trigger] [ID or Trigger]...`. For example: `-cc2file 10 "te st" 23`
+	Recommended trigger: Command trigger with trigger `cc2file`.
+	Configuration variables: None
+*/}}
+
+
+{{define "sendLongMessage"}}	{{/*INPUT: cslice channelIDToSend textToSend stringSeparator*/}}
+	{{$channelID:= index . 0}} {{$text:= index . 1}} {{$separator:= index . 2}}
+	{{$outStr:= ""}}
+
+	{{ range (split $text $separator)}}
+		{{- if gt (add (len $outStr) (len .)) 2000}}
+			{{- sendMessage $channelID $outStr}}
+			{{- $outStr = .}}
+		{{- else}}
+			{{- $outStr = (joinStr $separator $outStr .)}}
+		{{- end -}}
+	{{ end}}
+	{{sendMessage $channelID $outStr}}
+{{end}}
+
+{{$args:= cslice}} {{$selectedArgs:= cslice}}
+{{with .ExecData}}
+	{{$args = .}}
+{{else}}
+	{{range .CmdArgs}}
+		{{- if not (in $args .)}}
+			{{- $args = $args.Append .}}
+		{{- end}}
+	{{- end}}
+{{end}}
+{{$numArgs:= len $args}}
+
+{{if gt $numArgs 5}}
+	{{$selectedArgs = slice $args 0 5}}
+{{else}}
+	{{$selectedArgs = $args}}
+{{end}}
+
+{{range $selectedArgs}}
+	{{- $answer:= exec "cc" .}}
+	{{- $answerLines:= split $answer "\n"}}
+	{{- $extractedCode:= slice $answerLines 2 (sub (len $answerLines) 1)}}
+	{{- $firstLine:= index $answerLines 0}}
+
+	{{- if in $firstLine "here is a list of"}}
+		{{- sendMessage nil (printf "❌ CC `%s` not found" .)}}
+	{{- else if in $firstLine "More than 1 matched command"}}
+		{{- $msj:= reReplace "``" (printf "`%s`: %s" . $answer) "`<Empty trigger specified>`"}}
+		{{- template "sendLongMessage" (cslice nil $msj "\n")}}
+	{{- else}}
+		{{- sendMessage nil (complexMessage
+			"content" $firstLine
+			"file" (joinStr "\n" $extractedCode)
+		)}}
+	{{- end}}
+{{else}}
+	{{template "sendLongMessage" (cslice nil (exec "cc") "\n")}}
+{{end}}
+
+{{if gt $numArgs 5}}
+	{{scheduleUniqueCC .CCID nil 1 "cc2file - remaining args" (slice $args 5 $numArgs)}}
+{{end}}
