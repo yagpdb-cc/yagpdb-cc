@@ -14,9 +14,10 @@
 {{ $removeAfkOnMessage := false }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
 {{/* CONFIGURATION VALUE ENDS HERE */}}
 
-{{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}
+{{/* Dont edit below if you don't know what you're doing ! */}}
+{{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
 {{ if $args := .Args }}
-    {{ if eq (lower (index $args 0)) "?afk" }}
+    {{ if eq (lower (index $args 0)) (print $prefix "afk") }}
         {{ if and (ge (len $args) 2) (not $afk) }}
             {{ $args = (slice .Args 1) }}
             {{ $message := "" }}
@@ -54,7 +55,7 @@
         {{ with (dbGet (index .Message.Mentions 0).ID "afk") }}
             {{ $user := userArg .UserID }}
             {{ $eta := "" }}
-            {{ if not .ExpiresAt.IsZero }} {{ $eta = humanizeDurationSeconds (.ExpiresAt.Sub currentTime) | printf "*%s will be back in around %s.*" $user.Username }} {{ end }}
+            {{ if gt .ExpiresAt.Unix 0 }} {{ $eta = humanizeDurationSeconds (.ExpiresAt.Sub currentTime) | printf "*%s will be back in around %s.*" $user.Username }} {{ end }}
             {{ sendMessage nil (cembed
                 "author" (sdict "name" (printf "%s is AFK" $user.String) "icon_url" ($user.AvatarURL "256"))
                 "description" (joinStr "\n\n" $eta .Value)
