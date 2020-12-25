@@ -12,7 +12,7 @@
 {{$display := ""}}
 {{$page := 1}} {{/* Default page to start at */}}
 {{if ($args.IsSet 1)}}
-{{if ge ($args.Get 1) 0}}
+{{if ge ($args.Get 1) 1}}
 {{$page = ($args.Get 1)}}
 {{else}}
 {{$page = 1}}
