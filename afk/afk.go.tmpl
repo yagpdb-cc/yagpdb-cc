@@ -11,14 +11,14 @@
 */}}
 
 {{/* CONFIGURATION VALUE STARTS HERE */}}
-{{ $removeAfkOnMessage := false }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
+{{ $removeAfkOnMessage := true }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
 {{/* CONFIGURATION VALUE ENDS HERE */}}
 
 {{/* Dont edit below if you don't know what you're doing ! */}}
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
 {{ if $args := .Args }}
     {{ if eq (lower (index $args 0)) (print $prefix "afk") }}
-        {{ if and (ge (len $args) 2) (not $afk) }}
+        {{ if and (ge (len $args) 4) (not $afk) }}
             {{ $args = (slice .Args 1) }}
             {{ $message := "" }}
             {{ $duration := 0 }}
@@ -51,6 +51,9 @@
         {{ else }}
             Please either provide an afk message with `-afk <reason>`, with a duration `-afk -d <duration> <reason>` or you can remove your AFK with `-afk` (you either did not provide a message or you tried to turn off AFK when you were not).
         {{ end }}
+    {{ else if and $afk $removeAfkOnMessage }}
+        Welcome back, {{ .User.Mention }}, I removed your AFK.
+        {{ dbDel .User.ID "afk" }}
     {{ else if .Message.Mentions }}
         {{ with (dbGet (index .Message.Mentions 0).ID "afk") }}
             {{ $user := userArg .UserID }}
@@ -64,8 +67,5 @@
                 "timestamp" .UpdatedAt
             ) }}
         {{ end }}
-    {{ else if and $afk $removeAfkOnMessage }}
-        Welcome back, {{ .User.Mention }}, I removed your AFK.
-        {{ dbDel .User.ID "afk" }}
     {{ end }}
 {{ end }}
