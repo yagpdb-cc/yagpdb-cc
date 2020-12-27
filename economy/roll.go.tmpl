@@ -13,7 +13,7 @@
 {{ $name := "coins" }} {{/* the name of the currency */}}
 {{ $bet := 75 }} {{/* Amount to bet */}}
 {{/* Configuration variables end */}}
-{{ $newcoins := sub ((dbGet .User.ID "coins").Value) 75 }}
+{{ $newcoins := sub ((dbGet .User.ID "coins").Value) $bet }}
 {{ $roll := randInt 1 25 }}
 {{ if lt (toInt (dbGet .User.ID "coins").Value) $bet }}
 You dont have {{$bet}} {{$name}}!{{else}}
