@@ -3,6 +3,7 @@
 {{$channelID := 730216142924415006}} {{/* Channel ID to send the bday msgs */}}
 {{$bdayMsg := "Congratulations for your birthday!"}}
 {{$invertedOrder := false}}
+{{$yearOptional := false}}
 {{$kickUnderAge := false}}
 {{$banUnderAge := true}}
 {{/* End */}}
@@ -23,8 +24,8 @@
 			{{if and (eq (len .) 2) $isMod}} {{with index . 1 | userArg}} {{$user = .}} {{else}} {{$error = "Invalid User."}} {{end}} {{end}}
 		{{end}}
 		{{with $map}}
-			{{if eq (len .) 3}} {{$counter := 0}}
-				{{$year := index . 2 | toInt}}
+			{{if or (eq (len .) 3) $yearOptional}} {{$counter := 0}}
+				{{if eq (len .) 3}}{{$year = index . 2 | toInt}}{{else}}{{$year = 2000}}{{end}}
 				{{if $invertedOrder}} {{$day = index . 1 | toInt}} {{$month = index . 0 | toInt}}
 				{{else}} {{$day = index . 0 | toInt}} {{$month = index . 1 | toInt}}
 				{{end}}

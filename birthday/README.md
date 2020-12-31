@@ -6,6 +6,7 @@ All commands can be used with bday or birthday. Example: -getbday or -getbirthda
 This code will also kick/ban users if they are under 13 years old, if you want it to.<p>
 Change ONLY the user variables<p>
 $mods is the list of the Roles IDs that should be able to use all commands.<p>
+Year can be set to optional by editing the $yearOptional variable to true, the default year is 2000 when this variable is true.<p>
 User can only set their birthday once. After that a mod will have to set a new one or delete the existing one.<p>
 Trigger Type: regex<p>
 Trigger: \A-(my|start|stop|set|get|del)b(irth)?days?
