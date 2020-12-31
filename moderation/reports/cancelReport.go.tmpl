@@ -14,11 +14,10 @@
 {{$p := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "prefix")) 0 1}}
 {{$Escaped_Prefix := reReplace `[\.\[\]\-\?\!\\\*\{\}\(\)\|]` $p `\${0}`}}
 {{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}
-{{$response:= sendMessageRetID nil "Did not set regex to match Server Prefix!"}}{{deleteTrigger}}
-{{deleteMessage nil $response}}{{else}}
-{{if not (ge (len .CmdArgs) 3)}}
-    ```{{.Cmd}} <Message:ID> <Key:Text> <Reason:Text>```
-    Not enough arguments passed.
+Did not set regex to match Server Prefix! {{deleteTrigger}}
+{{if lt (len .CmdArgs) 3}}
+```{{.Cmd}} <Message:ID> <Key:Text> <Reason:Text>```
+Not enough arguments passed.
 {{else}}
     {{$s := sdict (dbGet 2000 "reportSettings").Value}}
     {{$rL := (toInt64 $s.reportLog)}}
@@ -33,14 +32,13 @@
     {{$userKey := (dbGet .User.ID "key").Value|str}}
     {{if eq $user.ID .User.ID}}
             {{if eq "used" $userKey}}
-                {{$response := sendMessageRetID nil "Your latest report was already cancelled!"}}
-                {{deleteMessage nil $response}}
+Your latest report was already cancelled!
             {{else}}
-            {{if eq (index .CmdArgs 1|str) $userKey}}
+            {{if eq (index .CmdArgs 1) $userKey}}
                 {{if ge (len .CmdArgs) 3}}
                     {{$reason := joinStr " " (slice .CmdArgs 2)}}
                     {{with $r}}
-                        {{.Set "Author" (sdict "name" (printf "%s (ID %d)" $user.String $user.ID) "icon_url" ($user.AvatarURL "256"))}}
+                        {{.Set "Author" (sdict "name" (printf "%s (ID %d)" $user $user.ID) "icon_url" ($user.AvatarURL "256"))}}
                         {{.Footer.Set "Icon_URL" .Footer.IconURL}}
                         {{.Set "description" (print .Description (printf "\nCancellation of this report was requested. \n Reason: `%s`" $reason))}}
                         {{.Set "color" 16711935}}
@@ -53,12 +51,9 @@
                     {{dbSet .User.ID "key" "used"}}
                 {{end}}
             {{else}}
-                {{$response := sendMessageRetID nil "Invalid key provided!"}}
-                {{deleteMessage nil $response}}
+Invalid key provided!
             {{end}}
         {{end}}
         {{else}}
-            {{$response := sendMessageRetID nil "You are not the author of this report!"}}
-            {{deleteMessage nil $response}}
-    {{end}}
-{{end}}{{end}}
+You are not the author of this report!
+    {{end}}{{end}}{{end}}{{deleteResponse}}
