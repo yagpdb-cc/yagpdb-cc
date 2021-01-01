@@ -18,7 +18,7 @@
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
 {{ if $args := .Args }}
     {{ if eq (lower (index $args 0)) (print $prefix "afk") }}
-        {{ if and (ge (len $args) 4) (not $afk) }}
+        {{ if and (ge (len $args) 2) (not $afk) }}
             {{ $args = (slice .Args 1) }}
             {{ $message := "" }}
             {{ $duration := 0 }}
