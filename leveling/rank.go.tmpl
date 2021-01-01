@@ -111,7 +111,7 @@
 
 {{ if $bg }}
 {{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=" ((dbGet $user.ID "hex").Value)))) }} {{ end }}
-	 {{ else if $bg }}
+	 {{ else }}
 	{{ sendMessage nil (cembed $embed) }}
 {{ end }}
 {{ end }}
