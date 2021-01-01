@@ -20,6 +20,7 @@ Should you need further information because something is unclear, or want to rep
         * [Pending Cancellation Request](#Pending-Cancellation-Request)
         * [Notification Message](#Notification-Message)
 * [Acknowledgements](#Acknowledgements)
+* [Planned Features](#Planned-Features)
 * [Author](#Author)
 </details>
 
@@ -42,7 +43,7 @@ Make for each custom command file a separate custom command, preferrably in the 
 4. Run the **case sensitive** command `-ru dbSetup`
 5. Done! YAGPDB.xyz will now take care of the rest and confirms setting up with an appropiate response.  
 
-| ℹ Make sure to change `-` in both RegEx triggers to match YAGPDB's prefix in your server! <br/> It is also recommened to create a command override disabling the `report` command completely. |
+| ℹ Make sure to change `-` in both RegEx triggers to match YAGPDB's prefix in your server!<br/>It is also recommened to create a command override disabling the `report` command completely. |
 | --- |
 
 # Usage
@@ -66,8 +67,8 @@ Please take some time to read the intention behind a few options:
 
 Of course, there are more options than just these four, however the missing ones are a fair bit clearer than these.
 
-***
-Once a report is closed, YAGPDB.xyz will add a white flag (🏳️) as reaction to signalize a closed report.
+| ✅ Once a report is closed, YAGPDB.xyz will add a white flag (🏳️) as reaction to signalize a closed report. |
+| --- |
 
 ### Colour Coding
 Each state has its own colour, for one to make it easier on the eyes and also to make it easier for you and your staff team recognizing in what state each report is.
@@ -92,7 +93,14 @@ Each state has its own colour, for one to make it easier on the eyes and also to
 ![Notification Example](https://cdn.discordapp.com/attachments/767771719720632350/793107470993588254/unknown.png)
 
 # Acknowledgements
-I also want to thank [Devonte](https://github.com/NaruDevnote), known on Discord as `Devonte#0745`, for helping me developing and fine-tuning this custom command set, pulling me back up when I failed and was on the verge of giving up, as well as pointing out vulnerabilities.
+I also want to thank [Devonte](https://github.com/NaruDevnote), known on Discord as `Devonte#0745`, for helping me developing and fine-tuning this custom command set.
+
+# Planned Features
+| ℹ These features are planned and still under development. To request new features, please follow the link on my profile. |
+| --- |
+
+- [ ] Custom message in notification.
+- [ ] Moderation menu to execute on the reported user for super-duper quick access.
 
 # Author
 This Custom-Command package was created by [Olde7325](https://github.com/Olde7325).
