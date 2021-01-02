@@ -8,7 +8,7 @@
 */}}
 {{$args := parseArgs 1 "correct usuage is -cases @user" (carg "member" "target user") (carg "int" "page number")}}
 {{$user := ($args.Get 0).User}}
-{{$id := ($args.Get 0).User.ID}}
+{{$id := $user.ID}}
 {{$display := ""}}
 {{$page := 1}} {{/* Default page to start at */}}
 {{if ($args.IsSet 1)}}
