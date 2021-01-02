@@ -10,7 +10,8 @@ An integrated Suggetion System with all commands condensed into a Single CC. Thi
 
     (?i)\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)
 
-**Note:** If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.
+| ⚠ If your prefix is not `-` replace the `-` at the start of the trigger with your prefix. |
+| --- |
 
 Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`
 
@@ -32,9 +33,11 @@ Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?2
 
    The channel where suggestions which have been marked as approved are sent. This provides a good way to organise all approved suggestions. This provides a good way to organise all implemented suggestions into a separate channel. It is very much possible to set the same channel for tracking approved+implemented suggestions by using the same channel ID in both variables.
 
-_Note:_ Among the **above** variables all channels can be separate or same. All combinations are possible.
+| ℹ Among the **above** variables all channels can be separate or same. All combinations are possible. |
+| --- |
 
-**IMPORTANT - DO NOT LEAVE ANY CHANNEL ID AS BLANK. YOU CAN PUT ALL IDS SAME BUT NEVER LEAVE THEM BLANK!!**
+| 🛑 DO NOT LEAVE ANY CHANNEL ID AS BLANK. YOU CAN PUT ALL IDS SAME BUT NEVER LEAVE THEM BLANK! |
+| --- |
 
 5. `$Mod_Roles` -
 
@@ -46,11 +49,19 @@ _Note:_ Among the **above** variables all channels can be separate or same. All 
 
 7. `$Upvote` -
 
-   The emoji for upvote reaction. Supports both custom as well as inbuilt emojis. For inbuilt emojis, it is recommended to use corresponding unicode characters. Example : "👍".
+   Upvote reaction emoji to use; inbuilt and custom emojis are both supported. If using a custom emoji, use the `name:id` / `a:name:id` format (for animated emojis). Otherwise, use the corresponding Unicode character, for example, `👍`.
 
 8. `$Downvote` -
 
-   The emoji for downvote reaction. Supports both custom as well as inbuilt emojis. For inbuilt emojis, it is recommended to use corresponding unicode characters. Example : "👎".
+   Downvote reaction emoji to use; inbuilt and custom emojis are both supported. If using a custom emoji, use the `name:id` / `a:name:id` format (for animated emojis). Otherwise, use the corresponding Unicode character, for example, `👍`.
+
+| ℹ When using unicode (inbuilt) emoji, make sure your code looks like the following: |
+| --- |
+
+```go
+{{$Upvote:="👍"}}
+{{$Downvote:="👎"}}
+```
 
 # Commands
 
@@ -102,4 +113,5 @@ _Note:_ Among the **above** variables all channels can be separate or same. All 
       Syntax: `sa comment <Suggestion ID> <New Comment>`
       Use: Updates comment of a new/approved/implemented Suggestion.
 
-_Note:_ Precede all commands with @YAGPDB.xyz or prefix to trigger them
+| ℹ Precede all commands with @YAGPDB.xyz or prefix to trigger them. |
+| --- |
