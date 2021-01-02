@@ -16,17 +16,17 @@
 {{$Upvote:="upvote:524907425531428864"}}
 {{$Downvote:="downvote:524907425032175638"}}
 {{/* CONFIGURATION AREA ENDS */}}
- 
+
 {{$globalDict:=dict "chans" (dict $Suggestion_Channel true $Approved_Channel true $Implemented_Channel true) "msg" .nil}}
 {{$Prefix:=index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
-{{$Escaped_Prefix:=reReplace `[\.\[\]\-\?\!\\\*\{\}\(\)\|]` $Prefix `\${0}`}}
+{{$Escaped_Prefix:=reReplace `[\.\[\]\-\?\!\\\*\{\}\(\)\|\+]` $Prefix `\${0}`}}
 {{$error:=""}}
 {{$Syntax:=""}}
 {{$IS_Mod:=false}}
 {{if in (slice (exec "viewperms") (add 25 (len .User.Username))) `Administrator`}}{{$IS_Mod =true}}{{else}}{{range $Mod_Roles}}{{if in $.Member.Roles .}}{{$IS_Mod =true}}{{end}}{{end}}{{end}}
 {{$Attachments:=""}}{{$Img_Set:=false}}
 
-{{if not (reFind (print `\A\` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}{{$error ="Did not set regex to match Server Prefix"}}{{$Syntax =`Prefix/Yag Mention <Command> <Args>`}}{{else}}
+{{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}{{$error ="Did not set regex to match Server Prefix"}}{{$Syntax =`Prefix/Yag Mention <Command> <Args>`}}{{else}}
 {{if reFind `(?i)\bsuggest(ion)?\b` .Cmd}}
 	{{$Syntax =print .Cmd " <Suggestion_Here>"}}
 	{{$col:=16777215}}{{$pos:=0}}{{$r:=.Member.Roles}}{{range .Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $pos .Position)}}{{$pos =.Position}}{{$col =.Color}}{{end}}{{end}}	
