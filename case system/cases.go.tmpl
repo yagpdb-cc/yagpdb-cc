@@ -19,12 +19,11 @@
 {{end}}{{end}}
 {{$skip := mult (sub $page 1) 10}}
 {{$cases := dbTopEntries $id 10 $skip}}
-{{if not $cases}}
-{{$display = "`No Cases exists on this page`"}}
+{{range $cases}}
+		{{- $value := str .Value }} 
+		{{- $display = joinStr "" $display "\n" $value -}} 
 {{else}}
-{{- range $cases -}}
-		{{ $value := str .Value }} 
-		{{ $display = joinStr "" $display "\n" $value}} 
-{{- end -}}{{- end -}}
+{{$display = "`No cases exist on this page`"}}
+{{end}}
 {{$id := sendMessageRetID nil (cembed "author" (sdict "name" (print $user.Username " (" $user.ID ")") "icon_url" ($user.AvatarURL "512")) "title" "Cases" "description" $display "footer" (sdict "text" (print "Page " $page)) "color" 0x00ffd9)}}
 {{addMessageReactions nil $id "◀️" "▶️"}}
