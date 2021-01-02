@@ -11,14 +11,14 @@
 {{$b := ($args.Get 0)}}
 {{with (dbGet $b "viewcase")}}	
 {{$a = sdict .Value}}
-	{{$name = $a.Get "name"}}
-	{{$iconurl = $a.Get "avatar"}}
-	{{$warnname = $a.Get "warnname"}}
-	{{$reason = $a.Get "reason"}}
-	{{$action = $a.Get "action"}}
-    	{{$userid = $a.Get "userid"}}
-	{{$msgid = $a.Get "msgid"}}
-	{{$channel = $a.Get "channel"}}
+	{{$name = $a.name}}
+	{{$iconurl = $a.avatar}}
+	{{$warnname = $a.warnname}}
+	{{$reason = $a.reason}}
+	{{$action = $a.action}}
+    	{{$userid = $a.userid}}
+	{{$msgid = $a.msgid}}
+	{{$channel = $a.channel}}
 {{$embed := cembed "author" (sdict "name" $name "url" "" "icon_url" $iconurl) "description" (print "[**Jump to Warn**](https://discordapp.com/channels/" $server "/" $channel "/" $msgid "/)\n**User** : `" $warnname "`\t`(" $userid ")`\n **Action** : `" $action "`\n **Reason** : `" $reason "`") "color" 0x00ff00 "footer" (sdict "text" (print "Case#" $b))}}
 {{sendMessage nil $embed}} 
 {{else}}
