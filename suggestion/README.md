@@ -53,7 +53,7 @@ Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?2
 
 8. `$Downvote` -
 
-   The emoji for downvote reaction. Supports both custom as well as inbuilt emojis. For inbuilt emojis, it is recommended to use corresponding unicode characters, like `👎`.
+   Downvote reaction emoji to use; inbuilt and custom emojis are both supported. If using a custom emoji, use the `name:id` / `a:name:id` format (for animated emojis). Otherwise, use the corresponding Unicode character, for example, `👍`.
 
 | ℹ When using unicode (inbuilt) emoji, make sure your code looks like the following: |
 | --- |
