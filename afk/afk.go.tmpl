@@ -11,16 +11,15 @@
 */}}
 
 {{/* CONFIGURATION VALUE STARTS HERE */}}
-{{ $removeAfkOnMessage := true }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
+{{ $removeAfkOnMessage := false }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
 {{/* CONFIGURATION VALUE ENDS HERE */}}
 
-{{/* Dont edit below if you don't know what you're doing ! */}}
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
 {{ if $args := .Args }}
     {{ if eq (lower (index $args 0)) (print $prefix "afk") }}
         {{ if and (ge (len $args) 2) (not $afk) }}
             {{ $args = (slice .Args 1) }}
-            {{ $message := "" }}
+            {{ $message := "No reason setted" }}
             {{ $duration := 0 }}
             {{ $skip := false }}
             {{ range $i, $v := $args }}
@@ -43,7 +42,9 @@
             {{ with and $duration (toDuration $duration) }} {{ $parsedDur = . }} {{ end }}
             {{ if $parsedDur }}
                 {{ dbSetExpire .User.ID "afk" $message (toInt $parsedDur.Seconds) }}
-            {{ else }} {{ dbSet .User.ID "afk" $message }} {{ end }}
+            {{ else }} 
+                {{ dbSet .User.ID "afk" $message }} {
+            {{ end }}
             {{ .User.Mention }}, I set your AFK to `{{ $message }}`.
         {{ else if $afk }}
             Welcome back, {{ .User.Mention }}, I removed your AFK.
@@ -61,7 +62,7 @@
             {{ if gt .ExpiresAt.Unix 0 }} {{ $eta = humanizeDurationSeconds (.ExpiresAt.Sub currentTime) | printf "*%s will be back in around %s.*" $user.Username }} {{ end }}
             {{ sendMessage nil (cembed
                 "author" (sdict "name" (printf "%s is AFK" $user.String) "icon_url" ($user.AvatarURL "256"))
-                "description" (joinStr "\n\n" $eta .Value)
+                "description" (print $eta "\n\nReason: **" .Value "**")
                 "color" (randInt 0 16777216)
                 "footer" (sdict "text" "Away since")
                 "timestamp" .UpdatedAt
