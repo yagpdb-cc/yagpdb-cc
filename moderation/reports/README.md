@@ -38,7 +38,7 @@ Should you need further information because something is unclear, or want to rep
 Make for each custom command file a separate custom command, preferrably in the same category to keep them neat and organized. Please make sure to follow each step precisely and to use the correct trigger and trigger type, as well.
 
 #### Here's what you have to do:
-1. Disable the native report command, found here: `Control Panel > Tools & Utilities > Moderation`, like [this](https://discord.com/channels/766370592445956106/767771719720632350/795330585618022420)
+1. Disable the native report command, found here: `Control Panel > Tools & Utilities > Moderation`, like [this](https://cdn.discordapp.com/attachments/767771719720632350/795330583303028746/unknown.png)
 2. Configure the variables in [the main command](customReport.go.tmpl) as described there.
 4. Run the **case sensitive** command `-ru dbSetup`
 5. Done! YAGPDB.xyz will now take care of the rest and confirms setting up with an appropiate response.  
