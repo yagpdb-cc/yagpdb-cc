@@ -38,7 +38,7 @@ Should you need further information because something is unclear, or want to rep
 Make for each custom command file a separate custom command, preferrably in the same category to keep them neat and organized. Please make sure to follow each step precisely and to use the correct trigger and trigger type, as well.
 
 #### Here's what you have to do:
-1. Disable the native report command, found here: `Control Panel > Tools & Utilities > Moderation`, like [this](https://cdn.discordapp.com/attachments/767771719720632350/795330583303028746/unknown.png)
+1. Disable the native report command, found here: `Control Panel > Tools & Utilities > Moderation`, like [this](#Disabled-Report-Command)
 2. Configure the variables in [the main command](customReport.go.tmpl) as described there.
 4. Run the **case sensitive** command `-ru dbSetup`
 5. Done! YAGPDB.xyz will now take care of the rest and confirms setting up with an appropiate response.  
@@ -51,7 +51,7 @@ For [the main command](customReport.go.tmpl) it is a RegEx trigger type with the
 [The second command](cancelReport.go.tmpl) requires a RegEx trigger as well, with the trigger being `\A-c(ancel)?r(eport)?(\s+|\z)`.
 The [reaction handler](reactionHandler.go.tmpl) needs a Reaction trigger with "Added reactions only" selected.
 
-| ℹ Make sure to change `-` in both RegEx triggers to match YAGPDB's prefix in your server!<br/>It is also recommended to create a [command override](https://cdn.discordapp.com/attachments/767771719720632350/795328377158369330/unknown.png) disabling the `report` command completely. |
+| ℹ Make sure to change `-` in both RegEx triggers to match YAGPDB's prefix in your server!<br/>It is also recommened to create a [command override](#Command-Override-Example) disabling the `report` command completely. |
 | --- |
 
 # Usage
@@ -113,3 +113,11 @@ I also want to thank [Devonte](https://github.com/NaruDevnote), known on Discord
 # Author
 This Custom-Command package was created by [Olde7325](https://github.com/Olde7325).
 The author does not take any responsibilty for bugs and other issues caused by altered code beyond the intended configuaration as described [further up](#Setting-Up).
+
+### Screenshots
+
+#### Command Override Example
+![Command Override](https://cdn.discordapp.com/attachments/767771719720632350/795328377158369330/unknown.png)
+
+#### Disabled Report Command
+![Disable Report Cmd](https://cdn.discordapp.com/attachments/767771719720632350/795330583303028746/unknown.png)
