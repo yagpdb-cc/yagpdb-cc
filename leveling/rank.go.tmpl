@@ -17,8 +17,6 @@
 {{ $color := 14232643 }} {{/* Embed color */}} 
 {{ $user := .User }} {{/* Target user */}}
 {{ $colorSet := false }}
-{{ with dbGet .User.ID "background" }}
-{{ $background = .Value }} {{end}}
 
 {{ with .CmdArgs }}
 	{{ $temp := userArg (index . 0) }}
@@ -106,6 +104,8 @@
 {{ if ($rankcard) }}
 {{ $rank = or $rank "100" }}
 {{ $username := urlescape ($user.Username) }}
+{{ with dbGet $user.ID "background" }}
+{{ $background = .Value }} {{end}}
 {{$pfp := "https://discord.com/assets/322c936a8c8be1b803cd94861bdfa868.png"}}
 {{if $user.Avatar}} {{$pfp = ($user.AvatarURL "256")}} {{end}}
 
