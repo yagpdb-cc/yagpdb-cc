@@ -62,7 +62,7 @@
 {{if and $isUnderAge $kickUnderAge (not $banUnderAge) (not $isMod)}} {{execAdmin "kick" $user "We do not allow users under 13 in this server."}} {{end}}
 {{if and $isUnderAge $banUnderAge (not $isMod)}} {{execAdmin "ban" $user "We do not allow users under 13 in this server."}} {{end}}
 {{with .ExecData}}
-	{{if eq (printf "%T" .) "int64"}} {{scheduleUniqueCC $.CCID $channelID . "bdays" true}} {{end}}
+	{{if eq (printf "%T" .) "int64"}} {{scheduleUniqueCC $.CCID $channelID . "bdays" true}} {{else}} {{scheduleUniqueCC $.CCID $channelID 86400 "bdays" true}} {{end}}
 	{{dbDel (currentTime.Add (mult -24 $.TimeHour | toDuration)).Day "bdayannounced"}}
 	{{with (dbGet (printf "%d" currentTime.Month | toInt) "bdays").Value}} {{$today = sdict .}} {{end}}
 	{{range (index $today (str currentTime.Day))}}
