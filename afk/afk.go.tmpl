@@ -9,7 +9,7 @@
 */}}
 
 {{/* CONFIGURATION VALUE STARTS HERE */}}
-{{ $removeAfkOnMessage := true }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
+{{ $removeAfkOnMessage := false }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
 {{/* CONFIGURATION VALUE ENDS HERE */}}
 
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}{{ $desc := "" }}
@@ -49,8 +49,6 @@
         {{ else if $afk }}
             Welcome back, {{ .User.Mention }}, I removed your AFK.
             {{ dbDel .User.ID "afk" }}
-        {{ else }}
-            Please either provide an afk message with `-afk <reason>`, with a duration `-afk -d <duration> <reason>` or you can remove your AFK with `-afk` (you either did not provide a message or you tried to turn off AFK when you were not).
         {{ end }}
     {{ else if and $afk $removeAfkOnMessage }}
         Welcome back, {{ .User.Mention }}, I removed your AFK.
