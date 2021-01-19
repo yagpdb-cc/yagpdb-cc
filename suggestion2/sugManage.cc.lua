@@ -21,6 +21,7 @@ Usage:
       
   -sug com/comment <sugNum> <comment>
       ^Comment on a suggestion (supports multipule comments and editing them)
+      ^Use \del in the comment section to delete your comment
       
   -sug ap/approve <sugNum> [reason]
       ^Approve of a suggestion, also makes the suggestion stay forever so it can possibly be implemented later
@@ -74,12 +75,12 @@ Usage:
 	{{ $id := sendMessageRetID nil (cembed
 		"Title" "Suggestion System"
 		"Description" (joinStr "\n\n"
-			"`suggestion/suggest/sug/sugs/s <action> <sugNum> [reason]` can be used as base"
+			"`suggestion/suggest/sug/s <action> <sugNum> [reason]` can be used as base"
 			"`sug quote/q <sugNum> [reason]` quote a suggestion, anyone can do this"
-			"`sug comment/com <sugNum> [reason]` comment on a suggestion"
 			"`sug approve/ap <sugNum> [reason]` approve a suggestion"
 			"`sug implement/imp <sugNum> [reason]` implement a suggestion"
 			"`sug` l/list [page num] kist suggestions"
+			"`sug comment/com <sugNum> [comment][\\delete]` comment on a suggestion (or delete one)"
 			"`Note: approve and implement make it so a suggestion won't be auto-deleted`"
 		)
 		"Color" 0x4B0082
