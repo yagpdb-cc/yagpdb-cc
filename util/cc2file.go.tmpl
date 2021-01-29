@@ -4,26 +4,48 @@
 	
 	Usage: `-cc2file <ID or Trigger> [ID or Trigger] [ID or Trigger]...`. For example: `-cc2file 10 "te st" 23`
 	Recommended trigger: Command trigger with trigger `cc2file`.
-	Configuration variables: None
+	Configuration variables: $limitTo5CCs, $CCInfo_MessageContent, $CCInfo_Attachment
 */}}
 
+{{/* CONFIGURATION AREA STARTS */}}
+	{{$limitTo5CCs:= true}}				{{/*If `true`, bot will do that. Prevents flood in the chat*/}}
+	{{$CCInfo_MessageContent:= true}}		{{/*If `true`, the info of each CC will be included in the message content*/}}
+	{{$CCInfo_Attachment:= false}}			{{/*If `true`, the info of each CC will be included in the attached file*/}}
+{{/* CONFIGURATION AREA ENDS */}}
 
 {{define "sendLongMessage"}}	{{/*INPUT: cslice channelIDToSend textToSend stringSeparator*/}}
 	{{$channelID:= index . 0}} {{$text:= index . 1}} {{$separator:= index . 2}}
 	{{$outStr:= ""}}
 
-	{{ range (split $text $separator)}}
+	{{range (split $text $separator)}}
 		{{- if gt (add (len $outStr) (len .)) 2000}}
 			{{- sendMessage $channelID $outStr}}
 			{{- $outStr = .}}
 		{{- else}}
-			{{- $outStr = (joinStr $separator $outStr .)}}
+			{{- $outStr = joinStr $separator $outStr .}}
 		{{- end -}}
-	{{ end}}
+	{{end}}
+
 	{{sendMessage $channelID $outStr}}
 {{end}}
 
-{{$args:= cslice}} {{$selectedArgs:= cslice}}
+{{define "sendLongMessageV2"}}	{{/*INPUT: sdict "channelID" $ID "text" $Text "separator" $Sepr*/}}
+	{{$outStr:= ""}}
+
+	{{range (split .text .separator)}}
+		{{- if gt (add (len $outStr) (len .)) 2000}}
+			{{- sendMessage .channelID $outStr}}
+			{{- $outStr = .}}
+		{{- else}}
+			{{- $outStr = joinStr .separator $outStr .}}
+		{{- end -}}
+	{{end}}
+
+	{{sendMessage .channelID $outStr}}
+{{end}}
+
+
+{{$args:= cslice}}
 {{with .ExecData}}
 	{{$args = .}}
 {{else}}
@@ -35,8 +57,13 @@
 {{end}}
 {{$numArgs:= len $args}}
 
+{{$selectedArgs:= cslice}}
 {{if gt $numArgs 5}}
 	{{$selectedArgs = slice $args 0 5}}
+
+	{{if $limitTo5CCs}}
+		{{sendMessage nil "⚠️ WARNING: Only first 5 CCs will be processed"}}
+	{{end}}
 {{else}}
 	{{$selectedArgs = $args}}
 {{end}}
@@ -53,15 +80,26 @@
 		{{- $msj:= reReplace "``" (printf "`%s`: %s" . $answer) "`<Empty trigger specified>`"}}
 		{{- template "sendLongMessage" (cslice nil $msj "\n")}}
 	{{- else}}
+		{{- $content:= ""}}
+		{{- $attachment:= (joinStr "\n" $extractedCode)}}
+
+		{{- if $CCInfo_MessageContent}}
+			{{- $content = $firstLine}}
+		{{- end}}
+
+		{{- if $CCInfo_Attachment}}
+			{{- $attachment = printf "{{/* CC INFO: %s */}}\n\n%s" $firstLine $attachment}}
+		{{- end}}
+
 		{{- sendMessage nil (complexMessage
-			"content" $firstLine
-			"file" (joinStr "\n" $extractedCode)
+			"content" $content
+			"file" $attachment
 		)}}
 	{{- end}}
 {{else}}
 	{{template "sendLongMessage" (cslice nil (exec "cc") "\n")}}
 {{end}}
 
-{{if gt $numArgs 5}}
+{{if and (not $limitTo5CCs) (gt $numArgs 5)}}
 	{{scheduleUniqueCC .CCID nil 1 "cc2file - remaining args" (slice $args 5 $numArgs)}}
 {{end}}
