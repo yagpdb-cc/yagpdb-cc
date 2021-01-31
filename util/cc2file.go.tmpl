@@ -14,42 +14,46 @@
 	{{$CCInfo_Attachment:= false}}			{{/*If `true`, the info of each CC will be included in the attached file*/}}
 {{/* CONFIGURATION AREA ENDS */}}
 
-{{define "sendLongMessage"}}	{{/*INPUT: cslice channelIDToSend textToSend stringSeparator*/}}
-	{{$channelID:= index . 0}} {{$text:= index . 1}} {{$separator:= index . 2}}
+
+
+{{/*
+	sendLongMessage is able to split a long text and send them in individual messages (of 2000 chars long max)
+
+	INPUT (arguments) is an SDICT with keys:
+		"channelID" = Channel ID/Name/nil where message(s) will be sent
+		"text" = The content itself you want to send
+		"separator" = A string that will define when a 'word' starts or ends
+*/}}
+{{define "sendLongMessage"}}
 	{{$outStr:= ""}}
 
-	{{range (split $text $separator)}}
-		{{- if gt (add (len $outStr) (len .)) 2000}}
-			{{- sendMessage $channelID $outStr}}
-			{{- $outStr = .}}
-		{{- else}}
-			{{- $outStr = joinStr $separator $outStr .}}
-		{{- end -}}
+	{{/*If separator is not found on the text, fallback to a default empty string*/}}
+	{{if not (in .text .separator)}}
+		{{.Set "separator" ""}}
 	{{end}}
 
-	{{sendMessage $channelID $outStr}}
-{{end}}
-
-{{define "sendLongMessageV2"}}	{{/*INPUT: sdict "channelID" $ID "text" $Text "separator" $Sepr*/}}
-	{{$outStr:= ""}}
-
+	{{/*Split text in 'words' and iterate over them*/}}
 	{{range (split .text .separator)}}
+		{{/*Keep appending words while length is under the limit. Then, send the message and "reset" the content for a new message*/}}
 		{{- if gt (add (len $outStr) (len .)) 2000}}
-			{{- sendMessage .channelID $outStr}}
+			{{- sendMessage $.channelID $outStr}}
 			{{- $outStr = .}}
 		{{- else}}
-			{{- $outStr = joinStr .separator $outStr .}}
+			{{- $outStr = joinStr $.separator $outStr .}}
 		{{- end -}}
 	{{end}}
 
+	{{/*Send the last message when range loop is over*/}}
 	{{sendMessage .channelID $outStr}}
 {{end}}
 
 
+{{/*If CC was called via execCC/scheduleUniqueCC, use .ExecData as the $args. If not, use .CmdArgs*/}}
 {{$args:= cslice}}
 {{with .ExecData}}
 	{{$args = .}}
 {{else}}
+	{{/*Delete duplicated $args*/}}
 	{{range .CmdArgs}}
 		{{- if not (in $args .)}}
 			{{- $args = $args.Append .}}
@@ -58,6 +62,7 @@
 {{end}}
 {{$numArgs:= len $args}}
 
+{{/*Exec can be called 5 times max, so $selectedArgs will have up to 5 $args to be processed*/}}
 {{$selectedArgs:= cslice}}
 {{if gt $numArgs 5}}
 	{{$selectedArgs = slice $args 0 5}}
@@ -69,25 +74,32 @@
 	{{$selectedArgs = $args}}
 {{end}}
 
+{{/*Process each selected argument in this execution*/}}
 {{range $selectedArgs}}
+	{{/*EXECute "-cc" and extract stuff from its output*/}}
 	{{- $answer:= exec "cc" .}}
 	{{- $answerLines:= split $answer "\n"}}
 	{{- $extractedCode:= slice $answerLines 2 (sub (len $answerLines) 1)}}
 	{{- $firstLine:= index $answerLines 0}}
 
+	{{/*Check if Answer's $firstLine is actually an error message*/}}
 	{{- if in $firstLine "here is a list of"}}
 		{{- sendMessage nil (printf "❌ CC `%s` not found" .)}}
 	{{- else if in $firstLine "More than 1 matched command"}}
+		{{/*Insert argument in message output, and if it's empty, replace it with "<Empty trigger specified>"*/}}
 		{{- $msj:= reReplace "``" (printf "`%s`: %s" . $answer) "`<Empty trigger specified>`"}}
-		{{- template "sendLongMessage" (cslice nil $msj "\n")}}
+		{{- template "sendLongMessage" (sdict "channelID" nil "text" $msj "separator" "\n")}}
 	{{- else}}
+		{{/*No error message, so send CC's code and info*/}}
 		{{- $content:= ""}}
-		{{- $attachment:= (joinStr "\n" $extractedCode)}}
+		{{- $attachment:= joinStr "\n" $extractedCode}}
 
+		{{/*If $CCInfo_MessageContent flag is set, the info will be sent as message content*/}}
 		{{- if $CCInfo_MessageContent}}
 			{{- $content = $firstLine}}
 		{{- end}}
 
+		{{/*If $CCInfo_Attachment flag is set, the info will be a comment in message's attachment*/}}
 		{{- if $CCInfo_Attachment}}
 			{{- $attachment = printf "{{/* CC INFO: %s */}}\n\n%s" $firstLine $attachment}}
 		{{- end}}
@@ -100,9 +112,11 @@
 
 	{{- sleep 1}}
 {{else}}
-	{{template "sendLongMessage" (cslice nil (exec "cc") "\n")}}
+	{{/*If there are 0 args, send full CC list*/}}
+	{{template "sendLongMessage" (sdict "channelID" nil "text" (exec "cc") "separator" "\n")}}
 {{end}}
 
+{{/*If $limitTo5CCs flag is not set, and there are still arguments left, execute CC again to process them*/}}
 {{if and (not $limitTo5CCs) (gt $numArgs 5)}}
 	{{scheduleUniqueCC .CCID nil 1 "cc2file - remaining args" (slice $args 5 $numArgs)}}
 {{end}}
