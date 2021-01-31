@@ -1,17 +1,26 @@
 {{/*
 	This command sends your CC(s) code in a text file, rather than "plain" Discord messages, preserving Tabs, markdown, etc. 
 	You can especify more than one ID or trigger, and bot will generate one file per input parameter. If none are provided, output will be CC list
-	
-	Recommended trigger: "cc2file"
+
 	Trigger type: Command
+	Recommended trigger 1: "cc2file"
+	Recommended trigger 2: "cc" IF you disable built-in "cc" command, via CommandOverrides
 	
 	Usage: `-cc2file <ID or Trigger> [ID or Trigger] [ID or Trigger]...`. For example: `-cc2file 10 "te st" 23`
 */}}
 
 {{/* CONFIGURATION AREA STARTS */}}
-	{{$limitTo5CCs:= true}}				{{/*If `true`, bot will do that. Prevents flood in the chat*/}}
-	{{$CCInfo_MessageContent:= true}}		{{/*If `true`, the info of each CC will be included in the message content*/}}
-	{{$CCInfo_Attachment:= false}}			{{/*If `true`, the info of each CC will be included in the attached file*/}}
+	{{/*If `true`, bot will do that. Prevents flood in the chat*/}}
+	{{$limitTo5CCs:= true}}
+
+	{{/*If `true`, the info of each CC will be included in the message content*/}}
+	{{$CCInfo_MessageContent:= true}}
+
+	{{/*If `true`, the info of each CC will be included in the attached file*/}}
+	{{$CCInfo_Attachment:= true}}
+
+	{{/*These CCs will NOT be processed. DON'T QUOTE THE NUMBERS NOR ADD "#" TO THEM*/}}
+	{{$blacklisted_CCIDs:= cslice 1234 5678}}
 {{/* CONFIGURATION AREA ENDS */}}
 
 
@@ -43,7 +52,7 @@
 		{{- end -}}
 	{{end}}
 
-	{{/*Send the last message when range loop is over*/}}
+	{{/*Send the last message, that was left when range loop ended*/}}
 	{{sendMessage .channelID $outStr}}
 {{end}}
 
@@ -74,6 +83,11 @@
 	{{$selectedArgs = $args}}
 {{end}}
 
+{{/*Convert each $blacklisted_CCIDs to a RegEx pattern*/}}
+{{range $index, $CCID:= $blacklisted_CCIDs}}
+	{{- $blacklisted_CCIDs.Set $index (printf "^#%d.*" $CCID)}}
+{{end}}
+
 {{/*Process each selected argument in this execution*/}}
 {{range $selectedArgs}}
 	{{/*EXECute "-cc" and extract stuff from its output*/}}
@@ -81,6 +95,14 @@
 	{{- $answerLines:= split $answer "\n"}}
 	{{- $extractedCode:= slice $answerLines 2 (sub (len $answerLines) 1)}}
 	{{- $firstLine:= index $answerLines 0}}
+	{{- $blacklisted:= false}}
+
+	{{/*Check if that CC was $blacklisted*/}}
+	{{range $blacklisted_CCIDs}}
+		{{- if reFind . $firstLine}}
+			{{$blacklisted = true}}
+		{{- end}}
+	{{end}}
 
 	{{/*Check if Answer's $firstLine is actually an error message*/}}
 	{{- if in $firstLine "here is a list of"}}
@@ -89,6 +111,8 @@
 		{{/*Insert argument in message output, and if it's empty, replace it with "<Empty trigger specified>"*/}}
 		{{- $msj:= reReplace "``" (printf "`%s`: %s" . $answer) "`<Empty trigger specified>`"}}
 		{{- template "sendLongMessage" (sdict "channelID" nil "text" $msj "separator" "\n")}}
+	{{- else if $blacklisted}}
+		{{- sendMessage nil (printf "🚫 CC `%s` is blacklisted" .)}}
 	{{- else}}
 		{{/*No error message, so send CC's code and info*/}}
 		{{- $content:= ""}}
