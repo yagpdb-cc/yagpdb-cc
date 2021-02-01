@@ -85,7 +85,7 @@
 
 {{/*Convert each $blacklisted_CCIDs to a RegEx pattern*/}}
 {{range $index, $CCID:= $blacklisted_CCIDs}}
-	{{- $blacklisted_CCIDs.Set $index (printf "^#%d.*" $CCID)}}
+	{{- $blacklisted_CCIDs.Set $index (printf "^#%d -.*" $CCID)}}
 {{end}}
 
 {{/*Process each selected argument in this execution*/}}
@@ -144,3 +144,9 @@
 {{if and (not $limitTo5CCs) (gt $numArgs 5)}}
 	{{scheduleUniqueCC .CCID nil 1 "cc2file - remaining args" (slice $args 5 $numArgs)}}
 {{end}}
+
+{{/*REGEX para matchear parametro "Custom usage text when invalid args provided" de parseArgs: `parseArgs \d+ "(.+)"`*/}}
+
+{{/*REGEX firstLine: `^#\s*(\d+) - (.*)(?:(?:: \x60(.*)\x60 - Case sensitive trigger: \x60(.+)\x60)|\b) - Group: \x60(.+)\x60$`
+	Robado de Crafter (MIT): https://github.com/TheHDCrafter/yagpdb-cc/blob/master/CustomCommands%20Replacement/command.gotmpl#L85
+*/}}
