@@ -19,7 +19,7 @@
 
 {{$globalDict:=dict "chans" (dict $Suggestion_Channel true $Approved_Channel true $Implemented_Channel true) "msg" .nil}}
 {{$Prefix:=index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
-{{$Escaped_Prefix:=reReplace `[\.\[\]\-\?\!\\\*\{\}\(\)\|\+]` $Prefix `\${0}`}}
+{{$Escaped_Prefix:=reReplace `[\$\^\.\[\]\-\?\!\\\*\{\}\(\)\|\+]` $Prefix `\${0}`}}
 {{$error:=""}}
 {{$Syntax:=""}}
 {{$IS_Mod:=false}}
