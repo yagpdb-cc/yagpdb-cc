@@ -1,0 +1,52 @@
+{{/* SETUP:
+     - Set the restrictions to only run in your QOTD channel
+     - Set the trigger type to Regex and the trigger to: \A
+
+     CREDITS: SpecialEliteSNP <https://github.com/SpecialEliteSNP>
+*/}}
+
+{{/* VARIABLES - You can edit these values */}}
+  {{/* Message when they try to answer the QOTD twice */}}
+    {{ $twice := "you can only answer the question once 😉" }}
+
+  {{/* Your QOTD role */}}
+    {{ $qotd_role := 778990627534536745 }}
+  {{/* Role able to ask a QOTD. These are also an exception for answering a question twice */}}
+    {{ $staff_roles := cslice 763447831829938176 764103587223044116 778952687986802698 764054381535821825 775003755842109440 }}
+
+  {{/* Channel to send the QOTD report in after a new one is started */}}
+    {{ $report_channel := 797104575076368444 }}
+
+
+{{/* CODE - Don't edit this part */}}
+{{ $q := sdict }}{{ with (dbGet 20 "qotd").Value }}{{ $q = sdict . }}{{ end }}
+{{ $s := false }}{{ range .Member.Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
+{{ if not $q }}
+  {{ dbSet 20 "qotd" (sdict "l" (sdict "m" 0 "t" 0 "u" 0)) }}
+  {{ addReactions "☑" }}
+  {{ print .User.Mention ", <#" .Channel.ID "> is all set up as your QOTD channel!" }}
+{{ else if and $s (in .Message.MentionRoles $qotd_role) }}
+  {{ $l := getMessage nil $q.l.m }}{{ $u := getMember $q.l.u }}
+  {{ sendMessage $report_channel (cembed
+    "title" "QOTD Report" "color" 49306
+    "description" (printf "[**Question:**](https://discord.com/channels/%d/%d/%d)\n%s\n\n**Answers:**\n%d" .Guild.ID .Channel.ID $q.l.m $l.Content $q.l.t)
+    "footer" (sdict "text" $u.User.String "icon_url" ($u.User.AvatarURL "128"))
+    "timestamp" $l.Timestamp) }}
+  {{ deleteTrigger 1 }}
+  {{ $m := sendMessageNoEscapeRetID nil .Message.Content }}
+  {{ range $k, $v := $q }}
+    {{ if eq $k "l" }}{{ $q.Set $k (sdict "m" $m "t" 0 "u" $.User.ID) }}
+    {{ else }}{{ $q.Set $k (sdict "a" 0 "n" $v.n) }}{{ end }}
+  {{ end }}
+  {{ dbSet 20 "qotd" $q}}
+{{ else }}
+  {{ if not ($q.Get (str .User.ID)).a }}
+    {{ $q.Set (str .User.ID) (sdict "a" 1 "n" (add ($q.Get (str .User.ID)).n 1)) }}
+    {{ $q.Set "l" (sdict "m" $q.l.m "t" (add $q.l.t 1) "u" $q.l.u) }}
+    {{ dbSet 20 "qotd" $q }}
+  {{ else if not $s }}
+    {{ deleteTrigger 1 }}
+    {{ print .User.Mention ", " $twice }}
+    {{ deleteResponse 5 }}
+  {{ end }}
+{{ end }}
