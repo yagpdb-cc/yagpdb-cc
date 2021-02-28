@@ -18,7 +18,7 @@
         {{- $result = dict }}
         {{- range $k, $v := .Value }} {{- $result.Set $k $v -}} {{- end }}
     {{- else if and (eq $kind "array" "slice") (ne $typ "templates.Slice") }}
-        {{= $result = cslice.AppendSlice .Value }}
+        {{- $result = cslice.AppendSlice .Value }}
     {{- else if eq $typ "templates.Dict" "templates.SDict" "templates.Slice" }}
       {{- $result = .Value }}
     {{- end }}
