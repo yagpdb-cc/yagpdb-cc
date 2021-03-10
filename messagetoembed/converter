@@ -1,0 +1,24 @@
+{{ $channel :=  }} {{/* Replace this with your suggestion channel ID */}}
+
+{{if .Message.Attachments}}
+		{{ $embed := cembed
+			"title"  "Photo"
+			"description" (index .Message.Content)
+			"timestamp"  currentTime
+			"image"  (sdict "url" (index .Message.Attachments 0).URL)
+		}}
+		{{ $id := (sendMessageNoEscapeRetID $channel $embed) }}
+		{{ addMessageReactions $channel $id "1️⃣" "2️⃣" "3️⃣" "4️⃣" }}
+		{{deleteResponse 5}}
+		{{deleteTrigger 5}}
+{{else}}
+	{{ $embed := cembed
+		"description"  (index .Message.Content)
+		"color" 9021952
+		"timestamp"  currentTime
+	}}
+	{{ $id := (sendMessageNoEscapeRetID $channel $embed) }}
+	{{ addMessageReactions $channel $id "1️⃣" "2️⃣" "3️⃣" "4️⃣" }}
+	{{deleteResponse 5}}
+	{{deleteTrigger 5}}
+{{end}}
