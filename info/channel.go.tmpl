@@ -11,7 +11,7 @@
 	{{ $channel = $args.Get 0 }}
 {{ end }}
 
-{{$types := cslice "Text" "DM" "Voice" "Group DM" "Category" "News" "Store"}}
+{{ $types := cslice "Text" "DM" "Voice" "Group DM" "Category" "News" "Store" }}
 {{ $nsfw := "No" }}
 {{ $parent := "*None set*" }}
 {{ if $channel.NSFW }} {{ $nsfw = "Yes" }} {{ end }}
