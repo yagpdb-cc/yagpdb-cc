@@ -9,7 +9,7 @@
 */}}
 
 {{/* CONFIGURATION VALUE STARTS HERE */}}
-{{ $removeAfkOnMessage := false }}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
+{{ $removeAfkOnMessage := true}}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
 {{/* CONFIGURATION VALUE ENDS HERE */}}
 
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}{{ $desc := "" }}
