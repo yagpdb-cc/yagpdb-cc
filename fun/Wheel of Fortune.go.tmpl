@@ -19,32 +19,16 @@
 {{/* CONFIGURATION VARIABLES ENDS */}}
 
 {{/* Do not change anything below */}}	
-{{ $pos := " " }}
+{{ $pos := 1.0 }}
 {{ if lt (randInt 0 11) 7 }}
 	{{ $pos = (index (shuffle (cslice 0.1 0.3 0.5 0.2)) 0) }}
 {{ else }}
 	{{ $pos = (index (shuffle (cslice 1.2 2.4 1.7 1.5)) 0) }}
 {{ end }}
 
-{{ $arrow := " " }}
-{{ if eq $pos 0.1 }}
-	{{ $arrow = `\↙️` }}
-{{ else if eq $pos 0.3 }}
-	{{ $arrow = "↓" }}
-{{ else if eq $pos 0.5 }}
-	{{ $arrow = `\↘️` }}
-{{ else if eq $pos 1.2 }}
-	{{ $arrow = "→" }}
-{{ else if eq $pos 2.4 }}
-	{{ $arrow = `\↗️` }}
-{{ else if eq $pos 1.7 }}
-	{{ $arrow = "↑" }}
-{{ else if eq $pos 1.5 }}
-	{{ $arrow = `\↖️` }}
-{{ else if eq $pos 0.2 }}
-	{{ $arrow = "←" }}
-{{ end }}
-     
+{{ $a := dict 0.1 `\↙️` 0.2 "←" 0.3 "↓" 0.5 `\↘️` 1.2 "→" 1.5 `\↖️` 1.7 "↑" 2.4 `\↗️` }}
+{{ $arrow := $a.Get $pos }}
+
 {{ $fh := "🦆\n\n   『1.5』   『1.7』   『2.4』\n\n『0.2』      " }}
 {{ $sh := "      『1.2』\n\n     『0.1』   『0.3』   『0.5』" }}
 {{ $bal := toInt (dbGet .User.ID $dbName).Value }}
