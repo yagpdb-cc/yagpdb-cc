@@ -1,0 +1,113 @@
+{{/*
+    SETUP:
+    - Set the cc restrictions to only run in your counting channel
+    - Set the trigger type to Regex and the trigger to: \A
+
+    USAGE:
+    - Just type the right number and count together :)
+    - You can use -resetcount to reset the count. There's a warning, you have to send it twice within 30 seconds to actually reset the count.
+      Only members with a role in $staff_roles can use the command.
+
+    OPTIONAL:
+    - You can add a command override for the counting channel in the YAGPDB control panel. That way you can make sure that no commands can be used here.
+
+    CREDITS: SpecialEliteSNP <https://github.com/SpecialEliteSNP>
+*/}}
+
+{{/* VARIABLES - You can edit these values */}}
+  {{/* Emoji to be added to the latest correct count */}}
+    {{ $emoji := "☑" }}
+
+  {{/* Responses: */}}
+    {{/* Message when they get the count wrong */}}
+      {{ $wrong := "not the right number bud 😅" }}
+    {{/* Message when they try to count twice in a row */}}
+      {{ $twice := "we do counting together 😠" }}
+    {{/* Milestone notification for every 1000 */}}
+      {{ $1000_ntf := "Holy moly, have we really reached" }}
+    {{/* Milestone notification for every 100 */}}
+      {{ $100_ntf := "We have reached" }}
+
+  {{/* Warnings */}}
+    {{/* Info message when the latest correct count was changed (edited or deleted) */}}
+      {{ $change_msg := "we're currently at:" }}
+    {{/* Warn when a member deletes their latest correct count */}}
+      {{ $warn_on_del := true }}
+    {{/* Warning message */}}
+      {{ $warn_msg := "Don't change your latest correct count!" }}
+    {{/* Role to ignore when trying to warn. This should be the roles above the bot since it can't warn members with a role higher than itself. */}}
+      {{ $staff_roles := cslice 763447831829938176 764103587223044116 778952687986802698 764054381535821825 775003755842109440 }}
+
+
+{{/* CODE - Don't edit this part */}}
+{{ $c := sdict }}{{ with (dbGet 20 "counting").Value }}{{ $c = sdict . }}{{ end }}
+{{ $e := execAdmin "prefix" }}{{ $p := reReplace `[*\\_\~]` (slice $e (add 15 (len (str .Guild.ID))) (sub (len $e) 1)) `\$0` }}
+{{ $r := 0 }}{{ with (dbGet .User.ID "resetcount").Value }}{{ $r = . }}{{ end }}
+{{ $s := false }}{{ range .Member.Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
+{{ if not $c }}
+  {{ addReactions "☑" }}
+  {{ dbSet 20 "counting" (sdict "l" (sdict "c" 1 "m" 0 "u" 0 "w" 0)) }}
+  {{ print .User.Mention ", <#" .Channel.ID "> is all set up as your counting channel!" }}
+{{ else if and $s (eq (print $p "resetcount") .Message.Content) }}
+  {{ deleteTrigger 1 }}
+  {{ if $s }}
+    {{ if not $r }}
+      {{ $m := sendMessageRetID nil (cembed
+        "color" 16734296
+        "description" (print "‼ " .User.Mention ", are you sure you want to reset the count to **1**?\n\nIf you're sure, type `-resetcount` again.")
+        "footer" (sdict "text" "This message will self destruct in 30 seconds")) }}
+      {{ deleteMessage nil $m 30 }}
+      {{ dbSetExpire .User.ID "resetcount" (sdict "s" 1 "m" $m) 30 }}
+    {{ else }}
+      {{ deleteMessage nil $r.m 0 }}
+      {{ dbDel .User.ID "resetcount" }}
+      {{ range $k, $v := $c }}
+        {{ if eq $k "l" }}{{ $c.Set $k (sdict "c" 1 "m" 0 "u" 0 "w" 0) }}{{ end }}
+      {{ end }}
+      {{ dbSet 20 "counting" $c }}
+      {{ print .User.Mention ", reset the count in <#" .Channel.ID ">!" }}
+      {{ deleteResponse 10 }}
+    {{ end }}
+  {{ else }}
+    {{ print .User.Mention ", you don't have the permissions to reset the count!" }}
+    {{ deleteResponse 5 }}
+  {{ end }}
+{{ else if eq .User.ID $c.l.u }}
+  {{ deleteTrigger 1 }}
+  {{ print .User.Mention ", " $twice }}
+  {{ deleteResponse 5 }}
+{{ else if or (not (reFind `\A\d+\z` .Message.Content)) (ne $c.l.c (toInt .Message.Content)) }}
+  {{ deleteTrigger 1 }}
+  {{ $m := getMessage nil $c.l.m }}
+  {{ if eq $c.l.m 0 }}
+    {{ print .User.Mention ", the count starts at 1 😉" }}
+  {{ else if not $m }}
+    {{ print .User.Mention ", " $change_msg " `" $c.l.c "`" }}
+    {{ $s := false }}{{ range (getMember $c.l.u).Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
+    {{ if and $warn_on_del (not $c.l.w) (not $s) }}{{ $h := execAdmin "warn" $c.l.u $warn_msg }}{{ $c.Set "l" (sdict "c" $c.l.c "m" $c.l.m "u" $c.l.u "w" 1) }}{{ dbSet 20 "counting" $c}}{{ end }}
+  {{ else if ne (sub $c.l.c 1) (toInt $m.Content) }}
+    {{ print .User.Mention ", " $change_msg " `" $c.l.c "`" }}
+    {{ $s := false }}{{ range (getMember $c.l.u).Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
+    {{ if and $warn_on_del (not $c.l.w) (not $s) }}{{ $h := execAdmin "warn" $c.l.u $warn_msg }}{{ $c.Set "l" (sdict "c" $c.l.c "m" $c.l.m "u" $c.l.u "w" 1) }}{{ dbSet 20 "counting" $c}}{{ end }}
+  {{ else }}
+    {{ print .User.Mention ", " $wrong }}
+  {{ end }}
+  {{ deleteResponse 10 }}
+{{ else }}
+  {{ if eq (index .Message.Content 0) 48 }}
+    {{ deleteTrigger 1 }}
+    {{ print .User.Mention ", leading zeros are not allowed!"}}
+    {{ deleteResponse 10 }}
+  {{ else }}
+    {{ deleteAllMessageReactions nil $c.l.m }}
+    {{ addReactions $emoji }}
+    {{ $c.Set (str .User.ID) (add ($c.Get (str .User.ID)) 1) }}
+    {{ $c.Set "l" (sdict "c" (add $c.l.c 1) "m" .Message.ID "u" .User.ID "w" 0) }}
+    {{ dbSet 20 "counting" $c }}
+    {{ if eq (toInt (mod $c.l.c 1000)) 0 }}
+      {{ print $1000_ntf " " $c.l.c "?! 😲" }}
+    {{ else if eq (toInt (mod $c.l.c 100)) 0 }}
+      {{ print $100_ntf " " $c.l.c "! 🎉" }}
+    {{ end }}
+  {{ end }}
+{{ end }}
