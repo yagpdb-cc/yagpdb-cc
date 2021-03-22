@@ -39,7 +39,7 @@
             "description" "News regarding your report!"
             "fields" (cslice
                 (sdict "name" "Responsible Moderator:" "value" (print $moderator.Mention "\nID: `" $moderator.ID "`") "inline" true)
-                (sdict "name" "Status:" .message "inline" true)
+                (sdict "name" "Status:" "value" .message "inline" true)
                 (sdict "name" "\u200B" "value" "\u200B" "inline" true)
                 (sdict "name" "Reported User:" "value" (index $rEmbed.Fields 2).Value "inline" true)
                 (sdict "name" "Reason for Report:" "value" (index $rEmbed.Fields 1).Value "inline" true)
@@ -95,7 +95,7 @@
             {{else if eq $.Reaction.Emoji.Name "🛡️"}}
                 {{$data = sdict "color" 16776960 "message" "Under investigation." "menu" "Dismiss with ❌ or resolve with 👌." "emojis" (cslice "❌" "👌") "notify" true}}
             {{else if eq $.Reaction.Emoji.Name "❗"}}
-                {{$data = sdict "color" "message" "Report dismissed, warned for false report." "menu" "none" "emojis" (cslice "🏳️") "notify" false}}
+                {{$data = sdict "color" 16711680 "message" "Report dismissed, warned for false report." "menu" "none" "emojis" (cslice "🏳️") "notify" false}}
             {{end}}
             {{if ne $.Reaction.Emoji.Name "🏳️"}}
             {{$data.Set "rembed" $report}}
