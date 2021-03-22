@@ -95,7 +95,7 @@
             {{else if eq $.Reaction.Emoji.Name "🛡️"}}
                 {{$data = sdict "color" 16776960 "message" "Under investigation." "menu" "Dismiss with ❌ or resolve with 👌." "emojis" (cslice "❌" "👌") "notify" true}}
             {{else if eq $.Reaction.Emoji.Name "❗"}}
-                {{$data = sdict "color" "message" "Report dismissed, warned for false report." "menu" "none" "emojis" (cslice "🏳️") "notify" false}}
+                {{$data = sdict "color" 16711680 "message" "Report dismissed, warned for false report." "menu" "none" "emojis" (cslice "🏳️") "notify" false}}
             {{end}}
             {{if ne $.Reaction.Emoji.Name "🏳️"}}
             {{$data.Set "rembed" $report}}
