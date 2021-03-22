@@ -34,7 +34,7 @@
     {{end}}
     {{editMessage .log .reportID (complexMessageEdit "embed" $rEmbed)}}
     {{if .notify}}
-        {{$message := complexMessage "content" .author.Mention: "embed" (cembed
+        {{$message := complexMessage "content" (print .author.Mention ":") "embed" (cembed
             "title" "Information"
             "description" "News regarding your report!"
             "fields" (cslice
