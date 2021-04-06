@@ -87,7 +87,7 @@ If you are having difficulties with one of the custom commands here, please get 
 
 ## Contributors
 
-**yagpdb-cc** is currently maintained by [@Jo3-L](https://github.com/Jo3-L) and [@Satty9361](https://github.com/Satty9361).<br>
+**yagpdb-cc** is currently maintained by [@jo3-l](https://github.com/jo3-l), [@Satty9361](https://github.com/Satty9361), and [@l-zeuch](https://github.com/l-zeuch).<br>
 It is licensed under the MIT License.
 
 We would also like to acknowledge the many contributors, seen below. Thank you!
