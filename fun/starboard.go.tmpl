@@ -33,7 +33,12 @@
 {{ end }}
 
 {{ if lt $count $starLimit }}
-	{{ deleteMessage $starboard $starboardMessage 0 }}
+{{ with (dbGet 0 "starboardMessages").Value }}
+	{{ $idRegex := printf `\n%d:(\d+)` $thisID }}
+	{{ with reFindAllSubmatches $idRegex . }} {{ $starboardMessage = index . 0 1 }} {{ end }}
+		{{ deleteMessage $starboard $starboardMessage 0 }}
+		{{ dbSet 0 "starboardMessages" (reReplace $idRegex . "") }}
+	{{ end }}
 {{ else if and $count (or .ReactionMessage.Content .ReactionMessage.Attachments) (eq .Reaction.Emoji.Name $starEmoji) (le (currentTime.Sub .Message.Timestamp.Parse) (toDuration $maxAge))}}
 	{{ $emoji := "🌠" }}
 	{{ if lt $count 5 }} {{ $emoji = "⭐" }}
