@@ -18,17 +18,23 @@
 {{if .ExecData}}
     {{$mentions := ""}}{{$ping := false}}
     {{if ($m := getMessage nil .ExecData.message)}}
-    {{if not $m.Mentions}}{{$ping = true}}{{end}}
+        {{if not $m.Mentions}}{{$ping = true}}{{end}}
     {{else}}{{$ping = true}}{{end}}
     {{if $ping}}
-    {{range .ExecData.mentions}}{{$mentions = print $mentions "<@" .ID ">, "}}{{end}}
-
-    {{/* Message to send when a ping is detected: */}}
-    {{sendMessage nil (print "Ghost ping detected by <@" .ExecData.author "> - " $mentions)}}
-
+        {{if gt (len .ExecData.mentions) 1}}
+        {{range .ExecData.mentions}}{{$mentions = joinStr ">, <@" $mentions .}}{{end}}
+        {{else}}{{$mentions = index .ExecData.mentions 0}}{{end}}
+        {{/* Message to send when a ping is detected: */}}
+        {{sendMessage nil (print "Ghost ping detected by <@" .ExecData.author "> - <@" $mentions ">")}}
     {{else}}
-    {{if $CHECK}}{{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" .Message.Mentions)}}{{end}}
+        {{if and $CHECK (not .ExecData.break)}}
+            {{$ids := cslice}}{{range .Message.Mentions}}{{$ids = $ids.Append (str .ID)}}{{end}}
+            {{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "content" .Message.Content "break" true)}}
+        {{end}}
     {{end}}
 {{else}}
-    {{if .Message.Mentions}}{{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" .Message.Mentions)}}{{end}}
+    {{if .Message.Mentions}}
+        {{$ids := cslice}}{{range .Message.Mentions}}{{$ids = $ids.Append (str .ID)}}{{end}}
+        {{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "break" false)}}
+    {{end}}
 {{end}}
