@@ -37,7 +37,7 @@
 
 {{if or (ge $maxP $maxW) (eq $maxP -1)}}
 
-{{with sendMessageNoEscapeRetID $chan cembed}}
+{{with sendMessageNoEscapeRetID $chan (cembed "title" "loading...")}}
 {{$ID =joinStr "" $chan .}}{{$giveawaySdict:=sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners" $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
 {{addMessageReactions $chan . $rEmoji}}{{$desc:=print `>>> **Prize : **` $prize "\n\n"}}
 {{if gt $maxW 0}}{{$desc =print $desc "**Max Winners :** " $maxW}}{{end}}{{if gt $maxP 0}}{{$desc =print $desc "⠀⠀⠀⠀⠀**Max Participants :** " $maxP}}{{end}}
