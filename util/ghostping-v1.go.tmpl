@@ -1,0 +1,34 @@
+{{/*
+    Ghost-Ping Detector CC v1
+
+    Recommended Trigger Type: Regex
+    Recommended Trigger: .*
+    Optional Trigger: <@!?\d{17,19}>
+    
+    Credits:
+    Devonte <https://github.com/devnote-dev>
+*/}}
+
+{{/* THINGS TO CHANGE */}}
+
+{{$CHECK := false}} {{/* Change to "true" for double exec-check */}}
+
+{{/* ACTUAL CODE - DO NOT TOUCH */}}
+
+{{if .ExecData}}
+    {{$mentions := ""}}{{$ping := false}}
+    {{if ($m := getMessage nil .ExecData.message)}}
+    {{if not $m.Mentions}}{{$ping = true}}{{end}}
+    {{else}}{{$ping = true}}{{end}}
+    {{if $ping}}
+    {{range .ExecData.mentions}}{{$mentions = print $mentions "<@" .ID ">, "}}{{end}}
+
+    {{/* Message to send when a ping is detected: */}}
+    {{sendMessage nil (print "Ghost ping detected by <@" .ExecData.author "> - " $mentions)}}
+
+    {{else}}
+    {{if $CHECK}}{{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" .Message.Mentions)}}{{end}}
+    {{end}}
+{{else}}
+    {{if .Message.Mentions}}{{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" .Message.Mentions)}}{{end}}
+{{end}}
