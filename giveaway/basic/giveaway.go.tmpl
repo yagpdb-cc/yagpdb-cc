@@ -73,7 +73,7 @@
 {{if or (ge $maxP $maxW) (eq $maxP -1)}}
 
 {{/*Giveaway Announcement*/}}
-{{with (sendMessageNoEscapeRetID $chan cembed)}}
+{{with sendMessageNoEscapeRetID $chan (cembed "title" "loading...")}}
 
 {{/*Make giveaway sdict data Structure */}}
 {{$ID = (joinStr "" $chan .) }}
