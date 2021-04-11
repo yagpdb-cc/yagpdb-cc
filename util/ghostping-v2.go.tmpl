@@ -1,0 +1,47 @@
+{{/*
+    Ghost-Ping Detector CC v2
+
+    Recommended Trigger Type: Regex
+    Recommended Trigger: .*
+    Optional Trigger: <@!?\d{17,19}>
+    
+    Credits:
+    Devonte <https://github.com/devnote-dev>
+*/}}
+
+{{/* THINGS TO CHANGE */}}
+
+{{$CHECK := false}} {{/* Change to "true" for double exec-check */}}
+
+{{$LOG := false}} {{/* Change to "true" to create message logs */}}
+
+{{/* ACTUAL CODE - DO NOT TOUCH */}}
+
+{{if .ExecData}}
+    {{$mentions := ""}}{{$ping := false}}
+    {{if ($m := getMessage nil .ExecData.message)}}
+    {{if $m.Mentions}}{{else}}{{$ping = true}}{{end}}
+    {{else}}{{$ping = true}}{{end}}
+    {{if $ping}}
+    {{range .ExecData.mentions}}{{$mentions = print $mentions "<@" .ID ">, "}}{{end}}
+    {{$col := 16777215}}{{$p := 0}}{{$r := .Member.Roles}}
+    {{range .Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $p .Position)}}{{$p = .Position}}{{$col = .Color}}{{end}}{{end}}
+
+    {{$log := ""}}{{if $LOG}}{{$log = print "\n**Logs:** [Message Logs](" (exec "logs") ")"}}{{end}}
+    {{/* Embed Construct */}}
+    {{$embed := cembed
+        "description" (print "**Channel:** <#" .Channel.ID ">\n**Message:**\n" .ExecData.content "\n\n**Mentioned Users:** " $mentions $log)
+        "color" $col
+        "footer" (sdict "text" "Detector triggered")
+        "timestamp" currentTime}}
+
+    {{/* Content Format */}}
+    {{$msgContent := print "Ghost ping detected from <@" .ExecData.author ">!"}}
+
+    {{sendMessage nil (complexMessage "content" $msgContent "embed" $embed)}}
+    {{else}}
+    {{if $CHECK}}{{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" .Message.Mentions "content" .Message.Content)}}{{end}}
+    {{end}}
+{{else}}
+    {{if .Message.Mentions}}{{execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" .Message.Mentions "content" .Message.Content)}}{{end}}
+{{end}}
