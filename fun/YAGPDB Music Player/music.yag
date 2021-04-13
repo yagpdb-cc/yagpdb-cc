@@ -4,7 +4,7 @@
 	License: GNU
 	Website: https://docs.yagpdb-mp.tk/
 */}}
-{{/*CHANGE $o VALUE TO music2.yml CC # */}}
+{{/*CHANGE $o VALUE TO music2.yag CC # */}}
 {{$o:=8}}{{$botID:=204255221017214977}}
 {{$q:=cslice}}{{with (dbGet 20 "queue").Value}}{{$q =$q.AppendSlice .}}{{end}}{{$nq:=cslice}}{{$nnq:=cslice}}{{range $i,$e:=$q}}{{if $i}}{{$nq =$nq.Append $e}}{{end}}{{if gt $i 1}}{{$nnq =$nnq.Append $e}}{{end}}{{end}}
 {{$e:=execAdmin "prefix"}}{{$p:=reReplace `[\.\[\]\-\?\!\\\*\{\}\(\)\|\+\$\^]` (slice $e (add 15 (len (str .Guild.ID))) (sub (len $e) 1)) `\$0`}}
