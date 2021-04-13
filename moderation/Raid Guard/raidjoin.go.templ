@@ -29,13 +29,13 @@
     "thumbnail" (sdict "url" "https://i.ibb.co/2n8pzH0/1f6e1.png")}}
 
 {{if lt (currentUserAgeMinutes) $age}}
-	{{if not (dbGet $newmem "raidcooldown") }}
+	{{if not (dbGet .User.ID "raidcooldown") }}
         {{$l = $l.Append .User}}
         {{dbSet 0 "raidlist" $l}}
         {{if eq (len $l) $len}}
             {{sendMessageNoEscape $channel (complexMessage "content" (mentionRoleID $rolemention) "embed" $embed) }}
         {{end}}
-        {{dbSetExpire $newmem "raidcooldown" true 3600}}
+        {{dbSetExpire .User.ID "raidcooldown" true 3600}}
         {{dbSetExpire 0 "raidlistcool" true 1200 }}
     {{end}}
 {{end}}
