@@ -12,30 +12,33 @@
 {{/* CONFIGURATION START */}}
 {{$age := 1440}} {{/*New account age in minutes 1440 = one day*/}}
 {{$len := 25}}{{/*Number of new members in a RAID to be notified by*/}}
-{{$rolemention := ROLE_ID_HERE }} {{/*This will be the role that gets pinged. MAKE SURE YOU CHANGE ROLE_ID_HERE WITH YOUR ROLE ID!*/}}
+{{$rolemention := cslice ROLE_ID_HERE }} {{/*This will be the role that gets pinged. MAKE SURE YOU CHANGE ROLE_ID_HERE WITH YOUR ROLE ID!*/}}
 {{$channel := MODLOG_CHANNEL_ID_HERE }} {{/*Channel ID for modlog*/}}
 
 {{/* ACTUAL CODE - DO NOT TOUCH */}}
+{{$newmem := .User }}
 {{$l:=cslice}}
+
 {{with (dbGet 0 "raidlist").Value}}
     {{$l = $l.AppendSlice . }}{{end}}
-{{if not (dbGet 0 "raidlistcool")}}
+
+{{ if not (dbGet 0 "raidlistcool")}}
     {{dbDel 0 "raidlist"}}{{end}}
 
 {{$embed := cembed 
     "title" " ⚠ RAID ALERT!" 
-    "description" (printf "I have determined that there are more than:\n**%d BRAND NEW ACCOUNTS**\nthat just joined the server!\n\n__Options:__\n1. `-raid kick` - Kicks all raid members.\n2. `-raid ban` - Bans all raid members.\n3. `-raid clear` - Clear Raid List" $len)
+    "description" "I have determined that there are more than:\n**25 BRAND NEW ACCOUNTS**\nthat just joined the server!\n\n__Options:__\n1. `-raid kick` - Kicks all raid members.\n2. `-raid ban` - Bans all raid members.\n3. `-raid clear` - Clear Raid List"
     "color" (randInt 16777217)
-    "thumbnail" (sdict "url" "https://i.ibb.co/2n8pzH0/1f6e1.png")}}
+    "thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/565142262401728512.png" )}}
 
 {{if lt (currentUserAgeMinutes) $age}}
-	{{if not (dbGet .User.ID "raidcooldown") }}
-        {{$l = $l.Append .User}}
+	{{if not (dbGet $newmem "raidcooldown") }}
+        {{$l = $l.Append $newmem}}
         {{dbSet 0 "raidlist" $l}}
         {{if eq (len $l) $len}}
             {{sendMessageNoEscape $channel (complexMessage "content" (mentionRoleID $rolemention) "embed" $embed) }}
         {{end}}
-        {{dbSetExpire .User.ID "raidcooldown" true 3600}}
+        {{dbSetExpire $newmem "raidcooldown" true 3600}}
         {{dbSetExpire 0 "raidlistcool" true 1200 }}
     {{end}}
 {{end}}
