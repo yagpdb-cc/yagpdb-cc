@@ -45,8 +45,5 @@
         {{end}}
         {{dbSetExpire $newmem "raidcooldown" true 3600}}
         {{dbSetExpire 0 "raidlistcool" true 1200 }}
-	    {{if eq (len $l) 50}}
-		    {{execAdmin "lockdown -all -force" }}
-        {{end}}
     {{end}}
 {{end}}
