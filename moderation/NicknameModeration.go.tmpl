@@ -21,17 +21,15 @@
 {{/* Configuration area starts */}}
 {{$name := "Moderated Nickname"}}{{/* What should be in front of the numbers when a nickname is moderated */}}
 {{$padding := "5"}}{{/* How many digits the number should have, recommendation: between 3 and 7 */}}
-{{$modRoles := cslice 809781706658807838 815197447000555530}}{{/* Users with these roles can moderate nicknames */}}
+{{$modPerms := "ManageMessages"}}{{/* Permissions required to moderate nicknames. Available options:
+	Administrator, ManageServer, ReadMessages, SendMessages, SendTTSMessages, ManageMessages, EmbedLinks,
+	AttachFiles, ReadMessageHistory, MentionEveryone, VoiceConnect, VoiceSpeak, VoiceMuteMembers, VoiceDeafenMembers,
+	VoiceMoveMembers, VoiceUseVAD, ManageNicknames, ManageRoles, ManageWebhooks, ManageEmojis, CreateInstantInvite,
+	KickMembers, BanMembers, ManageChannels, AddReactions, ViewAuditLogs */}}
 {{/* Configuration area ends */}}
 
 
-{{$mod := false}}
-{{range $modRoles -}}
-	{{if hasRoleID .}}
-		{{$mod = true}}
-	{{end}}
-{{end}}
-
+{{$mod := in (split (index (split (exec "viewperms") "\n") 2) ", ") $modPerms}}
 {{if eq (lower (index .CmdArgs 0)) (print $prefix "modnick")}}
 	{{if ge (len .CmdArgs) 2}}
 		{{if $mod}}
