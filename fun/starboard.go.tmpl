@@ -13,7 +13,7 @@
 {{ $starboard := 678379546218594304 }} {{/* ID of starboard channel */}}
 {{ $maxAge := "2w" }} {{/*maximum age of message for stars to be counted. structure (mo)nth, (w)eek, (d)ay, (h)our. ex: 3d = 3days, 1mo = 1 month.*/}}
 
-{{ $antiStarEnable := true}} {{/*enable/disable anti-star counting. enable = true, disable = false*/}}
+{{ $antiStarEnable := false}} {{/*enable/disable anti-star counting. enable = true, disable = false*/}}
 {{ $antiStarEmoji := "❌" }} {{/*anti-star emoji name*/}}
 {{ $antiStarExtra := 3}} {{/*number of additional anti-star reactions needed before removing post. At zero the post will remove when it has the same number of anti-stars as stars./}}
 {{/* CONFIGURATION VALUES END */}}
