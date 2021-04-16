@@ -1,23 +1,32 @@
 {{/*
 	This command allows users to react to messages with stars. If it reaches a given amount, it will be sent in a given channel.
 	Benefits over star command provided in docs: Updates star count with more stars using a single DB text entry.
-
+	Posts automatically removed when they fall below star threshold. Ability to use "anti-star" reactions similar to an
+	upvote/downvote system to automatically remove posts unfit for starboard. 
+	
 	Recommended trigger: Reaction trigger with option `Added + Removed reactions`.
 */}}
 
 {{/* CONFIGURATION VALUES START */}}
 {{ $starEmoji := "⭐" }} {{/* Star emoji name */}}
-{{ $starLimit := 1 }} {{/* Reactions needed for message to be put on starboard */}}
+{{ $starLimit := 4 }} {{/* Reactions needed for message to be put on starboard */}}
 {{ $starboard := 678379546218594304 }} {{/* ID of starboard channel */}}
 {{ $maxAge := "2w" }} {{/*maximum age of message for stars to be counted. structure (mo)nth, (w)eek, (d)ay, (h)our. ex: 3d = 3days, 1mo = 1 month.*/}}
+
+{{ $antiStarEnable := true}} {{/*enable/disable anti-star counting. enable = true, disable = false*/}}
+{{ $antiStarEmoji := "❌" }} {{/*anti-star emoji name*/}}
+{{ $antiStarExtra := 3}} {{/*number of additional anti-star reactions needed before removing post. At zero the post will remove when it has the same number of anti-stars as stars./}}
 {{/* CONFIGURATION VALUES END */}}
 
 {{ $linkRegex := `https?:\/\/(?:\w+\.)?[\w-]+\.[\w]{2,3}(?:\/[\w-_.]+)+\.(?:png|jpg|jpeg|gif|webp)` }}
 
-{{ $count := 0 }}
+{{ $count := 0 }} {{ $antiCount := 0 }}
 {{ range .ReactionMessage.Reactions }}
 	{{- if and (eq .Emoji.Name $starEmoji) (ge .Count $starLimit) }}
 		{{- $count = .Count }}
+	{{- end -}}
+	{{- if and $antiStarEnable (eq .Emoji.Name $antiStarEmoji) (ge .Count $starLimit) }}
+		{{- $antiCount = .Count }}
 	{{- end -}}
 {{ end }}
 
@@ -32,7 +41,9 @@
 	{{ end }}
 {{ end }}
 
-{{ if lt $count $starLimit }}
+{{if not $antiStarEnable}} {{$antiStarExtra = 0}} {{end}} {{/*if disabled reset count to zero to prevent user configured variable from interrupting desired functionality*/}}
+
+{{ if or (lt $count $starLimit) (ge (add $antiCount $antiStarExtra) $count) }}
 {{ with (dbGet 0 "starboardMessages").Value }}
 	{{ $idRegex := printf `\n%d:(\d+)` $thisID }}
 	{{ with reFindAllSubmatches $idRegex . }} {{ $starboardMessage = index . 0 1 }} {{ end }}
