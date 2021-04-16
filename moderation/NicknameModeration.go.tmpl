@@ -60,7 +60,7 @@
 	{{sendMessage nil (print .User.Mention ", you can't use that.")}}
 	{{end}}
 {{else if eq (toInt ((dbGet .User.ID "nick").Value)) 1}}
-	{{if or (ne (reFind $name .Member.Nick) $name) (eq .Member.Nick "")}}
+	{{if or (ne (reFind $name .Member.Nick) $name) (not .Member.Nick)}}
 	{{$db := dbIncr 0 "mnick" 1}}
 	{{$db2 := toInt ($db)}}
 	{{$v := printf (print "%0" $padding "d") $db2}}
