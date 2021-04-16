@@ -32,40 +32,41 @@
 {{$mod := in (split (index (split (exec "viewperms") "\n") 2) ", ") $modPerms}}
 {{$prefix := index (reFindAllSubmatches `Prefix of \x60\d+\x60: \x60(.+)\x60` (exec "prefix")) 0 1}}
 {{if .CmdArgs}}
-{{if eq (lower (index .CmdArgs 0)) (print $prefix "modnick")}}
-	{{if ge (len .CmdArgs) 2}}
+	{{if eq (lower (index .CmdArgs 0)) (print $prefix "modnick")}}
+		{{if ge (len .CmdArgs) 2}}
+			{{if $mod}}
+			{{((userArg (index .CmdArgs 1)).String)}}'s nickname will be moderated when they next send a message.
+			{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 1}}
+			{{else}}
+			{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+			{{end}}
+		{{else}}
+		{{sendMessage nil (print .User.Mention ", please provide a user!")}}
+		{{end}}
+	{{else if (eq (lower (index .CmdArgs 0)) (print $prefix "unmodnick"))}}
+		{{if ge (len .CmdArgs) 2}}
+			{{if $mod}}
+			{{((userArg (index .CmdArgs 1)).String)}}'s nickname will not be moderated anymore.
+			{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 0}}
+			{{else}}
+			{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+			{{end}}
+		{{else}}
+		{{sendMessage nil (print .User.Mention ", please provide a user!")}}
+		{{end}}
+	{{else if (eq (lower (index .CmdArgs 0)) (print $prefix "nick-numberreset"))}}
 		{{if $mod}}
-		{{((userArg (index .CmdArgs 1)).String)}}'s nickname will be moderated when they next send a message.
-		{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 1}}
+		{{dbSet 0 "mnick" 0}}
+		{{addReactions "✅"}}
 		{{else}}
 		{{sendMessage nil (print .User.Mention ", you can't use that.")}}
 		{{end}}
-	{{else}}
-	{{sendMessage nil (print .User.Mention ", please provide a user!")}}
-	{{end}}
-{{else if (eq (lower (index .CmdArgs 0)) (print $prefix "unmodnick"))}}
-	{{if ge (len .CmdArgs) 2}}
-		{{if $mod}}
-		{{((userArg (index .CmdArgs 1)).String)}}'s nickname will not be moderated anymore.
-		{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 0}}
-		{{else}}
-		{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+	{{else if eq (toInt ((dbGet .User.ID "nick").Value)) 1}}
+		{{if or (ne (reFind $name .Member.Nick) $name) (not .Member.Nick)}}
+		{{$db := dbIncr 0 "mnick" 1}}
+		{{$db2 := toInt ($db)}}
+		{{$v := printf (print "%0" $padding "d") $db2}}
+		{{editNickname (print $name " " $v)}}
 		{{end}}
-	{{else}}
-	{{sendMessage nil (print .User.Mention ", please provide a user!")}}
-{{else if (eq (lower (index .CmdArgs 0)) (print $prefix "nick-numberreset"))}}
-	{{if $mod}}
-	{{dbSet 0 "mnick" 0}}
-	{{addReactions "✅"}}
-	{{else}}
-	{{sendMessage nil (print .User.Mention ", you can't use that.")}}
 	{{end}}
-{{else if eq (toInt ((dbGet .User.ID "nick").Value)) 1}}
-	{{if or (ne (reFind $name .Member.Nick) $name) (not .Member.Nick)}}
-	{{$db := dbIncr 0 "mnick" 1}}
-	{{$db2 := toInt ($db)}}
-	{{$v := printf (print "%0" $padding "d") $db2}}
-	{{editNickname (print $name " " $v)}}
-	{{end}}
-{{end}}
 {{end}}
