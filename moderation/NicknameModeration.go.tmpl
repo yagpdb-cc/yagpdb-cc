@@ -39,7 +39,7 @@
 		{{sendMessage nil (print .User.Mention ", you can't use that.")}}
 		{{end}}
 	{{else}}
-	{{sendMessage nil (print .User.Mention ", please provide a user!"}}
+	{{sendMessage nil (print .User.Mention ", please provide a user!")}}
 	{{end}}
 {{else if (eq (lower (index .CmdArgs 0)) (print $prefix "unmodnick"))}}
 	{{if ge (len .CmdArgs) 2}}
@@ -50,7 +50,7 @@
 		{{sendMessage nil (print .User.Mention ", you can't use that.")}}
 		{{end}}
 	{{else}}
-	{{sendMessage nil (print .User.Mention ", please provide a user!"}}
+	{{sendMessage nil (print .User.Mention ", please provide a user!")}}
 {{else if (eq (lower (index .CmdArgs 0)) (print $prefix "nick-numberreset"))}}
 	{{if $mod}}
 	{{dbSet 0 "mnick" 0}}
