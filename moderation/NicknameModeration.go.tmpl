@@ -7,6 +7,7 @@
 
 	Trigger type: Regex
 	Trigger: \A
+	Errors as Custom Command Outputs: off
 
 	Usage:
 	-modnick <@user/ID>
@@ -18,7 +19,6 @@
 */}}
 
 {{/* Configuration area starts */}}
-{{$prefix := "-"}}{{/* YAGPDB's prefix in your server */}}
 {{$name := "Moderated Nickname"}}{{/* What should be in front of the numbers when a nickname is moderated */}}
 {{$padding := "5"}}{{/* How many digits the number should have, recommendation: between 3 and 7 */}}
 {{$modRoles := cslice 809781706658807838 815197447000555530}}{{/* Users with these roles can moderate nicknames */}}
@@ -31,20 +31,28 @@
 		{{$mod = true}}
 	{{end}}
 {{end}}
+
 {{if eq (lower (index .CmdArgs 0)) (print $prefix "modnick")}}
-	{{if $mod}}
-	{{((userArg (index .CmdArgs 1)).String)}}'s nickname will be moderated when they next send a message.
-	{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 1}}
+	{{if ge (len .CmdArgs) 2}}
+		{{if $mod}}
+		{{((userArg (index .CmdArgs 1)).String)}}'s nickname will be moderated when they next send a message.
+		{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 1}}
+		{{else}}
+		{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+		{{end}}
 	{{else}}
-	{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+	{{sendMessage nil (print .User.Mention ", please provide a user!"}}
 	{{end}}
 {{else if (eq (lower (index .CmdArgs 0)) (print $prefix "unmodnick"))}}
-	{{if $mod}}
-	{{((userArg (index .CmdArgs 1)).String)}}'s nickname will not be moderated anymore.
-	{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 0}}
+	{{if ge (len .CmdArgs) 2}}
+		{{if $mod}}
+		{{((userArg (index .CmdArgs 1)).String)}}'s nickname will not be moderated anymore.
+		{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 0}}
+		{{else}}
+		{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+		{{end}}
 	{{else}}
-	{{sendMessage nil (print .User.Mention ", you can't use that.")}}
-	{{end}}
+	{{sendMessage nil (print .User.Mention ", please provide a user!"}}
 {{else if (eq (lower (index .CmdArgs 0)) (print $prefix "nick-numberreset"))}}
 	{{if $mod}}
 	{{dbSet 0 "mnick" 0}}
