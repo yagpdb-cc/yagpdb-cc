@@ -6,10 +6,12 @@
 	-afk <message> -d <duration>
 
 	Recommended trigger: Regex trigger with trigger `\A`
+
+    Author: DaviiD1337 <https://github.com/DaviiD1337>
 */}}
 
 {{/* CONFIGURATION VALUE STARTS HERE */}}
-{{ $removeAfkOnMessage := true}}{{/* Remove the AFK database from an user if he/she types something in chat. */}}
+{{ $removeAfkOnMessage := true}}{{/* Remove the AFK status from an AFK user when they send a message. */}}
 {{/* CONFIGURATION VALUE ENDS HERE */}}
 
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}{{ $desc := "" }}
