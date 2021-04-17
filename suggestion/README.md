@@ -1,6 +1,6 @@
 # Suggestion Systems
 
-An integrated Suggetion System with all commands condensed into a Single CC. This is similar to the current system in use in YAGPDB Server.
+An integrated Suggestion System with all commands condensed into a single custom command (CC). This is similar to the current system in use in YAGPDB Discord Server.
 
 ## Trigger
 
