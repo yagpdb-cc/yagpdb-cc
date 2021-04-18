@@ -51,11 +51,11 @@ Okay, there are still a few things to do before your suggestion system is set up
 * `$Suggestion_Channel`<br>
    This is the main channel, where all suggestions made through the command will show up - This is the `#suggestions` channel on the support server.
 * `$Logging_Channel`<br>
-   This is the channel where the authors are being notified if a suggestion was denied, approved, implemented, or marked as dupe. In the YAGPDB server, this is the `#suggestion-discussion` channel.
+   This is the channel where the authors are notified if a suggestion was denied, approved, implemented, or marked as dupe. In the YAGPDB server, this is the `#suggestion-discussion` channel.
 * `$Implemented_Channel`<br>
    The channel where suggestions which have been marked as implemented are sent. This provides a good way to organise all implemented suggestions into a separate channel. On the support server, you can find this channel as `#implemented-suggestions`.
 * `$Approved_Channel`
-   Where approved suggestions are being sent to. This is not quite equal to implemented suggestions: You can see approved suggestions as "being worked on", and implemented suggestions as "this is now a feature". In the Support Server, we log those under `#implemented-suggestions` as well.
+   Where approved suggestions are being sent to. This is not the same as implemented suggestions: you can see approved suggestions as "being worked on", and implemented suggestions as "this is now a feature". In the Support Server, we log those under `#implemented-suggestions` as well.
 
 | 🛑 Do not leave any channel ID blank, as this will break the system. |
 | ---- |

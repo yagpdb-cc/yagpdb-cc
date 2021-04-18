@@ -3,7 +3,7 @@ This package includes two custom commands, both of which you will have to add to
 In case you need a refresher, or don't know how to add a custom command, please read [this](https://learn.yagpdb.xyz/the-custom-command-interface) tutorial.
 
 ## Features
-* Set AFK-status with optional duration
+* Set AFK status with optional duration
 * Notification in chat when an AFK member was mentioned
     * Estimated time of arrival, when set
 
