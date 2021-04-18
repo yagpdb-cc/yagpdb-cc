@@ -1,117 +1,138 @@
-# Suggestion Systems
+# Suggestion System
+A feature-rich suggestion system, condensed into a single custom command.<br>
+This is similar to the current system used in the YAGPDB Support Server.
 
-An integrated Suggestion System with all commands condensed into a single custom command (CC). This is similar to the current system in use in YAGPDB Discord Server.
+## Features
+* Logging channels
+* Management commands
+* Cooldown to prevent spam
 
-## Trigger
+## Installing 
+In case you need a refresher, or don't know how to add a custom command, please read [this](https://learn.yagpdb.xyz/the-custom-command-interface) tutorial.
 
-### Type - Regex
+For now, we will just add the system to your server and elaborate later on the various configuration variables as well as commands and subcommands.
 
-### Trigger -
+Copy the entire script from [suggestion.go.tmpl](suggestion.go.tmpl) and add it as a new custom command. Set the trigger type to RegEx and paste the following as the trigger:
 
-    (?i)\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)
+###### Suggestion System Trigger
+```
+(?i)\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)
+```
 
-| ⚠ If your prefix is not `-` replace the `-` at the start of the trigger with your prefix. |
-| --- |
+| ⚠ Make sure to replace the `-` at the beginning of the trigger with your server's prefix.
+| ---- |
 
-Example - For a server with prefix - `?`, Trigger would be : `(?i)\A(\?\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`
+You will not be able to save yet, as the custom command code is slightly over the limit as is. To fix this, we have to do one minor tweak: remove the large leading comment as well as the second comment:
 
-# Configuration Variables
+###### What to remove
+```diff
+- {{/*
+- 	This command is the main suggestion command with suggestion create/edit/delete 
+-   and suggestadmin commands. Usage: Refer README.md
+-
+-	Recommended trigger: Regex trigger with non case sensitive and trigger 
+-  `\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`
+-   Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.
+-	P.S. - REMOVE This comment so that you can save the command. Otherwise youll get an error!
+- */}}
+- 
+- {{/* CONFIGURATION AREA STARTS */}}
+{{$Suggestion_Channel:=737324313341853796}}
+```
+Remove the text you see here as red from your custom command. Now you can save, which you should definitely do.
 
-1. `$Suggestion_Channel` -
+## Configuration
+Okay, there are still a few things to do before your suggestion system is set up, which are the configuration variables. Please take your time to read through their description before making any changes.
 
-   The channel where the suggestions are sent.
+### Channels 
+| ℹ Among these variables, all channels can be separate or the same. |
+| ---- |
 
-2. `$Logging_Channel` -
+* `$Suggestion_Channel`<br>
+   This is the main channel, where all suggestions made through the command will show up - This is the `#suggestions` channel on the support server.
+* `$Logging_Channel`<br>
+   This is the channel where the authors are notified if a suggestion was denied, approved, implemented, or marked as dupe. In the YAGPDB server, this is the `#suggestion-discussion` channel.
+* `$Implemented_Channel`<br>
+   The channel where suggestions which have been marked as implemented are sent. This provides a good way to organise all implemented suggestions into a separate channel. On the support server, you can find this channel as `#implemented-suggestions`.
+* `$Approved_Channel`
+   Where approved suggestions are being sent to. This is not the same as implemented suggestions: you can see approved suggestions as "being worked on", and implemented suggestions as "this is now a feature". In the Support Server, we log those under `#implemented-suggestions` as well.
 
-   The channel where messages regarding denied/approved/implemented and suggestions marked as dupe are sent. It is suggested to keep it separate from the $Suggestion_Channel to reduce clutter but depends on personal taste.
+| 🛑 Do not leave any channel ID blank, as this will break the system. |
+| ---- |
 
-3. `$Implemented_Channel` -
+### Other
+* `$Mod_Roles`<br>
+   List of all role IDs which should have access to the management commands explained further down. There is no need to specify the roles which have `Administrator` permission, they will gain automatic access. Separate the individual role IDs by spaces.
+*  `$Cooldown`<br>
+   The cooldown in seconds between consecutive suggestions to prevent spam. Set this to `0` to disable, Mods and Admins will automatically bypass this.
+* `$Upvote`<br>
+   The emoji to use for upvoting a suggestion. Both inbuilt and custom emojis are supported. For custom emoji, use the `name:id` / `a:name:id` format. Otherwise, the corresponding unicode character. See below for an example.
+* `$Downvote`<br>
+   Same as above, however for downvoting a suggestion.
 
-   The channel where suggestions which have been marked as implemented are sent. This provides a good way to organise all implemented suggestions into a separate channel.
-
-4. `$Approved_Channel` -
-
-   The channel where suggestions which have been marked as approved are sent. This provides a good way to organise all approved suggestions. This provides a good way to organise all implemented suggestions into a separate channel. It is very much possible to set the same channel for tracking approved+implemented suggestions by using the same channel ID in both variables.
-
-| ℹ Among the **above** variables all channels can be separate or same. All combinations are possible. |
-| --- |
-
-| 🛑 DO NOT LEAVE ANY CHANNEL ID AS BLANK. YOU CAN PUT ALL IDS SAME BUT NEVER LEAVE THEM BLANK! |
-| --- |
-
-5. `$Mod_Roles` -
-
-   List of all role ids of moderators who should have access to all the suggestadmin commands. You do no need to specify roles who have `administrator` permissions in your server. They will have access by default.
-
-6. `$Cooldown` -
-
-   Cooldown in seconds between consecutive suggestions. This prevents suggestion misuse/spam. Can be set to 0 to disable. Mods/Admins can bypass the cooldown.
-
-7. `$Upvote` -
-
-   Upvote reaction emoji to use; inbuilt and custom emojis are both supported. If using a custom emoji, use the `name:id` / `a:name:id` format (for animated emojis). Otherwise, use the corresponding Unicode character, for example, `👍`.
-
-8. `$Downvote` -
-
-   Downvote reaction emoji to use; inbuilt and custom emojis are both supported. If using a custom emoji, use the `name:id` / `a:name:id` format (for animated emojis). Otherwise, use the corresponding Unicode character, for example, `👍`.
-
-| ℹ When using unicode (inbuilt) emoji, make sure your code looks like the following: |
-| --- |
-
+###### Upvote and Downvote example with unicode (inbuilt) emoji
 ```go
 {{$Upvote:="👍"}}
 {{$Downvote:="👎"}}
 ```
 
-# Commands
+###### Upvote and Downvote example with custom emoji
+```go
+{{$Upvote := "upvote:524907425531428864"}}
+{{$Downvote := "downvote:524907425032175638"}}
+```
 
-1.  **Suggest -**
+Configure the variables to your liking and save again.
 
-    Syntax : `suggest <Suggestion Here>`
+| ✅ Your suggestion system is now set up and ready for use! |
+| ---- |
 
-    Use : Creates a new Suggestion
+## Commands
+| ℹ Precede all commands covered in the following sections either with your prefix or mention YAGPDB. |
+| ---- |
 
-2.  **DeleteSuggest -**
+This section documents the commands and subcommands of this system, alongs their use-case and usage.
 
-    Syntax : `deletesuggest <Suggestion ID>`
+### For everyone
+* `suggest`<br>
+   Syntax: `suggest <Suggestion:Text>`<br>
+   Use: Used to submit a new suggestion.
+* `deletesuggestion`<br>
+   Syntax: `deletesuggestion <Suggestion-ID:Whole Number>`<br>
+   Use: Delete the suggestion with the given ID. Can be used by mods to force-delete a suggestion.
+*  `editsuggestion`<br>
+   Syntax: `editsuggestion <Suggestion-ID:Whole Number> <Edited Suggestion:Text>`<br>
+   Use: Edit the suggestion with the given ID. Replaces the old text entirely with the new text.
 
-    Use : Delete your own suggestions. Can be used by mods to silently delete/remove suggestions.
+### For Mods / Admins
+| ℹ All these commands are to be preceded with `sa` or `suggestadmin`. |
+| ---- |
 
-3.  **EditSuggest -**
+* `deny`<br>
+   Syntax: `deny <Suggestion-ID:Whole Number> [Reason:Text]`<br>
+   Use: Deny a suggestion and notify the author that their suggestion has been deleted, along with the optional reason for denial.
+* `dupe`<br>
+   Syntax: `dupe <Suggestion-ID:Whole Number> <Old Suggestion-ID:Whole Number>`<br>
+   Use: Mark the first given suggestion as a dupe of the second suggestion, delete the duplicate and inform the author of the duplicate.
+* `approve`<br>
+   Syntax: `approve <Suggestion-ID:Whole Number> [Comment:Text]`<br>
+   Use: Approve a suggestion and log it to the channel for approved suggestions and notify the author. Adds a record of who approved the suggestion.
+* `implement`<br>
+   Syntax: `implement <Suggestion-ID:Whole Number> [Comment:Text]`<br>
+   Use: Log a suggestion to the channel for implemented suggestions and notify the author. Sets a record of who implemented this suggestion.
+* `comment`<br>
+   Syntax: `comment <Suggestion-ID:Whole Number> <Comment:Text>`<br>
+   Use: Comment on a suggestion. If there is already a comment, this will override the old comment. Can be used on any kind of suggestion.
 
-    Syntax : `editsuggest <Suggestion ID> <New Suggestion>`
+| ℹ Required arguments are enclosed in `< >`, optional arguments in `[ ]`. |
+| ---- |
 
-    Use : Edits your previously posted suggestions.
+## FAQ
+**Q: What is a suggestion ID?**<br>
+A: This is just the message ID of the suggestion message. If you are unsure how to get message IDs, you can read [this](https://support.discord.com/hc/en-us/articles/206346498) handy Discord article.
 
-4.  **SA/SuggestAdmin commands -**
+**Q: I can't implement an approved suggestion! Why?**<br>
+A: This is very likely because you copied the wrong message ID. Double check your input.
 
-    - **Deny :**
-
-      Syntax: `sa deny <Suggestion ID> <Optional Reason>`
-
-      Use: Denies a suggestion, deletes it and tags the original person who posted the suggestion with reason for denial.
-
-    - **Dupe :**
-
-      Syntax: `sa dupe <Suggestion ID> <Original Suggestion ID>`
-
-      Use: Marks a suggestion dupe of a previous suggestion, deletes it and informs the user who posted with a tag.
-
-    - **Approve :**
-
-      Syntax: `sa approve <Suggestion ID> <Optional Comment>`
-
-      Use: Marks a suggestion as approved by re-posting in approved suggestions channel. Also keeps a record as to who approved the suggestion in footer. Supports additional comments.
-
-    - **Implement :**
-
-      Syntax: `sa implement <Suggestion ID> <Optional Comment>`
-
-      Use: Marks a suggestion as implemented by re-posting in implemented suggestions channel. Also keeps a record as to who implemented the suggestion in footer. Supports additional comments.
-
-    - **Comment :**
-      Syntax: `sa comment <Suggestion ID> <New Comment>`
-      Use: Updates comment of a new/approved/implemented Suggestion.
-
-| ℹ Precede all commands with @YAGPDB.xyz or prefix to trigger them. |
-| --- |
+**Q: When I try to save, it errors with "response too long". What am I doing wrong?**<br>
+A: You need to remove the first two comments, as shown [further up](#What-to-remove).
