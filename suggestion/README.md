@@ -22,7 +22,7 @@ Copy the entire script from [suggestion.go.tmpl](suggestion.go.tmpl) and add it 
 | ⚠ Make sure to replace the `-` at the beginning of the trigger with your server's prefix.
 | ---- |
 
-You will not be able to save yet, we have to do one minor tweak: Remove the large leading comment as well as the second comment:
+You will not be able to save yet, as the custom command code is slightly over the limit as is. To fix this, we have to do one minor tweak: remove the large leading comment as well as the second comment:
 
 ###### What to remove
 ```diff
@@ -113,10 +113,10 @@ This section documents the commands and subcommands of this system, alongs their
    Use: Deny a suggestion and notify the author that their suggestion has been deleted, along with the optional reason for denial.
 * `dupe`<br>
    Syntax: `dupe <Suggestion-ID:Whole Number> <Old Suggestion-ID:Whole Number>`<br>
-   Use: Mark the first given suggestion as dupe of the second suggestion, delete the duplicate and inform the author of the duplicate.
+   Use: Mark the first given suggestion as a dupe of the second suggestion, delete the duplicate and inform the author of the duplicate.
 * `approve`<br>
    Syntax: `approve <Suggestion-ID:Whole Number> [Comment:Text]`<br>
-   Use: Approve of a suggestion and log it to the channel for approved suggestions and notify the author. Adds a record of who approved the suggestion.
+   Use: Approve a suggestion and log it to the channel for approved suggestions and notify the author. Adds a record of who approved the suggestion.
 * `implement`<br>
    Syntax: `implement <Suggestion-ID:Whole Number> [Comment:Text]`<br>
    Use: Log a suggestion to the channel for implemented suggestions and notify the author. Sets a record of who implemented this suggestion.
