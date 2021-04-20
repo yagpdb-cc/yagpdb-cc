@@ -14,7 +14,7 @@
 {{$starboard := 712681639410663516}} {{/* ID of starboard channel */}}
 {{$maxAge := "2w"}} {{/*maximum age of message for stars to be counted. structure (mo)nth, (w)eek, (d)ay, (h)our. ex: 3d = 3days, 1mo = 1 month.*/}}
 {{$selfStarEnable := false}} {{/*true to allow members to star/anti-star their own posts, false to disallow*/}}
-{{$warnMessages := true}} {{/*true to enable sending of messages such as 'you can't star your own post', false to disable*/}}
+{{$warnMessages := false}} {{/*Whether to send warning messages such as "you can't star your own post". Will be posted in the chat.*/}}
 
 {{$antiStarEnable := false}} {{/*enable/disable anti-star counting. enable = true, disable = false*/}}
 {{$antiStarEmoji := "whystar"}} {{/*anti-star emoji name*/}}
@@ -156,4 +156,3 @@
 	{{$embed.Set "footer" (sdict "text" (printf "%s %d | %s" $emoji $count $thisID))}}
 	{{editMessage $starboard $starboardMessage (cembed $embed)}}
 {{end}}
-
