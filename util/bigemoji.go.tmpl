@@ -8,7 +8,7 @@
 	{{ $embed := sdict }} {{ $emoji := index .CmdArgs 0 }}
 		{{ if reFind `\p{So}|.\x{20e3}` $emoji }}
 			{{ $emoji_U := "" }}
-			{{ $url := "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-google-136/" }}
+			{{ $url := "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-twitter-64/" }}
 			{{- range toRune $emoji }}
 				{{- $emoji_U = joinStr "-" $emoji_U (printf "%04x" .) }}
 			{{- end -}}
