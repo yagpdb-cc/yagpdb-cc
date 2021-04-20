@@ -1,9 +1,5 @@
 # Starboard v2
-
-## **What is this?**
-This is modified version of the existing starboard custom command in the /fun/ folder. Several large changes have been made and more setup is required, 
-this command now consists of two separate CC's that must be used simultaneously. The first command is the basic starboard, the second is a starboard channel listener. 
-All features of the original starboard custom command should remain intact.
+This is version 2 of the starboard custom command. This package now consists of two custom commands, and a more elaborate setup is required. All features of the first version are also found in here.
 
 
 ## **Features added my me**
