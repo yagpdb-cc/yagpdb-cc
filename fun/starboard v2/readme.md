@@ -1,10 +1,13 @@
-**What is this?**
+# Starboard v2
+
+## **What is this?**
 This is modified version of the existing starboard custom command in the /fun/ folder. Several large changes have been made and more setup is required, 
 this command now consists of two separate CC's that must be used simultaneously. The first command is the basic starboard, the second is a starboard channel listener. 
 All features of the original starboard custom command should remain intact.
 
 
-**Features added my me** (some basic features have been added to the other starboard command)
+## **Features added my me**
+(some basic features have been added to the other starboard command)
 -posts automatically removed when they fall below set star threshold or when number of anti-stars has been reached
 -ability to ignore stars/ant-stars on old posts (server customizable)
 -anti-star feature similar to an upvote/downvote system with customizable threshold for 'downvotes' before autodeleting (server customizable)
@@ -16,7 +19,7 @@ All features of the original starboard custom command should remain intact.
  ***NOTE: not all of these features will work on starboard messages created with the original starboard cc***
  
  
- **SETUP:**
+ ## **SETUP:**
  1. Add both custom commands to your server with trigger 'Reaction - Added + Removed reactions'
  2. starboard.go.tmpl **MUST** be set to **IGNORE* your starboard channel
  3. starboardListener.go.tmpl **MUST** be set to work **ONLY** in your starboard channel
@@ -27,17 +30,17 @@ You should not enable anti-stars if your community can't be trusted to self mode
 could be a total disaster for others. Use your own best judgement regarding your community members. 
  
  
-**Why did I make this?**
+## **Why did I make this?**
 Starboard holds a special place in my heart on discord and I want a starboard with what I perceive to be the most important and valuable features.
 Every starboard bot seems to have one feature or another but none have them all, I want this to be that one.
 
 
-**Why is there no star leaderboard?**
+## **Why is there no star leaderboard?**
 I don't like it personally. My history with starboard is that funny or out of context comments, self made memes, etc get starred. Having a leaderboard 
 encourages members to make low effort or attention seeking posts for easy stars. It's better when it's organic in my opinion.
 
 
-**Known Issues**
+## **Known Issues**
 None that I know of. I've done my best to squash all bugs I could find and fix any inconsistencies. I've tested a wide range of situations but surely not all,
 if you have a problem I can be contacted on discord through the official YAG server at DV0RAK#0001.
 
