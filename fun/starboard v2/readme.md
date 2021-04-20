@@ -16,6 +16,7 @@ All features of the original starboard custom command should remain intact.
   - users are unable to duplicate stars/anti-stars between channels
  - reactions from the original message poster can be ignored (server customizable)
  - message warnings for attempts to duplicate stars/anti-stars and self stars (server customizable)
+
  ***NOTE: not all of these features will work on starboard messages created with the original starboard cc***
  
  
