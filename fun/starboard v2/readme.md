@@ -8,14 +8,14 @@ All features of the original starboard custom command should remain intact.
 
 ## **Features added my me**
 (some basic features have been added to the other starboard command)
--posts automatically removed when they fall below set star threshold or when number of anti-stars has been reached
--ability to ignore stars/ant-stars on old posts (server customizable)
--anti-star feature similar to an upvote/downvote system with customizable threshold for 'downvotes' before autodeleting (server customizable)
--ability to react directly on posts in your #starboard channel with either star or anti-star
-   -accurate tracking between original post and starboard post
-   -users are unable to duplicate stars/anti-stars between channels
- -reactions from the original message poster can be ignored (server customizable)
- -message warnings for attempts to duplicate stars/anti-stars and self stars (server customizable)
+- posts automatically removed when they fall below set star threshold or when number of anti-stars has been reached
+- ability to ignore stars/ant-stars on old posts (server customizable)
+- anti-star feature similar to an upvote/downvote system with customizable threshold for 'downvotes' before autodeleting (server customizable)
+- ability to react directly on posts in your #starboard channel with either star or anti-star
+  - accurate tracking between original post and starboard post
+  - users are unable to duplicate stars/anti-stars between channels
+ - reactions from the original message poster can be ignored (server customizable)
+ - message warnings for attempts to duplicate stars/anti-stars and self stars (server customizable)
  ***NOTE: not all of these features will work on starboard messages created with the original starboard cc***
  
  
