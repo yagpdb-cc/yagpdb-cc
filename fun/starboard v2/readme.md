@@ -39,6 +39,6 @@ None that I know of. I've done my best to squash all bugs I could find and fix a
 if you have a problem I can be contacted on discord through the official YAG server at DV0RAK#0001.
 
 
-HUGE THANKS to joe for creating the base code in this custom command, another huge thanks to satty whose giveaway code provided the inspiration and assistance
-needed for some of the code in here. Some more thanks to the bois and gals in the cc-help channel for answering some questions and the years long backlog of 
-messages that I leeched off of.
+## Acknowledgements
+Thanks to Joe for creating the base code for this custom command which you can see in v1. Satty, as his giveaway command gave inspiration and assistance needed for some chunks in here.
+A general thank you for all the people in the custom command help channel for answering some questions as well as the years-long backlog of messages I leeched off of.
