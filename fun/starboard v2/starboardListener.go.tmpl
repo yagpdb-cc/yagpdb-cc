@@ -29,11 +29,11 @@
 	{{with reFindAllSubmatches $idRegex .}} {{$thisID = index . 0 1}} {{$chanID = index . 0 2}} {{end}} 
 {{end}}
 
-{{$data := ""}}{{$sboardPost := print $thisID}}{{$skip := true}}
+{{$data := ""}}{{$sboardPost := print $thisID}}{{$skip := true}}{{$starboardData := ""}}
 {{if and (or (eq .Reaction.Emoji.Name $starEmoji) (eq .Reaction.Emoji.Name $antiStarEmoji)) (not .User.Bot)}}
 	{{if not (dbGet 0 "starboardReactions")}}{{dbSet 0 "starboardReactions" (sdict $sboardPost (sdict "ID" $sboardPost "listID" (print .User.ID ",")))}}{{end}}
 	{{with (dbGet 0 "starboardReactions").Value}}{{$data = sdict .}}{{end}}
-	{{$starboardData := $data.Get $sboardPost}}
+	{{$starboardData = $data.Get $sboardPost}}
 
 	{{if and .ReactionAdded (not $selfStarEnable) (eq .User.ID ((getMessage $chanID $thisID).Author).ID)}}
 		{{deleteMessageReaction $starboard $starboardMessage .User.ID $starEmFull $antiStarEmFull}}
