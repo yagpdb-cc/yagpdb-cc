@@ -30,9 +30,8 @@ You should not enable anti-stars if your community cannot be trusted to self mod
 Starboards on Discord hold a special place in my heart and I wanted one with, what I perceive to be, the most important and valuable features. Every bot with a starboard seems to lack one feature or the other, never all of them. This is what I think is a complete starboard.
 
 
-## **Why is there no star leaderboard?**
-I don't like it personally. My history with starboard is that funny or out of context comments, self made memes, etc get starred. Having a leaderboard 
-encourages members to make low effort or attention seeking posts for easy stars. It's better when it's organic in my opinion.
+### Why is there no star leaderboard?
+Personally, I don't like it. A starboard should be for funny or out of context comments, self-made memes, or similar. Having a leaderboard seems to encourage members to make low-effort, spammy, attention-seeking, or a combination of those for easy stars. To me, it should be organic, hence no leaderboard.
 
 
 ## **Known Issues**
