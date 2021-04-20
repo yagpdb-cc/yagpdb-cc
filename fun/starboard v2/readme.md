@@ -22,6 +22,9 @@ All features of the original starboard custom command should remain intact.
  3. starboardListener.go.tmpl **MUST** be set to work **ONLY** in your starboard channel
  4. **user configured variables MUST be the same between both commands.** If you change something on one be sure to change it on the other
     -don't forget to configure your starboard channel ID and desired emojis for basic functions to work
+    
+You should not enable anti-stars if your community can't be trusted to self moderate starboard posts. It should work great for some servers but 
+could be a total disaster for others. Use your own best judgement regarding your community members. 
  
  
 **Why did I make this?**
