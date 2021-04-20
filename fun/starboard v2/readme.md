@@ -20,7 +20,7 @@ All the starboard v1 features, plus the following:
  ***NOTE: not all of these features will work on starboard messages created with the original starboard cc***
  
  
- ## **SETUP:**
+ ## Installing
  1. Add both custom commands to your server with trigger 'Reaction - Added + Removed reactions'
  2. starboard.go.tmpl **MUST** be set to **IGNORE* your starboard channel
  3. starboardListener.go.tmpl **MUST** be set to work **ONLY** in your starboard channel
