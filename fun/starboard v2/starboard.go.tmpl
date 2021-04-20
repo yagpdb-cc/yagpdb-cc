@@ -12,7 +12,7 @@
 {{$starLimit := 4}} {{/* Minimum of stars required to show up on the starboard. */}}
 {{$starboard := 712681639410663516}} {{/* ID of starboard channel */}}
 {{$maxAge := "2w"}} {{/*maximum age of message for stars to be counted. structure (mo)nth, (w)eek, (d)ay, (h)our. ex: 3d = 3days, 1mo = 1 month.*/}}
-{{$selfStarEnable := false}} {{/*true to allow members to star/anti-star their own posts, false to disallow*/}}
+{{$selfStarEnable := false}} {{/* Whether self-starring a message will make it show up on the starboard. */}}
 {{$warnMessages := true}} {{/*true to enable sending of messages such as 'you can't star your own post', false to disable*/}}
 
 {{$antiStarEnable := false}} {{/*enable/disable anti-star counting. enable = true, disable = false*/}}
