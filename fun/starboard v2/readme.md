@@ -25,7 +25,7 @@ All the starboard v1 features, plus the following:
     
 You should not enable anti-stars if your community cannot be trusted to self moderate starboard posts. It should work great for some servers but could be a total disaster for others. Use your own best judgement regarding your community members. 
  
- 
+ ## FAQ
 ### Why did I make this?
 Starboards on Discord hold a special place in my heart and I wanted one with, what I perceive to be, the most important and valuable features. Every bot with a starboard seems to lack one feature or the other, never all of them. This is what I think is a complete starboard.
 
