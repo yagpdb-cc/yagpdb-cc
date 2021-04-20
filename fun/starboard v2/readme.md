@@ -2,7 +2,7 @@
 This is version 2 of the starboard custom command. This package now consists of two custom commands, and a more elaborate setup is required. All features of the first version are also found in here.
 
 
-## **Features added my me**
+## Features
 All the starboard v1 features, plus the following:
 - posts automatically removed when they fall below set star threshold or when number of anti-stars has been reached
 - ability to ignore stars/ant-stars on old posts (server customizable)
