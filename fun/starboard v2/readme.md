@@ -1,6 +1,7 @@
 **What is this?**
 This is modified version of the existing starboard custom command in the /fun/ folder. Several large changes have been made and more setup is required, 
 this command now consists of two separate CC's that must be used simultaneously. The first command is the basic starboard, the second is a starboard channel listener. 
+All features of the original starboard custom command should remain intact.
 
 
 **Features added my me** (some basic features have been added to the other starboard command)
