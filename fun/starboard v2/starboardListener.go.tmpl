@@ -18,8 +18,8 @@
 {{$warnMessages := false}} {{/*Whether to send warning messages such as "you can't star your own post". Will be posted in the chat.*/}}
 
 {{$antiStarEnable := false}} {{/*enable/disable anti-star counting. enable = true, disable = false*/}}
-{{$antiStarEmoji := "whystar"}} {{/*anti-star emoji name*/}}
-{{$antiStarEmFull := ":whystar:592143371565400064"}} {{/*full emoji name of anti-star emoji, needed to add/remove message reactions. same as $antiStarEmoji if unicode*/}}
+{{$antiStarEmoji := "❌"}} {{/*anti-star emoji name*/}}
+{{$antiStarEmFull := "❌"}} {{/*full emoji name of anti-star emoji, needed to add/remove message reactions. same as $antiStarEmoji if unicode*/}}
 {{$antiStarExtra := 0}} {{/*number of additional anti-star reactions needed before removing post. At zero the post will remove when it has the same number of anti-stars as stars./}}
 {{/* CONFIGURATION VALUES END */}}
 
