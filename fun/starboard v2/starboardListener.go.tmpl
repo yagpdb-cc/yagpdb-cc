@@ -129,10 +129,12 @@
 		{{dbSet 0 "starboardMessages" (reReplace $idRegex . "")}}
 	{{end}}
 	
-{{$starboardData.Set "listID" (reReplace `SB\d+,` $starboardData.listID "")}}
-{{$starboardData.Set "listAnti" (reReplace `SB\d+,` $starboardData.listAnti "")}}
-{{$data.Set $sboardPost $starboardData}}
-{{dbSet 0 "starboardReactions" $data}}
+	 {{if $starboardData}}
+		{{$nil := $starboardData.Set "listID" (reReplace `SB\d+,` $starboardData.listID "")}}
+		{{$nil := $starboardData.Set "listAnti" (reReplace `SB\d+,` $starboardData.listAnti "")}}
+		{{$data.Set $sboardPost $starboardData}}
+		{{dbSet 0 "starboardReactions" $data}}
+	{{end}}
 
 {{else if and $count (not $skip) (or (eq .Reaction.Emoji.Name $starEmoji) (eq .Reaction.Emoji.Name $antiStarEmoji)) (le (currentTime.Sub .Message.Timestamp.Parse) (toDuration $maxAge))}}
 
