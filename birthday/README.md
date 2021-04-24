@@ -33,7 +33,7 @@ Before your birthday custom command is ready to go, you still need to configure 
 - `$mods`<br>
     List of role IDs you consider moderator. Separate multiple role IDs by spaces.
 - `$ChannelID`<br>
-    Configures where the birthday messages are being sent to.
+    The channel that birthday messages should be sent in.
 - `$bdayMsg`<br>
     This variable defines the message that'll be sent on a member's birthday.
 - `$invertedOrder`<br>
