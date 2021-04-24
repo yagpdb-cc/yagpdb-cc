@@ -34,7 +34,7 @@ Before your birthday custom command is ready to go, you still need to configure 
     List of role IDs you consider moderator. Separate multiple role IDs by spaces.
 - `$ChannelID`<br>
     Configures where the birthday messages are being sent to.
-- `§bdayMsg`<br>
+- `$bdayMsg`<br>
     This variable defines the message that'll be sent on a member's birthday.
 - `$invertedOrder`<br>
     Configure which date format will be used. If set to to `true`, YAGPDB will use the american notation `mm/dd/yyyy` instead of `dd/mm/yyyy`.
