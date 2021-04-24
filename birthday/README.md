@@ -30,6 +30,8 @@ Save for now, so it doesn't get lost.
 ## Configuration
 Before your birthday custom command is ready to go, you still need to configure a few things. Please read carefully through their decription before changing anything.
 
+- `$mods`<br>
+    List of role IDs you consider moderator. Separate multiple role IDs by spaces.
 - `$ChannelID`<br>
     Configures where the birthday messages are being sent to.
 - `§bdayMsg`<br>
@@ -42,4 +44,27 @@ Before your birthday custom command is ready to go, you still need to configure 
     If `true`, YAGPDB will kick users younger than 13 years.
 - `$banUnderAge`<br>
     Same as above, but instead will ban users younger than 13 years.
+
+## Commands
+| ℹ All commands can be used with `bday` or `birthday`, such as `-getbday` or `-getbirthday`. |
+| ---- |
+
+- `mybirthday`<br>
+    Syntax: `mybirthday dd/mm/yyyy` or `mybirthday mm/dd/yyyy`<br>
+    Use: Set your birthday to the given date. Note that if `$invertedOrder` is true, you'd have to use the latter version, as it now uses american date notation.
+- `startbirthday`<br>
+    Syntax: `starbirthday [Duration:Duration]`<br>
+    Use: Start announcing birthdays at the time of executing this command. Provide an optional duration to fine-tune the timing.
+- `stopbirthday`<br>
+    Syntax: `stopbirthday`<br>
+    Use: Stops announcing birthdays immediately.
+- `setbirthday`<br>
+    Syntax: `setbirthday <User:Mention>`<br>
+    Use: Set the birthday date of the mentioned user. Can only be used by users with at least one role in `$mods`.
+- `getbirthday`<br>
+    Syntax: `getbirthday <User:Mention>`<br>
+    Use: Get the birthday of the mentioned user.
+- `delbirthday`<br>
+    Syntax: `delbirthday <User:Metion>`<br>
+    Use: Delete the set birthday of the mentioned user. Can only be used by users with at least one role in `$mods`.
 
