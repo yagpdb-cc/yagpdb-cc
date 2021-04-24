@@ -43,7 +43,7 @@ Before your birthday custom command is ready to go, you still need to configure 
 - `$kickUnderAge`<br>
     If `true`, YAGPDB will kick users younger than 13 years.
 - `$banUnderAge`<br>
-    Same as above, but instead will ban users younger than 13 years.
+    Same as above, but will instead ban users younger than 13 years old.
 
 ## Commands
 | ℹ All commands can be used with `bday` or `birthday`, such as `-getbday` or `-getbirthday`. |
