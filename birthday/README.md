@@ -129,7 +129,7 @@ Once that is done, YAGPDB will respond with `All set, you can now use V2.0`.
       {{end}}
    {{end}}
 {{else}}
-   Please wait... Deletion is in progress.
+   Please wait... deletion is in progress.
    {{execCC .CCID nil 1 "1"}}
 {{end}}
 ```
