@@ -35,7 +35,7 @@ Before your birthday custom command is ready to go, you still need to configure 
 - `$ChannelID`<br>
     The channel that birthday messages should be sent in.
 - `$bdayMsg`<br>
-    This variable defines the message that'll be sent on a member's birthday.
+    The message sent on a member's birthday.
 - `$invertedOrder`<br>
     Configure which date format will be used. If set to to `true`, YAGPDB will use the american notation `mm/dd/yyyy` instead of `dd/mm/yyyy`.
 - `$yearOptional`<br>
