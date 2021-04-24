@@ -25,4 +25,21 @@ Add the only command, [birthday.go.tmpl](birthday.go.tmpl) as a new custom comma
 | ℹ Make sure to replace `-` with your server's prefix. |
 | ---- |
 
-Save for now and take your time reading through the following section describing the configuration variables.
+Save for now, so it doesn't get lost.
+
+## Configuration
+Before your birthday custom command is ready to go, you still need to configure a few things. Please read carefully through their decription before changing anything.
+
+- `$ChannelID`<br>
+    Configures where the birthday messages are being sent to.
+- `§bdayMsg`<br>
+    This variable defines the message that'll be sent on a member's birthday.
+- `$invertedOrder`<br>
+    Configure which date format will be used. If set to to `true`, YAGPDB will use the american notation `mm/dd/yyyy` instead of `dd/mm/yyyy`.
+- `$yearOptional`<br>
+    Set this to `true` to make the year optional. This will make it default to `2000`, should a member not give a year upon configuring their birthday.
+- `$kickUnderAge`<br>
+    If `true`, YAGPDB will kick users younger than 13 years.
+- `$banUnderAge`<br>
+    Same as above, but instead will ban users younger than 13 years.
+
