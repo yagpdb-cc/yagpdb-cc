@@ -68,3 +68,68 @@ Before your birthday custom command is ready to go, you still need to configure 
     Syntax: `delbirthday <User:Metion>`<br>
     Use: Delete the set birthday of the mentioned user. Can only be used by users with at least one role in `$mods`.
 
+After you've configured all those variables, save again.
+| ✅ Your birthday system is now ready to use! |
+| ---- |
+
+# Updating
+As the first version had some flaws, such as congratulating a member more than once, we highly recommend updating to v2. To do that, please follow the steps below.
+
+| 🛑 This will erase all set birthdays. Your members will have to set them up again. |
+| ---- |
+
+Add this script as a new custom command with any trigger you like, such as a command trigger with `update`. After that, just run it.
+
+Once that is done, YAGPDB will respond with `All set, you can now use V2.0`.
+| ✅ You may now install the latest version as described above. |
+| ---- |
+
+```go
+{{with .ExecData}}
+   {{if eq . "1"}}
+      {{range seq 0 10}}
+         {{dbDel . "bdays"}}
+      {{end}}
+      {{execCC $.CCID nil 2 "2"}}
+   {{else if eq . "2"}}
+      {{range seq 9 13}}
+         {{dbDel . "bdays"}}
+      {{end}}
+      {{execCC $.CCID nil 3 "3"}}
+   {{else if eq . "3"}}
+      Still running deletation...
+      {{$day := currentTime.Day}}
+      {{range seq (sub $day 3) (add $day 3)}}
+         {{dbDel . "bdayannounced"}}
+      {{end}}
+      {{execCC $.CCID nil 4 "4"}}
+   {{else if eq . "4"}}
+      {{$entries := dbTopEntries "bday" 9 0}}
+      {{if not $entries}}
+         All set, you can now use V2.0
+      {{else}}
+         {{range $entries}}
+            {{dbDel .UserID "bday"}}
+         {{end}}
+         {{if le (len $entries) 9}}
+            All set, you can now use V2.0
+         {{else}}
+            {{execCC $.CCID nil 5 "5"}}
+         {{end}}
+      {{end}}
+   {{else}}
+      {{$entries := dbTopEntries "bday" 9 0}}
+      {{if not $entries}}
+         All set, you can now use V2.0
+      {{else}}
+         {{range $entries}}
+            {{dbDel .UserID "bday"}}
+         {{end}}
+         {{execCC $.CCID nil 5 "5"}}
+      {{end}}
+   {{end}}
+{{else}}
+   Please wait... Deletion is in progress.
+   {{execCC .CCID nil 1 "1"}}
+{{end}}
+```
