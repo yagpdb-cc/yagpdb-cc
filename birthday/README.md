@@ -37,7 +37,7 @@ Before your birthday custom command is ready to go, you still need to configure 
 - `$bdayMsg`<br>
     The message sent on a member's birthday.
 - `$invertedOrder`<br>
-    Configure which date format will be used. If set to to `true`, YAGPDB will use the american notation `mm/dd/yyyy` instead of `dd/mm/yyyy`.
+    Date format to use. If set to to `true`, YAGPDB will use the american notation `mm/dd/yyyy` instead of `dd/mm/yyyy`.
 - `$yearOptional`<br>
     Set this to `true` to make the year optional. This will make it default to `2000`, should a member not give a year upon configuring their birthday.
 - `$kickUnderAge`<br>
