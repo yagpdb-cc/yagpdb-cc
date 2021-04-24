@@ -39,7 +39,7 @@ Before your birthday custom command is ready to go, you still need to configure 
 - `$invertedOrder`<br>
     Date format to use. If set to to `true`, YAGPDB will use the american notation `mm/dd/yyyy` instead of `dd/mm/yyyy`.
 - `$yearOptional`<br>
-    Set this to `true` to make the year optional. This will make it default to `2000`, should a member not give a year upon configuring their birthday.
+    Whether the year is optional when configuring birthdays; set to `true` to enable. This will make the year default to `2000`, should a member not give a year upon configuring their birthday.
 - `$kickUnderAge`<br>
     Whether to kick users younger than 13 years old; set to `true` to enable.
 - `$banUnderAge`<br>
