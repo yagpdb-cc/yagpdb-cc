@@ -41,7 +41,7 @@ Before your birthday custom command is ready to go, you still need to configure 
 - `$yearOptional`<br>
     Set this to `true` to make the year optional. This will make it default to `2000`, should a member not give a year upon configuring their birthday.
 - `$kickUnderAge`<br>
-    If `true`, YAGPDB will kick users younger than 13 years.
+    Whether to kick users younger than 13 years old; set to `true` to enable.
 - `$banUnderAge`<br>
     Same as above, but will instead ban users younger than 13 years old.
 
