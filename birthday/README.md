@@ -4,8 +4,8 @@ This custom command adds birthday functionality to your server, wishing members 
 ## Features
 * Send a configurable message in the chat on birthdays
 * Kick or ban users younger than 13 years
-* Allow users to set their birthday date
-* Allow staff to edit/remove birthday dates
+* Allow users to set their birthday 
+* Allow staff to edit/remove birthdays
 
 ## Installing
 As usual, there are leading comments in each file describing where to put the script and which trigger to use. 
