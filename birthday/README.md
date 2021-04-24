@@ -1,5 +1,5 @@
 # Birthdays
-This custom command adds a birthday functionality to your server, wishing members all the best on their respective date.
+This custom command adds birthday functionality to your server, wishing members all the best on their respective date.
 
 ## Features
 * Send a congratulation message in the chat
