@@ -3,7 +3,7 @@ This custom command adds birthday functionality to your server, wishing members 
 
 ## Features
 * Send a congratulation message in the chat
-* Kick or Ban users younger than 13 years
+* Kick or ban users younger than 13 years
 * Allow users to set their birthday date
 * Allow staff to edit/remove birthday dates
 
