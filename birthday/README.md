@@ -3,13 +3,12 @@ This custom command adds birthday functionality to your server, wishing members 
 
 ## Features
 * Send a configurable message in the chat on birthdays
-* Kick or ban users younger than 13 years
+* Configure to kick or ban users younger than 13 years
 * Allow users to set their birthday 
 * Allow staff to edit/remove birthdays
 
 ## Installing
-As usual, there are leading comments in each file describing where to put the script and which trigger to use. 
-Additionally, we've documented how and where to add this script down below.
+As this script does not have any leading comment, we've documented everything down below.
 
 If you instead want to update to v2, because you used an older version, please click [here](#Updating).
 
@@ -43,7 +42,7 @@ Before your birthday custom command is ready to go, you still need to configure 
 - `$kickUnderAge`<br>
     Whether to kick users younger than 13 years old; set to `true` to enable.
 - `$banUnderAge`<br>
-    Same as above, but will instead ban users younger than 13 years old.
+    Same as above, but will instead ban users younger than 13 years old, will take priority over `$kickUnderAge`.
 
 ## Commands
 | ℹ All commands can be used with `bday` or `birthday`, such as `-getbday` or `-getbirthday`. |
@@ -63,7 +62,7 @@ Before your birthday custom command is ready to go, you still need to configure 
     Use: Set the birthday date of the mentioned user. Can only be used by users with at least one role in `$mods`.
 - `getbirthday`<br>
     Syntax: `getbirthday <User:Mention>`<br>
-    Use: Get the birthday of the mentioned user.
+    Use: Get the birthday of the mentioned user, can only be used by users with at least one role in `$mods`.
 - `delbirthday`<br>
     Syntax: `delbirthday <User:Metion>`<br>
     Use: Delete the set birthday of the mentioned user. Can only be used by users with at least one role in `$mods`.
@@ -97,7 +96,7 @@ Once that is done, YAGPDB will respond with `All set, you can now use V2.0`.
       {{end}}
       {{execCC $.CCID nil 3 "3"}}
    {{else if eq . "3"}}
-      Still running deletation...
+      Deletion is still in progress.
       {{$day := currentTime.Day}}
       {{range seq (sub $day 3) (add $day 3)}}
          {{dbDel . "bdayannounced"}}
@@ -129,7 +128,7 @@ Once that is done, YAGPDB will respond with `All set, you can now use V2.0`.
       {{end}}
    {{end}}
 {{else}}
-   Please wait... deletion is in progress.
+   Please wait... Deletion is in progress.
    {{execCC .CCID nil 1 "1"}}
 {{end}}
 ```
