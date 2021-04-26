@@ -1,11 +1,13 @@
 {{/*
-	starboard listener
+	Starboard Listener
 
 	This command allows users to react to messages within the starboard channel with stars/anti-stars. 
 
-	Recommended trigger: Reaction trigger with option `Added + Removed reactions`.
-	Channel limitations: run ONLY in your starboard channel.
+	Trigger: Reaction trigger with option `Added + Removed reactions`.
+	Channel limitations: Run ONLY in your starboard channel.
 	Author: dvoraknt <https://github.com/dvoraknt>
+	
+	Last Update: 4/26/2021 - If installed before this date please update to this new script.
 */}}
 
 {{/* CONFIGURATION VALUES START */}}
@@ -42,6 +44,19 @@
 		{{deleteMessage $starboard $ret 3}}{{end}}
 	{{else if $starboardData}}
 		{{$starboardData = sdict $starboardData}}
+		
+		{{if gt (len (print $data)) 90000}}
+			{{$dataSlice := cslice}}
+			{{range $k, $v := $data}}{{- $dataSlice = $dataSlice.Append (cslice $k $v) -}}{{end}}
+			{{$lenCount := 0}}{{$toDel := cslice}}
+			{{range $dataSlice}}
+				{{if lt $lenCount 10000}}
+					{{- $lenCount = add $lenCount (len (print .)) -}}
+					{{- $toDel = $toDel.Append (index . 0)}}
+			{{end}}{{end}}
+			{{range $toDel}}
+				{{$data.Del . }}
+		{{end}}{{end}}
 
 		{{if and .ReactionAdded (eq .Reaction.Emoji.Name $starEmoji)}}
 			{{if reFind (print "PO" .User.ID ",") $starboardData.listID}}
