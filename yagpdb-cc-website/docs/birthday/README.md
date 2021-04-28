@@ -152,4 +152,3 @@ Once that is done, YAGPDB will respond with `All set, you can now use V2.0`.
 ---
 
 This custom command was authored by [@Pedro-Pessoa](https://github.com/Pedro-Pessoa).
-
