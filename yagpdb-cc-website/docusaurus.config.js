@@ -65,7 +65,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} under MIT Liscense.`,
+      copyright: `Copyright © ${new Date().getFullYear()} under the MIT license.`,
     },
   },
   presets: [
