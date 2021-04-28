@@ -13,7 +13,7 @@ module.exports = {
     navbar: {
       title: 'YAGPDB Custom Commands',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'YAGPDB logo',
         src: 'img/yag.ico',
       },
       items: [
