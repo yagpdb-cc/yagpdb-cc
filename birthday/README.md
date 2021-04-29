@@ -58,7 +58,7 @@ Before your birthday custom command is ready to go, you still need to configure 
     Syntax: `stopbirthday`<br>
     Use: Stops announcing birthdays immediately.
 - `setbirthday`<br>
-    Syntax: `setbirthday <User:Mention>`<br>
+    Syntax: `setbirthday <Date> <User:Mention>`<br>
     Use: Set the birthday date of the mentioned user. Can only be used by users with at least one role in `$mods`.
 - `getbirthday`<br>
     Syntax: `getbirthday <User:Mention>`<br>
