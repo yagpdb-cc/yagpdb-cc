@@ -105,7 +105,7 @@
 	{{else}}
 		{{$spammersdict.Set (str .User.ID) 1}}
 		{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-		{{end}}
+	{{end}}
 
 
 	{{range $k, $v := $spammersdict}}
