@@ -4,6 +4,8 @@
 	Recommended trigger: Reaction trigger with option `Added + Removed reactions`.
 	Channel limitations: set to IGNORE your starboard channel.
 	Author: dvoraknt <https://github.com/dvoraknt>
+	
+	Last Update: 5/3/2021 - If installed before this date please update to this new script.
 */}}
 
 {{/* CONFIGURATION VALUES START */}}
@@ -126,7 +128,7 @@
 {{if not $antiStarEnable}} {{$antiStarExtra = 0}} {{end}} {{/*resetting count to zero to prevent user configured variable from interrupting desired functionality*/}}
 {{if and (not $skip) (or (lt $count $starLimit) (ge (add $antiCount $antiStarExtra) $count))}}
 {{with (dbGet 0 "starboardMessages").Value}}
-	{{$idRegex := printf `\n%d:(\d+)` $thisID}}
+	{{$idRegex := printf `\n%d:(\d+):(\d+)` $thisID}}
 	{{with reFindAllSubmatches $idRegex .}} {{$starboardMessage = index . 0 1}} {{end}}
 		{{deleteMessage $starboard $starboardMessage 0}}
 		{{dbSet 0 "starboardMessages" (reReplace $idRegex . "")}}
