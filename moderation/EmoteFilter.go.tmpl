@@ -15,7 +15,7 @@
 	triggering the filter, there is nothing that can be done to prevent this so it is not an issue with the command. 
 
 	Created by: DV0RAK - https://github.com/dvoraknt/
-	Last Update: 3/30/2021
+	Last Update: 5/3/2021
 
 */}}
 
@@ -30,6 +30,7 @@
 {{$banRole := 539502463649185794}}{{/*role ID of emote ban role*/}}
 {{$banTime := 3600}}{{/*emote ban length in seconds. default 3600 - one hour*/}}
 {{$banNum := 5}}{{/*number of emotes from single user before emote ban*/}}
+{{$banWarn := 3}}{{/*number of emotes from single user before sending DM warning. must be higher than one, zero to disable*/}}
 {{$banMsg := true}}{{/*true if you have "Use External Emoji" permission disabled in channels, false if you have not disabled it. Only affects the DM sent to users.*/}}
 {{/* END CONFIGURABLE VARIABLES */}}
 
@@ -53,6 +54,7 @@
 		{{if $count := $spammersdict.Get (str .User.ID)}}
 			{{$count = add $count 1}}
 			{{$spammersdict.Set (str .User.ID) $count}}
+			{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
 			{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
 		{{else}}
 			{{$spammersdict.Set (str .User.ID) 1}}
@@ -72,6 +74,7 @@
 			{{if $count := $spammersdict.Get (str .User.ID)}}
 				{{$count = add $count 1}}
 				{{$spammersdict.Set (str .User.ID) $count}}
+				{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
 				{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
 			{{else}}
 				{{$spammersdict.Set (str .User.ID) 1}}
@@ -86,21 +89,22 @@
 		{{if $count := $spammersdict.Get (str .User.ID)}}
 			{{$count = add $count 1}}
 			{{$spammersdict.Set (str .User.ID) $count}}
-				{{if and (ge $count $banNum) ($banEnable)}}
-					{{addRoleID $banRole}}
-					{{removeRoleID $banRole $banTime}}
-					{{$spammersdict.Set (str .User.ID) (print $banNum " - User has been emote banned.")}}
-					{{$banMin := div $banTime 60}}
-					{{if $banMsg}}
-						{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to use external emotes (if you are a nitro user) and will not be able to send emote-only messages during this time."}}
-					{{else}}
-						{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to send emote-only messages during this time."}}
-					{{end}}
+			{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
+			{{if and (ge $count $banNum) ($banEnable)}}
+				{{addRoleID $banRole}}
+				{{removeRoleID $banRole $banTime}}
+				{{$spammersdict.Set (str .User.ID) (print $banNum " - User has been emote banned.")}}
+				{{$banMin := div $banTime 60}}
+				{{if $banMsg}}
+					{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to use external emotes (if you are a nitro user) and will not be able to send emote-only messages during this time."}}
+				{{else}}
+					{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to send emote-only messages during this time."}}
 				{{end}}
-			{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-		{{else}}
-			{{$spammersdict.Set (str .User.ID) 1}}
-			{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+			{{end}}
+		{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+	{{else}}
+		{{$spammersdict.Set (str .User.ID) 1}}
+		{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
 		{{end}}
 
 
