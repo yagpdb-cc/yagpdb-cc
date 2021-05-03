@@ -33,8 +33,8 @@ You should not enable anti-stars if your community cannot be trusted to self mod
 - `Failed executing template... {"message": "Unknown Emoji", "code": 10014}`
   - YAGPDB will accept unicode emojis (Discord default) in the format `"⭐"` (in both emoji variables)
   - YAGPDB will accept custom emojis in the following format:
-    - `"pQuack"` in `$starEmoji` 
-    - `":pQuack:828204295824080926"` in `$starEmojiFull`
+    - `"pQuack"` in `$starEmoji` or `$antiStarEmoji`
+    - `":pQuack:828204295824080926"` in `$starEmFull` or `$antiStarEmFull`
 
 
 ## **Known Issues**
