@@ -27,9 +27,12 @@
 
 {{$starboardMessage := 0}}{{$thisID := 0}}{{$chanID := 0}}{{$count := 0}}{{$antiCount := 0}}
 {{$starboardMessage = .ReactionMessage.ID}}
-{{with (dbGet 0 "starboardMessages").Value}}
+{{with (dbGet 0 "starboardMessages").Value}}{{$data := (print . )}}
 	{{$idRegex := printf `(\d+):%d:(\d+)` $starboardMessage}}
 	{{with reFindAllSubmatches $idRegex .}} {{$thisID = index . 0 1}} {{$chanID = index . 0 2}} {{end}} 
+	{{if gt (len $data) 90000}}
+		{{dbSet 0 "starboardMessages" (reReplace `\A(?:\n?(?:\d+:){2}\d+\n?){160}` $data "")}}
+	{{end}}
 {{end}}
 
 {{$data := ""}}{{$sboardPost := print $thisID}}{{$skip := true}}{{$starboardData := ""}}
@@ -138,7 +141,7 @@
 {{if not $antiStarEnable}} {{$antiStarExtra = 0}} {{end}} {{/*resetting count to zero to prevent user configured variable from interrupting desired functionality*/}}
 {{if and (not $skip) (or (lt $count $starLimit) (ge (add $antiCount $antiStarExtra) $count))}}
 {{with (dbGet 0 "starboardMessages").Value}}
-	{{$idRegex := printf `\n%d:(\d+)` $thisID}}
+	{{$idRegex := printf `\n%s:(\d+):(\d+)` $thisID}}
 	{{with reFindAllSubmatches $idRegex .}} {{$starboardMessage = index . 0 1}} {{end}}
 		{{deleteMessage $starboard $starboardMessage 0}}
 		{{dbSet 0 "starboardMessages" (reReplace $idRegex . "")}}
