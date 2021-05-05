@@ -22,6 +22,7 @@ All the starboard v1 features, plus the following:
  3. starboardListener.go.tmpl **MUST** be set to work **ONLY** in your starboard channel
  4. **user configured variables MUST be the same between both commands.** If you change something on one be sure to change it on the other
     - don't forget to configure your starboard channel ID and desired emojis for basic functions to work
+    - the exception to this rule is `$warnMessages`, you can manage these separately without issue. 
     
 You should not enable anti-stars if your community cannot be trusted to self moderate starboard posts. It should work great for some servers but could be a total disaster for others. Use your own best judgement regarding your community members. 
 
@@ -30,13 +31,17 @@ You should not enable anti-stars if your community cannot be trusted to self mod
 - `Failed executing template... at <$thisID>: can't evaluate field Author in type discordgo.Message` 
   - You have either not set the channel permissions properly or you still have the original starboard CC active in your server. Double check that you have disabled/removed the original starboard CC and followed the install instructions above.
 - `Failed executing template... {"message": "Unknown Emoji", "code": 10014}`
-  - YAGPDB will accept unicode emojis (Discord default) in the format `"⭐"`
-  - YAGPDB will accept custom emojis in the format `":pQuack:828204295824080926"`
+  - YAGPDB will accept unicode emojis (Discord default) in the format `"⭐"` (in both emoji variables)
+  - YAGPDB will accept custom emojis in the following format:
+    - `"pQuack"` in `$starEmoji` or `$antiStarEmoji`
+    - `":pQuack:828204295824080926"` in `$starEmFull` or `$antiStarEmFull`
 
 
 ## **Known Issues**
-None that I know of. I've done my best to squash all bugs I could find and fix any inconsistencies. I've tested a wide range of situations but surely not all,
-if you have a problem I can be contacted on discord through the official YAG server at DV0RAK#0001.
+- Due to necessary DB trimming and the ability to ignore reactions on older messages the CC will automatically trim off the oldest data when necessary. 
+  If you have set the date limiter to a very long duration you may have old messages reposted in the starboard channel when reactions are modified.
+  
+I've tested a wide range of situations but surely not all, if you have a problem I can be contacted on discord through the official YAG server at DV0RAK#0001.
  
  
  ## FAQ
