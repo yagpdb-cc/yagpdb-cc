@@ -30,7 +30,7 @@ You should not enable anti-stars if your community cannot be trusted to self mod
 ## **Troubleshooting**
 - `Failed executing template... at <$thisID>: can't evaluate field Author in type discordgo.Message` 
   - You have either not set the channel permissions properly or you still have the original starboard CC active in your server. Double check that you have disabled/removed the original starboard CC and followed the install instructions above.
-  - This error will appear if you are trying to create starboard posts from within your starboard channel. The listener CC is not designed to create new starboard posts, it can only manage existing posts.
+  - This error will appear if you are trying to create starboard posts from within your starboard channel. The listener CC is not designed to create new starboard posts, it can only manage existing entries.
 - `Failed executing template... {"message": "Unknown Emoji", "code": 10014}`
   - YAGPDB will accept unicode emojis (Discord default) in the format `"⭐"` (in both emoji variables)
   - YAGPDB will accept custom emojis in the following format:
