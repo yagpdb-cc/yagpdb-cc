@@ -74,8 +74,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/yagpdb-cc/yagpdb-cc/edit/master/yagpdb-cc-website',
+          editUrl: 'https://github.com/yagpdb-cc/yagpdb-cc/edit/master/yagpdb-cc-website',
           routeBasePath: '/',
         },
         blog: false,
