@@ -1,92 +1,89 @@
-Birthday CC V2.0
-================
+# Birthdays
+This custom command adds birthday functionality to your server, wishing members all the best on their respective date.
 
-# Info
+## Features
+* Send a configurable message in the chat on birthdays
+* Configure to kick or ban users younger than 13 years
+* Allow users to set their birthday 
+* Allow staff to edit/remove birthdays
 
-| ℹ If you used V1.0 of this command, read `UPDATING FROM V1.0` at the bottom of this doc before updating. |
-| --- |
-<p>
-This command will send a congratulation message to the users of your server on their birthday.<p>
-This code can kick/ban users if they are under 13 years old, if you want it to.<p>
-Change <b>ONLY</b> the user variables.<p>
-User can only set their birthday once. After that a mod will have to set a new one or delete the existing one.<p>
+## Installing
+As this script does not have any leading comment, we've documented everything down below.
 
-# Trigger
+If you instead want to update to v2, because you used an older version, please click [here](#Updating).
 
-## Trigger Type -  Regex
+| ⚠ To be able to add custom commands, you need control panel write access. |
+| ---- |
 
-## Trigger - 
-   `\A-(my|start|stop|set|get|del)b(irth)?days?`
-| ⚠ If your prefix is not `-` replace the `-` at the start of the trigger with your prefix. |
-| --- |
+Add the only command, [birthday.go.tmpl](birthday.go.tmpl) as a new custom command. The trigger is going to be a RegEx trigger as follows.
 
-# Variables
-
-1. `$mods` -
-
-   Is the list of the Roles IDs that should be able to use all commands.
-
-2. `$ChannelID` -
-
-   Is the ID of the channel where the congratulations messages will be sent.
-
-3. `$bdayMsg` -
-
-   Is the message that will be sent to congratulate users on their birthdays.
-
-4. `$invertedOrder` -
-
-   If set to `true`, the date syntax will be `mm/dd/yyyy`.<p>
-   If set to `false`, the date syntax will be `dd/mm/yyy`.
-
-5. `$yearOptional` -
-
-   If set to `true`, it makes the year optional. The default year is 2000 when this variable is true.
-
-6. `$kickUnderAge`
-
-   If set to `true`, the bot will kick users that are under 13 years-old.
-
-7. `$banUnderAge`
-
-   If set to `true`, the bot will ban users that are under 13 years-old.
-
-# Commands
-
-All commands can be used with bday or birthday. Example: -getbday or -getbirthday<p>
-
-1. **mybirthday 20/12/1998**
-   1. Will set the user birthday to be that date and the bot will congratulate them on that day.<p>
-      Note: syntax is `day/month/year` if you want it to be `month/day/year` set `$invertedOrder` to `true`.
-1. **startbdays**
-   1. Use this command at the time you want the bot to send the birthday msgs.<p>
-      Example: if you use this at 1PM in your local time, the congratulations messages will always be sent at 1PM everyday.<p>
-      Optional duration flag: -startbdays 1h12m<p>
-      Using the command like that would make the bday msg be sent everyday at 1h and 12 minutes after this command was triggered.
-1. **stopbdays**
-   1. This will stop the bdays msgs from being sent.<p>
-1. **setbday**
-   1. This will set a targeted user birthday.<p>
-      Example: -setbday 20/12/1998 @Pedro
-1. **getbday**
-   1. This will tell you the birthday of the specified user.<p>
-      Example: -getbday @Pedro
-1. **delbday**
-   1. This will delete the targeted user birthday. If no user is targeted, it will delete the triggering user bday.
-
-## UPDATING FROM V1.0
-
-I found out that there were a few bugs on this code since I last updated it.<p>
-I **highly** recommend you update your code with this newest version, since all these bugs have been fixed. <p>
-But, one of these bugs were that some users were being congratulated more than once.<p>
-If this is happening on your server, you can run this CC and wait for the bot to send `All set, you can now use V2.0`.<p>
-After that you can update to V2.0.<p>
-If you were not experiencing this issue, you don't need to run this CC.<p>
-| ⚠ This will erase **ALL** birthdays you currently have stored on your server. Users will have to set them up again. |
-| --- |
-
-Code:
+###### Birthday CC trigger
 ```
+\A\-(my|start|stop|set|get|del)b(irth)?days?
+```
+| ℹ Make sure to replace `-` with your server's prefix. |
+| ---- |
+
+Save for now, so it doesn't get lost.
+
+## Configuration
+Before your birthday custom command is ready to go, you still need to configure a few things. Please read carefully through their decription before changing anything.
+
+- `$mods`<br>
+    List of role IDs you consider moderator. Separate multiple role IDs by spaces.
+- `$ChannelID`<br>
+    The channel that birthday messages should be sent in.
+- `$bdayMsg`<br>
+    The message sent on a member's birthday.
+- `$invertedOrder`<br>
+    Date format to use. If set to to `true`, YAGPDB will use the american notation `mm/dd/yyyy` instead of `dd/mm/yyyy`.
+- `$yearOptional`<br>
+    Whether the year is optional when configuring birthdays; set to `true` to enable. This will make the year default to `2000`, should a member not give a year upon configuring their birthday.
+- `$kickUnderAge`<br>
+    Whether to kick users younger than 13 years old; set to `true` to enable.
+- `$banUnderAge`<br>
+    Same as above, but will instead ban users younger than 13 years old, will take priority over `$kickUnderAge`.
+
+## Commands
+| ℹ All commands can be used with `bday` or `birthday`, such as `-getbday` or `-getbirthday`. |
+| ---- |
+
+- `mybirthday`<br>
+    Syntax: `mybirthday dd/mm/yyyy` or `mybirthday mm/dd/yyyy`<br>
+    Use: Set your birthday to the given date. Note that if `$invertedOrder` is true, you'd have to use the latter version, as it now uses american date notation.
+- `startbirthday`<br>
+    Syntax: `starbirthday [Duration:Duration]`<br>
+    Use: Start announcing birthdays at the time of executing this command. Provide an optional duration to fine-tune the timing.
+- `stopbirthday`<br>
+    Syntax: `stopbirthday`<br>
+    Use: Stops announcing birthdays immediately.
+- `setbirthday`<br>
+    Syntax: `setbirthday <Date> <User:Mention>`<br>
+    Use: Set the birthday date of the mentioned user. Can only be used by users with at least one role in `$mods`.
+- `getbirthday`<br>
+    Syntax: `getbirthday <User:Mention>`<br>
+    Use: Get the birthday of the mentioned user, can only be used by users with at least one role in `$mods`.
+- `delbirthday`<br>
+    Syntax: `delbirthday <User:Metion>`<br>
+    Use: Delete the set birthday of the mentioned user. Can only be used by users with at least one role in `$mods`.
+
+After you've configured all those variables, save again.
+| ✅ Your birthday system is now ready to use! |
+| ---- |
+
+# Updating
+As the first version had some flaws, such as congratulating a member more than once, we highly recommend updating to v2. To do that, please follow the steps below.
+
+| 🛑 This will erase all set birthdays. Your members will have to set them up again. |
+| ---- |
+
+Add this script as a new custom command with any trigger you like, such as a command trigger with `update`. After that, just run it.
+
+Once that is done, YAGPDB will respond with `All set, you can now use V2.0`.
+| ✅ You may now install the latest version as described above. |
+| ---- |
+
+```go
 {{with .ExecData}}
    {{if eq . "1"}}
       {{range seq 0 10}}
@@ -99,7 +96,7 @@ Code:
       {{end}}
       {{execCC $.CCID nil 3 "3"}}
    {{else if eq . "3"}}
-      Still running deletation...
+      Deletion is still in progress.
       {{$day := currentTime.Day}}
       {{range seq (sub $day 3) (add $day 3)}}
          {{dbDel . "bdayannounced"}}
@@ -131,7 +128,10 @@ Code:
       {{end}}
    {{end}}
 {{else}}
-   Wait... Deletation is being done.
+   Please wait... Deletion is in progress.
    {{execCC .CCID nil 1 "1"}}
 {{end}}
 ```
+
+---- 
+This custom command was authored by [@Pedro-Pessoa](https://github.com/Pedro-Pessoa).

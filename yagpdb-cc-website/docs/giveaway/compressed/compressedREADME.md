@@ -1,7 +1,6 @@
 ---
 sidebar_position: 1
-title: Giveaway Package (Basic Version) 
-sidebase_label: Basic Giveaway Read Me
+title: Giveaway Package (Compressed Version)
 ---
 
 This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs). Both must be saved for it to work as expected.
@@ -34,17 +33,28 @@ This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs).
         **Example:** `(prefix)giveaway start 1d12h Ps4 Pro -p 50 -w 2 -c #giveaway-channel` will start a giveaway in the #giveaway-channel which will remain active for 1 day 12 hours with max participants as 50 and max winners as 2.
 
 2. `giveaway end <ID>`
+
     Ends a giveaway with specified ID and will announce the winners instantly. Will update giveaway announcement message.
 
     **Note:** ID is the long number which can be obtained using: `g list` command and is also mentioned in the giveaway announcement embed.
 
 3. `giveaway cancel <ID>`
+
     Cancels a giveaway with specified ID WITHOUT announcing winners. Will update giveaway announcement message.
 
     **Note:** ID is the long number which can be obtained using: `g list` command and is also mentioned in the giveaway announcement embed.
 
-4. `giveaway list`
-Lists all active giveaways with their IDs , Prize and Ending Time.
+4. `giveaway reroll [ID or N Giveaways Old]`
+
+    Re-rolls an old giveaway, which was finished earlier, to find new winner(s). If no argument is passed, the most recently finished giveaway is re-rolled.
+    
+    Accpets an optional argument which could be either the ID of the older giveaway or you can specify the nth previously finished giveaway (between 1 - 10).
+    
+    For example, if 2 is passed, it will re-roll the giveaway finished before the most recently finished giveaway.
+
+5. `giveaway list`
+
+    Lists all active giveaways with their IDs , Prize and Ending Time.
 
 ---
 

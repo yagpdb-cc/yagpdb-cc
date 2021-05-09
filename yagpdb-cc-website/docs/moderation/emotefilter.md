@@ -1,6 +1,12 @@
+---
+sidebar_position: 3
+title: Emote Filter
+---
+
+```go
 {{/*
-	Trigger ^.{0,2}(((<a?:[\w~]{2,32}:\d{17,19}>)|[\x{1f1e6}-\x{1f1ff}]{2}|\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?(\x{200D}\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?)*|[#\d*]\x{FE0F}?\x{20E3}).{0,2}|\s+)+$
 	Trigger Type: Regex
+	Trigger `^.{0,2}(((<a?:[\w~]{2,32}:\d{17,19}>)|[\x{1f1e6}-\x{1f1ff}]{2}|\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?(\x{200D}\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?)*|[#\d*]\x{FE0F}?\x{20E3}).{0,2}|\s+)+$`
 
 	About: This was created for an incredibly specific use in a server I staff - to catch emote-only message chains. The CC will allow a set number of 
 	emote-only messages to go through before deleting subsequent messages and tracking them in a log channel. This is a rolling time frame, every time 
@@ -125,3 +131,4 @@
 
 
 {{end}}
+```

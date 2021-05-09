@@ -11,7 +11,7 @@ This is version 2 of the starboard custom command. This package now consists of 
 ## Features
 All the starboard v1 features, plus the following:
 - Posts automatically removed when they fall below set star threshold or when number of anti-stars has been reached.
-- Ability to ignore stars/ant-stars on old posts (server customizable).
+- Ability to ignore stars/anti-stars on old posts (server customizable).
 - Anti-star feature similar to an upvote/downvote system with customizable threshold for 'downvotes' before autodeleting (server customizable).
 - Ability to react directly on posts in your #starboard channel with either star or anti-star.
     - Accurate tracking between original post and starboard post.
@@ -19,7 +19,7 @@ All the starboard v1 features, plus the following:
 - Reactions from the original message poster can be ignored (server customizable).
 - Message warnings for attempts to duplicate stars/anti-stars and self stars (server customizable).
 
-**NOTE:** *Not all of these features will work on starboard messages created with the original starboard cc*
+**NOTE:** *Not all of these features will work on starboard messages created with the original starboard CC*
 
 ---
 
@@ -34,13 +34,12 @@ You should not enable anti-stars if your community cannot be trusted to self mod
 
 ---
 
-## FAQ
-
-#### Why did I make this?
-Starboards on Discord hold a special place in my heart and I wanted one with, what I perceive to be, the most important and valuable features. Every bot with a starboard seems to lack one feature or the other, never all of them. This is what I think is a complete starboard.
-
-#### Why is there no star leaderboard?
-Personally, I don't like it. A starboard should be for funny or out of context comments, self-made memes, or similar. Having a leaderboard seems to encourage members to make low-effort, spammy, attention-seeking, or a combination of those for easy stars. To me, it should be organic, hence no leaderboard.
+## **Troubleshooting**
+- `Failed executing template... at <$thisID>: can't evaluate field Author in type discordgo.Message` 
+  - You have either not set the channel permissions properly or you still have the original starboard CC active in your server. Double check that you have disabled/removed the original starboard CC and followed the install instructions above.
+- `Failed executing template... {"message": "Unknown Emoji", "code": 10014}`
+  - YAGPDB will accept unicode emojis (Discord default) in the format `"⭐"`
+  - YAGPDB will accept custom emojis in the format `":pQuack:828204295824080926"`
 
 ---
 
@@ -51,6 +50,16 @@ None that I know of. I've done my best to squash all bugs I could find and fix a
 
 ## Acknowledgements
 Thanks to Joe for creating the base code for this custom command which you can see in v1. Satty, as his giveaway command gave inspiration and assistance needed for some chunks in here. A general thank you for all the people in the custom command help channel for answering some questions as well as the years-long backlog of messages I leeched off of.
+
+---
+
+## FAQ
+
+#### Why did I make this?
+Starboards on Discord hold a special place in my heart and I wanted one with, what I perceive to be, the most important and valuable features. Every bot with a starboard seems to lack one feature or the other, never all of them. This is what I think is a complete starboard.
+
+#### Why is there no star leaderboard?
+Personally, I don't like it. A starboard should be for funny or out of context comments, self-made memes, or similar. Having a leaderboard seems to encourage members to make low-effort, spammy, attention-seeking, or a combination of those for easy stars. To me, it should be organic, hence no leaderboard.
 
 ---
 

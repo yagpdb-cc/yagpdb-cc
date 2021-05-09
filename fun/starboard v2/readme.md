@@ -5,7 +5,7 @@ This is version 2 of the starboard custom command. This package now consists of 
 ## Features
 All the starboard v1 features, plus the following:
 - posts automatically removed when they fall below set star threshold or when number of anti-stars has been reached
-- ability to ignore stars/ant-stars on old posts (server customizable)
+- ability to ignore stars/anti-stars on old posts (server customizable)
 - anti-star feature similar to an upvote/downvote system with customizable threshold for 'downvotes' before autodeleting (server customizable)
 - ability to react directly on posts in your #starboard channel with either star or anti-star
   - accurate tracking between original post and starboard post
@@ -13,17 +13,36 @@ All the starboard v1 features, plus the following:
  - reactions from the original message poster can be ignored (server customizable)
  - message warnings for attempts to duplicate stars/anti-stars and self stars (server customizable)
 
- ***NOTE: not all of these features will work on starboard messages created with the original starboard cc***
+ ***NOTE: not all of these features will work on starboard messages created with the original starboard CC***
  
  
  ## Installing
  1. Add both custom commands to your server with trigger 'Reaction - Added + Removed reactions'
- 2. starboard.go.tmpl **MUST** be set to **IGNORE* your starboard channel
+ 2. starboard.go.tmpl **MUST** be set to **IGNORE** your starboard channel
  3. starboardListener.go.tmpl **MUST** be set to work **ONLY** in your starboard channel
  4. **user configured variables MUST be the same between both commands.** If you change something on one be sure to change it on the other
     - don't forget to configure your starboard channel ID and desired emojis for basic functions to work
+    - the exception to this rule is `$warnMessages`, you can manage these separately without issue. 
     
 You should not enable anti-stars if your community cannot be trusted to self moderate starboard posts. It should work great for some servers but could be a total disaster for others. Use your own best judgement regarding your community members. 
+
+
+## **Troubleshooting**
+- `Failed executing template... at <$thisID>: can't evaluate field Author in type discordgo.Message` 
+  - You have either not set the channel permissions properly or you still have the original starboard CC active in your server. Double check that you have disabled/removed the original starboard CC and followed the install instructions above.
+- `Failed executing template... {"message": "Unknown Emoji", "code": 10014}`
+  - YAGPDB will accept unicode emojis (Discord default) in the format `"⭐"` (in both emoji variables)
+  - YAGPDB will accept custom emojis in the following format:
+    - `"pQuack"` in `$starEmoji` or `$antiStarEmoji`
+    - `":pQuack:828204295824080926"` in `$starEmFull` or `$antiStarEmFull`
+
+
+## **Known Issues**
+- Due to necessary DB trimming and the ability to ignore reactions on older messages the CC will automatically trim off the oldest data when necessary. 
+  If you have set the date limiter to a very long duration you may have old messages reposted in the starboard channel when reactions are modified.
+  
+I've tested a wide range of situations but surely not all, if you have a problem I can be contacted on discord through the official YAG server at DV0RAK#0001.
+ 
  
  ## FAQ
 ### Why did I make this?
@@ -31,12 +50,7 @@ Starboards on Discord hold a special place in my heart and I wanted one with, wh
 
 
 ### Why is there no star leaderboard?
-Personally, I don't like it. A starboard should be for funny or out of context comments, self-made memes, or similar. Having a leaderboard seems to encourage members to make low-effort, spammy, attention-seeking, or a combination of those for easy stars. To me, it should be organic, hence no leaderboard.
-
-
-## **Known Issues**
-None that I know of. I've done my best to squash all bugs I could find and fix any inconsistencies. I've tested a wide range of situations but surely not all,
-if you have a problem I can be contacted on discord through the official YAG server at DV0RAK#0001.
+Personally, I don't like it. A starboard should be for funny or out of context comments, self-made memes, or similar. Having a leaderboard seems to encourage members to make low-effort, spammy, attention-seeking, messages for easy stars. To me, it should be organic, hence no leaderboard.
 
 
 ## Acknowledgements

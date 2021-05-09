@@ -10,7 +10,9 @@ title: Meme
 	Sometimes, the special characters will mess up the link, so it is recommended that you only use these special characters: " " "?" "%" "#" "/"
   Example: `-meme custom "this is" "my meme generator" "https://wiki.geogebra.org/uploads/a/a9/Example.jpg"`
   
-	Recommend trigger: Command trigger with trigger `meme`. If you have any questions, contact me on discord: GenryMg#0001
+	Recommend trigger: Command trigger with trigger `meme`.
+	
+	If you have any questions, contact me on discord: GenryMg#0001
 */}}
 
 
