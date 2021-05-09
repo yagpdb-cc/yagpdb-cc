@@ -2,18 +2,18 @@
 module.exports = {
   title: 'YAGPDB Custom Commands',
   tagline: 'An up-to-date collection of CCs for your server',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'tbd',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/yag.ico',
-  organizationName: 'yagpdb-cc', // Usually your GitHub org/user name.
-  projectName: 'yagpdb-cc', // Usually your repo name.
+  organizationName: 'yagpdb-cc',
+  projectName: 'yagpdb-cc',
   themeConfig: {
     navbar: {
       title: 'YAGPDB Custom Commands',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'YAGPDB logo',
         src: 'img/yag.ico',
       },
       items: [
@@ -65,7 +65,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} under MIT Liscense.`,
+      copyright: `Copyright © ${new Date().getFullYear()} under the MIT license.`,
     },
   },
   presets: [
@@ -74,9 +74,8 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/yagpdb-cc/yagpdb-cc/edit/master/yagpdb-cc-website',
           routeBasePath: '/',
         },
         blog: false,
