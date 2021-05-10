@@ -5,18 +5,6 @@ title: YAGPDB Custom Commands
 sidebar_label: YAGPDB CCs
 ---
 
----
-
-## Adding These Custom Commands
-
-This assumes you know how to create a custom command, if you aren't too familiar with that or just need a refresher, this [article](https://learn.yagpdb.xyz/the-custom-command-interface) explains it well.
-
-The **yagpdb-cc** repository is separated into groups / categories. Most categories have standalone custom commands, meaning you can add one, two, or even all of them without issues. There are, however, some "systems" which require you to add all commands in that section. This is detailed in the individual `README`s of that section.
-
-When you find a custom command you wish to add, the file will have a leading comment explaining what it does and the recommended trigger type & trigger value. You can add it in the YAGPDB dashboard with these attributes.
-
----
-
 ## Custom Commands Available
 
 <details>
