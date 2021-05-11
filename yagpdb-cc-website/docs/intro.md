@@ -10,47 +10,47 @@ sidebar_label: YAGPDB CCs
 <details>
 <summary>List of Custom Commands</summary>
 
-- AFK system  
+- [AFK system](afk/afkREADME)  
     - Set AFK with optional duration and message  
     - When pinged, shows AFK message and duration if avaliable
 
-- Fun commands
+- [Fun commands](funccs/funccsREADME)
     - Deathmatch / battle others
     - Starboard
     - Random animals
     - And more!
 
-- Giveaway system
+- [Giveaway system](giveaway/giveawayREADME)
     - Create giveaways with time, prize, max number of partcipants, and amount of winners
     - End giveaways
     - Cancel giveaways
     - List giveaways
     - Execute within CCs with execCC
 
-- Info commands
+- [Info commands](info/infoREADME)
     - Server info
     - Channel info
     - User info
     - Avatar CC
 
-- Leveling system
+- [Leveling system](leveling/levelingREADME)
     - Create/view/edit role rewards which are given on levelup
     - View leaderboard
     - Give variable amount of XP with variable cooldowns on messages
     - View user profiles
     - And others!
 
-- Useful snippets for your own custom commands
+- [Useful snippets](snippets/snippetsREADME) for your own custom commands
     - Selection sort (sort an array ASC-DESC)
     - Convert string to time
     - Find closest number from provided number in cslice
 
-- Suggestion system
+- [Suggestion system](suggestion/suggestionREADME)
     - Create suggestions
     - Comment, approve, or deny them
     - Edit and remove them
 
-- General utility commands + Preview colors + See time and weather in your location + World clock + Big emoji
+- [General utility commands](utilities/utilitiesREADME) + Preview colors + See time and weather in your location + World clock + Big emoji
 
 </details>
 
