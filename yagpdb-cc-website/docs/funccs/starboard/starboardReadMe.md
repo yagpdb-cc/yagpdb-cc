@@ -48,7 +48,7 @@ You should not enable anti-stars if your community cannot be trusted to self mod
 ---
 
 ## Known Issues
-- Due to necessary DB trimming and the ability to ignore reactions on older messages the CC will automatically trim off the oldest data when necessary. If you have set the date limiter to a very long duration you may have old messages reposted in the starboard channel when reactions are modified.
+- Due to necessary DB trimming and the ability to ignore reactions on older messages the CC will automatically trim off the oldest data when appropiate. If you have set the date limiter to a very long duration you may have old messages getting reposted in the starboard channel when reactions are modified.
 
 I've tested a wide range of situations but surely not all, if you have a problem I can be contacted on discord through the official YAG server at `DV0RAK#0001`.
 
