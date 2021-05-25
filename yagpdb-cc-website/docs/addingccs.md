@@ -45,4 +45,6 @@ Follow the insctructions as it states. Remove the leading comment, and further c
 ### Configuration Variables
 In many custom commands there will be a `{{/* CONFIGURATION AREA STARTS */}}` where you must edit the values of the variables for the command to properly work in your server. The variables between `{{/* CONFIGURATION AREA STARTS */}}` and `{{/* CONFIGURATION AREA ENDS */}}` are what you must edit to run the custom command properly.
 
+Please do not edit the code, unless you *really* know what you are doing.
+
 In a few systems, partucularly [Starboard V2](funccs/starboard/StarboardReadMe), there are multiple custom commands in the system that need identical values for the configuration variables to allow the system to work as intended. This will be stated as a reminder in the system's `Read Me` or the leading comment.
