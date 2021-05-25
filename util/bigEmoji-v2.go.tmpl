@@ -26,7 +26,7 @@
 
 	{{if reFind `^(\d{17,20})` $subArg}}
 		{{if getMessage nil $subArg}}
-			{{$msg = $subArg}}{{$chan = .H.e.n.l.o}}
+			{{$msg = $subArg}}{{$chan = .nil}}
 			{{$ogMsg = (getMessage nil $subArg).Content}}
 			{{$emoji = reFindAllSubmatches `<(a)?:[\w~]+:(\d+)>` $ogMsg}}
 			{{$defEmoji = reFindAllSubmatches `([\x{1f1e6}-\x{1f1ff}]{2}|\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?(\x{200D}\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?)*|[#\d*]\x{FE0F}?\x{20E3})` $ogMsg}}
