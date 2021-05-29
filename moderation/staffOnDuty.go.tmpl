@@ -32,13 +32,11 @@
 */}}
 
 {{/*CONFIGURABLE VARIABLES START HERE*/}}
-
 {{$dutyRole := 539502575758737408}}{{/*role ID of your "on duty" role*/}}
 {{$autoOff := 10}}{{/*number of hours before on duty role is automatically removed*/}}
 
 {{$dutyChannel := 503913846684123166}}{{/*channel ID where you want the topic to be edited*/}}
 {{$chanEdit := true}}{{/*enable/disable channel topic editing. note that this CC was built around topic editing and has several built-in cooldowns because of that.*/}}
-
 {{/*CONFIGURABLE VARIABLES END HERE*/}}
 
 {{if not (dbGet 0 "modOnDuty")}}{{dbSet 0 "modOnDuty" ""}}{{end}}{{/*creates initial database slot. you can delete this after first run if you know what you are doing*/}}
