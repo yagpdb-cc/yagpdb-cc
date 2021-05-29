@@ -1,15 +1,15 @@
 {{/*
-Made by: Crenshaw#1312
+	Made by: Crenshaw#1312
 
-Trigger Type: Regex
-Trigger: .*
+	Trigger Type: Regex
+	Trigger: .*
 		
-Note: read the other file for more info :)
-~~~
-Note: ONLY ALLOW THIS TO RUN IN ONE CHANNEL (this should be your suggestion chanel)
-Note: Allow people to type in your suggestion channel
-~~~
-Note: You can change your upvote/downvote in line 75 (on Github)
+	Note: read the other file for more info :)
+
+	Note: ONLY ALLOW THIS TO RUN IN ONE CHANNEL (this should be your suggestion chanel)
+	Note: Allow people to type in your suggestion channel
+
+	Note: You can change your upvote/downvote in line 75 (on Github)
 */}}
 
 {{{/* CONFIGURATION VAlUES START*/}}
@@ -49,7 +49,7 @@ Note: You can change your upvote/downvote in line 75 (on Github)
 	  {{ $filegex := `https?://(?:\w+\.)?[\w-]+\.[\w]{2,3}(?:\/[\w-_.]+)+\.(png|jpe?g|gif|webp|mp4|mkv|mov|wav)` }}
 	  {{ $attachLinks := cslice }}
 		{{ range .Message.Attachments }}
-	    	{{- if reFind $filegex .URL -}}
+	    	{{- if reFind $filegex .ProxyURL -}}
 				{{ $attachLinks = $attachLinks.Append .URL }}
 	    	{{ end }}
 		{{ end }}

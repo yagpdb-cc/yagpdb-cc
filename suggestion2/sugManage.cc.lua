@@ -1,39 +1,39 @@
 {{/*
-Made by: Crenshaw#1312
+	Made by: Crenshaw#1312
 
-Trigger Type: Regex
-Trigger: \A-s(ug(s|gestion(s)?)?)\s\w+
+	Trigger Type: Regex
+	Trigger: \A-s(ug(s|gestion(s)?)?)\s\w+
 		
-Note: `-sug implement` and `-sug approve` both make it so the suggestion WILL NOT be deleted after given seconds in sugCreate.cc.lua
-Note: This system is much cleaner then most others due to the simplicity and databse used for it
-Note: MAKE SURE TO PUT THE CORRECT DATA/INFORMATION IN CONFIG VALUES!!!!!!!!
-~~~~
-Note: has image and MULTIPLE file(s)/image(s) support, dynamically showed in a field
-Note: Supports multipule comments and editing them (and deletion)
-Note: Can show emoji count perecntages if wanted
-Note: Has quoting mechanisim
+	Note: `-sug implement` and `-sug approve` both make it so the suggestion WILL NOT be deleted after given seconds in sugCreate.cc.lua
+	Note: This system is much cleaner then most others due to the simplicity and databse used for it
+	Note: MAKE SURE TO PUT THE CORRECT DATA/INFORMATION IN CONFIG VALUES!!!!!!!!
 
-Usage:
-  Base: -suggestion/-sug/-s
-  
-  -sug del/delete/deny <sugNum> [reason]
-      ^Remove a suggestion
+	Note: has image and MULTIPLE file(s)/image(s) support, dynamically showed in a field
+	Note: Supports multipule comments and editing them (and deletion)
+	Note: Can show emoji count perecntages if wanted
+	Note: Has quoting mechanisim
+
+	Usage:
+		Base: -suggestion/-sug/-s
+
+		-sug del/delete/deny <sugNum> [reason]
+    	^Remove a suggestion
+
+  		-sug com/comment <sugNum> <comment>
+      	^Comment on a suggestion (supports multipule comments and editing them)
+      	^Use \del in the comment section to delete your comment
       
-  -sug com/comment <sugNum> <comment>
-      ^Comment on a suggestion (supports multipule comments and editing them)
-      ^Use \del in the comment section to delete your comment
+  		-sug ap/approve <sugNum> [reason]
+    	^Approve of a suggestion, also makes the suggestion stay forever so it can possibly be implemented later
       
-  -sug ap/approve <sugNum> [reason]
-      ^Approve of a suggestion, also makes the suggestion stay forever so it can possibly be implemented later
+  		-sug imp/implement <sugNum> [reason]
+      	^Implement a suggestion, done what this suggestion asked/suggested
       
-  -sug imp/implement <sugNum> [reason]
-      ^Implement a suggestion, done what this suggestion asked/suggested
-      
-  -sug q/quote <sugNum>
-      ^Anyone can use this, quote a suggestion
+  		-sug q/quote <sugNum>
+      	^Anyone can use this, quote a suggestion
 			
-  -sug l/list [page num]
-      ^Anyone can use this, lists all suggestions in groups of 10
+  		-sug l/list [page num]
+      	^Anyone can use this, lists all suggestions in groups of 10
 		
 */}}
 {{/* ~you only have to copy below this line, the above is just me telling you shit~ */}}
