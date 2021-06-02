@@ -1,0 +1,55 @@
+{{/*
+	Custom Command to transfer a member's roles to another member
+
+
+	Trigger type: Regex
+	Trigger: `\A(-|<@!?204255221017214977>\s*)((m(ove)?|tr(ansfer)?)r(oles)?)(\s+|\z)`
+	Errors as Custom Command Outputs: off
+
+	Usage:
+	-transferroles <@user/ID> <@user/ID>
+
+	This command makes YAGPDB remove all roles from the second member and gives them all roles from the first member specified.
+	It can not transfer:
+	- Roles above or equal to the bot's highest role
+	- Roles manages by integrations (Bot roles, Booster roles, Twitch roles etc.)
+
+	NOTE: This may error if you are transferring more than 60 roles.
+
+	Credits: 2x2Master1 <https://github.com/2x2master1>
+	Feel free to DM me if you have any questions or problems!
+*/}}
+
+{{$args := parseArgs 2 "Please specify two members of the server." (carg "member" "Member to be transferred from") (carg "member" "Member to be transferred to")}}
+{{$m := sendMessageRetID nil (cembed "title" "<a:loading:839427216848584706> Transferring..." "color" 0xFFFF00)}}
+{{$u1 := (getMember (index .CmdArgs 0))}}
+{{$u2 := (getMember (index .CmdArgs 1))}}
+{{$a := false}}
+{{range $u2.Roles}}
+	{{takeRoleID $u2.User .}}
+{{end}}
+
+{{$x := ""}}
+{{$fail := ""}}
+
+{{range $u1.Roles}}
+	{{$a = .}}
+	{{editMessage nil $m (cembed "title" "<a:loading:839427216848584706> Transferring..." "description" (print "Currently transferring: <@&" $a ">") "color" 0xFFFF00)}}
+	{{giveRoleID $u2.User.ID .}}
+	{{sleep 1}}
+	{{if (targetHasRoleID $u2.User.ID $a)}}
+		{{$x = print $x " <@&" $a ">"}}
+	{{else}}
+		{{$fail = print $fail " <@&" $a ">"}}
+	{{end}}
+{{end}}
+
+{{if $fail}}
+	{{$fail = print "\n<:arrow:839425883017838604> Roles that failed to transfer:\n" $fail}}
+{{end}}
+
+{{if not $x}}
+	{{$x = "None"}}
+{{end}}
+
+{{editMessage nil $m (cembed "title" "Role transfer successful!" "description" (print "<:arrow:839425883017838604> Transferred from: `" $u1.User.String "`\n<:arrow:839425883017838604> Transferred to: `" $u2.User.String "`\n<:arrow:839425883017838604> Transferred roles:\n" $x $fail) "color" 0x00FF00)}}
