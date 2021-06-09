@@ -1,0 +1,145 @@
+{{/*
+	Name: Connect4 command
+	Author: Hyakki999 (https://github.com/Hyakki999/YAGPDB-cc)
+
+	Recommended
+	- Trigger Type: Regex
+	- Trigger: `\A(?i)(-|<@!?204255221017214977>)\s*Connect4\s*(h(elp)?)?`
+*/}}
+
+
+{{/* Do not change anything BELOW unless you know what you are doing */}}
+
+{{ if reFind `\A(?i)(-|<@!?204255221017214977>)\s*Connect4\s*h(elp)?` .Message.Content }}
+{{ $help := cembed "title" "Rules of Connect4" "fields" (cslice (sdict "name" "Objective" "value" "• To be the first player to connect 4 of the same colored discs in a row (either vertically, horizontally, or diagonally)") (sdict "name" "How to play" "value" "• Players must alternate turns, and only one disc can be dropped in each turn.\n• On your turn, react drop one of your colored discs from the top into any of the seven slots.\n• The game ends when there is a 4-in-a-row or a stalemate.\n• React with ❌ to cancel the game.")) "color" 0x333333 }}
+{{ sendMessage nil $help }}
+
+{{ else }}
+{{ $u := .User.Username }} {{ $ui := .User.AvatarURL "256" }}
+{{ $oo := ((parseArgs 1 "**Usage:** -connect4 <user>" (carg "member" "")).Get 0).User }} {{ $o := $oo.Username }} {{ $oi := $oo.AvatarURL "256" }}
+{{ $t := $u }} {{ $i := $ui }}
+{{ $a := cslice  (cslice "◻️" "◻️" "◻️" "◻️" "◻️" "◻️" "◻️") (cslice "◻️" "◻️" "◻️" "◻️" "◻️" "◻️" "◻️") (cslice "◻️" "◻️" "◻️" "◻️" "◻️" "◻️" "◻️") (cslice "◻️" "◻️" "◻️" "◻️" "◻️" "◻️" "◻️") (cslice "◻️" "◻️" "◻️" "◻️" "◻️" "◻️" "◻️") (cslice "◻️" "◻️" "◻️" "◻️" "◻️" "◻️" "◻️") }}
+{{ $p := "🔴" }} {{ $turn := 1 }}
+
+{{ $db := sdict }}
+{{ with (dbGet 0 "Connect4").Value }}
+{{ $db = sdict . }}
+{{ $u = $db.u }} {{ $o = $db.o }} {{ $ui = $db.ui }} {{ $oi = $db.oi }}
+{{ $db.Set "a" (cslice.AppendSlice $db.a) }}
+{{ range $i, $v := $db.a }}
+{{- $db.a.Set $i (cslice.AppendSlice $v) -}}
+{{- end -}}
+{{ $a = $db.a }}
+{{ $turn = toInt $db.turn }}
+{{ if $turn }}
+{{ $p = "⚫" }} {{ $t = $u }} {{ $i = $ui }}
+{{ else }}
+{{ $t = $o }} {{ $i = $oi }}
+{{ end }}
+{{ end }}
+
+{{ $c := cslice 5 4 3 2 1 0 }}
+{{ $run := true }}
+
+{{ if .ExecData }}
+{{ $col := sub .ExecData.col 1}}
+{{ range $c }}
+{{- if and (eq (index $a . $col) "◻️") $run -}}
+{{- (index $a .).Set $col $p -}}
+{{- $run = false -}}
+{{- end -}} {{- end -}}
+{{ if $run }}
+{{ if $turn }} {{ $turn = 0 }} {{ else }} {{ $turn = 1 }} {{ end }}
+{{ $db.Set "turn" $turn }}
+This slot is already filled up.
+{{ deleteResponse 5 }}
+{{ end }}
+{{ dbSet 0 "Connect4" $db }}
+{{ end }}
+
+{{ $b := " " }}
+{{ range $r := seq 0 6 }}
+{{- range $c := seq 0 7 -}}
+{{- if eq $c 6 -}}
+{{- $b = println $b (index $a $r $c) -}}
+{{- else if eq $c 0 -}}
+{{- $b = print $b (index $a $r $c) -}}
+{{- else -}}
+{{- $b = print $b " " (index $a $r $c) -}}
+{{- end -}} {{- end -}} {{- end -}}
+{{ $b = print $b "1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣" }}
+
+{{ $e := sdict "author" (sdict "name" (print $t "'s turn") "icon_url" $i) "fields" (cslice (sdict "name" "Connect4" "value" $b) (sdict "name" "> Player 1" "value" $u "inline" false) (sdict "name" "> Player 2" "value" $o)) "footer" (sdict "text" "• Run -connect4 help to see the rules") "color" 0x08ffff }}
+
+{{ $won := false }}
+{{ $move := false }}
+{{ $winner := "" }}
+
+{{ $run := true }}
+{{ range $c := seq 0 7 }}
+{{ range $r := seq 0 6 }}
+{{ if and (eq (index $a $r $c) "◻️") $run }}
+{{ $move = true }}
+{{ end }} {{ end }} {{ end }}
+
+{{ range $c := seq 0 4 }}
+{{ range $r := seq 0 6 }}
+{{ if and (eq (index $a $r $c) $p) (eq (index $a $r (add $c 1)) $p) (eq (index $a $r (add $c 2)) $p) (eq (index $a $r (add $c 3)) $p) }}
+{{ $won = true }}
+{{ end }}
+{{ end }} {{ end }}
+
+{{ range $c := seq 0 7 }}
+{{ range $r := seq 0 3 }}
+{{ if and (eq (index $a $r $c) $p) (eq (index $a (add $r 1) $c) $p) (eq (index $a (add $r 2) $c) $p) (eq (index $a (add $r 3) $c) $p) }}
+{{ $won = true }}
+{{ end }}
+{{ end }} {{ end }}
+
+{{ range $c := seq 0 4 }}
+{{ range $r := seq 0 3 }}
+{{ if and (eq (index $a $r $c) $p) (eq (index $a (add 1 $r) (add $c 1)) $p) (eq (index $a (add 2 $r) (add $c 2)) $p) (eq (index $a (add 3 $r) (add $c 3)) $p) }}
+{{ $won = true }}
+{{ end }}
+{{ end }} {{ end }}
+
+{{ range $c := seq 0 4 }}
+{{ range $r := seq 3 6 }}
+{{ if and (eq (index $a $r $c) $p) (eq (index $a (sub $r 1) (add $c 1)) $p) (eq (index $a (sub $r 2) (add $c 2)) $p) (eq (index $a (sub $r 3) (add $c 3)) $p) }}
+{{ $won = true }}
+{{ end }}
+{{ end }} {{ end }}
+
+{{ if $won }}
+{{ if eq $p "🔴" }}
+{{ $winner = $u }}
+{{ else }}
+{{ $winner = $o }}
+{{ end }}
+{{ dbDel 0 "Connect4" }}
+{{ $e.Set "author" (sdict "name" (println "Game Ended!\nWinner:" $winner)) }}
+{{ else if not $move }}
+{{ dbDel 0 "Connect4" }}
+{{ $e.Set "author" (sdict "name" "Game ended due to stalemate!") }}
+{{ end }}
+
+{{ with .ExecData }}
+{{ editMessage .cid .mid (cembed $e) }}
+
+{{ else }}
+{{ if dbGet 0 "Connect4" }}
+{{ $cid := $db.c }} {{ $mid := $db.m }}
+{{ $link := "" }}
+{{ if and $cid $mid }}
+{{ $link = print "https://discord.com/channels/" .Guild.ID "/" $cid "/" $mid }}
+{{ end }}
+There's an unfinished game!
+{{ $link }}
+{{ else }}
+{{ $mid := sendMessageRetID nil (cembed $e) }}
+{{ with $mid }}
+{{ addMessageReactions nil . "1️⃣" "2️⃣" "3️⃣" "4️⃣" "5️⃣" "6️⃣" "7️⃣" "❌" }}
+{{ $data := sdict "u" $u "ui" $ui "uid" (str $.User.ID) "o" $o "oi" $oi "oid" (str $oo.ID) "m" . "c" $.Channel.ID "a" $a "turn" $turn }}
+{{ dbSet 0 "Connect4" $data }}
+{{ end }} {{ end }} {{ end }}
+{{ end }}
