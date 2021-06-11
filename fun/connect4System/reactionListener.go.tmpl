@@ -5,8 +5,8 @@
     Credits: 
     zen | ゼン (https://github.com/z3nn13)
     */}}
-
-{{ define "board_maker" }}
+    
+{{- define "board_maker" -}}
     {{- $emojis := sdict "0" "⚫" "1" "🔴" "2" "🟡" "10" "🔵" -}}
     {{- $board := cslice.AppendSlice .board -}}
     {{- $visual := "" -}}
@@ -27,22 +27,22 @@
     {{- .Set "embed" $embed -}}
 {{- end}}
 
-{{ $data := ""}}{{$players := ""}}{{$cPlayer := ""}}{{$turn := ""}}{{$nextTurn := ""}}{{$nPlayer := ""}}{{$input := ""}}{{$flag := false}}
+{{ $data := sdict}}{{$players := cslice}}{{$cPlayer := ""}}{{$turn := ""}}{{$nextTurn := ""}}{{$nPlayer := ""}}{{$input := ""}}{{$flag := false}}
 {{ $store := sdict  "1" (sdict "emoji" "🔴" "color" 0xff4d12) "2" (sdict "emoji" "🟡" "color" 0xfff457)}}
 
 {{if $db := dbGet 2021 "connect4"}}
     
     {{/* Global variables */}}
-    {{ $data = $db.Value}}
-    {{ $players = $data.players}}
+    {{ $data = sdict $db.Value}}
+    {{ $players = $players.AppendSlice $data.players}}
     {{ $turn = $data.turn}}
     {{ $cPlayer = (index $players $turn|toInt64|getMember).User}}
     {{ $nextTurn = sub 3 $turn}}
     {{ $nPlayer = (index $players $nextTurn|toInt64|getMember).User}}
 
     {{ if eq ($data.msgID|toInt64) .Message.ID}}
-        {{deleteMessageReaction nil .Message.ID .User.ID (print (and ($k:=.Reaction.Emoji).Animated "a:"|str) $k.Name (and (ne $k.ID 0) (print ":" $k.ID)|str))}}
-        {{/* quit reaction */}}
+            {{ deleteMessageReaction nil .Message.ID .User.ID .Reaction.Emoji.APIName}}
+            {{/* quit reaction */}}
             {{ if and (eq .Reaction.Emoji.ID 844556617085485058) (in $players (str .User.ID)) }}
                     {{ dbDel 2021 "connect4"}}
                     {{ deleteAllMessageReactions nil .Message.ID }}
@@ -108,7 +108,6 @@
     {{- end -}}
     {{- range $i,$v := $verti -}}
         {{- if not $found -}}
-            {{/* if the first slot has a value */}}
             {{- if and (eq $i 0) (not (eq $v 10)) $v -}}
                 {{- $full = true -}}
             {{- else -}}
@@ -119,7 +118,9 @@
                     {{- $position = sub $i 1 -}}
                     {{- $found = true -}}
                 {{- else if not $v -}}
-                    {{- (index $board $i).Set $input 10}}
+                    {{- $convert := cslice.AppendSlice (index $board $i)}}
+                    {{- $convert.Set $input 10 -}}
+                    {{- $board.Set $i $convert}}
                 {{- end -}}
             {{- end -}}
         {{- end -}}
@@ -127,12 +128,16 @@
     {{- range $rowIndex,$row := $board -}}
         {{- range $col,$v := $row -}}
             {{- if and (eq $col $input|not) (eq $v 10) -}}
-                {{- (index $board $rowIndex).Set $col 0 -}}
+                {{- $convert := cslice.AppendSlice (index $board $rowIndex) -}}
+                {{- $convert.Set $col 0 -}}
+                {{- $board.Set $rowIndex $convert -}}
             {{- end -}}
         {{- end -}}
     {{- end -}}
     {{- if and $found (not $full) -}}
-        {{- (index $board $position).Set $input $turn -}}
+        {{- $convert := cslice.AppendSlice (index $board $position) -}}
+        {{- $convert.Set $input $turn -}}
+        {{- $board.Set $position $convert -}}
     {{- end -}}
     {{- .Set "board" $board -}}
     {{- .Set "full" $full -}}
