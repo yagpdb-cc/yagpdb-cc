@@ -10,6 +10,8 @@
 	  Command type trigger 'deathmatch'.
 */}}
 
+{{/* CONFIGURATION VALUES START */}}
+
 {{/* A set of emojis to use for the deathmatch messages. Change this if you are selfhosting, otherwise, leave it alone. */}}
 {{$Emojis := cslice "<:battleForward:681735565594460181>" "<:battleBackwards:681735538105253901>"}}
 
@@ -18,6 +20,8 @@
 
 {{/* Slice of channel IDs to use when executing the command. These can be chosen randomly. */}}
 {{$Channels := cslice ID1 ID2 ID3}}
+
+{{/* CONFIGURATION VALUES END */}}
 
 {{define "renderEmbed"}}
 	{{$player0 := index .GameData.Players 0}}
