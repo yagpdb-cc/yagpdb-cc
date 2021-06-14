@@ -1,6 +1,6 @@
 # Connect4
-This will allow you to play a Connect4 game either against another player (or with yourself)
+This allows you to play a game of Connect4 with either yourself or against another player.
 
 ## Preview
-<img src="https://i.ibb.co/xGqvzht/image.png" alt="image" border="0">
-<img src="https://i.ibb.co/10JtCmK/image.png" alt="image" border="0">
+![image1](https://i.ibb.co/P5wXpHZ/image.png)
+![image2](https://i.ibb.co/RctPSng/image.png)
