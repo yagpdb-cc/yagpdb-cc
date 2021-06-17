@@ -40,10 +40,10 @@
 {{ if dbGet 2021 "connect4"}}
 	{{ $errorMsg = "Another game is still ongoing. Please wait for it to finish\n> To quit, react to the <a:r_leave:844556617085485058>"}}
 {{ else if $db := dbGet 2021 "c4cooldown"}}
-        {{ $data = sdict $db.Value}}
-        {{ $p1 = ($data.p1|toInt64|getMember).User}}
-        {{ $p2 = ($data.p2|toInt64|getMember).User}}
-        {{ if and (eq $p1.ID .User.ID) (.Message.Mentions) }} {{/* If the user sent a challenge to someone already*/}}
+        {{ $data = $db.Value}}
+        {{ $p1 = ($data.p1|getMember).User}}
+        {{ $p2 = ($data.p2|getMember).User}}
+        {{ if and (eq $p1.ID .User.ID) .Message.Mentions }} {{/* If the user sent a challenge to someone already*/}}
                 {{ $errorMsg = print "You already have an ongoing challenge. Try again in " ($db.ExpiresAt.Sub currentTime|humanizeDurationSeconds) "."}}
         {{ else if eq $p2.ID .User.ID}}
                 {{ $reply = true }}
@@ -66,7 +66,7 @@
                                 (sdict "name" "Player 2" "value" $p2.Mention "inline" true))}}
                                 {{ $msgID := sendMessageRetID nil (complexMessage "content" (print "> A connect4 game has been started\n🔴┃" $p1.Mention ", Please pick a slot") "embed" $temp.embed)}}
                                 {{ addMessageReactions nil $msgID "1️⃣" "2️⃣" "3️⃣" "4️⃣" "5️⃣" "6️⃣" "7️⃣" "a:r_leave:844556617085485058"}}
-                                {{ dbSet 2021 "connect4" (sdict "players" (cslice "offset" $data.p1 $data.p2) "turn" "1" "board" $temp.board "msgID" (str $msgID) "time" currentTime)}}
+                                {{ dbSet 2021 "connect4" (sdict "players" (cslice "offset" $data.p1 $data.p2) "turn" 1 "board" $temp.board "msgID" $msgID "time" currentTime)}}
                         {{ else if reFind `(?i)(?:deny|refuse|decline)` . }}
                                 {{ sendMessage nil (print $p1.Mention ", your challenge has been declined.")}}
                         {{ else }}
@@ -78,7 +78,7 @@
                         {{ if not $errorMsg }}
                                 {{ $p2 := .|toInt64|userArg}}
                                 {{ if $p2 }}
-                                        {{ dbSetExpire 2021 "c4cooldown" (sdict "p1" (str $.User.ID) "p2" (str $p2.ID)) 15}}
+                                        {{ dbSetExpire 2021 "c4cooldown" (sdict "p1" $.User.ID "p2" $p2.ID) 15}}
                                         {{ sendMessage nil (printf "%s, %s has challenged you to a connect4 match! (15s)\nReply with `-connect4 (accept/deny)`" $p2.Mention $.User.Mention)}} 
                                 {{ else }}
                                         {{ $errorMsg = "Error: Invalid User" }}
