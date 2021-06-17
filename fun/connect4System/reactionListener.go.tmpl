@@ -59,7 +59,7 @@
             {{ else }}
                     {{ if eq $cPlayer.ID $.User.ID}}
                             {{/* Getting integer from keycap reaction */}}
-                            {{ if le ($temp := index (toRune .Reaction.Emoji.Name) 0) '7'}}
+                            {{ if and (le ($temp := index (toRune .Reaction.Emoji.Name) 0) '7') (gt $temp '0') }}
                                     {{$input = sub $temp '1'}}
                                     {{$flag = true}}
                             {{end}}
