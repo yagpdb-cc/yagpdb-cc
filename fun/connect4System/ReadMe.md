@@ -11,7 +11,7 @@ If you're not familiar with installing custom commands, read [this](https://lear
 ```
 \A(?:\-|<@!?204255221017214977>)\s*(?:c(?:on(?:nect)?)?4)(?: +|\z)
 ```
-| You can change the `-` to match your server's prefix| 
+| 📙 You can change the `-` to match your server's prefix| 
 |----------|
 ## Preview
 ![image1](https://i.ibb.co/P5wXpHZ/image.png)
