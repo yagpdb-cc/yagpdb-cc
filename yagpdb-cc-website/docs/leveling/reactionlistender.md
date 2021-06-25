@@ -3,6 +3,11 @@ sidebar_position: 8
 title: Reaction Listener CC
 ---
 
+This command manages the pagination of the leaderboard command.
+WARNING: this command may be extremely buggy as I was unable to test it with limited users.
+
+**Trigger Type:** `Reaction` on `Reaction Added only`.
+
 ```go
 {{/*
 	WARNING: this command may be extremely buggy as I was unable to test it with limited users.

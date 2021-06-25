@@ -3,6 +3,9 @@ sidebar_position: 3
 title: Closest To
 ---
 
+This CC is a snippet for finding the closest number to a given number in a slice of numbers.  
+	The array is `$arr`, number is `$num`. Result is stored in `$res`.
+
 ```go
 {{/*
 	This CC is a snippet for finding the closest number to a given number in a slice of numbers.

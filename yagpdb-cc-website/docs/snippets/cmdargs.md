@@ -3,6 +3,8 @@ sidebar_position: 4
 title: cmdArgs
 ---
 
+Example of manually parsing into a `.CmdArgs` like slice from text.
+
 ```go
 {{/*
 	Example of manually parsing into a .CmdArgs like slice from text.

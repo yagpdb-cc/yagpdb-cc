@@ -3,6 +3,16 @@ sidebar_position: 6
 title: Set XP/Level CC
 ---
 
+Sets XP or level of user.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(set-?(xp|level))(\s+|\z)`
+
+**Usage:**  
+`-setxp <user> <xp>`  
+`-setlevel <user> <level>`
+
 ```go
 {{/*
 	Sets XP or level of user.

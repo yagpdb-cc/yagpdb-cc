@@ -3,11 +3,20 @@ sidebar_position: 17
 title: Text to Emoji
 ---
 
+This command converts given text to emoji.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(?:\-|<@!?204255221017214977>)\s*(?:tte|emojify|emotify)(?: +|\z)`
+
+**Usage:**  
+`-tte <text>`
+
 ```go
 {{/*
 	This command converts given text to emoji. Usage: `-tte <text>`.
 
-	Recommended trigger: Regex trigger with trigger `^-(tte|emojify|emotify)`
+	Recommended trigger: Regex trigger with trigger `\A(?:\-|<@!?204255221017214977>)\s*(?:tte|emojify|emotify)(?: +|\z)`
 */}}
 {{ $keycap := "⃣" }}
 {{ $emojis := sdict "#" "#⃣" "*" "*⃣" "!" "❗" "?" "❓" }}

@@ -3,7 +3,7 @@ module.exports = {
   title: 'YAGPDB Custom Commands',
   tagline: 'An up-to-date collection of CCs for your server',
   url: 'https://yagpdb-cc.github.io',
-  baseUrl: '/yagpdb-cc',
+  baseUrl: '/yagpdb-cc/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/yag.ico',

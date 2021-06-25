@@ -1,7 +1,11 @@
 ---
-sidebar_position: 12
+sidebar_position: 13
 title: Reaction Logs
 ---
+
+This command allows you to set up a reaction logging.
+
+**Trigger Type:** `Reaction` on `Added and Removed`
 
 ```go
 {{/*

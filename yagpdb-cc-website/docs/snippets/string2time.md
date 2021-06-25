@@ -3,6 +3,24 @@ sidebar_position: 9
 title: String to Time
 ---
 
+This command allows you to parse string to time, in a human friendly way.  
+Recommended usage: As a part of a Larger Command. Can also be used standalone with -  
+	**Trigger Type:** `Command`  
+	**Trigger:** `time`
+
+**Usage:**  
+- String to be converted is fed to -> `$timeString`  
+- Converted time is available in variable -> `$timeConverted`
+
+**Supported Syntax:**     
+- Date: Format 1:  `dd/mm/yyyy` or `dd.mm.yyyy` or `dd-mm-yyyy` or `dd,mm,yyyy`  
+- Format 2:  String format with year mentioned with 4 digits and both short and long month names supported. Date components (i.e day , month , year) need not be present together. eg: `12 Feb 11:50 am` , `2020` is supported.  
+- Format 3:  `Today` and `tomorrow` is supported.
+
+**TimeZone:** By default timezone is UTC. If user has timezone set using `setz` command, timezone adjustment is also possible. UTC time is parsed if explicitly specified UTC in this case.
+
+**Time:** Time is mentioned as `hh:mm:ss` or `hh:mm` or `hh`. May or may not be followed by AM or PM.
+
 ```go
 {{/*
   This command allows you to parse string to time, in a human friendly way.

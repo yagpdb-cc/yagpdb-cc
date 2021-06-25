@@ -3,6 +3,15 @@ sidebar_position: 3
 title: Channel Info CC
 ---
 
+This command allows you to view information about a given channel (defaulting to the current channel).
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(channel)(-?info)?(\s+|\z)`
+
+**Usage:**  
+`-channelinfo [channel]`
+
 ```go
 {{/*
 	This command allows you to view information about a given channel (defaulting to the current channel).

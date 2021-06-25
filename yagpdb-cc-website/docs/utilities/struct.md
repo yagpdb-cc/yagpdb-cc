@@ -1,7 +1,16 @@
 ---
-sidebar_position: 14
+sidebar_position: 15
 title: Struct
 ---
+
+This command shows all the avaliable properties and methods of a structure with a link to the Discord docs on that structure.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(struct)(ure)?(\s+|\z)`
+
+**Usage:**  
+`-struct <struct>`
 
 ```go
 {{/*

@@ -3,6 +3,15 @@ sidebar_position: 4
 title: Coin Flip
 ---
 
+This command is a game of heads or tails where users can play.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `coinflip`
+
+**Usage:**  
+`-coinflip <heads/tails> <bet>`
+
 ```go
 {{/*
 		

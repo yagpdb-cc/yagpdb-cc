@@ -1,7 +1,17 @@
 ---
-sidebar_position: 19
+sidebar_position: 20
 title: X Word Story
 ---
+
+**Setup:**
+- Set the cc restrictions to only run in your x-word-story channel
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A`
+
+**Usage:**  
+Just type the right amount of words and write a story together :)
 
 ```go
 {{/*

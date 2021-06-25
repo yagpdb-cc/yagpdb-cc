@@ -1,7 +1,14 @@
 ---
-sidebar_position: 20
+sidebar_position: 19
 title: Wheel of Fortune
 ---
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A\-(?i)wheel(offortune)?`
+
+**Usage:**  
+`-wheel <bet>`
 
 ```go
 {{/*

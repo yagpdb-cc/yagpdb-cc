@@ -3,6 +3,12 @@ sidebar_position: 3
 title: Emote Filter
 ---
 
+This was created for an incredibly specific use in a server I staff - to catch emote-only message chains. The CC will allow a set number of emote-only messages to go through before deleting subsequent messages and tracking them in a log channel. This is a rolling time frame, every time the filter catches an emote-only message it will refresh the automod length. The regex trigger will capture any number of emotes in a row and with up to (2) characters on each side to prevent automod bypass (such as an emote followed by a single period) but has enough wiggle room to allow a message such as "LOL :kek:". You have the option to enable an automatic emote ban function based on assigning a role to the user, this will delete all emote-only messages for the duration of their ban rather than counting towards the filter. I recommend disabling the "Use External Emoji" permission (must be done in channel permissions, not role permissions) as an added incentive for nitro users to not get themselves emote banned. Make sure the role is above all other standard user roles in the role hierarchy. Emote bans/logging DO NOT need to be used in conjunction to function.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `^.{0,2}(((<a?:[\w~]{2,32}:\d{17,19}>)|[\x{1f1e6}-\x{1f1ff}]{2}|\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?(\x{200D}\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?)*|[#\d*]\x{FE0F}?\x{20E3}).{0,2}|\s+)+$`
+
 ```go
 {{/*
 	Trigger Type: Regex

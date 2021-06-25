@@ -3,6 +3,12 @@ sidebar_position: 16
 title: Starboard V1
 ---
 
+This command allows users to react to messages with stars. If it reaches a given amount, it will be sent in a given channel.  
+Benefits over star command provided in docs: Updates star count with more stars using a single DB text entry.  
+Posts automatically removed when they fall below star threshold. Ability to use "anti-star" reactions similar to an upvote/downvote system to automatically remove posts unfit for starboard.
+
+**Trigger Type:** `Reaction` with option `Added + Removed reactions`
+
 ```go
 {{/*
 	This command allows users to react to messages with stars. If it reaches a given amount, it will be sent in a given channel.

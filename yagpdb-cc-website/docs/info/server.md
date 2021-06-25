@@ -3,6 +3,16 @@ sidebar_position: 4
 title: Server Info CC
 ---
 
+This command allows you to view information about the server.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(server|guild)(-?info)?(\s+|\z)`
+
+**Usage:**  
+`-serverinfo`  
+(Use `-server icon` to view the server icon).
+
 ```go
 {{/*
 	This command allows you to view information about the server.

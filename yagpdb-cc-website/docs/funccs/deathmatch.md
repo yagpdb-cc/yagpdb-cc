@@ -3,118 +3,129 @@ sidebar_position: 6
 title: Deathmatch
 ---
 
-```go
-{{/*
-	This command is a replica of the deathmatch command from Yggdrasil. Usage: `-deathmatch [user1] [user2]`.
+This command is a replica of the deathmatch command from Yggdrasil.
 
-	Recommended trigger: Command trigger with trigger `deathmatch`.
+**Trigger Type:** `Command`
+
+**Trigger:** `deathmatch`
+
+**Usage:**  
+`-deathmatch [user1] [user2]`
+
+```go
+{/*
+	A replica of the deathmatch command from Yggdrasil.
+
+	Usage:
+	  -deathmatch                 // play against YAG
+	  -deathmatch player1         // play against another user
+	  -deathmatch player1 player2 // make two players play against each other
+
+	Trigger:
+	  Command type trigger 'deathmatch'.
 */}}
 
 {{/* CONFIGURATION VALUES START */}}
-{{/* Slice of random channel IDs in your server to decrease execCC lag */}}
-{{ $channels := cslice
-	670669801596649478
-	671509095433371688
-	677921750566043708
-	678379546218594304
-}}
-{{ $emojis := sdict
-	"UserA" "<:battleForward:681735565594460181>"
-	"UserB" "<:battleBackwards:681735538105253901>"
-}}
-{{ $yag := userArg 204255221017214977 }}
+
+{{/* A set of emojis to use for the deathmatch messages. Change this if you are selfhosting, otherwise, leave it alone. */}}
+{{$Emojis := cslice "<:battleForward:681735565594460181>" "<:battleBackwards:681735538105253901>"}}
+
+{{/* The default opponent. Change this if you are selfhosting, otherwise, leave it alone. */}}
+{{$YAG := userArg 204255221017214977}}
+
+{{/* Slice of channel IDs to use when executing the command. These can be chosen randomly. */}}
+{{$Channels := cslice ID1 ID2 ID3}}
+
 {{/* CONFIGURATION VALUES END */}}
 
-{{ $args := parseArgs 0 "**Syntax:** -deathmatch [user1] [user2]" (carg "userid" "user1") (carg "userid" "user2") }}
-{{ $userA := $yag }}
-{{ $userB := .User }}
-{{ $cc := toInt .CCID }}
+{{define "renderEmbed"}}
+	{{$player0 := index .GameData.Players 0}}
+	{{$player1 := index .GameData.Players 1}}
+	{{.Set "Out" (sdict
+		"title" "💢 Deathmatch"
+		"description" (joinStr "\n" .GameData.Msgs.StringSlice)
+		"color" 14232643
+		"fields" (cslice
+			(sdict "name" $player0.User.Username "value" (print $player0.HP "/100 HP") "inline" true)
+			(sdict "name" $player1.User.Username "value" (print $player1.HP "/100 HP") "inline" true)
+		)
+	)}}
+{{end}}
 
-{{ if $args.IsSet 0 }} {{ $userA = userArg ($args.Get 0) }} {{ end }}
-{{ if $args.IsSet 1 }} {{ $userB = userArg ($args.Get 1) }} {{ end }}
+{{if not .ExecData}}
+	{{$games := or (dbGet 0 "deathmatch_games").Value 0 | toInt}}
+	{{if gt $games 5}}
+		To prevent overloading YAGPDB, no more than 5 deathmatch games can be played in a server at any time.
+	{{else}}
+		{{$s := dbIncr 0 "deathmatch_games" 1}}
+		{{$args := parseArgs 0 "**Syntax:** `-deathmatch [player1] [player2]`"
+			(carg "member" "player-one")
+			(carg "member" "player-two")
+		}}
+		{{$players := cslice
+			(sdict "User" $YAG "HP" 100)
+			(sdict "User" .User "HP" 100)
+		}}
+		{{with $args.Get 0}} {{$players.Set 0 (sdict "User" .User "HP" 100)}} {{end}}
+		{{with $args.Get 1}} {{$players.Set 1 (sdict "User" .User "HP" 100)}} {{end}}
 
-{{ $embed := sdict 
-	"title" "💢 Deathmatch"
-	"description" "*Match starting in 3...*"
-	"color" 14232643
-	"fields" (cslice
-		(sdict "name" $userA.Username "value" "100/100 HP" "inline" true)
-		(sdict "name" $userB.Username "value" "100/100 HP" "inline" true)
-	)
-}}
+		{{$gameData := dict
+			"Players" $players
+			"Round" 0
+			"Msgs" (cslice)
+			"ChannelID" .Channel.ID
+		}}
 
-{{ with .ExecData }}
-	{{ $embed := sdict .Embed }}
-	{{ $embed.Set "fields" (cslice.AppendSlice $embed.fields) }}
+		{{template "renderEmbed" ($query := dict "GameData" $gameData)}}
+		{{$embed := $query.Out}}
+		{{$embed.Set "description" "_Match starting in 3..._"}}
 
-	{{ $msgs := split $embed.description "\n" | cslice.AppendSlice }}
-	{{ if .IsFirst }} {{ $msgs = cslice }} {{ end }}
+		{{$id := sendMessageRetID nil (cembed $embed)}}
+		{{$gameData.Set "MsgID" $id}}
 
-	{{ $attacker := index . .Attacker | sdict }}
-	{{ $target := index . .Target | sdict }}
-	{{ $emoji := $emojis.Get .Target }}
+		{{$c := index $Channels (randInt (len $Channels))}}
+		{{execCC .CCID $c 2 $gameData}}
+	{{end}}
+{{else}}
+	{{$gameData := .ExecData}}
+	{{$idx := mod $gameData.Round 2 | toInt}}
 
-	{{ $rand := randInt 100 }}
-	{{ $dmg := 0 }}
-	{{ if lt $rand 5 }}
-		{{ $dmg = randInt 40 50 }}
-	{{ else if lt $rand 15 }}
-		{{ $dmg = randInt 30 40 }}
-	{{ else if lt $rand 45 }}
-		{{ $dmg = randInt 20 30 }}
-	{{ else }}
-		{{ $dmg = randInt 1 20 }}
-	{{ end }}
+	{{$attacker := index $gameData.Players $idx}}
+	{{$defender := index $gameData.Players (sub 1 $idx)}}
 
-	{{ $newHp := sub $target.HP $dmg }}
-	{{ if lt $newHp 0 }} {{ $newHp = 0 }} {{ end }}
-	{{ $target.Set "HP" $newHp }}
-	{{ $msgs = $msgs.Append (printf "%s **%s** attacked **%s**, dealing __%d__ damage!"
-		$emoji
-		$attacker.Name
-		$target.Name
+	{{/* compute damage */}}
+	{{$p := randInt 100}}
+	{{$dmg := 0}}
+	{{if lt $p 5}} {{$dmg = randInt 40 50}}
+	{{else if lt $p 15}} {{$dmg = randInt 30 40}}
+	{{else if lt $p 45}} {{$dmg = randInt 20 30}}
+	{{else}} {{$dmg = randInt 1 20}}
+	{{end}}
+
+	{{/* clamp $dmg to defender's health so we don't get negative HP */}}
+	{{if gt $dmg $defender.HP}} {{$dmg = $defender.HP}} {{end}}
+	{{$defender.Set "HP" (sub $defender.HP $dmg)}}
+
+	{{$m := printf "%s **%s** attacked **%s**, dealing __%d__ damage!"
+		(index $Emojis $idx)
+		$attacker.User.Username
+		$defender.User.Username
 		$dmg
-	) }}
-	
-	{{ $data := sdict . }}
-	{{ $data.Set "IsFirst" false }}
-	{{ $data.Set "Target" .Attacker }}
-	{{ $data.Set "Attacker" .Target }}
-	{{ $data.Set .Target $target }}
+	}}
+	{{$gameData.Set "Msgs" ($gameData.Msgs.Append $m)}}
 
-	{{ if not $target.HP }}
-		{{ $msgs = $msgs.Append (printf "🏆 **%s** has won!" $attacker.Name) }}
-	{{ end }}
-	{{ if gt (len $msgs) 3 }}
-		{{ $msgs = slice $msgs (sub (len $msgs) 3) (len $msgs) }}
-	{{ end }}
-	{{ $embed.Set "description" (joinStr "\n" $msgs.StringSlice) }}
-		
-	{{ $embed.fields.Set (index (sdict "UserA" 0 "UserB" 1) .Target) (sdict
-		"name" $target.Name
-		"value" (printf "%d/100 HP" $target.HP)
-		"inline" true
-	) }}
-	{{ $data.Set "Embed" $embed }}
+	{{if eq $defender.HP 0}}
+		{{$wm := print "🏆 **" $attacker.User.Username "** has won!"}}
+		{{$gameData.Set "Msgs" ($gameData.Msgs.Append $wm)}}
+		{{$s := dbIncr 0 "deathmatch_games" -1}}
+	{{else}}
+		{{$gameData.Set "Round" (add $gameData.Round 1)}}
+		{{$c := index $Channels (randInt (len $Channels))}}
+		{{execCC .CCID $c 2 $gameData}}
+	{{end}}
 
-	{{ if $target.HP }}
-		{{ execCC $cc (index $channels (randInt (len $channels))) 2 $data }}
-	{{ end }}
-
-	{{ editMessage .ChannelID .MsgID (cembed $embed) }}
-
-{{ else }}
-	{{ $initial := sendMessageRetID nil (cembed $embed) }}
-	{{ sleep 3 }}
-	{{ execCC $cc (index $channels (randInt (len $channels))) 2 (sdict
-		"UserA" (sdict "Name" $userA.Username "HP" 100)
-		"UserB" (sdict "Name" $userB.Username "HP" 100)
-		"Embed" $embed
-		"Target" "UserA"
-		"Attacker" "UserB"
-		"MsgID" $initial
-		"IsFirst" true
-		"ChannelID" .Channel.ID
-	) }}
-{{ end }}
+	{{/* update embed */}}
+	{{template "renderEmbed" ($query := dict "GameData" $gameData)}}
+	{{editMessage $gameData.ChannelID $gameData.MsgID (cembed $query.Out)}}
+{{end}}
 ```

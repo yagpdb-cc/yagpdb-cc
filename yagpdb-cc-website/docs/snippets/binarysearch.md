@@ -3,6 +3,10 @@ sidebar_position: 2
 title: Binary Search
 ---
 
+This CC is a snippet help search a given element x in sorted array. The array must be ascending.  
+Binary search is `O(log n)` which is its big selling point.  
+The array input is `$arr`. Lenght of array is `$length`. Element need to search is `$element`
+
 ```go
 {{/*
     This CC is a snippet help search a given element x in sorted array. The array must be ascending. 

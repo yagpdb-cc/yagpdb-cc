@@ -3,6 +3,15 @@ sidebar_position: 8
 title: Fun Info
 ---
 
+A command to see user's info about counting, qotd and x-word-story
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A-funinfo(?:\s+(?:\d{17,19}|<@!?\d{17,19}>))?\z`
+
+**Usage:**  
+`-funinfo <User: ID/Mention>`
+
 ```go
 {{/*
     SETUP:

@@ -3,6 +3,10 @@ sidebar_position: 3
 title: Reaction Listener
 ---
 
+Supporting Reaction CC for Giveaway Package.
+
+**Trigger Type:** `Reaction` with option `Added + Removed reactions`
+
 ```go
 {{/* 
         Supporting Reaction CC for Giveaway Package.

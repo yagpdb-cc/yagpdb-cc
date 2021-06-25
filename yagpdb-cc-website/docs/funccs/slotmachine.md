@@ -3,6 +3,15 @@ sidebar_position: 15
 title: Slot Machine
 ---
 
+Slot machine game by Pedro Pessoa.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `slotmachine`
+
+**Usage:**  
+`-slotmachine <amount>`
+
 ```go
 {{/*
 	Slot machine game by Pedro Pessoa. Usage: `-slotmachine <amount>`.

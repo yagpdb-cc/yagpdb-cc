@@ -1,7 +1,16 @@
 ---
-sidebar_position: 16
+sidebar_position: 17
 title: World Clock
 ---
+
+Simple world clock.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `worldclock`
+
+**Usage:**  
+`-worldclock`
 
 ```go
 {{/*

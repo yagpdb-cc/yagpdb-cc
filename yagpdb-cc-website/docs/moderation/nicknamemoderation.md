@@ -3,6 +3,20 @@ sidebar_position: 4
 title: Nickname Moderation
 ---
 
+If a user of your server has an inappropriate or unpingable nickname, mods often have to change their nickname manually.  
+With this custom command, they can moderate nicknames with a simple command.  
+After you moderated the nickname, the nickname will be changed when the moderated user sends their next message.  
+The command nick-numberreset makes the next moderated nickname start at number one.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A`
+
+**Usage:**  
+`-modnick <@user/ID>`  
+`-unmodnick <@user/ID>`  
+`-nick-numberreset`
+
 ```go
 {{/*
 	Custom Command for nickname moderation

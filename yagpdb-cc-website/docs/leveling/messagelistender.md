@@ -3,6 +3,12 @@ sidebar_position: 4
 title: Message Listener CC
 ---
 
+This command manages messages - setting cooldowns, giving role rewards when users level up, and giving XP.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `.*`
+
 ```go
 {{/*
 	This command manages messages - setting cooldowns, giving role rewards when users level up, and giving XP.

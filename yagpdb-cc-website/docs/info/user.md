@@ -3,6 +3,15 @@ sidebar_position: 5
 title: User Info CC
 ---
 
+This command allows you to view information about a given user defaulting to yourself.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(user|member)(-?info)?(\s+|\z)`
+
+**Usage:**  
+`-userinfo [user]`  
+
 ```go
 {{/*
 	This command allows you to view information about a given user defaulting to yourself.

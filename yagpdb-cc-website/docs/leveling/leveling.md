@@ -3,6 +3,17 @@ sidebar_position: 2
 title: Leveling CC
 ---
 
+This command manages the general level settings of the guild.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(leveling|(level|lvl)-?conf|(level|lvl)-?settings)(\s+|\z)`
+
+**Usage:**  
+`-leveling set <key> value` - example: `-leveling set cooldown 1 minute 30 seconds`  
+`-leveling use-default` | `use default settings`  
+`-leveling view` | `view settings`  
+
 ```go
 {{/*
 	This command manages the general level settings of the guild.

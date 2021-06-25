@@ -3,6 +3,17 @@ sidebar_position: 2
 title: Custom Report
 ---
 
+This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes  
+Reactions to make things easier for staff.  
+This custom command is basically the native report-command, but adds some back-end functionalites in order for the rest to work :)
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A-r(eport)?(?:u(ser)?)?(\s+|\z)`
+
+**Usage:**  
+`-ru <User:Mention/ID> <Reason:Text>`
+
 ```go
 {{/*
     This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes

@@ -3,6 +3,8 @@ sidebar_position: 5
 title: Ordinal
 ---
 
+This command is a demonstration of adding the ordinal to a number. 1 -> 1st, 11 -> 11th, 122 -> 122nd.
+
 ```go
 {{/*
 	This command is a demonstration of adding the ordinal to a number. 1 -> 1st, 11 -> 11th, 122 -> 122nd.

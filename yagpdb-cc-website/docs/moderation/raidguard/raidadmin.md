@@ -3,6 +3,16 @@ sidebar_position: 2
 title: Raid Admin
 ---
 
+This part of the code provides the Admin commands.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `raid`
+
+**Usage:**  
+All commands are preceeded by `-raid <action>`  
+Actions include: `ban`, `kick`, `clear`
+
 ```go
 {{/*
     Trigger Type: Command

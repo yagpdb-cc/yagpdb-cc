@@ -1,7 +1,16 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 title: JSON Converter
 ---
+
+JSON Converter CC (JSONify)
+
+**Trigger Type:** `Command`
+
+**Trigger:** `json`  
+
+**Usage:**  
+Run the json command to find out :)
 
 ```go
 {{/*

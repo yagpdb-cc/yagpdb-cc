@@ -3,6 +3,16 @@ sidebar_position: 5
 title: Slowmode
 ---
 
+This command helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `.*`
+
+**Usage:**  
+`-slowmode on (time in seconds)`  
+`-slowmode off`
+
 ```go
 {{/*
 	This command helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it 

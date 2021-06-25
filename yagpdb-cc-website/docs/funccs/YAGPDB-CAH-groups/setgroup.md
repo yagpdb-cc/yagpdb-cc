@@ -3,6 +3,16 @@ sidebar_position: 6
 title: setgroup
 ---
 
+This command creates a new group of CAH card packs, or edits an existing one.  
+Note that the packs to form the specified group must all be in the same set of quotes.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `setgroup`
+
+**Usage:**  
+`-setgroup "group name" "pack1 pack2 etc"`
+
 ```go
 {{/*
 	This command creates a new group of CAH card packs, or edits an existing one.

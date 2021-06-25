@@ -3,6 +3,15 @@ sidebar_position: 2
 title: Basic Giveaway
 ---
 
+Main Giveaway CC. Supports execCC invoke.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `giveaway`
+
+**Usage:**  
+Read the [README](basicREADME.md)
+
 ```go
 {{/*
         Main Giveaway CC. Supports execCC invoke. Usage: Read README.md

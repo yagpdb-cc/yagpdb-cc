@@ -3,6 +3,15 @@ sidebar_position: 2
 title: Avatar CC
 ---
 
+This command allows you to view the avatar of a given user defaulting to yourself.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(avatar|av|pfp)(\s+|\z)`
+
+**Usage:**  
+`-avatar [user]`
+
 ```go
 {{/*
 	This command allows you to view the avatar of a given user defaulting to yourself.

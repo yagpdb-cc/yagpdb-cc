@@ -3,6 +3,15 @@ sidebar_position: 2
 title: delgroup
 ---
 
+This command deletes a group of CAH card packs.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `delgroup`
+
+**Usage:**  
+`-delgroup "group name"`
+
 ```go
 {{/*
 	This command deletes a group of CAH card packs.

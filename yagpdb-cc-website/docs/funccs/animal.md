@@ -3,6 +3,15 @@ sidebar_position: 2
 title: Animal
 ---
 
+This CC generates random images of different animals.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `animal`
+
+**Usage:**  
+`-animal <animaltype>` where `<animaltype>` is one of `duck`, `fox`, `cat`, `goat`, `shiba`, and `httpcat`
+
 ```go
 {{/*
 	This CC generates random images of different animals. Usage: `-animal <animaltype>` where `animal` is one of `duck`, `fox`, `cat`, `goat`, `shiba`, and `httpcat`.
