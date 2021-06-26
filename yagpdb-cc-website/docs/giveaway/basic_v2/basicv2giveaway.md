@@ -3,7 +3,7 @@ sidebar_position: 2
 title: Basic Giveaway V2
 ---
 
-Main Giveaway V2 CC. Supports execCC invoke.
+Main Giveaway V2 CC. Supports intuitive usage via `execCC`.
 
 **Trigger Type:** `Command`
 
