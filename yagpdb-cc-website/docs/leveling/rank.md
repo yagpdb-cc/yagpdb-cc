@@ -2,7 +2,7 @@
 sidebar_position: 5
 title: Rank CC
 ---
-This command manages viewing the rank of a given member.
+This command manages viewing the rank of yourself, or a given member.
 
 **Trigger Type:** `Regex`
 
