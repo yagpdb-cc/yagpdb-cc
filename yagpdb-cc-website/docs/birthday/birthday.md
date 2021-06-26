@@ -10,7 +10,7 @@ This custom command adds birthday functionality to your server, wishing members 
 **Trigger:** `\A\-(my|start|stop|set|get|del)b(irth)?days?`
 
 **Usage:** 
-Commands and usage is outlined in the [read me](birthdayREADME/#commands).
+Commands and usage is outlined in the [README](birthdayREADME/#commands).
 
 ```go
 {{/* User Variables */}}
