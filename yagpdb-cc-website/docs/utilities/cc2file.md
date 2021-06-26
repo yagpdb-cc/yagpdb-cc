@@ -4,7 +4,7 @@ title: CC to File
 ---
 
 This command sends your CC(s) code in a text file, rather than "plain" Discord messages, preserving Tabs, markdown, etc.  
-You can especify more than one ID or trigger, and bot will generate one file per input parameter. If none are provided, output will be CC list
+You can specify more than one ID or trigger, and the bot will generate one file per input parameter. If none are provided, output will be the entire CC list.
 
 **Trigger Type:** `Command`
 
