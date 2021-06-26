@@ -13,7 +13,7 @@ Note: If your prefix is not `-` replace the `-` at the start of the trigger with
 **Usage:** Refer to [README](suggestionREADME.md).
 
 P.S. - REMOVE the leading comment AND the second comment, so that you can save the command. Otherwise youll get an error!
-Refer to the [Suggestion Read Me](suggestionREADME.md) for an explanation about the configuration variables.
+Refer to the [README](suggestionREADME.md) for an explanation about the configuration variables.
 
 ```go
 {{/*
