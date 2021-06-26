@@ -3,7 +3,7 @@ sidebar_position: 11
 title: Color Preview
 ---
 
-This command allows you to preview how colors look. Converts hex to dec, vice versa.
+This command allows you to preview how colors look. Converts hex to dec, and vice versa.
 
 **Trigger Type:** `Regex`
 
