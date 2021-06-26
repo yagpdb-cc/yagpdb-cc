@@ -10,7 +10,7 @@ This command is the main suggestion command with suggestion create/edit/delete a
 **Trigger:** `\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`  
 Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.  
 
-**Usage:** Refer to [Suggestion Read Me](suggestionREADME.md).
+**Usage:** Refer to [README](suggestionREADME.md).
 
 P.S. - REMOVE the leading comment AND the second comment, so that you can save the command. Otherwise youll get an error!
 Refer to the [Suggestion Read Me](suggestionREADME.md) for an explanation about the configuration variables.
