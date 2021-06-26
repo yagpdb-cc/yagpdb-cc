@@ -5,8 +5,10 @@ title: parseArgs
 
 This snippet provides a reusable template which you can add to your custom commands.  
 It separates predefined flags from positional arguments within input; for example:
-- `-command -m 123 positional arg -f`
-    - might be parsed into:
+    ```
+    -command -m 123 positional arg -f
+    ```
+might be parsed into:
     
     ```
     positional: ["positional" "arg"]  
