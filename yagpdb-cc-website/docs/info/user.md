@@ -3,7 +3,7 @@ sidebar_position: 5
 title: User Info CC
 ---
 
-This command allows you to view information about a given user defaulting to yourself.
+This command allows you to view information about a given user, defaulting to yourself.
 
 **Trigger Type:** `Regex`
 
