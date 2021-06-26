@@ -3,7 +3,7 @@ sidebar_position: 15
 title: Slot Machine
 ---
 
-Slot machine game by Pedro Pessoa.
+Slot machine game by Pedro Pessoa. Gambling can be addictive. 
 
 **Trigger Type:** `Command`
 
