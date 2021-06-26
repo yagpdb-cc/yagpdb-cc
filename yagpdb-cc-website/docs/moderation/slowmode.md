@@ -3,7 +3,7 @@ sidebar_position: 5
 title: Slowmode
 ---
 
-This command helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it.
+This command adds slowmode functionality: It'll delete an user's message if their cooldown isn't over yet. Configurable permission requirement to bypass the cooldown, as well as required permission to invoke the slow mode.
 
 **Trigger Type:** `Regex`
 
