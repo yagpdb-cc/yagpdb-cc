@@ -3,7 +3,7 @@ sidebar_position: 10
 title: Maze
 ---
 
-This command sends a maze with an optional amount crossings/bridges. It also includes a link to a downloadable solution and `.ExecData` support.
+This command sends a maze with an optional amount crossings/bridges. It also includes a link to a downloadable solution and intuitive `execCC` support.
 
 **Trigger Type:** `Command`
 
