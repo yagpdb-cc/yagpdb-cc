@@ -3,7 +3,7 @@ sidebar_position: 2
 title: Avatar CC
 ---
 
-This command allows you to view the avatar of a given user defaulting to yourself.
+This command allows you to view the avatar of a given user, defaulting to yourself.
 
 **Trigger Type:** `Regex`
 
