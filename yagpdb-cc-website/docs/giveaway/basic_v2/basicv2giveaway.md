@@ -10,7 +10,7 @@ Main Giveaway V2 CC. Supports intuitive usage via `execCC`.
 **Trigger:** `giveaway`
 
 **Usage:**  
-Read the [README](basicc2README.md)
+Read the [README](basicv2README.md)
 
 **Note:** Command is very long so you MUST remove the comment and the next one after it (`{{/*CONFIGURATION VALUES START*/}}`) for it to save properly.
 
