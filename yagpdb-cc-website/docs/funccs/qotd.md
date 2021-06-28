@@ -3,6 +3,18 @@ sidebar_position: 13
 title: Question of the Day
 ---
 
+**Setup:**
+- Set the restrictions to only run in your QOTD channel
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A`
+
+**Usage:**  
+- "@QOTD What is your favourite food?" or "What is @QOTD's fav movie?". As long as you mention your QOTD role, it will work.
+- The bot will then remove that message and resend it. (So you don't get pinged when people reply to your message 😉)
+- On the next Question Of The Day, the bot will send a report to a channel of your choice with some info on the previous QOTD.
+
 ```go
 {{/*
     SETUP:

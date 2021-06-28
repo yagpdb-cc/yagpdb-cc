@@ -3,6 +3,11 @@ sidebar_position: 6
 title: Selection Sort
 ---
 
+This CC is a snippet for sorting an array of numbers descending or ascending.  
+The array input is `$arr`. It is sorted in place.
+
+Currently, it sorts in DESC order, but this may be changed simply by changing the comparison on L13 to `gt` instead of `lt`.
+
 ```go
 {{/*
 	This CC is a snippet for sorting an array of numbers descending or ascending.

@@ -3,6 +3,15 @@ sidebar_position: 7
 title: Leaderboard CC
 ---
 
+This command manages the leaderboard.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(leaderboard|lb|top)(\s+|\z)`
+
+**Usage:**  
+`-leaderboard [page]`
+
 ```go
 {{/*
 	This command manages the leaderboard. Usage is -leaderboard [page] where page is optional.

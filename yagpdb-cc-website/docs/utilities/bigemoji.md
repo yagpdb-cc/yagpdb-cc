@@ -1,11 +1,20 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 title: Big Emoji
 ---
 
+This command allows you to enlarge emojis.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(be|big-?emo(te|ji))(\s+|\z)(\s+|\z)`
+
+**Usage:**  
+`-bigemoji <emoji>`
+
 ```go
 {{/*
-	This command allows you to enlarge emojis - version 2. Usage: `-bigemoji <emoji>`.
+	This command allows you to enlarge emojis. Usage: `-bigemoji <emoji>`.
 
 	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(be|big-?emo(te|ji))(\s+|\z)(\s+|\z)`
 */}}

@@ -3,6 +3,15 @@ sidebar_position: 7
 title: Duck
 ---
 
+A simple command which generates random duck embedded pictures because ducks are important!!
+
+**Trigger Type:** `Command`
+
+**Trigger:** `randduck`
+
+**Usage:**  
+`-randduck`
+
 ```go
 {{/* 
 	A simple command which generates random duck embedded pictures because ducks are important!! 

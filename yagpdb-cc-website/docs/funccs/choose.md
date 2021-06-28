@@ -3,6 +3,15 @@ sidebar_position: 3
 title: Choose
 ---
 
+This command makes YAGPDB choose a given item from the ones provided.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `choose`
+
+**Usage:**  
+`-choose <...items>`
+
 ```go
 {{/*
 	This command makes YAGPDB choose a given item from the ones provided. Usage: `-choose <...items>`.

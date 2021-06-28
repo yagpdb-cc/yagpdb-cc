@@ -3,6 +3,15 @@ sidebar_position: 4
 title: listgroups
 ---
 
+This command deletes a group of CAH card packs.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `listgroups`
+
+**Usage:**  
+`-listgroups`
+
 ```go
 {{/*
 	This command lists all currently configured CAH card pack groups.

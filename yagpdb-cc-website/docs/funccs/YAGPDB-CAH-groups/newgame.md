@@ -3,6 +3,18 @@ sidebar_position: 5
 title: newgame
 ---
 
+This command starts a new CAH game using the specified packs and pack groups.  
+It first checks whether each argument is a valid pack group and, if so, expands it into its component packs. If not, that argment is assumed to be an individual pack and is skipped.  
+After expanding all applicable pack groups, the resulting list of packs is used to start a new game, and all members with the CAH role are pinged.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `newgame`
+
+**Usage:**  
+`-newgame pack1 "pack 2" packGroup1 "pack group 2" etc` (no specific ordering necessary)
+
+
 ```go
 {{/*
 	This command starts a new CAH game using the specified packs and pack groups.

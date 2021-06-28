@@ -3,6 +3,15 @@ sidebar_position: 9
 title: Guess the Number
 ---
 
+This command is a game where users need to send numbers from 1 to 100. The winners win an amount of credits!
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `.*`
+
+**Usage:**  
+To start the game just type 31
+
 ```go
 {{/*
 	This command is a game where users need to send numbers from 1 to 100. The winners win an amount of credits!

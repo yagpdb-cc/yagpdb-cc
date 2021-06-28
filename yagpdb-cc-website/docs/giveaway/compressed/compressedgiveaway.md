@@ -3,6 +3,13 @@ sidebar_position: 2
 title: Compressed Giveaway
 ---
 
+**Trigger Type:** `Command`
+
+**Trigger:** `giveaway`
+
+**Usage:**  
+Read the [README](compressedREADME.md)
+
 ```go
 {{$gEmoji:=`<:yag:277569741932068864>`}}
 

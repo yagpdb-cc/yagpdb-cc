@@ -3,6 +3,10 @@ sidebar_position: 3
 title: Compressed Reaction Listener
 ---
 
+Supporting Reaction CC for Giveaway Package.
+
+**Trigger Type:** `Reaction` with option `Added + Removed reactions`
+
 ```go
 {{$gEmoji:=`<:yag:277569741932068864>`}}
 

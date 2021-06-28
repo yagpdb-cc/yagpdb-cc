@@ -2,6 +2,16 @@
 sidebar_position: 5
 title: Rank CC
 ---
+This command manages viewing the rank of yourself, or a given member.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(rank|lvl|xp)(\s+|\z)`
+
+**Usage:**  
+`-rank [member]`  
+You may also set a color for your rank card using `-rank set-color <hex>` or `-rank set-color default`.  
+You may also set a background for your rank card (if enabled) using `-rank set-background <link>` or `-rank set-background del`.
 
 ```go
 {{/*

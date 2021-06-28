@@ -2,14 +2,20 @@
 sidebar_position: 3
 title: Raid Join
 ---
+This part of the code will track all incomming new members to a server. If their account is younger than 1 day then they will get added to the raid list. This list will expire every 10 minutes to account for any members not part of a RAID.
+
+**Trigger:** `Member join`  
+This code is to be placed in the `Join Message` section.
+
 
 ```go
 {{/*
 	Trigger: member join
 	This code is to be placed in the "Join Message" section.
 
-	About: This part of the code will track all incomming new members to a server. If their account is younger than 1 day then they will get added to the raid
-	list. This list will expire every 10 minutes to account for any members not part of a RAID.
+	About: This part of the code will track all incomming new members to a server. 
+    If their account is younger than 1 day then they will get added to the raid list. 
+    This list will expire every 10 minutes to account for any members not part of a RAID.
 	
 	Created by: ENGINEER15 - https://github.com/engineer152/
 	Last Update: 4/13/2021

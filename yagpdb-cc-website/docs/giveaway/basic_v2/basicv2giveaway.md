@@ -3,6 +3,17 @@ sidebar_position: 2
 title: Basic Giveaway V2
 ---
 
+Main Giveaway V2 CC. Supports intuitive usage via `execCC`.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `giveaway`
+
+**Usage:**  
+Read the [README](basicv2README.md)
+
+**Note:** Command is very long so you MUST remove the comment and the next one after it (`{{/*CONFIGURATION VALUES START*/}}`) for it to save properly.
+
 ```go
 {{/*
         Main Giveaway V2 CC. Supports execCC invoke. Usage: Read README.md

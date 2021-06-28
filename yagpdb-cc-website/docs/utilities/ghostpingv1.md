@@ -1,7 +1,14 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 title: Ghost-Ping v1
 ---
+
+Ghost-Ping Detector CC v1
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `.*`  
+Optional Trigger: `<@!?\d{17,19}>`
 
 ```go
 {{/*

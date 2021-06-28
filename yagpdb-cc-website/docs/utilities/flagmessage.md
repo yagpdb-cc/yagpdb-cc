@@ -1,7 +1,11 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 title: Flag Message
 ---
+
+This command allows users to flag messages by reacting with a custom emoji.
+
+**Trigger Type:** `Reaction` on `Reaction Added only`.
 
 ```go
 {{/*

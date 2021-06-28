@@ -3,6 +3,14 @@ sidebar_position: 3
 title: Reaction Handler
 ---
 
+This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes  
+Reactions to make things easier for staff.  
+This custom command manages the reaction menu.  
+Make this in a seperate Reaction CC, due to its massive character count.  
+Remove this leading comment once you added this command.
+
+**Trigger:** `Reaction` on `Added Reactions only`
+
 ```go
 {{/*
     This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes

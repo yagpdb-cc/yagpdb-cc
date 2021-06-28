@@ -3,6 +3,15 @@ sidebar_position: 14
 title: Repeat
 ---
 
+This command repeats a given phrase.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `repeat`
+
+**Usage:**  
+`-repeat <amount> <phrase>`
+
 ```go
 {{/*
 	This command repeats a given phrase. Usage: `-repeat <phrase>` or `-repeat <amount> <phrase>`.

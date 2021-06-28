@@ -3,6 +3,18 @@ sidebar_position: 2
 title: Suggestion CC
 ---
 
+This command is the main suggestion command with suggestion create/edit/delete and suggestadmin commands.
+
+**Trigger Type:** Regex
+
+**Trigger:** `\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`  
+Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.  
+
+**Usage:** Refer to [README](suggestionREADME.md).
+
+P.S. - REMOVE the leading comment AND the second comment, so that you can save the command. Otherwise youll get an error!
+Refer to the [README](suggestionREADME.md) for an explanation about the configuration variables.
+
 ```go
 {{/*
 	This command is the main suggestion command with suggestion create/edit/delete and suggestadmin commands. Usage: Refer README.md

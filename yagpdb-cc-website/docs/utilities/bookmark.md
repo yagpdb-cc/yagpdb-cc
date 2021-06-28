@@ -1,7 +1,18 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 title: Bookmark
 ---
+
+This custom commands functions similar to the reminder command, however it will send a DM instantly.  
+One could say like a private pin command. Nothing much, but quite handy I think  :)
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(?:-\s?|<@!?204255221017214977>\s*)b(?:ook)?m(?:ark)?(?:\s+|\z)`
+
+**Usage:**  
+`-bookmark <message>`  
+`-bm <message>`
 
 ```go
 {{/*

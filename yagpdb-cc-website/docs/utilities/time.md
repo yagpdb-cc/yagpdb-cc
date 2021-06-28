@@ -1,7 +1,16 @@
 ---
-sidebar_position: 15
+sidebar_position: 16
 title: Time
 ---
+
+This command gets the time of your city, the weather of your city, and shows it in an embed with a different image / color depending on time.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `time`
+
+**Usage:**  
+`-time`
 
 ```go
 {{/*

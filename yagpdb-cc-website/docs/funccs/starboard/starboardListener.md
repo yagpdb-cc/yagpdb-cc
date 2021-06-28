@@ -3,6 +3,12 @@ sidebar_position: 3
 title: starboardListener
 ---
 
+This command allows users to react to messages within the starboard channel with stars/anti-stars. 
+
+**Trigger Type:** `Reaction trigger` with option `Added + Removed reactions`
+
+**Credits:** [dvoraknt](https://github.com/dvoraknt)
+
 ```go
 {{/*
 	Starboard Listener

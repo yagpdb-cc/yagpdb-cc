@@ -3,6 +3,17 @@ sidebar_position: 3
 title: Cancel Report
 ---
 
+This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes
+Reactions to make things easier for staff.
+This custom command manages and takes care of the cancellation requests.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A-c(ancel)?r(eport)?(\s+|\z)`
+
+**Usage:**  
+`-cr <Message:ID> <Key:Text> <Reason:Text>`
+
 ```go
 {{/*
     This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes

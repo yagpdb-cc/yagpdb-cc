@@ -3,6 +3,12 @@ sidebar_position: 2
 title: Starboard
 ---
 
+This command allows users to react to messages with stars. If it reaches a given amount, it will be sent in a given channel.
+
+**Trigger Type:** `Reaction trigger` with option `Added + Removed reactions`
+
+**Credits:** [dvoraknt](https://github.com/dvoraknt)
+
 ```go
 {{/*
 	This command allows users to react to messages with stars. If it reaches a given amount, it will be sent in a given channel.

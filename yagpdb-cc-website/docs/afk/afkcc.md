@@ -3,6 +3,16 @@ sidebar_position: 2
 title: AFK CC
 ---
 
+This command allows users to set an AFK message with optional duration.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A`
+
+**Usage:**  
+`-afk message`  
+`-afk <message> -d <duration>`
+
 ```go
 {{/*
 	This command allows users to set an AFK message with optional duration.

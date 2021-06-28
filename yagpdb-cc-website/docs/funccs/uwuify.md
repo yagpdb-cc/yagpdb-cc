@@ -3,6 +3,15 @@ sidebar_position: 18
 title: uwuify
 ---
 
+This command "uwuifies" text. The best way to see what the heck it does is to add it to your own server and test it.
+
+**Trigger Type:** `Command`
+
+**Trigger:** `uwuify`
+
+**Usage:**  
+`-uwuify <text>`
+
 ```go
 {{/*
 	This command "uwuifies" text. The best way to see what the heck it does is to add it to your own server and test it.

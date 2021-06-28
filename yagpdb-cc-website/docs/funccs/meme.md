@@ -3,9 +3,23 @@ sidebar_position: 11
 title: Meme
 ---
 
+This command allows you to make a meme.  
+You can provide a link for a custom meme, or use the existing templates: both, buzz, doge, joker and sad-biden.  
+Sometimes, the special characters will mess up the link, so it is recommended that you only use these special characters: " " "?" "%" "#" "/"
+
+**Trigger Type:** `Command`
+
+**Trigger:** `meme`
+
+**Usage:**  
+`-meme <meme template> <top text> <bottom text> <link if template is custom>`
+
+**Example:**  
+`-meme custom "this is" "my meme generator" "https://wiki.geogebra.org/uploads/a/a9/Example.jpg"`
+
 ```go
 {{/*
-	This command allows you to make a meme. Usage: `-meme <meme template> >top text> <bottom text> <link if template is custom>`.
+	This command allows you to make a meme. Usage: `-meme <meme template> <top text> <bottom text> <link if template is custom>`.
 	You can provide a link for a custom meme, or use the existing templates: both, buzz, doge, joker and sad-biden.
 	Sometimes, the special characters will mess up the link, so it is recommended that you only use these special characters: " " "?" "%" "#" "/"
   Example: `-meme custom "this is" "my meme generator" "https://wiki.geogebra.org/uploads/a/a9/Example.jpg"`

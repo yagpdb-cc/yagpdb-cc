@@ -1,7 +1,16 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 title: Color Preview
 ---
+
+This command allows you to preview how colors look. Converts hex to dec, and vice versa.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(preview|color)(\s+|\z)`
+
+**Usage:**  
+`-preview <hex>` or `-preview <dec> -dec`
 
 ```go
 {{/*

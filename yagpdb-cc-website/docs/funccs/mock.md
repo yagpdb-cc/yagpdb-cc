@@ -3,6 +3,15 @@ sidebar_position: 12
 title: Mock
 ---
 
+This command mocks text which is given (capitalizes every second letter, small-cases all other letters).
+
+**Trigger Type:** `Command`
+
+**Trigger:** `mock`
+
+**Usage:**  
+`-mock <text>`
+
 ```go
 {{/*
 	This command mocks text which is given (capitalizes every second letter, small-cases all other letters). Usage: `-mock <text>`. 
