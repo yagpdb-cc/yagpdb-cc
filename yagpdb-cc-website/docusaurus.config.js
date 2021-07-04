@@ -24,7 +24,7 @@ module.exports = {
           label: 'YAGPDB CCs',
         },
         {
-          href: 'https://github.com/yagpdb-cc/yagpdb-cc/tree/feature/website',
+          href: 'https://github.com/yagpdb-cc/yagpdb-cc/tree/master',
           label: 'GitHub',
           position: 'right',
         },
@@ -74,7 +74,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/yagpdb-cc/yagpdb-cc/edit/feature/website/yagpdb-cc-website',
+          editUrl: 'https://github.com/yagpdb-cc/yagpdb-cc/edit/master/yagpdb-cc-website',
           routeBasePath: '/',
         },
         blog: false,
