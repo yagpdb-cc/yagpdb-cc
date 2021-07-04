@@ -8,7 +8,7 @@ module.exports = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/yag.ico',
   organizationName: 'yagpdb-cc',
-  projectName: 'yagpdb-cc',
+  projectName: 'yagpdb-cc.github.io',
   themeConfig: {
     navbar: {
       title: 'YAGPDB Custom Commands',
