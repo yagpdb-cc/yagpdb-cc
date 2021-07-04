@@ -54,6 +54,7 @@ jobs:
       - name: Deploy website to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          external_repository: yagpdb-cc/yagpdb-cc.github.io
           publish_dir: ./yagpdb-cc-website/build
           full_commit_message: "docs: deploy website for ${{ github.sha }}"
