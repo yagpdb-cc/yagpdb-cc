@@ -40,7 +40,7 @@ For example:
 {{/*CONFIGURATION VALUES START*/}}
 */}}
 ```
-Follow the insctructions as it states. Remove the leading comment, and further comments to remove if it says to do so.
+Follow the instructions as it states. Remove the leading comment, and further comments to remove if it says to do so.
 
 ### Configuration Variables
 In many custom commands there will be a `{{/* CONFIGURATION AREA STARTS */}}` where you must edit the values of the variables for the command to properly work in your server. The variables between `{{/* CONFIGURATION AREA STARTS */}}` and `{{/* CONFIGURATION AREA ENDS */}}` are what you must edit to run the custom command properly.
