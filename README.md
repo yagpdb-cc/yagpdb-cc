@@ -4,6 +4,12 @@
 
 > <p align="center">An up-to-date collection of CCs for your server</p>
 
+<p align="center">
+	<i>
+		Check out our <a href="https://yagpdb-cc.github.io">new website</a>, which displays all custom commands available here in addition to instructions on how to add them!
+	</i>
+</p>
+
 # Table of Contents
 
 - [Adding these Custom Commands](#adding-these-custom-commands)
