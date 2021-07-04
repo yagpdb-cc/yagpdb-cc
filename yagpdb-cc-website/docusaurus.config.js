@@ -38,7 +38,7 @@ module.exports = {
           items: [
             {
               label: 'YAGPDB CCs',
-              to: '/docs/intro',
+              to: '/',
             },
           ],
         },
@@ -47,7 +47,7 @@ module.exports = {
           items: [
             {
               label: 'YAGPDB Github',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              href: 'https://github.com/jonas747/yagpdb',
             },
             {
               label: 'Discord',
@@ -74,7 +74,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/yagpdb-cc/yagpdb-cc/edit/master/yagpdb-cc-website',
+          editUrl: 'https://github.com/yagpdb-cc/yagpdb-cc/edit/feature/website/yagpdb-cc-website',
           routeBasePath: '/',
         },
         blog: false,
