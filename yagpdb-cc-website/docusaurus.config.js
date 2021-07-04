@@ -12,7 +12,7 @@ module.exports = {
   themeConfig: {
     colorMode: {
         defaultMode: 'dark',
-        respectPrefersColorTheme: true,
+        respectPrefersColorScheme: true,
         switchConfig: {
             darkIcon: '🌙',
             lightIcon: '☀️',
