@@ -1,0 +1,57 @@
+name: documentation
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test-build-docs:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./yagpdb-cc-website
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Node v14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Cache dependencies
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build website
+        run: yarn build
+  deploy-docs:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./yagpdb-cc-website
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Node v14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Cache dependencies
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build website
+        run: yarn build
+      - name: Deploy website to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          public_dir: ./build
+          full_commit_message: "docs: deploy website for ${{ github.sha }}"
