@@ -10,11 +10,13 @@ module.exports = {
   organizationName: 'yagpdb-cc',
   projectName: 'yagpdb-cc.github.io',
   themeConfig: {
-    defaultMode: 'dark',
-    respectPrefersColorTheme: true,
-    switchConfig: {
-        darkIcon: '🌙',
-        lightIcon: '☀️',
+    colorMode: {
+        defaultMode: 'dark',
+        respectPrefersColorTheme: true,
+        switchConfig: {
+            darkIcon: '🌙',
+            lightIcon: '☀️',
+        },
     },
     navbar: {
       title: 'YAGPDB Custom Commands',
