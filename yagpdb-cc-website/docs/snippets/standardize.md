@@ -1,0 +1,52 @@
+---
+sidebar_position: 8
+title: Standardize
+---
+
+This is a snippet which converts all internal maps/slices in a multi layered data structure to `sdict`/`cslice` respectively.  
+It is most useful when retrieving deserialized data from the database which needs to be converted.
+
+**Example usage:**  
+`{{ template "standardize" ($data := sdict "Value" $MY_VALUE) }}
+{{ $standardized := $data.Result }}`
+
+```go
+{{/* 
+    This is a snippet which converts all internal maps/slices in a multi layered data structure to sdict/cslice respectively.
+	It is most useful when retrieving deserialized data from the database which needs to be converted.
+
+	Example usage:
+	
+	{{ template "standardize" ($data := sdict "Value" $MY_VALUE) }}
+	{{ $standardized := $data.Result }}
+*/}}
+
+{{ define "standardize" }}
+    {{- $kind := kindOf .Value true }}
+    {{- $typ := printf "%T" .Value }}
+    {{- $arg := sdict }}
+    {{- $result := "" }}
+
+    {{- if and (eq $kind "map") (not (eq $typ "templates.Dict" "templates.SDict")) }}
+        {{- $result = dict }}
+        {{- range $k, $v := .Value }} {{- $result.Set $k $v -}} {{- end }}
+    {{- else if and (eq $kind "array" "slice") (ne $typ "templates.Slice") }}
+        {{- $result = cslice.AppendSlice .Value }}
+    {{- else if eq $typ "templates.Dict" "templates.SDict" "templates.Slice" }}
+      {{- $result = .Value }}
+    {{- end }}
+
+    {{- if print $result }}
+        {{- range $k, $v := $result }}
+            {{- $kind := kindOf $v true }}
+            {{- if eq $kind "array" "slice" "map" }}
+                {{- $arg.Set "Value" $v -}}
+                {{- template "standardize" $arg -}}
+                {{- $result.Set $k $arg.Result }}
+            {{- end -}}
+        {{- end }}
+    {{- else }} {{- $result = .Value }} {{- end }}
+
+    {{- .Set "Result" $result -}}
+{{ end }}
+```

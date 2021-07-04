@@ -1,0 +1,19 @@
+---
+sidebar_position: 7
+title: Snowflake to Time
+---
+
+```go
+{{/* Let $snowflake be the ID. */}}
+
+{{/* snowflake >> 22 can be evaluated as snowflake / 2 ^ 22. 2 ^ 22 is 4194304. */}}
+{{ $time := div $snowflake 4194304 }}
+
+{{/* Multiply by 10^6 to convert milliseconds to nanoseconds */}}
+{{ $time = mult $time 1000000 }}
+
+{{/* Convert to duration so we can pass it as an argument to time.Add, which expects a duration and returns a time */}}
+{{ $time = toDuration $time }}
+
+{{ $time := .DiscordEpoch.Add $time }}
+```

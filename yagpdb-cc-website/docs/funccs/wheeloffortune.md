@@ -1,0 +1,65 @@
+---
+sidebar_position: 19
+title: Wheel of Fortune
+---
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A\-(?i)wheel(offortune)?`
+
+**Usage:**  
+`-wheel <bet>`
+
+```go
+{{/*
+	Name: Wheel of Fortune
+	Author: Hyakki999 <https://github.com/Hyakki999>
+	License: MIT
+	
+	Recommended:
+	- Trigger Type: Regex
+	- Trigger: `\A\-(?i)wheel(offortune)?`
+*/}}
+
+{{/* CONFIGURATION VARIABLES */}}
+{{ $dbName := "CREDITS" }} {{/* Name of the Key of your DB that stores users currency amount */}}
+{{ $limit := " insufficient 🦆" }} {{/* Error message when user doesn't have enough credits to place bet */}}
+{{ $bb1 := " you have to bet at least 1 🦆" }} {{/* Error message when user try to bet less than 1 🦆 */}}
+{{ $helpText := "-wheel <amount>\nFor example: **-wheel 10**\nThis way you would be betting 10 🦆." }} {{/* Your help text */}}
+{{/* CONFIGURATION VARIABLES ENDS */}}
+
+{{/* Do not change anything below */}}	
+{{ $pos := 1.0 }}
+{{ if lt (randInt 0 11) 7 }}
+	{{ $pos = (index (shuffle (cslice 0.1 0.3 0.5 0.2)) 0) }}
+{{ else }}
+	{{ $pos = (index (shuffle (cslice 1.2 2.4 1.7 1.5)) 0) }}
+{{ end }}
+
+{{ $a := dict 0.1 `\↙️` 0.2 "←" 0.3 "↓" 0.5 `\↘️` 1.2 "→" 1.5 `\↖️` 1.7 "↑" 2.4 `\↗️` }}
+{{ $arrow := $a.Get $pos }}
+
+{{ $fh := "🦆\n\n   『1.5』   『1.7』   『2.4』\n\n『0.2』      " }}
+{{ $sh := "      『1.2』\n\n     『0.1』   『0.3』   『0.5』" }}
+{{ $bal := toInt (dbGet .User.ID $dbName).Value }}
+{{ $red := 0xff2627 }}
+{{ $gre := 0x76ff03 }}
+
+{{ if .CmdArgs}}
+	{{ $bet := index .CmdArgs 0 | toInt }}
+	{{ if ge $bet 1 }}
+		{{ if ge $bal $bet }}
+			{{ $silent := dbIncr .User.ID $dbName ( mult -1 $bet ) }}
+			{{ $amount := toInt ( round ( mult ( toFloat $bet ) $pos ) ) }}
+			{{ $silent := dbIncr .User.ID $dbName $amount }}
+			{{ sendMessage nil ( cembed "color" $gre "title" ( print .User.String " won: " $amount $fh $arrow $sh ) ) }}
+		{{ else }}
+		{{ sendMessage nil ( cembed "color" $red "title" ( print .User.String $limit ) ) }}
+		{{ end }}
+	{{ else }}
+	{{ sendMessage nil ( cembed "color" $red "title" ( print .User.String $bb1 ) ) }}
+	{{ end }}
+{{ else }}
+{{ sendMessage nil ( cembed "color" $red "title" ( print "Usage: \n" $helpText ) ) }}
+{{ end }}
+```

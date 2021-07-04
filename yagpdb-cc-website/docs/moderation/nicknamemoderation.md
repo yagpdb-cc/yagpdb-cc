@@ -1,0 +1,93 @@
+---
+sidebar_position: 4
+title: Nickname Moderation
+---
+
+If a user of your server has an inappropriate or unpingable nickname, mods often have to change their nickname manually.  
+With this custom command, they can moderate nicknames with a simple command.  
+After you moderated the nickname, the nickname will be changed when the moderated user sends their next message.  
+The command nick-numberreset makes the next moderated nickname start at number one.
+
+**Trigger Type:** `Regex`
+
+**Trigger:** `\A`
+
+**Usage:**  
+`-modnick <@user/ID>`  
+`-unmodnick <@user/ID>`  
+`-nick-numberreset`
+
+```go
+{{/*
+	Custom Command for nickname moderation
+	If a user of your server has an inappropriate or unpingable nickname, mods often have to change their nickname manually.
+	With this custom command, they can moderate nicknames with a simple command.
+	After you moderated the nickname, the nickname will be changed when the moderated user sends their next message.
+	The command nick-numberreset makes the next moderated nickname start at number one.
+
+	Trigger type: Regex
+	Trigger: `\A`
+	Errors as Custom Command Outputs: off
+
+	Usage:
+	-modnick <@user/ID>
+	-unmodnick <@user/ID>
+	-nick-numberreset
+
+	Credits: 2x2Master1 <https://github.com/2x2master1>
+	Feel free to ping me in YAGPDB support if you have any questions or problems!
+*/}}
+
+{{/* Configuration area starts */}}
+{{$name := "Moderated Nickname"}}{{/* What should be in front of the numbers when a nickname is moderated */}}
+{{$padding := "5"}}{{/* How many digits the number should have, recommendation: between 3 and 7 */}}
+{{$modPerms := "ManageMessages"}}{{/* Permissions required to moderate nicknames. Available options:
+	Administrator, ManageServer, ReadMessages, SendMessages, SendTTSMessages, ManageMessages, EmbedLinks,
+	AttachFiles, ReadMessageHistory, MentionEveryone, VoiceConnect, VoiceSpeak, VoiceMuteMembers, VoiceDeafenMembers,
+	VoiceMoveMembers, VoiceUseVAD, ManageNicknames, ManageRoles, ManageWebhooks, ManageEmojis, CreateInstantInvite,
+	KickMembers, BanMembers, ManageChannels, AddReactions, ViewAuditLogs */}}
+{{/* Configuration area ends */}}
+
+
+{{$mod := in (split (index (split (exec "viewperms") "\n") 2) ", ") $modPerms}}
+{{$prefix := index (reFindAllSubmatches `Prefix of \x60\d+\x60: \x60(.+)\x60` (exec "prefix")) 0 1}}
+{{if .CmdArgs}}
+	{{if eq (lower (index .CmdArgs 0)) (print $prefix "modnick")}}
+		{{if ge (len .CmdArgs) 2}}
+			{{if $mod}}
+			{{((userArg (index .CmdArgs 1)).String)}}'s nickname will be moderated when they next send a message.
+			{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 1}}
+			{{else}}
+			{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+			{{end}}
+		{{else}}
+		{{sendMessage nil (print .User.Mention ", please provide a user!")}}
+		{{end}}
+	{{else if (eq (lower (index .CmdArgs 0)) (print $prefix "unmodnick"))}}
+		{{if ge (len .CmdArgs) 2}}
+			{{if $mod}}
+			{{((userArg (index .CmdArgs 1)).String)}}'s nickname will not be moderated anymore.
+			{{dbSet ((userArg (index .CmdArgs 1)).ID) "nick" 0}}
+			{{else}}
+			{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+			{{end}}
+		{{else}}
+		{{sendMessage nil (print .User.Mention ", please provide a user!")}}
+		{{end}}
+	{{else if (eq (lower (index .CmdArgs 0)) (print $prefix "nick-numberreset"))}}
+		{{if $mod}}
+		{{dbSet 0 "mnick" 0}}
+		{{addReactions "✅"}}
+		{{else}}
+		{{sendMessage nil (print .User.Mention ", you can't use that.")}}
+		{{end}}
+	{{else if eq (toInt ((dbGet .User.ID "nick").Value)) 1}}
+		{{if or (ne (reFind $name .Member.Nick) $name) (not .Member.Nick)}}
+		{{$db := dbIncr 0 "mnick" 1}}
+		{{$db2 := toInt ($db)}}
+		{{$v := printf (print "%0" $padding "d") $db2}}
+		{{editNickname (print $name " " $v)}}
+		{{end}}
+	{{end}}
+{{end}}
+```
