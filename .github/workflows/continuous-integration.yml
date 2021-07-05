@@ -10,9 +10,6 @@ jobs:
       run:
         working-directory: ./website
     name: Build website
-    # CD workflow already builds & deploys the website for commits to master, so only run this job
-    # if it was triggered by a push to a branch other than master / a pull request.
-    if: ${{ github.event_name != 'push' || github.ref != 'master' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
