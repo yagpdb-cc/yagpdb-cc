@@ -84,6 +84,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/yagpdb-cc/yagpdb-cc/edit/master/yagpdb-cc-website',
           routeBasePath: '/',
+		  remarkPlugins: [require('remark-code-import')],
         },
         blog: false,
         theme: {
