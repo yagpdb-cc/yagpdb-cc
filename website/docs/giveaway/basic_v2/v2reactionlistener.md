@@ -8,7 +8,7 @@ Supporting Reaction CC for Giveaway Package.
 **Trigger Type:** `Reaction` with option `Added + Removed reactions`
 
 ```go
-{{/* 
+{{/*
         Supporting Reaction CC for Giveaway Package.
 
         Recommended trigger: Reaction trigger with option `Added + Removed reactions` selected.
@@ -49,7 +49,7 @@ Supporting Reaction CC for Giveaway Package.
 				{{$giveawayData.Set "count" (add $giveawayData.count -1)}}
 			{{end}}
 		{{end}}
-						
+
 		{{/* update active giveaway database entry */}}
 		{{ $data.Set (joinStr ""  .Reaction.ChannelID .Reaction.MessageID) $giveawayData }}
 		{{ dbSet 7777 "giveaway_active" $data }}

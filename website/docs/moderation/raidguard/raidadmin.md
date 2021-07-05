@@ -41,12 +41,12 @@ Actions include: `ban`, `kick`, `clear`
 {{end}}
 
 {{with .CmdArgs}}
-    {{$t = index . 0}}{{end}} 
+    {{$t = index . 0}}{{end}}
 {{with (dbGet 0 "raidlist").Value}}
     {{$l = $l.AppendSlice . }}{{end}}
 {{$qlen = len $l}}
 
-{{$embed := sdict 
+{{$embed := sdict
 	"title" " 🛡 RAID GUARD"
 	"description" "*Initializing in 3...*"
 	"color" 14232643
@@ -96,10 +96,10 @@ Actions include: `ban`, `kick`, `clear`
     {{editMessage .ChannelID .MsgID (cembed $embed) }}
 
 {{else}}
-    
+
     {{if eq $t "clear"}}
         {{dbDel 0 "raidlist"}}
-        {{$embed2 := sdict 
+        {{$embed2 := sdict
 	        "title" "✅ COMPLETE"
 	        "description" "🧹 RAID LIST HAS NOW BEEN CLEARED"
 	        "color" 14232643 }}

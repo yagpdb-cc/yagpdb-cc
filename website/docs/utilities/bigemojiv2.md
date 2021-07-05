@@ -4,7 +4,6 @@ title: Big Emoji V2
 ---
 
 This command allows you to enlarge virtually any emojis used in your server. It carries the same base function as the original Big Emoji CC (allowing you to enlarge one single emoji with `-bigemoji <emoji>`) but extends functionality to use message ID or link to view enlarged versions of emojis used in other members messages or as reactions (with optional `-re` flag). When multiple emojis are used in a messageor as reactions this CC will generate a list of up to 25 with links to view the larger versions in your browser.
-	
 While it's fun to view emojis other members are using this is also a moderation tool. It can often be difficult to see detailed emojis in messages or when used as reactions, being able to safely pull them into a staff channel can allow you to moderate things such as NSFW emojis without drawing attention to them. This also allows you to better view reactions while on mobile since Discord has made it near impossible to view reaction names and images.
 
 **Trigger Type:** `Regex`
@@ -14,22 +13,22 @@ While it's fun to view emojis other members are using this is also a moderation 
 **Usage:**  
 Use `-bigemoji help` for information on how to use this CC.
 
-```go
+````go
 {{/*
 	Trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(be|big-?emo(te|ji))(\s+|\z)`
-	
-    This command allows you to enlarge virtually any emojis used in your server. It carries the same base function as the original Big Emoji CC 
-	(allowing you to enlarge one single emoji with `-bigemoji <emoji>`) but extends functionality to use message ID or link to view enlarged 
+
+    This command allows you to enlarge virtually any emojis used in your server. It carries the same base function as the original Big Emoji CC
+	(allowing you to enlarge one single emoji with `-bigemoji <emoji>`) but extends functionality to use message ID or link to view enlarged
 	versions of emojis used in other members messages or as reactions (with optional `-re` flag). When multiple emojis are used in a message
 	or as reactions this CC will generate a list of up to 25 with links to view the larger versions in your browser.
-	
-	While it's fun to view emojis other members are using this is also a moderation tool. It can often be difficult to see detailed emojis in 
-	messages or when used as reactions, being able to safely pull them into a staff channel can allow you to moderate things such as NSFW 
-	emojis without drawing attention to them. This also allows you to better view reactions while on mobile since Discord has made it near 
+
+	While it's fun to view emojis other members are using this is also a moderation tool. It can often be difficult to see detailed emojis in
+	messages or when used as reactions, being able to safely pull them into a staff channel can allow you to moderate things such as NSFW
+	emojis without drawing attention to them. This also allows you to better view reactions while on mobile since Discord has made it near
 	impossible to view reaction names and images.
-	
+
 	Use `-bigemoji help` for information on how to use this CC.
-	
+
 	Author: https://github.com/dvoraknt
 	Last updated: 5/20/2021
 
@@ -65,14 +64,14 @@ Use `-bigemoji help` for information on how to use this CC.
 			{{deleteMessage nil $waitMsg 10}}
 			{{$error = true}}
 		{{end}}
-		
+
 	{{else if eq $subArg "help"}}
 		{{$helpEmbed := sdict
-		
-		"title" (joinStr "" "Big Emoji Help") 
-		"description" "This command will allow you to view a single emoji as a larger image or generate image/gif links for up to 25 individual emojis.\n\nYou can use it to view your own emojis, emojis in other messages, used as reactions, or even in a different channel. Use any message ID or message link to extract the emojis and enlarge them.\n\nTo capture reactions use the optional `-re` flag after the message ID or link." 
-		"color" 4645612 
-		"fields" (cslice 
+
+		"title" (joinStr "" "Big Emoji Help")
+		"description" "This command will allow you to view a single emoji as a larger image or generate image/gif links for up to 25 individual emojis.\n\nYou can use it to view your own emojis, emojis in other messages, used as reactions, or even in a different channel. Use any message ID or message link to extract the emojis and enlarge them.\n\nTo capture reactions use the optional `-re` flag after the message ID or link."
+		"color" 4645612
+		"fields" (cslice
 			(sdict "name" "Syntax" "value" "```elm\n-bigemoji <Emoji> (minimum 1, maximum 25)\n-bigemoji <MessageID> (use when original message exists within the same channel)\n-bigemoji <MessageLink> (use to view reactions from anywhere that YAGPDB has read access)```" "inline" false)
 			(sdict "name" "Reaction Flag Usage" "value" "```elm\n-bigemoji <MessageID> -re\n-bigemoji <MessageLink> -re```" "inline" false)
 			(sdict "name" "Available Triggers" "value" "`-bigemoji` `-bigemote` `-big-emoji` `-big-emote` `-be`")
@@ -82,7 +81,7 @@ Use `-bigemoji help` for information on how to use this CC.
 		"timestamp" currentTime
 		}}
 		{{editMessage nil $waitMsg (complexMessageEdit "content" "" "embed" (cembed $helpEmbed))}}
-		
+
 	{{else if eq $subArg "-re"}}
 		{{editMessage nil $waitMsg (print "**Invalid Syntax:** The `-re` flag must be placed after the message ID/link.")}}
 		{{deleteMessage nil $waitMsg 10}}
@@ -92,7 +91,7 @@ Use `-bigemoji help` for information on how to use this CC.
 		{{$emoji = reFindAllSubmatches `<(a)?:[\w~]+:(\d+)>` .Message.Content}}
 		{{$defEmoji = reFindAllSubmatches `([\x{1f1e6}-\x{1f1ff}]{2}|\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?(\x{200D}\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?)*|[#\d*]\x{FE0F}?\x{20E3})` .Message.Content}}
 	{{end}}
-	
+
 	{{if and (reFind `(?i)-re` (print .CmdArgs)) $ogMsg}}
 	{{$emoji = cslice.AppendSlice $emoji}}{{$defEmoji = cslice.AppendSlice $defEmoji}}
 		{{range (getMessage $chan $msg).Reactions}}
@@ -105,7 +104,7 @@ Use `-bigemoji help` for information on how to use this CC.
 			{{end}}
 		{{end}}
 	{{end}}
-	
+
 	{{if $emoji}}
 	{{if eq (add (len $emoji) (len $defEmoji)) 1}}
 		{{with $emoji}}
@@ -128,7 +127,7 @@ Use `-bigemoji help` for information on how to use this CC.
 		{{$embed.Set "fields" $fields}}
 	{{end}}
 	{{end}}
-	
+
 	{{if $defEmoji}}
 		{{$emoji_U := ""}}{{$url := "https://twemoji.maxcdn.com/v/latest/72x72/"}}
 
@@ -151,7 +150,7 @@ Use `-bigemoji help` for information on how to use this CC.
 			{{$embed.Set "fields" $fields}}
 		{{end}}
 	{{end}}
-		
+
 	{{if and (not $emoji) (not $defEmoji) (not $error) (not (eq $subArg "help"))}}
 		{{editMessage nil $waitMsg (print "This message does not contain any emojis or you have given an incorrect message ID.")}}
 		{{deleteMessage nil $waitMsg 10}}
@@ -173,4 +172,4 @@ Use `-bigemoji help` for information on how to use this CC.
 	{{$failMsg := sendMessageRetID nil (print "No arguments provided! Use `-bigemoji help` for information on how to use this command.")}}
 	{{deleteMessage nil $failMsg 10}}
 {{end}}
-```
+````

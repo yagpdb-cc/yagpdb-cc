@@ -10,7 +10,7 @@ title: Compressed Giveaway
 **Usage:**  
 Read the [README](compressedREADME.md)
 
-```go
+````go
 {{$gEmoji:=`<:yag:277569741932068864>`}}
 
 {{/*Code*/}}
@@ -186,4 +186,4 @@ No Active Giveaways.
 {{end}}
 
 {{if $syntaxError}}{{sendMessage nil (print "__**Incorrect Syntax** __ \n**Commands are :** \n```elm\n" ($Cmd) " start <time : Duration> <prize : String> \n\noptional_flags \n-p (max participants : Number) \n-w (max winners : Number)\n-c (channel : Mention/ID)\n```\n```elm\n" ($Cmd) " end <id : Number>```\n```elm\n" ($Cmd) " cancel <id : Number>```\n```elm\n" ($Cmd) " reroll [id or n giveaways old : Number]```\n```elm\n" ($Cmd) " list ``` ")}}{{end}}
-```
+````

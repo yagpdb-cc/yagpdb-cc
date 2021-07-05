@@ -10,28 +10,34 @@ In case you need a refresher, or don't know how to add a custom command, please 
 ---
 
 ## Features
-- Set AFK status with optional duration  
+
+- Set AFK status with optional duration
 - Notification in chat when an AFK member was mentioned
-    - Estimated time of arrival, when set
+  - Estimated time of arrival, when set
 
 ---
 
 ## Installing
+
 As usual, there are leading comments in each file describing where to put the script and which trigger to use. Additionally, we've documented how and where to add these scripts down below.
 
 | ⚠ To be able to add custom commands, you need contol panel write access. |
-| ---- |
+| ------------------------------------------------------------------------ |
 
 ### Main Command
+
 Add the main command [AFK CC](afkcc) as a new custom command. The trigger is a RegEx trigger type with `\A` or `.*`.  
 Alternatively, you can append the code to your already existing `\A` or `.*` trigger. Please do so only once, though.  
-Now take your time to read through the leading comment and decide if you want to remove the AFK status of users, once they send a message. If so, leave it as is, otherwise set the config variable to `false`, as follows:  
+Now take your time to read through the leading comment and decide if you want to remove the AFK status of users, once they send a message. If so, leave it as is, otherwise set the config variable to `false`, as follows:
+
 #### Disable removeAfkOnMessage
+
 ```go
 {{ $removeAfkOnMessage := false }}
 ```
 
 ### Leave Feed
+
 This is entirely optional, however generally encouraged to keep your custom command database clean. Add the code in [leaveFeed](leaveFeed) to your leave message, which you can find like this:
 
 - Go to your control panel
@@ -42,7 +48,7 @@ This is entirely optional, however generally encouraged to keep your custom comm
 Once you've found it, just append the code at the end - don't forget to save!
 
 | ✅ The AFK System is now set up and ready to use! |
-| ---- |
+| ------------------------------------------------- |
 
 ---
 

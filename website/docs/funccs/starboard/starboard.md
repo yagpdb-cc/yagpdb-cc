@@ -20,7 +20,7 @@ This command allows users to react to messages with stars. If it reaches a given
 
 {{/* CONFIGURATION VALUES START */}}
 {{$starEmoji := "⭐"}} {{/* Star emoji name */}}
-{{$starEmFull := "⭐"}} {{/*full emoji name of star emoji, needed to add/remove reactions. Same as $starEmoji if unicode*/}} 
+{{$starEmFull := "⭐"}} {{/*full emoji name of star emoji, needed to add/remove reactions. Same as $starEmoji if unicode*/}}
 {{$starLimit := 4}} {{/* Minimum of stars required to show up on the starboard. */}}
 {{$starboard := 712681639410663516}} {{/* ID of starboard channel */}}
 {{$maxAge := "2w"}} {{/*maximum age of message for stars to be counted. structure (mo)nth, (w)eek, (d)ay, (h)our. ex: 3d = 3days, 1mo = 1 month.*/}}
@@ -41,14 +41,14 @@ This command allows users to react to messages with stars. If it reaches a given
 	{{if not (dbGet 0 "starboardReactions")}}{{dbSet 0 "starboardReactions" (sdict $sboardPost (sdict "ID" $sboardPost "listID" "" "listAnti" ""))}}{{end}}
 	{{with (dbGet 0 "starboardReactions").Value}}{{$data = sdict .}}{{end}}
 	{{$starboardData = $data.Get $sboardPost}}
-	
+
 	{{if and .ReactionAdded (not $selfStarEnable) (eq .User.ID (.Message.Author).ID)}}
 		{{deleteMessageReaction $cid $mid .User.ID $starEmFull $antiStarEmFull}}
 		{{if $warnMessages}}{{$ret := sendMessageRetID nil (print .User.Mention " You can't influence your own post!")}}
 		{{deleteMessage $cid $ret 3}}{{end}}
 	{{else if $starboardData}}
 		{{$starboardData = sdict $starboardData}}
-		
+
 		{{if and .ReactionAdded (eq .Reaction.Emoji.Name $starEmoji)}}
 			{{if reFind (print "SB" .User.ID ",") $starboardData.listID}}
 				{{deleteMessageReaction $cid $mid .User.ID $starEmFull}}
@@ -63,15 +63,15 @@ This command allows users to react to messages with stars. If it reaches a given
 				{{$starboardData.Set "listID" (print $starboardData.listID  $IDregex)}}
 				{{$skip = false}}
 			{{end}}
-		
+
 		{{else if eq .Reaction.Emoji.Name $starEmoji}}
-			{{$IDregex := print "PO" .User.ID ","}} 
+			{{$IDregex := print "PO" .User.ID ","}}
 			{{if reFind $IDregex $starboardData.listID}}
 				{{$starboardData.Set "listID" (reReplace $IDregex $starboardData.listID "")}}
 			{{end}}
 			{{$skip = false}}
 		{{end}}
-		
+
 		{{if and $antiStarEnable .ReactionAdded (eq .Reaction.Emoji.Name $antiStarEmoji)}}
 			{{if reFind (print "SB" .User.ID ",") $starboardData.listAnti}}
 				{{deleteMessageReaction $cid $mid .User.ID $antiStarEmFull}}
@@ -86,7 +86,7 @@ This command allows users to react to messages with stars. If it reaches a given
 				{{$starboardData.Set "listAnti" (print $starboardData.listAnti  $IDregex)}}
 				{{$skip = false}}
 			{{end}}
-		
+
 		{{else if and $antiStarEnable (eq .Reaction.Emoji.Name $antiStarEmoji)}}
 			{{$IDregex := print "PO" .User.ID ","}}
 			{{if reFind $IDregex $starboardData.listAnti}}
@@ -97,7 +97,7 @@ This command allows users to react to messages with stars. If it reaches a given
 
 	{{$data.Set $sboardPost $starboardData}}
 	{{dbSet 0 "starboardReactions" $data}}
-	
+
 	{{else}}
 		{{$data.Set $sboardPost (sdict "ID" $sboardPost "listID" (print "PO" .User.ID ",") "listAnti" "")}}
 		{{dbSet 0 "starboardReactions" $data}}
@@ -134,7 +134,7 @@ This command allows users to react to messages with stars. If it reaches a given
 	{{end}}
 	{{end}}
 {{end}}
-	
+
 {{if not $antiStarEnable}} {{$antiStarExtra = 0}} {{end}} {{/*resetting count to zero to prevent user configured variable from interrupting desired functionality*/}}
 {{if and (not $skip) (or (lt $count $starLimit) (ge (add $antiCount $antiStarExtra) $count))}}
 {{with (dbGet 0 "starboardMessages").Value}}
@@ -143,14 +143,14 @@ This command allows users to react to messages with stars. If it reaches a given
 		{{deleteMessage $starboard $starboardMessage 0}}
 		{{dbSet 0 "starboardMessages" (reReplace $idRegex . "")}}
 	{{end}}
-	
+
 	 {{if $starboardData}}
 		{{$nil := $starboardData.Set "listID" (reReplace `SB\d+,` $starboardData.listID "")}}
 		{{$nil := $starboardData.Set "listAnti" (reReplace `SB\d+,` $starboardData.listAnti "")}}
 		{{$data.Set $sboardPost $starboardData}}
 		{{dbSet 0 "starboardReactions" $data}}
 	{{end}}
-	
+
 {{else if and $count (not $skip) (or .ReactionMessage.Content .ReactionMessage.Attachments) (or (eq .Reaction.Emoji.Name $starEmoji) (eq .Reaction.Emoji.Name $antiStarEmoji)) (le (currentTime.Sub .Message.Timestamp.Parse) (toDuration $maxAge))}}
 	{{$emoji := "🌠"}}
 	{{if lt $count 5}} {{$emoji = "⭐"}}

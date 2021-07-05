@@ -12,7 +12,7 @@ This command manages messages - setting cooldowns, giving role rewards when user
 ```go
 {{/*
 	This command manages messages - setting cooldowns, giving role rewards when users level up, and giving XP.
-	
+
 	Recommended trigger: Regex trigger with trigger `.*`.
 */}}
 {{ $settings := 0 }} {{/* Instantiate settings at nil value */}}
@@ -44,7 +44,7 @@ This command manages messages - setting cooldowns, giving role rewards when user
 			{{- else if and (hasRoleID $reward) (eq $type "highest") $toAdd }} {{- removeRoleID $reward }} {{- end -}}
 		{{ end }}
 		{{ if $toAdd }} {{ addRoleID $toAdd }} {{ end }}
-		{{ $embed := cembed 
+		{{ $embed := cembed
 			"title" "❯ Level up!"
 			"thumbnail" (sdict "url" "https://webstockreview.net/images/emoji-clipart-celebration-4.png")
 			"description" (printf "Congratulations **%s**! You've leveled up to level %d - keep it up!" .User.String (toInt $newLvl))

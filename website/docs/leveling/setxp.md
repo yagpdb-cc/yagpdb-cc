@@ -38,7 +38,7 @@ Sets XP or level of user.
 		{{ $newLvl = $level }} {{/* As user leveled up, we change newLvl */}}
 		{{ printf "Successfully set **%s**'s level to %d!" $user.String $level }}
 	{{ else }}
-		The syntax for this command is `-setlevel <user> <level>`. 
+		The syntax for this command is `-setlevel <user> <level>`.
 	{{ end }}
 {{ else if eq (len .CmdArgs) 2 }}
 	{{ $xp := $.nil }}

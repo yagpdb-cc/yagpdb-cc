@@ -8,13 +8,13 @@ This is the reaction listener for the Connect4 system
 **Trigger Type:** `Reaction` on `Added Reactions Only`
 
 ```go
-{{/* 
+{{/*
 	This is the reaction listener for the connect4 system
 
 	Trigger Type: Reaction
 	Trigger: Added Reactions Only
-    
-	Credits: 
+
+	Credits:
 	zen | ゼン (https://github.com/z3nn13)
 */}}
 
@@ -30,8 +30,8 @@ This is the reaction listener for the Connect4 system
                 {{- $out = print $rows "\n" $out -}}
         {{- end -}}
         {{- $out = print $out "1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣" -}}
-        {{- $embed := sdict "author" (sdict "name" (print .cPlayer.Username "'s turn") "icon_url" (.cPlayer.AvatarURL "256")) 
-            "title" "Connect4" 
+        {{- $embed := sdict "author" (sdict "name" (print .cPlayer.Username "'s turn") "icon_url" (.cPlayer.AvatarURL "256"))
+            "title" "Connect4"
             "description" $out
             "color" (index $store.color .turn)
             "fields" (cslice 1 2)
@@ -101,7 +101,7 @@ This is the reaction listener for the Connect4 system
                         {{ $msg = print $msg "🤝┃Owo what's this, the match is a **draw**"  }}
                         {{ $tempData.embed.author.Set "name" "Game Over • Tied !" }}
                 {{ end }}
-                
+
                 {{ sendMessage nil (cembed "color" 0x03fc90 "description" (printf "<:status_online:845602611872399381> **Results** • %s vs %s\n> **Winner**┃%s\n> **Time Taken**┃`%s`" $nPlayer.Mention .User.Mention $winner ((currentTime.Sub $data.time).Round .TimeSecond)))}}
                 {{ $tempData.embed.Set  "color" $col }}
                 {{ deleteAllMessageReactions nil .Message.ID }}
@@ -130,7 +130,7 @@ This is the reaction listener for the Connect4 system
         {{/* Returning the first empty spot from bottom */}}
         {{- range $i,$v := $verti -}}
             {{- if not $found -}}
-                {{- if eq $v 0 3}} 
+                {{- if eq $v 0 3}}
                     {{- $found = true}}
                     {{- $position = $i}}
                 {{- end }}

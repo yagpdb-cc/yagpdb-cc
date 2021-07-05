@@ -4,6 +4,7 @@ title: X Word Story
 ---
 
 **Setup:**
+
 - Set the cc restrictions to only run in your x-word-story channel
 
 **Trigger Type:** `Regex`

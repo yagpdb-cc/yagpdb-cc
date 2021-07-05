@@ -38,7 +38,7 @@ This command is a tool for editing messages sent by YAGPDB.
 {{$error := ""}}
 
 {{$flags := sdict "-title" "Title" "-desc" "Description" "-url" "URL" "-image" "Image" "-thumbnail" "Thumbnail" "-author" "Author" "-authoricon" "Author" "-authorurl" "Author" "-footer" "Footer" "-footericon" "Footer" "-color" "Color" "-content" "Content" "-force" "Force" "-clrembed"  "Clear"}}
-{{$subField := sdict "-image" "URL" "-thumbnail" "URL" "-author" "Name" "-authoricon" "IconURL" "-authorurl" "URL" "-footer" "Text" "-footericon" "IconURL"}} 
+{{$subField := sdict "-image" "URL" "-thumbnail" "URL" "-author" "Name" "-authoricon" "IconURL" "-authorurl" "URL" "-footer" "Text" "-footericon" "IconURL"}}
 {{$channel := .Channel}}
 {{$multipliers := cslice 1048576 65536 4096 256 16 1}}
 {{$hex2dec := sdict "A" 10 "B" 11 "C" 12 "D" 13 "E" 14 "F" 15}}
@@ -98,7 +98,7 @@ This command is a tool for editing messages sent by YAGPDB.
 				{{- end}}
 			{{- end}}
 		{{- end}}
-		
+
 		{{- if and (not $error) $parseFlag (not $skip)}}
 			{{- if $currentFlag}}
 				{{- if in (cslice "Description" "Title" "URL") $currentFlag}}
@@ -148,13 +148,13 @@ This command is a tool for editing messages sent by YAGPDB.
 
 	{{if not $error}}
 		{{if or $content (ne (print $embed) "<nil>")}}
-			{{editMessage $channel.ID $id (complexMessageEdit "content" $content "embed" $embed)}} 
+			{{editMessage $channel.ID $id (complexMessageEdit "content" $content "embed" $embed)}}
 			Done :+1:
 		{{else}}
 			{{$error = "Content and embed cannot be null at the same time."}}
 		{{end}}
 	{{end}}
-{{end}}	
+{{end}}
 
 {{if $error}}
 	{{$helpMsg.Set "description" (print "**Error** - `" $error  "`\n" ($helpMsg.Get "description"))}}

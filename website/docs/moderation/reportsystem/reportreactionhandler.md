@@ -18,7 +18,7 @@ Remove this leading comment once you added this command.
     This custom command manages the reaction menu.
     Make this in a seperate Reaction CC, due to its massive character count.
     Remove this leading comment once you added this command.
-    
+
     Obligatory Trigger type and trigger: Reaction; added reactions only.
 
     Author: Luca Z. <https://github.com/l-zeuch>

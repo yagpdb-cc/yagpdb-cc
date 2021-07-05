@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: Suggest an idea for the YAGPDB-CC repo
-title: "request: "
-labels: "enhancement"
-assignees: ""
+title: 'request: '
+labels: 'enhancement'
+assignees: ''
 ---
 
 **Is your feature request related to a problem? Please describe.**

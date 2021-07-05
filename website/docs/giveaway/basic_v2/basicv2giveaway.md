@@ -14,7 +14,7 @@ Read the [README](basicv2README.md)
 
 **Note:** Command is very long so you MUST remove the comment and the next one after it (`{{/*CONFIGURATION VALUES START*/}}`) for it to save properly.
 
-```go
+````go
 {{/*
         Main Giveaway V2 CC. Supports execCC invoke. Usage: Read README.md
 
@@ -76,14 +76,14 @@ Read the [README](basicv2README.md)
 
 {{$temp:=split $CmdArgs  " "}}
 
-{{/*To Duration*/}} 
+{{/*To Duration*/}}
 {{$duration:=toDuration (index $temp 0)}}
 {{$prize := ""}}
 {{if gt (len $temp) 1}}{{$prize =joinStr " " (slice $temp 1)}}{{end}}
 {{$prize =reReplace `\A\s+` $prize ""}}
 
 {{/*if valid duration & prize*/}}
-{{if and ($duration)  ($prize)}} 
+{{if and ($duration)  ($prize)}}
 
 {{/*if max Participants > max Winners*/}}
 {{if or (ge $maxP $maxW) (eq $maxP -1)}}
@@ -93,7 +93,7 @@ Read the [README](basicv2README.md)
 
 {{/*Make giveaway sdict data Structure*/}}
 {{$ID =joinStr "" $chan .}}
-{{$giveawaySdict := sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners"  $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}} 
+{{$giveawaySdict := sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners"  $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
 
 {{/*Send Actual Announcement Message*/}}
 {{addMessageReactions $chan . $giveawayEmoji}}
@@ -200,7 +200,7 @@ Read the [README](basicv2README.md)
 {{$count := 0}}
 
 {{/*List all active giveaway data fields*/}}
-{{range $k , $v:=.}}{{$count =add $count 1}} 
+{{range $k , $v:=.}}{{$count =add $count 1}}
 {{$count}}) **ID:** ``{{$v.uID}}``  **Prize:** ``{{$v.prize}}``
 **Ends AT:** ``{{formatTime $v.expiresAt}}``
 {{end}}
@@ -288,4 +288,4 @@ No Active Giveaways.
 {{sendMessage nil (print "__**Incorrect Syntax** __ \n**Commands are :** \n```elm\n" ($Cmd) " start <time : Duration> <prize : String> \n\noptional_flags \n-p (max participants : Number) \n-w (max winners : Number)\n-c (channel : Mention/ID)\n```\n```elm\n" ($Cmd) " end <id : Number>```\n```elm\n" ($Cmd) " cancel <id : Number>```\n```elm\n" ($Cmd) " reroll [id or n giveaways old : Number]```\n```elm\n"  ($Cmd) " list ``` ")}}
 {{end}}
 
-```
+````

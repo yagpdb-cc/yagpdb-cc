@@ -6,6 +6,7 @@ title: Connect4 Read Me
 This allows you to play a game of Connect4 with either yourself or against another player.
 
 ## Installing
+
 - [connect4Start](connect4Start)
 - [reactionListener](reactionListener)
 
@@ -18,8 +19,8 @@ If you're not familiar with installing custom commands, read [this](addingccs.md
 \A(?:\-|<@!?204255221017214977>)\s*(?:c(?:on(?:nect)?)?4)(?: +|\z)
 ```
 
-|⚠ Change the `-` to match your server's prefix if applicable| 
-|----------|
+| ⚠ Change the `-` to match your server's prefix if applicable |
+| ------------------------------------------------------------ |
 
 ## Preview
 

@@ -8,7 +8,7 @@ This command is the main suggestion command with suggestion create/edit/delete a
 **Trigger Type:** Regex
 
 **Trigger:** `\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`  
-Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.  
+Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.
 
 **Usage:** Refer to [README](suggestionREADME.md).
 
@@ -19,10 +19,10 @@ Refer to the [README](suggestionREADME.md) for an explanation about the configur
 {{/*
 	This command is the main suggestion command with suggestion create/edit/delete and suggestadmin commands. Usage: Refer README.md
 
-	Recommended trigger: Regex trigger with non case sensitive and trigger 
+	Recommended trigger: Regex trigger with non case sensitive and trigger
 	`\A(\-\s?|<@!?204255221017214977>\s*)((del(ete)?|edit)?suggest(ion)?|(sa|suggestadmin)\s+((?:mark)?dupe|deny|implement(ed)?|archive|approved?|comment))(\s+|\z)`
     Note: If your prefix is not `-` replace the `-` at the start of the trigger with your prefix.
-	P.S. - REMOVE This comment AND the second comment, so that you can save the command. 
+	P.S. - REMOVE This comment AND the second comment, so that you can save the command.
 	Otherwise youll get an error!
 
 	Refer to the README.md for an explanation about the configuration variables.
@@ -51,7 +51,7 @@ Refer to the [README](suggestionREADME.md) for an explanation about the configur
 {{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}{{$error ="Did not set regex to match Server Prefix"}}{{$Syntax =`Prefix/Yag Mention <Command> <Args>`}}{{else}}
 {{if reFind `(?i)\bsuggest(ion)?\b` .Cmd}}
 	{{$Syntax =print .Cmd " <Suggestion_Here>"}}
-	{{$col:=16777215}}{{$pos:=0}}{{$r:=.Member.Roles}}{{range .Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $pos .Position)}}{{$pos =.Position}}{{$col =.Color}}{{end}}{{end}}	
+	{{$col:=16777215}}{{$pos:=0}}{{$r:=.Member.Roles}}{{range .Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $pos .Position)}}{{$pos =.Position}}{{$col =.Color}}{{end}}{{end}}
 	{{if or .StrippedMsg .Message.Attachments}}
 		{{with (dbGet .User.ID "suggestCld")}}
 			{{$error =print "This command is on cooldown for " (humanizeDurationSeconds (.ExpiresAt.Sub currentTime)) " to avoid spam."}}
@@ -65,7 +65,7 @@ Refer to the [README](suggestionREADME.md) for an explanation about the configur
 						"timestamp"  currentTime
 						"footer" (sdict "text" (print "Author ID - " $.User.ID))
 			}}
-			
+
 			{{range .Message.Attachments}}{{if and (not $Img_Set) .Width}}{{$Img_Set =true}}{{$embed.Set "image" (sdict "url" .ProxyURL)}}{{else}}{{$Attachments =print $Attachments "\n[" .Filename "](" .ProxyURL ")"}}{{end}}{{end}}
 			{{if $Attachments}}{{$embed.Set "description" (print $embed.description "\n\n**__Attachments:__**" $Attachments)}}{{end}}
 			{{$ID:=sendMessageRetID $Suggestion_Channel (cembed $embed)}}
@@ -76,7 +76,7 @@ Refer to the [README](suggestionREADME.md) for an explanation about the configur
 	{{else}}
 		{{$error ="Insufficient Arguments."}}
 	{{end}}
-	
+
 {{else}}
 	{{$authorID:=0}}{{$message:=.nil}}{{$channel:=.nil}}{{$rest:=""}}{{$command:=""}}{{$type:=""}}{{$SNum:=0}}
 	{{$Syntax =print .Cmd " <Suggestion_ID> <Message/Arguments>"}}
@@ -133,9 +133,9 @@ Refer to the [README](suggestionREADME.md) for an explanation about the configur
 			{{end}}
 			{{$embed.Set "Title" (print $command " Suggestion #" $SNum)}}
 			{{end}}
-				
+
 			{{if eq $command "Dupe"}}
-				{{$Syntax ="<Suggestion_ID> <Original_Suggestion_ID>"}} 
+				{{$Syntax ="<Suggestion_ID> <Original_Suggestion_ID>"}}
 				{{with $rest}}
 					{{$globalDict.Set "mID" .}}{{$globalDict.Set "msg" $.nil}}
 					{{template "process-suggest-msg" $globalDict}}
@@ -195,7 +195,7 @@ Done :+1:
 	{{range $k,$v:=.chans}}
 		{{if not $.msg}}{{with getMessage $k $.mID}}{{$.Set "msg" .}}{{$.Set "chan" $k}}{{end}}{{end}}
 	{{end}}
-	
+
 	{{with .msg}}
 		{{with .Embeds}}
 			{{with (index . 0).Footer}}
@@ -203,7 +203,7 @@ Done :+1:
 					{{$.Set "authorID" (toInt64 (index . 0 1))}}
 				{{else}}
 					 {{$err ="Not a valid Suggestion Message"}}
-				{{end}}			
+				{{end}}
 			{{else}}
 				{{$err ="Not a valid Suggestion Message"}}
 			{{end}}

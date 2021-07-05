@@ -15,24 +15,24 @@ This command adds slowmode functionality: It'll delete an user's message if thei
 
 ```go
 {{/*
-	This command helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it 
- 
+	This command helps using a slowmode. it deletes a user's message if their slowmode isnt over people who you want can bypass slowmode as well as set it
+
 	Usage: "-slowmode on (time in seconds) / -slowmode off "
 
 	Trigger type: Regex
 	Recommended trigger: `.*`
- 
+
 	Credits:
 	Sponge :D
 */}}
- 
+
 {{/* CONFIGURATION VALUES START */}}
 {{ $bypassperms := "ManageMessages" }}{{/* perms needed to bypass slowmode */}}
 {{ $usageperms := "ManageMessages" }}{{/* perms needed for slowmode commands */}}
 {{/* put in the permissions you want the use to have in order to use or bypass the command */}}
 {{/* available perms: Administrator, ManageServer, ReadMessages, SendMessages, SendTTSMessages, ManageMessages, EmbedLinks, AttachFiles, ReadMessageHistory, MentionEveryone, VoiceConnect, VoiceSpeak, VoiceMuteMembers, VoiceDeafenMembers, VoiceMoveMembers, VoiceUseVAD, ManageNicknames, ManageRoles, ManageWebhooks, ManageEmojis, CreateInstantInvite, KickMembers, BanMembers, ManageChannels, AddReactions, ViewAuditLogs  */}}
 {{/* CONFIGURATION VALUES END */}}
- 
+
 {{/* ACTUAL CODE */}}
 {{ $viewperms := (split (index (split (exec "viewperms") "\n") 2) ", ") }}
 {{ $usageaccess := in $viewperms $usageperms }}

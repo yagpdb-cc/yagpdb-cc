@@ -9,7 +9,7 @@ The array input is `$arr`. Lenght of array is `$length`. Element need to search 
 
 ```go
 {{/*
-    This CC is a snippet help search a given element x in sorted array. The array must be ascending. 
+    This CC is a snippet help search a given element x in sorted array. The array must be ascending.
     Binary search is O(log n) which is its big selling point.
     The array input is $arr. Lenght of array is $length. Element need to search is $element
 
@@ -31,7 +31,7 @@ The array input is `$arr`. Lenght of array is `$length`. Element need to search 
     {{- else -}}
         {{- .Set "Result" -1 -}}{{- .Set "Found" false -}}
     {{- end -}}
-{{- end -}} 
+{{- end -}}
 {{ end }}
 {{ $arr := cslice 2 5 6 7 9 10 15 }}
 {{ $element := 15 }}

@@ -3,7 +3,7 @@ sidebar_position: 15
 title: Slot Machine
 ---
 
-Slot machine game by Pedro Pessoa. Gambling can be addictive. 
+Slot machine game by Pedro Pessoa. Gambling can be addictive.
 
 **Trigger Type:** `Command`
 
@@ -95,8 +95,8 @@ Slot machine game by Pedro Pessoa. Gambling can be addictive.
 		{{ $embedHelp := cembed
 			"title" $gameName
 			"fields" (cslice
-				(sdict 
-					"name" $payOut 
+				(sdict
+					"name" $payOut
 					"value" "**🥇🥇❓ - 1x\n💎💎❓ - 2x\n💯💯❓ - 3x\n🥇🥇🥇 - 3x\n💎💎💎 - 4x\n💵💵❓ - 4x\n💯💯💯 - 5x\n💰💰❓ - 5x\n💵💵💵 - 10x\n💰💰💰 - 15x**"
 					"inline" false
 				)

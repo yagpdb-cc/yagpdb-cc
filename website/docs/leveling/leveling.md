@@ -12,15 +12,15 @@ This command manages the general level settings of the guild.
 **Usage:**  
 `-leveling set <key> value` - example: `-leveling set cooldown 1 minute 30 seconds`  
 `-leveling use-default` | `use default settings`  
-`-leveling view` | `view settings`  
+`-leveling view` | `view settings`
 
 ```go
 {{/*
 	This command manages the general level settings of the guild.
 	Possible usage:
 
-	-leveling set <key> value | example: -leveling set cooldown 1 minute 30 seconds 
-	-leveling use-default | use default settings 
+	-leveling set <key> value | example: -leveling set cooldown 1 minute 30 seconds
+	-leveling use-default | use default settings
 	-leveling view | view settings
 
 	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(leveling|(level|lvl)-?conf|(level|lvl)-?settings)(\s+|\z)`.
@@ -39,9 +39,9 @@ This command manages the general level settings of the guild.
 }}
 {{ if .CmdArgs }}
 	{{ $isSaved := false }} {{/* Whether the settings are saved */}}
-	{{ $currentSettings := sdict 
-		"min" 15 
-		"max" 25 
+	{{ $currentSettings := sdict
+		"min" 15
+		"max" 25
 		"cooldown" .TimeMinute
         	"announcements" true
 	}} {{/* Defaults for level settings */}}
@@ -53,7 +53,7 @@ This command manages the general level settings of the guild.
 	{{ if eq (index .CmdArgs 0) "use-default" }}
 		{{ $s := dbSet 0 "xpSettings" $currentSettings }} {{/* Set defaults */}}
 		Done! You are now using the default settings for the leveling system.
-	
+
 	{{ else if and (eq (index .CmdArgs 0) "set") (ge (len .CmdArgs) 3) }}
 		{{ $key := index .CmdArgs 1 }} {{/* The key of the setting being set */}}
 		{{ $value := slice .CmdArgs 2 | joinStr " " }} {{/* The value of the new setting */}}
@@ -94,11 +94,11 @@ This command manages the general level settings of the guild.
         {{ $input := index .CmdArgs 1 | lower }}
         {{ if eq $input "true" "y" }}
             {{ $currentSettings.Set "announcements" true }}
-            Successfully set the value for announcements to `true` 
+            Successfully set the value for announcements to `true`
             {{ dbSet 0 "xpSettings" $currentSettings }}
         {{ else if eq $input "false" "n" }}
             {{ $currentSettings.Set "announcements" false }}
-            Successfully set the value for announcements to `false` 
+            Successfully set the value for announcements to `false`
             {{ dbSet 0 "xpSettings" $currentSettings }}
         {{ else }}
             That was not a valid option. The only valid options are "true" and "false".
@@ -110,7 +110,7 @@ This command manages the general level settings of the guild.
 		{{ $formatted := printf "**❯ Minimum XP:** %d\n**❯ Maximum XP:** %d\n**❯ Cooldown:** %s\n**❯ Level-up Channel:** %s\n**❯ Announcements:** %v\n"
 			$currentSettings.min
 			$currentSettings.max
-			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration)) 
+			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration))
 			$channel
            		$currentSettings.announcements
 		}} {{/* Construct the embed description */}}
@@ -120,7 +120,7 @@ This command manages the general level settings of the guild.
 			This server has not set up the leveling system. Run `-leveling use-default` to use the default settings or customize it using `-leveling set <key> <value>`.
 		{{ end }}
 	{{ else }} {{/* Send help messages */}}
-		{{ sendMessage nil $helpMsg }} 
+		{{ sendMessage nil $helpMsg }}
 	{{ end }}
 {{ else }}
 	{{ sendMessage nil $helpMsg }}

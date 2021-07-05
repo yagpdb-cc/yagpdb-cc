@@ -23,9 +23,9 @@ Sometimes, the special characters will mess up the link, so it is recommended th
 	You can provide a link for a custom meme, or use the existing templates: both, buzz, doge, joker and sad-biden.
 	Sometimes, the special characters will mess up the link, so it is recommended that you only use these special characters: " " "?" "%" "#" "/"
   Example: `-meme custom "this is" "my meme generator" "https://wiki.geogebra.org/uploads/a/a9/Example.jpg"`
-  
+
 	Recommend trigger: Command trigger with trigger `meme`.
-	
+
 	If you have any questions, contact me on discord: GenryMg#0001
 */}}
 

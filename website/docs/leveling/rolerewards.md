@@ -6,6 +6,7 @@ title: Role Rewards CC
 This command manages the role rewards of the server.
 
 Types of role giving:
+
 - stack: Users get all roles up to current level [DEFAULT]
 - highest: Users get the last role reward closet to current level [MAY BE BUGGY]
 
@@ -65,7 +66,7 @@ Types of role giving:
 		{{ $exactRole := 0 }}
 		{{/* Match from inFold */}}
 		{{ $maybeRole := 0 }}
-		
+
 		{{ with reFindAllSubmatches `^<@&(\d{17,19})>|(\d{17,19})$` $input }}
 			{{ $id := toInt (or (index . 0 1) (index . 0 2)) }}
 			{{ range $.Guild.Roles }}

@@ -12,14 +12,14 @@ Main Giveaway CC. Supports intuitive `execCC` usage.
 **Usage:**  
 Read the [README](basicREADME.md)
 
-```go
+````go
 {{/*
         Main Giveaway CC. Supports execCC invoke. Usage: Read README.md
 
         Recommended Trigger: Command trigger with trigger `giveaway`
         (Can also work with `regex` and `starts with` triggers if triggers are correctly set)
 */}}
-     
+
 {{/* CONFIGURATION VALUES START */}}
 {{$giveawayEmoji := `🎉`}}{{/* set giveaway emoji to be used */}}
 {{/* CONFIGURATION VALUES END */}}
@@ -78,11 +78,11 @@ Read the [README](basicREADME.md)
 {{if gt (len $temp) 1}}{{$prize = joinStr " " (slice $temp 1)}}{{end}}
 {{$prize = reReplace `\A\s+` $prize ""}}
 
-{{/* String to Duration */}} 
+{{/* String to Duration */}}
 {{$duration := toDuration $dur}}
 
 {{/* if valid duration & prize */}}
-{{if and ($duration)  ($prize)}} 
+{{if and ($duration)  ($prize)}}
 
 {{/*if max Participants > max Winners*/}}
 {{if or (ge $maxP $maxW) (eq $maxP -1)}}
@@ -92,7 +92,7 @@ Read the [README](basicREADME.md)
 
 {{/*Make giveaway sdict data Structure */}}
 {{$ID = (joinStr "" $chan .) }}
-{{$giveawaySdict := sdict "chan" $chan "count" 0 "listID" "" "maxWinners"  $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uniqueID}} 
+{{$giveawaySdict := sdict "chan" $chan "count" 0 "listID" "" "maxWinners"  $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uniqueID}}
 
 {{/*Send Actual Announcement Message*/}}
 {{addMessageReactions $chan . $giveawayEmoji}}
@@ -180,7 +180,7 @@ Read the [README](basicREADME.md)
 {{$count := 0}}
 
 {{/* Listing all active giveaway data fields*/}}
-{{range $k , $v := .}}{{$count = add $count 1}} 
+{{range $k , $v := .}}{{$count = add $count 1}}
 {{$count}}) **ID:** ``{{$v.uID}}``  **Prize:** ``{{$v.prize}}``
 **Ends AT:** ``{{formatTime $v.expiresAt}}``
 {{end}}
@@ -202,7 +202,7 @@ No Active Giveaways.
 
 {{/* Giveaway Ending handling */}}
 {{/* Setting Variables */}}
-{{$ID := $ExecData}}{{$chan := .Channel.ID}} 
+{{$ID := $ExecData}}{{$chan := .Channel.ID}}
 {{$dbData := (dbGet 7777 "giveaway_active" ).Value}}
 
 {{/* Proceed only if invoked with valid  ID or active giveaways exist*/}}
@@ -256,4 +256,4 @@ No Active Giveaways.
 {{if $syntaxError}}
 {{sendMessage nil (joinStr "" "__**Incorrect Syntax** __ \n**Commands are :** \n```elm\n" ($Cmd) " start <Time> [Prize] \n\noptional_flags \n-p (max participants : Number) \n-w (max winners : Number)\n-c (channel : Mention/ID)\n```\n```elm\n" ($Cmd) " end <ID>```\n```elm\n" ($Cmd) " cancel <ID>```\n```elm\n" ($Cmd) " list ``` ")}}
 {{end}}
-```
+````

@@ -14,14 +14,14 @@ This custom command manages and takes care of the cancellation requests.
 **Usage:**  
 `-cr <Message:ID> <Key:Text> <Reason:Text>`
 
-```go
+````go
 {{/*
     This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes
     Reactions to make things easier for staff.
     This custom command manages and takes care of the cancellation requests.
 
     Usage: `-cr <Message:ID> <Key:Text> <Reason:Text>`
-    
+
     Recommended Trigger type and trigger: Regex trigger with trigger `\A-c(ancel)?r(eport)?(\s+|\z)`
 
     Author: Luca Z. <https://github.com/l-zeuch>
@@ -75,4 +75,4 @@ Invalid key provided!
         {{else}}
 You are not the author of this report!
     {{end}}{{end}}{{end}}{{deleteResponse}}
-```
+````

@@ -14,16 +14,16 @@ This is the command to start the connect4 game
 `-connect4 help`
 
 ```go
-{{/*    
+{{/*
 	This is the command to start the connect4 game
 
 	Recommended Trigger: \A(?:\-|<@!?204255221017214977>)\s*(?:c(?:on(?:nect)?)?4)(?: +|\z)
 	Recommended Trigger Type: Regex
-	
+
 	Usage:
 		-connect4 <User:Mention>
 		-connect4 help
-        
+
 	Aliases: connect4,con4,c4
 
 	Credits:
@@ -79,7 +79,7 @@ This is the command to start the connect4 game
                                 {{ $temp := sdict}}
                                 {{ template "board_maker" $temp}}
                                 {{ $temp.embed.Set "author" (sdict "name" (print $p1.Username "'s turn") "icon_url" ($p1.AvatarURL "256"))}}
-                                {{ $temp.embed.Set "fields" (cslice (sdict "name" "Player 1" "value" (print "> " $p1.Mention) "inline" true) 
+                                {{ $temp.embed.Set "fields" (cslice (sdict "name" "Player 1" "value" (print "> " $p1.Mention) "inline" true)
                                 (sdict "name" "Player 2" "value" $p2.Mention "inline" true))}}
                                 {{ $msgID := sendMessageRetID nil (complexMessage "content" (print "> A connect4 game has been started\n🔴┃" $p1.Mention ", Please pick a slot") "embed" $temp.embed)}}
                                 {{ addMessageReactions nil $msgID "1️⃣" "2️⃣" "3️⃣" "4️⃣" "5️⃣" "6️⃣" "7️⃣" "a:r_leave:844556617085485058"}}
@@ -96,7 +96,7 @@ This is the command to start the connect4 game
                                 {{ $p2 := .|toInt64|userArg}}
                                 {{ if $p2 }}
                                         {{ dbSetExpire 2021 "c4cooldown" (sdict "p1" $.User.ID "p2" $p2.ID) 15}}
-                                        {{ sendMessage nil (printf "%s, %s has challenged you to a connect4 match! (15s)\nReply with `-connect4 (accept/deny)`" $p2.Mention $.User.Mention)}} 
+                                        {{ sendMessage nil (printf "%s, %s has challenged you to a connect4 match! (15s)\nReply with `-connect4 (accept/deny)`" $p2.Mention $.User.Mention)}}
                                 {{ else }}
                                         {{ $errorMsg = "Error: Invalid User" }}
                                 {{ end }}

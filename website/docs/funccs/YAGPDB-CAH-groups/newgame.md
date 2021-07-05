@@ -14,7 +14,6 @@ After expanding all applicable pack groups, the resulting list of packs is used 
 **Usage:**  
 `-newgame pack1 "pack 2" packGroup1 "pack group 2" etc` (no specific ordering necessary)
 
-
 ```go
 {{/*
 	This command starts a new CAH game using the specified packs and pack groups.
@@ -59,7 +58,7 @@ After expanding all applicable pack groups, the resulting list of packs is used 
         {{ $packs = "*" }}
     {{ end }}
 {{ end }}
- 
+
 {{ $resp := exec "cah create" $packs }}
 {{ if eq (len (reFind "Unknown pack" $resp)) 0 }}
     {{.User.Mention}} has summoned all the{{mentionRoleID $CAHrole}}s to a new game!

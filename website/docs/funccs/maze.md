@@ -15,7 +15,7 @@ This command sends a maze with an optional amount crossings/bridges. It also inc
 ```go
 {{/*
      Made by Crenshaw#7860
-	    This command sends a maze with an optional amount crossings/bridges. It also includes a link to a downloadable solution and .ExecData support. 
+	    This command sends a maze with an optional amount crossings/bridges. It also includes a link to a downloadable solution and .ExecData support.
      Usage: `-maze <cross amount>` <cross amount> is an optional argument on how many bridges/crossings you want
 
  	  Recommended Trigger: Command trigger with trigger `maze`

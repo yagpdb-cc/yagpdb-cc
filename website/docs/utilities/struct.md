@@ -12,7 +12,7 @@ This command shows all the avaliable properties and methods of a structure with 
 **Usage:**  
 `-struct <struct>`
 
-```go
+````go
 {{/*
 	This command shows all the avaliable properties and methods of a structure with a link to the Discord docs on that structure.
 	Usage: `-struct <struct>`.
@@ -48,4 +48,4 @@ This command shows all the avaliable properties and methods of a structure with 
 {{ else }}
 	Please provide a valid target to view.
 {{ end }}
-```
+````

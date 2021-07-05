@@ -4,7 +4,7 @@ title: Bookmark
 ---
 
 This custom commands functions similar to the reminder command, however it will send a DM instantly.  
-One could say like a private pin command. Nothing much, but quite handy I think  :)
+One could say like a private pin command. Nothing much, but quite handy I think :)
 
 **Trigger Type:** `Regex`
 
@@ -14,15 +14,15 @@ One could say like a private pin command. Nothing much, but quite handy I think 
 `-bookmark <message>`  
 `-bm <message>`
 
-```go
+````go
 {{/*
     This custom commands functions similar to the reminder command, however it will send a DM instantly.
     One could say like a private pin command. Nothing much, but quite handy I think  :)
 
-    Usage:  
+    Usage:
         Bookmark <message>
         bm <message>
-    
+
     Recommended trigger and trigger type: RegEx trigger with `\A(?:-\s?|<@!?204255221017214977>\s*)b(?:ook)?m(?:ark)?(?:\s+|\z)`
 
     Author: Luca Z. <https://github.com/l-zeuch>
@@ -44,4 +44,4 @@ One could say like a private pin command. Nothing much, but quite handy I think 
 )}}
 {{sendDM $embed}}
 {{addReactions "📫"}}
-```
+````

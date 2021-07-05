@@ -7,7 +7,7 @@ This command shows a random color.
 
 **Trigger Type:** `Regex`
 
-**Trigger:** `\A(-|<@!?204255221017214977>\s*)(rand(om)?-?color)(\s+|\z)`  
+**Trigger:** `\A(-|<@!?204255221017214977>\s*)(rand(om)?-?color)(\s+|\z)`
 
 **Usage:**  
 `-randcolor`

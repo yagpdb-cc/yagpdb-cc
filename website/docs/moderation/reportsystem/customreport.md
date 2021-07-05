@@ -14,7 +14,7 @@ This custom command is basically the native report-command, but adds some back-e
 **Usage:**  
 `-ru <User:Mention/ID> <Reason:Text>`
 
-```go
+````go
 {{/*
     This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes
     Reactions to make things easier for staff.
@@ -99,4 +99,4 @@ User reported to the proper authorites!
         {{sendDM (printf "User reported to the proper authorities! If you wish to cancel your report, simply type \n```-cancelr %d %s``` in any channel.\n **A reason is required.**" $x $secret)}}
 {{end}}{{end}}{{end}}
 {{deleteResponse}}
-```
+````

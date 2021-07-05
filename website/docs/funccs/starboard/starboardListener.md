@@ -3,7 +3,7 @@ sidebar_position: 3
 title: starboardListener
 ---
 
-This command allows users to react to messages within the starboard channel with stars/anti-stars. 
+This command allows users to react to messages within the starboard channel with stars/anti-stars.
 
 **Trigger Type:** `Reaction trigger` with option `Added + Removed reactions`
 
@@ -13,18 +13,18 @@ This command allows users to react to messages within the starboard channel with
 {{/*
 	Starboard Listener
 
-	This command allows users to react to messages within the starboard channel with stars/anti-stars. 
+	This command allows users to react to messages within the starboard channel with stars/anti-stars.
 
 	Trigger: Reaction trigger with option `Added + Removed reactions`.
 	Channel limitations: Run ONLY in your starboard channel.
 	Author: dvoraknt <https://github.com/dvoraknt>
-	
+
 	Last Update: 4/26/2021 - If installed before this date please update to this new script.
 */}}
 
 {{/* CONFIGURATION VALUES START */}}
 {{$starEmoji := "⭐"}} {{/* Star emoji name */}}
-{{$starEmFull := "⭐"}} {{/*full emoji name of star emoji, needed to add/remove reactions. Same as $starEmoji if unicode*/}} 
+{{$starEmFull := "⭐"}} {{/*full emoji name of star emoji, needed to add/remove reactions. Same as $starEmoji if unicode*/}}
 {{$starLimit := 4}} {{/* Minimum of stars required to show up on the starboard. */}}
 {{$starboard := 712681639410663516}} {{/* ID of starboard channel */}}
 {{$maxAge := "2w"}} {{/*maximum age of message for stars to be counted. structure (mo)nth, (w)eek, (d)ay, (h)our. ex: 3d = 3days, 1mo = 1 month.*/}}
@@ -41,7 +41,7 @@ This command allows users to react to messages within the starboard channel with
 {{$starboardMessage = .ReactionMessage.ID}}
 {{with (dbGet 0 "starboardMessages").Value}}
 	{{$idRegex := printf `(\d+):%d:(\d+)` $starboardMessage}}
-	{{with reFindAllSubmatches $idRegex .}} {{$thisID = index . 0 1}} {{$chanID = index . 0 2}} {{end}} 
+	{{with reFindAllSubmatches $idRegex .}} {{$thisID = index . 0 1}} {{$chanID = index . 0 2}} {{end}}
 {{end}}
 
 {{$data := ""}}{{$sboardPost := print $thisID}}{{$skip := true}}{{$starboardData := ""}}
@@ -56,7 +56,7 @@ This command allows users to react to messages within the starboard channel with
 		{{deleteMessage $starboard $ret 3}}{{end}}
 	{{else if $starboardData}}
 		{{$starboardData = sdict $starboardData}}
-		
+
 		{{if gt (len (print $data)) 90000}}
 			{{$dataSlice := cslice}}
 			{{range $k, $v := $data}}{{- $dataSlice = $dataSlice.Append (cslice $k $v) -}}{{end}}
@@ -84,7 +84,7 @@ This command allows users to react to messages within the starboard channel with
 				{{$starboardData.Set "listID" (print $starboardData.listID  $IDregex)}}
 				{{$skip = false}}
 			{{end}}
-		
+
 		{{else if eq .Reaction.Emoji.Name $starEmoji}}
 			{{$IDregex := print "SB" .User.ID ","}}
 			{{if reFind $IDregex $starboardData.listID}}
@@ -92,7 +92,7 @@ This command allows users to react to messages within the starboard channel with
 			{{end}}
 			{{$skip = false}}
 		{{end}}
-		
+
 		{{if and $antiStarEnable .ReactionAdded (eq .Reaction.Emoji.Name $antiStarEmoji)}}
 			{{if reFind (print "PO" .User.ID ",") $starboardData.listAnti}}
 				{{deleteMessageReaction $starboard $starboardMessage .User.ID $antiStarEmFull}}
@@ -107,7 +107,7 @@ This command allows users to react to messages within the starboard channel with
 				{{$starboardData.Set "listAnti" (print $starboardData.listAnti  $IDregex)}}
 				{{$skip = false}}
 			{{end}}
-		
+
 		{{else if and $antiStarEnable (eq .Reaction.Emoji.Name $antiStarEmoji)}}
 			{{$IDregex := print "SB" .User.ID ","}}
 			{{if reFind $IDregex $starboardData.listAnti}}
@@ -118,7 +118,7 @@ This command allows users to react to messages within the starboard channel with
 
 	{{$data.Set $sboardPost $starboardData}}
 	{{dbSet 0 "starboardReactions" $data}}
-	
+
 	{{else}}
 		{{$data.Set $sboardPost (sdict "ID" $sboardPost "listID" (print .User.ID ","))}}
 		{{dbSet 0 "starboardReactions" $data}}
@@ -155,7 +155,7 @@ This command allows users to react to messages within the starboard channel with
 		{{deleteMessage $starboard $starboardMessage 0}}
 		{{dbSet 0 "starboardMessages" (reReplace $idRegex . "")}}
 	{{end}}
-	
+
 	 {{if $starboardData}}
 		{{$nil := $starboardData.Set "listID" (reReplace `SB\d+,` $starboardData.listID "")}}
 		{{$nil := $starboardData.Set "listAnti" (reReplace `SB\d+,` $starboardData.listAnti "")}}
@@ -182,7 +182,7 @@ This command allows users to react to messages within the starboard channel with
 	{{- end -}}{{end}}
 	{{if $embed.Author}} {{$embed.Author.Set "Icon_URL" $embed.Author.IconURL}} {{end}}
 	{{if $embed.Footer}} {{$embed.Footer.Set "Icon_URL" $embed.Footer.IconURL}} {{end}}
- 
+
 	{{$embed.Set "footer" (sdict "text" (printf "%s %d | %s" $emoji $count $thisID))}}
 	{{editMessage $starboard $starboardMessage (cembed $embed)}}
 {{end}}

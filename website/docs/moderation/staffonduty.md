@@ -11,55 +11,57 @@ On-duty staffing system for discord server staff. You will need to set up a memb
 
 **Usage:**  
 `-onduty`  
-`-offduty`  
+`-offduty`
 
-**Role restrictions:** limit to only roles that have access to moderation functions 
+**Role restrictions:** limit to only roles that have access to moderation functions
 
 **Features:**
+
 - adds/removes an "on duty" role of your choice
-	- automatically adds "on duty" role back to staff who have manually removed the role but are designated on duty 
-		 -Will only add the role if CC is run again after manual role removal. Takes effect immediately with `-onduty list` or five minutes after any valid execution.
-- updates channel topic in a specified channel to provide a visible on duty staff list 
-	- updates five minutes after execution to prevent hitting discord rate limits
-	- automatically placed after any user defined channel topic
+  - automatically adds "on duty" role back to staff who have manually removed the role but are designated on duty
+    -Will only add the role if CC is run again after manual role removal. Takes effect immediately with `-onduty list` or five minutes after any valid execution.
+- updates channel topic in a specified channel to provide a visible on duty staff list
+  - updates five minutes after execution to prevent hitting discord rate limits
+  - automatically placed after any user defined channel topic
 - automatically removes staff from the list after a specified time (to help with staff members who forget to go off duty)
 - `-offduty <@mention/userID>` allows manual removal of staff from the list (again, to help with staff members who forget to go off duty)
 - `-onduty list` will give a list of staff members designated as on duty and reassign on duty role if necessary
 - `-onduty update` to force an update of the channel topic. Will update five minutes after the command is run
-	
+
 **Warnings/limitations:**
+
 - on non-premium servers `-onduty` will occasionally require an additional command to be run
 - this CC was built arount channel topic editing. You can use it without editing the topic but some actions will be unnecessary or delayed
 
 ```go
 {{/*
-	Trigger type: regex 
+	Trigger type: regex
 	Trigger: `\A(-|<@!?204255221017214977>\s*)(o(n|ff)duty)(\s+|\z)` (triggers on `-onduty` and `-offduty`)
-	Role restrictions: limit to only roles that have access to moderation functions 
-	
+	Role restrictions: limit to only roles that have access to moderation functions
+
 	On-duty staffing system for discord server staff. You will need to set up a member pingable "on duty" role. The idea behind
-	this CC is to have an easy way for server members to ping only the staff who have self designated themselves as available to 
-	moderate. In most servers pinging staff is discouraged to the point that people won't do it even when swift moderation is 
-	necessary. By providing an encouraged method of reaching only the active staff members it should provide faster response time 
+	this CC is to have an easy way for server members to ping only the staff who have self designated themselves as available to
+	moderate. In most servers pinging staff is discouraged to the point that people won't do it even when swift moderation is
+	necessary. By providing an encouraged method of reaching only the active staff members it should provide faster response time
 	to issues without members needing to ping a specific person who may or may not be available.
-	
+
 	Features:
 	- adds/removes an "on duty" role of your choice
-		- automatically adds "on duty" role back to staff who have manually removed the role but are designated on duty 
+		- automatically adds "on duty" role back to staff who have manually removed the role but are designated on duty
 			-Will only add the role if CC is run again after manual role removal. Takes effect immediately with `-onduty list` or
 			five minutes after any valid execution.
-	- updates channel topic in a specified channel to provide a visible on duty staff list 
+	- updates channel topic in a specified channel to provide a visible on duty staff list
 		- updates five minutes after execution to prevent hitting discord rate limits
 		- automatically placed after any user defined channel topic
 	- automatically removes staff from the list after a specified time (to help with staff members who forget to go off duty)
 	- `-offduty <@mention/userID>` allows manual removal of staff from the list (again, to help with staff members who forget to go off duty)
 	- `-onduty list` will give a list of staff members designated as on duty and reassign on duty role if necessary
 	- `-onduty update` to force an update of the channel topic. Will update five minutes after the command is run
-	
+
 	Warnings/limitations:
 	- on non-premium servers `-onduty` will occasionally require an additional command to be run
 	- this CC was built arount channel topic editing. You can use it without editing the topic but some actions will be unnecessary or delayed
-	
+
 	Author: https://github.com/dvoraknt
 	Last Updated: 5/29/2021
 
@@ -76,7 +78,7 @@ On-duty staffing system for discord server staff. You will need to set up a memb
 {{if not (dbGet 0 "modOnDuty")}}{{dbSet 0 "modOnDuty" ""}}{{end}}{{/*creates initial database slot. you can delete this after first run if you know what you are doing*/}}
 
 {{$onDuty := ""}}
-{{if .ExecData}} 
+{{if .ExecData}}
 	{{if eq (str .ExecData) "update"}}
 		{{$current := 0}}{{$name := ""}}{{$member := ""}}{{$dutyList := ""}}
 		{{$onDuty = (dbGet 0 "modOnDuty").Value}}
@@ -84,7 +86,7 @@ On-duty staffing system for discord server staff. You will need to set up a memb
 		{{if eq (len $dutySplit) 1}}{{$dutyList = "None"}}{{else}}
 		{{range $dutySplit}}
 			{{- $current = (toInt . ) -}}
-			{{if $current}} 
+			{{if $current}}
 				{{$member = getMember $current}}
 				{{$name = or $member.Nick $member.User.Username}}
 				{{- $dutyList = joinStr ", " $dutyList $name -}}
@@ -104,7 +106,7 @@ On-duty staffing system for discord server staff. You will need to set up a memb
 				{{editChannelTopic $dutyChannel (print $curTopic)}}
 			{{end}}
 		{{end}}
-		
+
 	{{else}}
 		{{takeRoleID .ExecData $dutyRole 0}}
 		{{sendDM (print "You have been automatically removed from duty after (" $autoOff ") hour(s), if this is a mistake go back on duty.")}}
@@ -143,7 +145,7 @@ On-duty staffing system for discord server staff. You will need to set up a memb
 		{{if eq (len $dutySplit) 1}}{{$dutyList = "None"}}{{else}}
 		{{range $dutySplit}}
 			{{- $current = (toInt . ) -}}
-			{{if $current}} 
+			{{if $current}}
 				{{$member = getMember $current}}
 				{{$name = or $member.Nick $member.User.Username}}
 				{{- $dutyList = joinStr ", " $dutyList $name -}}
@@ -165,16 +167,16 @@ On-duty staffing system for discord server staff. You will need to set up a memb
 	{{else}}
 		{{sendMessage nil (print "You can't force other people on duty!")}}
 	{{end}}
-	
+
 {{else}}
 {{/*==================*/}}
 
 {{if and (hasRoleID $dutyRole) (eq .Cmd "-onduty")}}
 	{{sendMessage nil (print "You're already on duty! Send `-offduty` to take a break.")}}
-	
+
 {{else if and (not (hasRoleID $dutyRole)) (eq .Cmd "-offduty")}}
 	{{sendMessage nil (print "You're already off duty! Send `-onduty` to go on patrol.")}}
-	
+
 {{else if and (hasRoleID $dutyRole) (eq .Cmd "-offduty")}}
 	{{removeRoleID $dutyRole 0}}
 	{{sendMessage  nil (print "You are now off duty.")}}
@@ -186,7 +188,7 @@ On-duty staffing system for discord server staff. You will need to set up a memb
 		{{execCC .CCID nil 305 "update"}}
 		{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
 	{{end}}
-	
+
 {{else if and (not (hasRoleID $dutyRole)) (eq .Cmd "-onduty")}}
 	{{addRoleID $dutyRole}}
 	{{sendMessage nil (print "You are now on duty.")}}

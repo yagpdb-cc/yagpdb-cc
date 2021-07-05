@@ -14,7 +14,7 @@ This command is a game of heads or tails where users can play.
 
 ```go
 {{/*
-		
+
 	This command is a game of heads or tails where users can play.
 
 	Usage: coinflip <heads/tails> <bet>
@@ -22,7 +22,7 @@ This command is a game of heads or tails where users can play.
     Trigger type: Command
 	Recommended trigger: `coinflip`
 
-*/}} 
+*/}}
 
 {{/* Configuration variables start */}}
 {{ $c := 782711001333235734 }} {{/* The channel ID where the game is played. */}}

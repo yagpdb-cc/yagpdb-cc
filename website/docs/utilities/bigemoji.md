@@ -38,14 +38,14 @@ This command allows you to enlarge emojis.
 				{{ $embed.Set "image"  (sdict "url" (printf "https://cdn.discordapp.com/emojis/%s%s" $id $ext)) }}
 			{{ end }}
 		{{ end }}
-		
+
 		{{$ID := 0}}
 		{{if $embed}}
 			{{ $embed.Set "color" 0x39ff14 }}
 			{{ $embed.Set "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "256")) }}
 			{{ $ID = sendMessageRetID nil (cembed $embed) }}
 		{{ end }}
-	
+
 		{{ sleep 1 }} {{/* This just puts a standard output when no matching image is found. You can also use deleteMessage here */}}
 		{{ with getMessage nil $ID }}
 			{{ if not (index .Embeds 0).Image.Width }}

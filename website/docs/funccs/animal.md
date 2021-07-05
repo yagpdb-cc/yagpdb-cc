@@ -20,7 +20,7 @@ This CC generates random images of different animals.
 	Authored by GenryMg.
 */}}
 
-{{ $args := parseArgs 1 "Usage: `-animal <animal type>`. Usage `-animal help` to see the animal types avaliable." 
+{{ $args := parseArgs 1 "Usage: `-animal <animal type>`. Usage `-animal help` to see the animal types avaliable."
 	(carg "string" "animal")
 	(carg "string" "optional-httpcat")
 }}

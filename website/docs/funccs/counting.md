@@ -4,18 +4,21 @@ title: Counting
 ---
 
 **Setup:**
-- Set the cc restrictions to only run in your counting channel  
+
+- Set the cc restrictions to only run in your counting channel
 
 **Trigger Type:** `Regex`
 
 **Trigger:** `\A`
 
-**Usage:**  
+**Usage:**
+
 - Just type the right number and count together :)
 - You can use `-resetcount` to reset the count. There's a warning, you have to send it twice within 30 seconds to actually reset the count.  
-Only members with a role in `$staff_roles` can use the command.
+  Only members with a role in `$staff_roles` can use the command.
 
 **Optional:**
+
 - You can add a command override for the counting channel in the YAGPDB control panel. That way you can make sure that no commands can be used here.
 
 ```go

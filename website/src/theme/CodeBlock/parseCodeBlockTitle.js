@@ -7,7 +7,7 @@
 const codeBlockTitleRegex = /title=(["'])(.*?)\1/;
 
 const parseCodeBlockTitle = (metastring) => {
-  return (metastring && metastring.match(codeBlockTitleRegex)?.[2]) || '';
+	return (metastring && metastring.match(codeBlockTitleRegex)?.[2]) || '';
 };
 
 export default parseCodeBlockTitle;

@@ -7,16 +7,15 @@ This is a snippet which converts all internal maps/slices in a multi layered dat
 It is most useful when retrieving deserialized data from the database which needs to be converted.
 
 **Example usage:**  
-`{{ template "standardize" ($data := sdict "Value" $MY_VALUE) }}
-{{ $standardized := $data.Result }}`
+`{{ template "standardize" ($data := sdict "Value" $MY_VALUE) }} {{ $standardized := $data.Result }}`
 
 ```go
-{{/* 
+{{/*
     This is a snippet which converts all internal maps/slices in a multi layered data structure to sdict/cslice respectively.
 	It is most useful when retrieving deserialized data from the database which needs to be converted.
 
 	Example usage:
-	
+
 	{{ template "standardize" ($data := sdict "Value" $MY_VALUE) }}
 	{{ $standardized := $data.Result }}
 */}}

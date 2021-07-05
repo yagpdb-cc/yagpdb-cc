@@ -15,7 +15,7 @@ title: Wheel of Fortune
 	Name: Wheel of Fortune
 	Author: Hyakki999 <https://github.com/Hyakki999>
 	License: MIT
-	
+
 	Recommended:
 	- Trigger Type: Regex
 	- Trigger: `\A\-(?i)wheel(offortune)?`
@@ -28,7 +28,7 @@ title: Wheel of Fortune
 {{ $helpText := "-wheel <amount>\nFor example: **-wheel 10**\nThis way you would be betting 10 🦆." }} {{/* Your help text */}}
 {{/* CONFIGURATION VARIABLES ENDS */}}
 
-{{/* Do not change anything below */}}	
+{{/* Do not change anything below */}}
 {{ $pos := 1.0 }}
 {{ if lt (randInt 0 11) 7 }}
 	{{ $pos = (index (shuffle (cslice 0.1 0.3 0.5 0.2)) 0) }}

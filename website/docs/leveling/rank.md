@@ -2,6 +2,7 @@
 sidebar_position: 5
 title: Rank CC
 ---
+
 This command manages viewing the rank of yourself, or a given member.
 
 **Trigger Type:** `Regex`
@@ -30,7 +31,7 @@ You may also set a background for your rank card (if enabled) using `-rank set-b
 {{ $barEmpty := "□" }}
 {{ $barFull := "■" }}
 {{ $xp := 0 }} {{/* Xp of user */}}
-{{ $color := 14232643 }} {{/* Embed color */}} 
+{{ $color := 14232643 }} {{/* Embed color */}}
 {{ $user := .User }} {{/* Target user */}}
 {{ $colorSet := false }}
 
@@ -86,10 +87,10 @@ You may also set a background for your rank card (if enabled) using `-rank set-b
 		{{- else }} {{- $bar = joinStr "" $bar $barEmpty }} {{- end -}} {{/* Otherwise, join with empty bar */}}
 	{{ end }}
 
-	{{ $embed := sdict 
+	{{ $embed := sdict
 		"title" (printf "❯ %s's Rank" $user.String)
 		"color" $color
-		"description" (printf 
+		"description" (printf
 			"❯ **%d / %d** XP\n❯ **Total:** %d\n❯ **Level:** %d\n❯ **Progress bar:**\n[**%s**](https://yagpdb.xyz)"
 			(toInt $current) (toInt $total) (toInt $xp) (toInt $level) $bar)
 	}} {{/* Format embed */}}
@@ -100,7 +101,7 @@ You may also set a background for your rank card (if enabled) using `-rank set-b
 	{{ end }}
 
 	{{ if $rank }}
-		{{ $embed.Set "description" (printf 
+		{{ $embed.Set "description" (printf
 			"🏆 *Member of Top 100*\n\n❯ **Rank:** %d\n%s"
 			$rank
 			$embed.description
@@ -111,8 +112,8 @@ You may also set a background for your rank card (if enabled) using `-rank set-b
 {{ $bg = false }}
 {{ if and (eq (index . 0) "set-background") (ge (len .) 2) }}
 			  {{ if eq (index . 1) "del" }} {{ dbDel $.User.ID "background" }} deleted
-			{{ else if (reFindAllSubmatches `https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,63}\b(?:(?:(?:,?[-a-zA-Z0-9@:%_\+.~#?!&/=*]*)|(?:,?\([-a-zA-Z0-9@:%_\+.~#?!&/=*]*\))*|\[\])*)` (index . 1)) }} 
-			{{ dbSet $.User.ID "background" (index . 1) }} doneso 
+			{{ else if (reFindAllSubmatches `https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,63}\b(?:(?:(?:,?[-a-zA-Z0-9@:%_\+.~#?!&/=*]*)|(?:,?\([-a-zA-Z0-9@:%_\+.~#?!&/=*]*\))*|\[\])*)` (index . 1)) }}
+			{{ dbSet $.User.ID "background" (index . 1) }} doneso
 	{{ else }} thats not a valid link!
 {{ end }}
 {{ end }}
@@ -125,7 +126,7 @@ You may also set a background for your rank card (if enabled) using `-rank set-b
 {{$pfp := "https://discord.com/assets/322c936a8c8be1b803cd94861bdfa868.png"}}
 {{if $user.Avatar}} {{$pfp = ($user.AvatarURL "256")}} {{end}}
 
-{{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=" ((dbGet $user.ID "hex").Value)))) }} 
+{{ sendMessage nil (cembed "color" 4645612 "image" (sdict "url" (print "https://vacefron.nl/api/rankcard?username=" $username "&avatar=" $pfp "&level=" $level "&rank=" $rank "&currentxp=" $current "&nextlevelxp=" $total "&previouslevelxp=0&custombg=" $background "&xpcolor=" ((dbGet $user.ID "hex").Value)))) }}
 	 {{ else }}
 	{{ sendMessage nil (cembed $embed) }}
 {{ end }}

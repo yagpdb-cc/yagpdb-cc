@@ -22,7 +22,7 @@ This command allows users to set an AFK message with optional duration.
 	-afk <message> -d <duration>
 
 	Recommended trigger: Regex trigger with trigger `\A`
-    
+
     Author: DaviiD1337 <https://github.com/DaviiD1337>
 */}}
 
@@ -60,7 +60,7 @@ This command allows users to set an AFK message with optional duration.
             {{ with and $duration (toDuration $duration) }} {{ $parsedDur = . }} {{ end }}
                 {{ if $parsedDur }}
                     {{ dbSetExpire .User.ID "afk" (or $message "No reason") (toInt $parsedDur.Seconds) }}
-                {{ else }} 
+                {{ else }}
                     {{ dbSet .User.ID "afk" (or $message "No reason") }}
                 {{ end }}
             {{ .User.Mention }}, I set your AFK to `{{ or $message "No reason provided" }}`.
@@ -75,8 +75,8 @@ This command allows users to set an AFK message with optional duration.
         {{ with (dbGet (index .Message.Mentions 0).ID "afk") }}
             {{ $user := userArg .UserID }}
             {{ $eta := "" }}
-            {{ if gt .ExpiresAt.Unix 0 }} 
-                {{ $eta = humanizeDurationSeconds (.ExpiresAt.Sub currentTime) | printf "*%s will be back in around %s.*" $user.Username }} 
+            {{ if gt .ExpiresAt.Unix 0 }}
+                {{ $eta = humanizeDurationSeconds (.ExpiresAt.Sub currentTime) | printf "*%s will be back in around %s.*" $user.Username }}
             {{ end }}
             {{ if and (eq .Value "No reason") $eta }}
                 {{ $desc = printf "%s" $eta }}

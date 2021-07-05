@@ -7,12 +7,12 @@ JSON Converter CC (JSONify)
 
 **Trigger Type:** `Command`
 
-**Trigger:** `json`  
+**Trigger:** `json`
 
 **Usage:**  
 Run the json command to find out :)
 
-```go
+````go
 {{/*
     JSON Converter CC (JSONify)
 
@@ -86,4 +86,4 @@ Run the json command to find out :)
 {{ else }}
     {{ editMessage nil $mainMessage (complexMessageEdit "embed" (cembed "title" "Error" "description" "Unknown channel. Please try again.")) }}
 {{ end }}
-```
+````

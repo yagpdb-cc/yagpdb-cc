@@ -1,9 +1,9 @@
 ---
 name: Bug report
 about: Create a issue about a possible bug in one of the CCs here
-title: "bug: "
-labels: "bug"
-assignees: ""
+title: 'bug: '
+labels: 'bug'
+assignees: ''
 ---
 
 **Describe the bug in as much detail as possible:**

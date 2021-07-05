@@ -15,14 +15,14 @@ To start the game just type 31
 ```go
 {{/*
 	This command is a game where users need to send numbers from 1 to 100. The winners win an amount of credits!
- 
+
 	Recommended trigger: Regex trigger with trigger `.*`
-		
+
 	V2 by Dav!dﾉᵈᶻ#8302 (555791735607787580)
 
 	To start the game just type 31
 */}}
- 
+
 {{/* CONFIGURATION VALUES START */}}
 {{ $channel := 722554898612355093 }} {{/* Channel ID where the game is played */}}
 {{ $prize := 400 }} {{/* The number of credits if the user won */}}
@@ -32,8 +32,8 @@ To start the game just type 31
 {{ $infoat := 5 }} {{/* When should hints be displayed? After how many fails */}}
 {{/* CONFIGURATION VALUES END */}}
 {{/* DONT TOUCH BELOW !! */}}
- 
- 
+
+
 {{/* Some variables */}}
 {{ $icon := "https://cdn.discordapp.com/attachments/741968239332163618/742027618907324436/warning.png" }}
 {{ if .Guild.Icon }}
@@ -46,13 +46,13 @@ To start the game just type 31
 "info" 37807 }}
 {{ $fields := cslice }}
 {{/* End of some variables :D */}}
- 
+
 {{ if eq .Channel.ID $channel }}
 	{{ $nr := or (toInt (dbGet 0 "NR").Value) 31 }}
 	{{ if not .ExecData }}
 		{{ with reFindAllSubmatches `\d+` .Message.Content }}
     			{{ if (eq $nr (toInt (index (index  . 0) 0))) }}
-				    {{ dbSet 0 "NR" (randInt 12345678) }} 
+				    {{ dbSet 0 "NR" (randInt 12345678) }}
     				    {{ $r := dbIncr $.User.ID $db $prize }}
 				    {{ $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "256")) }}
 				    {{ $embed.Set "color" ($col.Get "finish") }}
@@ -65,7 +65,7 @@ To start the game just type 31
 			{{ else if $information }}
 				    {{ $k := dbIncr 0 "hintsat" 1 }}
 				    {{ if eq (toInt $k) $infoat }}
-				    	{{ $hint1 := (sub $nr (randInt 1 20)) }}		
+				    	{{ $hint1 := (sub $nr (randInt 1 20)) }}
 					    {{ if le $hint1 1 }}
 						    {{ $hint1 = 1 }}
 						{{ end }}

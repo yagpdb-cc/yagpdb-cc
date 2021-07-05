@@ -8,7 +8,7 @@ Supporting Reaction CC for Giveaway Package.
 **Trigger Type:** `Reaction` with option `Added + Removed reactions`
 
 ```go
-{{/* 
+{{/*
         Supporting Reaction CC for Giveaway Package.
 
         Recommended trigger: Reaction trigger with option `Added + Removed reactions` selected.
@@ -31,7 +31,7 @@ Supporting Reaction CC for Giveaway Package.
 		{{ $giveawayData = sdict $giveawayData }}
 		{{/* Regex for the User ID */}}
 		{{$IDregex:=print .User.ID ","}}
-		
+
 		{{if .ReactionAdded}}
 			{{$amount := 1}}
 			{{/* If user is somwhow already present in list, dont increase count but update position in list */}}
@@ -45,10 +45,10 @@ Supporting Reaction CC for Giveaway Package.
 			{{/* if reaction was removed reduce count by 1 and remove user ID from ID list if user ID is present in list. Else do nothing. */}}
 			{{if reFind $IDregex $giveawayData.listID}}
 				{{$giveawayData.Set "listID" (reReplace $IDregex $giveawayData.listID "")}}
-				{{$giveawayData.Set "count" (add $giveawayData.count -1)}}    
+				{{$giveawayData.Set "count" (add $giveawayData.count -1)}}
 			{{end}}
 		{{end}}
-					
+
 		{{/* update active giveaway database entry */}}
 		{{ $data.Set (joinStr ""  .Reaction.ChannelID .Reaction.MessageID) $giveawayData }}
 		{{ dbSet 7777 "giveaway_active" $data }}

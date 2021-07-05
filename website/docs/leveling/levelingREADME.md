@@ -11,6 +11,7 @@ As usual, there is a leading comment showing the trigger and description of the 
 ---
 
 ## Functionality
+
 - Role rewards (one per level, up to 200 from level 1 to 200)
 - Two types of role rewards (stack, and highest, explained more)
 - Source is easy to read (indented, commented with leading comment in each "command" to explain that command)
@@ -22,6 +23,7 @@ As usual, there is a leading comment showing the trigger and description of the 
 ---
 
 ## Getting Started
+
 Copy the commands given below, add them with the instructions given in the comment at the very TOP of the file, and run -leveling use-default to get started with the default settings!
 
 ---

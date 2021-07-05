@@ -13,7 +13,7 @@ This command retrieves the most recent deleted message in the past hour(non-prem
 `-snipe`
 
 ```go
-{{/* 
+{{/*
 
     This command retrieves the most recent deleted message in the past hour(non-premium)/ 12 hours(premium)
 
@@ -46,17 +46,17 @@ This command retrieves the most recent deleted message in the past hour(non-prem
                 {{ $file = $message }}
                 {{ $message = "*Message exceeded 2k limit. Contents sent as file instead*"}}
         {{ else if not $message }}
-                {{ $message = "> ⚠️ An attachment/embed was deleted" }} 
+                {{ $message = "> ⚠️ An attachment/embed was deleted" }}
         {{ end }}
 
         {{ $col := 0 }}{{ $p := 0 }}{{ $r := $member.Roles }}
         {{ range $.Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $p .Position)}}{{$p = .Position}}{{$col = .Color}}{{end}}{{end }}
 
         {{ $embed := cembed "author" (sdict "name" (print $member.User.String " (ID " $member.User.ID ")") "icon_url" ($member.User.AvatarURL "256"))
-            "description" $message 
-            "color" $col 
+            "description" $message
+            "color" $col
             "image" (sdict "url" $image_url)
-            "footer" (sdict "text" (printf "%s %s ago" (index . 0 1) (index . 0 2)) "icon_url" $icon) 
+            "footer" (sdict "text" (printf "%s %s ago" (index . 0 1) (index . 0 2)) "icon_url" $icon)
             "timestamp" (currentTime.Add (mult $time -1|toDuration)) }}
 
         {{ with $file }}

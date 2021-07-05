@@ -17,7 +17,7 @@ For example: `-cc2file 10 "te st" 23`
 
 ```go
 {{/*
-	This command sends your CC(s) code in a text file, rather than "plain" Discord messages, preserving Tabs, markdown, etc. 
+	This command sends your CC(s) code in a text file, rather than "plain" Discord messages, preserving Tabs, markdown, etc.
 	You can especify more than one ID or trigger, and bot will generate one file per input parameter. If none are provided, output will be CC list
 
 	Trigger type: Command

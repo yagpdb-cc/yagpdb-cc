@@ -24,7 +24,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: "**/node_modules"
+          path: '**/node_modules'
           key: ${{ runner.os }}-deps-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -48,7 +48,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: "**/node_modules"
+          path: '**/node_modules'
           key: ${{ runner.os }}-deps-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -60,4 +60,4 @@ jobs:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           external_repository: yagpdb-cc/yagpdb-cc.github.io
           publish_dir: ./website/build
-          full_commit_message: "docs: deploy website for ${{ github.repository }}@${{ github.sha }}"
+          full_commit_message: 'docs: deploy website for ${{ github.repository }}@${{ github.sha }}'
