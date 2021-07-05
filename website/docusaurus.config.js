@@ -73,7 +73,7 @@ module.exports = {
 					],
 				},
 			],
-			copyright: `Copyright © ${new Date().getFullYear()} under the MIT license.`,
+			copyright: `Copyright © ${new Date().getFullYear()} YAGPDB-CC contributors under the MIT license.`,
 		},
 	},
 	presets: [
