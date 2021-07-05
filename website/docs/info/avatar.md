@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: Avatar CC
+title: View Avatar
 ---
 
 This command allows you to view the avatar of a given user, defaulting to yourself.

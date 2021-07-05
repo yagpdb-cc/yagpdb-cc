@@ -1,6 +1,6 @@
 ---
 sidebar_position: 6
-title: Edit
+title: Edit Message
 ---
 
 This command is a tool for editing messages sent by YAGPDB.

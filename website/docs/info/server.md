@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: Server Info CC
+title: View Server Info
 ---
 
 This command allows you to view information about the server.

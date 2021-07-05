@@ -5,7 +5,7 @@ module.exports = {
 	url: 'https://yagpdb-cc.github.io',
 	baseUrl: '/',
 	onBrokenLinks: 'throw',
-	onBrokenMarkdownLinks: 'warn',
+	onBrokenMarkdownLinks: 'throw',
 	favicon: 'img/yag.ico',
 	organizationName: 'yagpdb-cc',
 	projectName: 'yagpdb-cc.github.io',
@@ -27,7 +27,7 @@ module.exports = {
 			items: [
 				{
 					type: 'doc',
-					docId: 'intro',
+					docId: 'overview',
 					position: 'left',
 					label: 'YAGPDB CCs',
 				},

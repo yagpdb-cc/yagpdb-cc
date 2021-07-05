@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: Channel Info CC
+title: View Channel Info
 ---
 
 This command allows you to view information about a given channel (defaulting to the current channel).

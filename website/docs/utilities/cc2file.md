@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: CC to File
+title: Custom Command to File
 ---
 
 This command sends your CC(s) code in a text file, rather than "plain" Discord messages, preserving Tabs, markdown, etc.  

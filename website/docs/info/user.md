@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: User Info CC
+title: View User Info
 ---
 
 This command allows you to view information about a given user, defaulting to yourself.

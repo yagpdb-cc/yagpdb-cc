@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: Bookmark
+title: Bookmark Message
 ---
 
 This custom commands functions similar to the reminder command, however it will send a DM instantly.  
