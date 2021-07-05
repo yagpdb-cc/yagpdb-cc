@@ -1,0 +1,51 @@
+name: Continuous Integration
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-website:
+    defaults:
+      run:
+        working-directory: ./website
+    name: Build website
+    # CD workflow already builds & deploys the website for commits to master, so only run this job
+    # if it was triggered by a push to a branch other than master / a pull request.
+    if: github.event_name != 'push' || github.head_ref != 'master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Node v14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build website
+        run: yarn build
+
+  run-prettier:
+    name: Run Prettier on code
+    # Don't run Prettier for pull requests, only on pushes.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Prettier on code
+        uses: creyD/prettier_action@v3.3
+        with:
+          prettier_options: --write **/*.{md,json,js,css,yaml,yml}
+          commit_message: 'style(*): run prettier on codebase'
