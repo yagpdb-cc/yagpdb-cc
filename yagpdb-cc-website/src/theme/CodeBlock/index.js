@@ -206,13 +206,13 @@ export default function CodeBlock({
               style={style}>
               <code className={styles.codeBlockLines}>
                 {tokens.map((line, i) => {
-				  // Replace 4 spaces with tabs.
-				  // Somewhere in the site generation process, tabs are being replaced with 4 spaces, which is undesirable.
-				  // This is just a quick hotfix until we can find the root cause of the issue.
-				  // TODO: Remove this once the above issue is fixed properly.
-				  for (const token of line) {
-					token.content = token.content.replace(/ {4}/g, '\t');
-				  }
+                  // Replace 4 spaces with tabs.
+                  // Somewhere in the site generation process, tabs are being replaced with 4 spaces, which is undesirable.
+                  // This is just a quick hotfix until we can find the root cause of the issue.
+                  // TODO: Remove this once the above issue is fixed properly.
+                  for (const token of line) {
+                    token.content = token.content.replace(/ {4}/g, '\t');
+                  }
                   if (line.length === 1 && line[0].content === '') {
                     line[0].content = '\n'; // eslint-disable-line no-param-reassign
                   }
