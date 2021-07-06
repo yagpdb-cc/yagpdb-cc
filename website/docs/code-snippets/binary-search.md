@@ -3,47 +3,47 @@ sidebar_position: 2
 title: Binary Search
 ---
 
-This CC is a snippet help search a given element x in sorted array. The array must be ascending.  
-Binary search is `O(log n)` which is its big selling point.  
-The array input is `$arr`. Lenght of array is `$length`. Element need to search is `$element`
+This code snippet searches for a value in a sorted slice/array in _O(log n)_ using the [binary search](https://en.wikipedia.org/wiki/Binary_search_algorithm) algorithm.
+
+## Code
+
+```go file=../../../src/code_snippets/binary_search.go.tmpl
+
+```
+
+## Usage
+
+First, copy the above snippet to the top of your code.<br />
+To use it, you will need to construct a map holding your input slice/array in addition to the value you wish to search for:
 
 ```go
-{{/*
-    This CC is a snippet help search a given element x in sorted array. The array must be ascending.
-    Binary search is O(log n) which is its big selling point.
-    The array input is $arr. Lenght of array is $length. Element need to search is $element
-
-    Made by Alikuxac#4177
-*/}}
-{{define "binary_search"}}
-{{- $list := .List -}}{{- $left := or .Left 0 -}}{{- $right := or .Right (sub (len $list) 1) -}}{{- $value := .Value -}}
-{{- if .Found -}}
-    {{- if ge $right 1 -}}
-        {{- $mid := (div (add $left $right) 2) | toInt -}}
-        {{- if eq (index $list $mid) $value -}}
-            {{- .Set "Result" $mid -}}{{- .Set "Found" false -}}
-        {{- end -}}
-        {{- if gt (index $list $mid) $value -}}
-            {{- .Set "Right" (sub $mid 1) -}}{{- template "binary_search" . -}}
-        {{- else -}}
-            {{- .Set "Left" (add $mid 1) -}}{{- template "binary_search" . -}}
-        {{- end -}}
-    {{- else -}}
-        {{- .Set "Result" -1 -}}{{- .Set "Found" false -}}
-    {{- end -}}
-{{- end -}}
-{{ end }}
-{{ $arr := cslice 2 5 6 7 9 10 15 }}
-{{ $element := 15 }}
-{{ $length := len $arr }}
-{{ $data := sdict "Found" true "List" $arr "Value" $element }}
-{{ template "binary_search" $data }}
-{{ $data = $data.Result }}
-Array: {{ $arr }}
-Element: {{ $element }}
-{{ if eq $data -1 }}
-Result: Not present
-{{ else }}
-Result: Element found at index {{ $data }}
-{{ end }}
+{{/* code snippet here */}}
+{{$query := sdict "List" (cslice 1 2 3 5 7 8) "Value" 2 "Found" true}}
 ```
+
+:::note
+
+`"Found" true` tells the template to begin searching in the slice/array, so make sure to set it!
+
+:::
+
+Then, we can run the template, passing the query as data:
+
+```go {3}
+{{/* code snippet here */}}
+{{$query := sdict "List" (cslice 1 2 3 5 7 8) "Value" 2 "Found" true}}
+{{template "binary_search" $query}}
+```
+
+Running the template will add a new value to your map, `Result`, which is the index where the element was found, or `-1` if it wasn't found. We can access it using dot notation or `index`, like such:
+
+```go {4}
+{{/* code snippet here */}}
+{{$query := sdict "List" (cslice 1 2 3 5 7 8) "Value" 2 "Found" true}}
+{{template "binary_search" $query}}
+Index: {{$query.Result}}
+```
+
+## Author
+
+This code snippet was written by [@alikuxac](https://github.com/alikuxac).

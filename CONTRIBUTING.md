@@ -6,7 +6,7 @@ Thanks for considering a contribution to **yagpdb-cc**. We accept contributions 
 
 As noted above, there's a few things you have to do before PRing a new command to this repository.
 
-**Leading comment**<br>
+**Leading comment**<br />
 Add a brief comment at the start of your custom command code explaining what your command does and any setup required. This should include the trigger & trigger type in addition to any restrictions recommended. This is also the place to put information about you, the author. This is the most complicated step, so we've including an example below.
 
 Let's say this was your original code:
@@ -35,7 +35,7 @@ This would be your code afterwards:
 
 Note that we did not include the Discord tag, only the name (if you wish) and the GitHub link. This is because tags can change, and it's rather troublesome keeping up with all the changes. A better idea is to include your Discord tag in your GitHub profile description, so you can edit it whenever.
 
-**Configuration variables**<br>
+**Configuration variables**<br />
 Extract all configuration data in your code to local variables defined at the top of your code, right after the comment. For example, let's say you had a code that checks if a user has a hardcoded role ID. Your code might have looked like this:
 
 ```go
@@ -64,7 +64,7 @@ We named our configuration variable `ROLE_ID`, in UPPER_SNAKE_CASE, as it makes 
 
 You'll notice that we added comments around our configuration variables. These serve as a hint to the end user that they should not be editing anything beyond this part (`Configuration variables start` and `Configuration variables end` signal the start and end of what they should edit). In addition, they provide information about what data they should put in, in this case, the role ID.
 
-**Formatting**<br>
+**Formatting**<br />
 We don't have any particular formatting guidelines other than that your code should be relatively readable. That doesn't mean that it has to be beautiful or even indented, but it shouldn't be one super long line with single-character variable names.
 
 Don't worry about code length if it's long - we run a minifier on code after it is accepted which does a very good job of making the code as short as possible.

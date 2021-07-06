@@ -1,140 +1,67 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 title: Emote Filter
 ---
 
-This was created for an incredibly specific use in a server I staff - to catch emote-only message chains. The CC will allow a set number of emote-only messages to go through before deleting subsequent messages and tracking them in a log channel. This is a rolling time frame, every time the filter catches an emote-only message it will refresh the automod length. The regex trigger will capture any number of emotes in a row and with up to (2) characters on each side to prevent automod bypass (such as an emote followed by a single period) but has enough wiggle room to allow a message such as "LOL :kek:". You have the option to enable an automatic emote ban function based on assigning a role to the user, this will delete all emote-only messages for the duration of their ban rather than counting towards the filter. I recommend disabling the "Use External Emoji" permission (must be done in channel permissions, not role permissions) as an added incentive for nitro users to not get themselves emote banned. Make sure the role is above all other standard user roles in the role hierarchy. Emote bans/logging DO NOT need to be used in conjunction to function.
+Triggers on emoji-only message chains and punishes the user.
 
-**Trigger Type:** `Regex`
+More specifically, this command will allow a set number of emote-only messages to go through before deleting subsequent messages and tracking them in a log channel.
+It uses a rolling time frame: every time the filter catches an emote-only message, the automod length is refreshed.
+The regex trigger will capture any number of emotes in a row and with up to 2 characters on each side to prevent bypassing automod (such as an emote followed by a single period) but has enough wiggle room to allow a message such as "LOL :kek:".
 
+You have the option to enable an automatic emote ban function based on assigning a role to the user, which will delete all emote-only messages for the duration of their ban rather than counting towards the filter.
+We recommend disabling the `Use External Emoji` permission as an added incentive for nitro users to not get themselves emote banned.
+
+:::note
+
+YAGPDB cannot detect message edits; thus, users are able to send messages and then edit them to single emotes bypassing the filter.
+There is nothing that can be done about this so it's not an issue of this command.
+
+:::
+
+## Trigger
+
+**Type:** `Regex`<br />
 **Trigger:** `^.{0,2}(((<a?:[\w~]{2,32}:\d{17,19}>)|[\x{1f1e6}-\x{1f1ff}]{2}|\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?(\x{200D}\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?)*|[#\d*]\x{FE0F}?\x{20E3}).{0,2}|\s+)+$`
 
-```go
-{{/*
-	Trigger Type: Regex
-	Trigger `^.{0,2}(((<a?:[\w~]{2,32}:\d{17,19}>)|[\x{1f1e6}-\x{1f1ff}]{2}|\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?(\x{200D}\p{So}\x{fe0f}?[\x{1f3fb}-\x{1f3ff}]?)*|[#\d*]\x{FE0F}?\x{20E3}).{0,2}|\s+)+$`
+## Configuration
 
-	About: This was created for an incredibly specific use in a server I staff - to catch emote-only message chains. The CC will allow a set number of
-	emote-only messages to go through before deleting subsequent messages and tracking them in a log channel. This is a rolling time frame, every time
-	the filter catches an emote-only message it will refresh the automod length. The regex trigger will capture any number of emotes in a row and with
-	up to (2) characters on each side to prevent automod bypass (such as an emote followed by a single period) but has enough wiggle room to allow a
-	message such as "LOL :kek:". You have the option to enable an automatic emote ban function based on assigning a role to the user, this will delete
-	all emote-only messages for the duration of their ban rather than counting towards the filter. I recommend disabling the "Use External Emoji"
-	permission (must be done in channel permissions, not role permissions) as an added incentive for nitro users to not get themselves emote banned.
-	Make sure the role is above all other standard user roles in the role hierarchy. Emote bans/logging DO NOT need to be used in conjunction to function.
+- `$length`<br />
+  Duration of auto delete, in seconds.
 
-	Known Issues: no known issues. YAG cannot detect message edits therefore users are able to send messages and then edit them to single emotes without
-	triggering the filter, there is nothing that can be done to prevent this so it is not an issue with the command.
+- `$emoteDelete`<br />
+  Number of emotes allowed before deletion.
 
-	Created by: DV0RAK - https://github.com/dvoraknt/
-	Last Update: 5/3/2021
+- `$logEnable`<br />
+  Whether or not logging is enabled.
 
-*/}}
+- 📌 `$logChannel`<br />
+  Channel to send logs. Only applies if `$logEnable` is `true`.
 
-{{/* START CONFIGURABLE VARIABLES */}}
-{{$length := 120}}{{/*duration of auto delete in seconds*/}}
-{{$emoteDelete := 3}}{{/*number of emotes allowed before deleting*/}}
+- `$banEnable`<br />
+  Whether or not emote bans are enabled.
 
-{{$logEnable := true}}{{/*true to enable logging, false to disable*/}}
-{{$logChannel := 503913846684123166}}{{/*automod/mod log channel ID*/}}
+- 📌 `$banRole`<br />
+  Role ID of the emote ban role.
 
-{{$banEnable := true}}{{/*true to enable emote bans, false to disable*/}}
-{{$banRole := 539502463649185794}}{{/*role ID of emote ban role*/}}
-{{$banTime := 3600}}{{/*emote ban length in seconds. default 3600 - one hour*/}}
-{{$banNum := 5}}{{/*number of emotes from single user before emote ban*/}}
-{{$banWarn := 3}}{{/*number of emotes from single user before sending DM warning. must be higher than one, zero to disable*/}}
-{{$banMsg := true}}{{/*true if you have "Use External Emoji" permission disabled in channels, false if you have not disabled it. Only affects the DM sent to users.*/}}
-{{/* END CONFIGURABLE VARIABLES */}}
+- `$banTime`<br />
+  Emote ban duration in seconds.
 
-{{/* ===============================DO NOT TOUCH=============================== */}}
-{{$x := ""}}
-{{$spammers := ""}}
-{{$spammerList := ""}}
-{{$spammersdict := ""}}
+- `$banNum`<br />
+  Number of emotes from a single user permitted before an emote ban.
 
-{{if hasRoleID $banRole}}
-	{{deleteTrigger 0}}
-{{end}}
+- `$banWarn`<br />
+  Number of emotes from a single user before sending a warning in DM. Use `0` to disable.
 
-{{if and (dbGet .Channel.ID "cooldown") (not (hasRoleID $banRole))}}
-	{{if eq (dbIncr .Channel.ID "emoteCount" 1|toInt) $emoteDelete}}
-		{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
-		{{if $logEnable}}{{$x = sendMessageRetID $logChannel (print "Emote filter triggered in <#" .Channel.ID ">")}}{{end}}
-		{{dbSetExpire .Channel.ID "messageID" ($x|toString) $length}}
+- `$banMsg`<br />
+  Whether or not you have `Use External Emoji` permissions disabled in channels.
 
-		{{$spammersdict := sdict (dbGet .Channel.ID "spammers").Value}}
-		{{if $count := $spammersdict.Get (str .User.ID)}}
-			{{$count = add $count 1}}
-			{{$spammersdict.Set (str .User.ID) $count}}
-			{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
-			{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-		{{else}}
-			{{$spammersdict.Set (str .User.ID) 1}}
-			{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-		{{end}}
+## Code
 
-	{{range $k, $v := $spammersdict}}
-		{{- $spammerList = joinStr "\n" $spammerList (printf "<@%s> - %s" $k (str $v)) -}}
-	{{end}}
+```go file=../../../src/moderation/emote_filter.go.tmpl
 
-	{{if $logEnable}}{{editMessage $logChannel $x (cembed "title" "Emotes Filtered" "description" $spammerList)}}{{end}}
-	{{dbSetExpire .Channel.ID "messageID" ($x|toString) $length}}
-
-	{{else if lt (dbIncr .Channel.ID "emoteCount" 1|toInt) $emoteDelete}}
-		{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
-		{{$spammersdict := sdict (dbGet .Channel.ID "spammers").Value}}
-			{{if $count := $spammersdict.Get (str .User.ID)}}
-				{{$count = add $count 1}}
-				{{$spammersdict.Set (str .User.ID) $count}}
-				{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
-				{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-			{{else}}
-				{{$spammersdict.Set (str .User.ID) 1}}
-				{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-			{{end}}
-
-	{{else if gt (dbIncr .Channel.ID "emoteCount" 1|toInt) $emoteDelete}}
-		{{deleteTrigger 0}}{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
-		{{$x = (dbGet .Channel.ID "messageID").Value|toString}}
-
-		{{$spammersdict := sdict (dbGet .Channel.ID "spammers").Value}}
-		{{if $count := $spammersdict.Get (str .User.ID)}}
-			{{$count = add $count 1}}
-			{{$spammersdict.Set (str .User.ID) $count}}
-			{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
-			{{if and (ge $count $banNum) ($banEnable)}}
-				{{addRoleID $banRole}}
-				{{removeRoleID $banRole $banTime}}
-				{{$spammersdict.Set (str .User.ID) (print $banNum " - User has been emote banned.")}}
-				{{$banMin := div $banTime 60}}
-				{{if $banMsg}}
-					{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to use external emotes (if you are a nitro user) and will not be able to send emote-only messages during this time."}}
-				{{else}}
-					{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to send emote-only messages during this time."}}
-				{{end}}
-			{{end}}
-		{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-	{{else}}
-		{{$spammersdict.Set (str .User.ID) 1}}
-		{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-	{{end}}
-
-
-	{{range $k, $v := $spammersdict}}
-		{{- $spammerList = joinStr "\n" $spammerList (printf "<@%s> - %s" $k (str $v)) -}}
-	{{end}}
-
-	{{if $logEnable}}{{editMessage $logChannel $x (cembed "title" "Emotes Filtered" "description" $spammerList)}}{{end}}
-	{{dbSetExpire .Channel.ID "messageID" ($x|toString) $length}}
-	{{end}}
-{{else if not (hasRoleID $banRole)}}
-
-{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
-{{dbDel .Channel.ID "emoteCount"}}
-
-{{$spammersdict = sdict (str .User.ID) 1}}
-{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
-
-
-{{end}}
 ```
+
+## Author
+
+This custom command was written by [@dvoraknt](https://github.com/dvoraknt).

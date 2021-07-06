@@ -3,27 +3,23 @@ sidebar_position: 1
 title: Overview
 ---
 
-This allows you to play a game of Connect4 with either yourself or against another player.
+This allows you to play a game of connect-four with yourself or against another player.
 
 ## Installing
 
-- [connect4Start](start-game)
-- [reactionListener](reaction-handler)
+As usual, there are instructions describing where to put the script and which trigger to use on the pages corresponding to the individual commands. Both of the following commands need to be installed for this system to work correctly:
 
-Both of these files must be installed in order for this to function as intended.  
-If you're not familiar with installing custom commands, read [this](adding-ccs).
+- [Start game command](start-game)
+- [Reaction handler](reaction-handler)
 
-#### connect4Start Trigger
-
-```
-\A(?:\-|<@!?204255221017214977>)\s*(?:c(?:on(?:nect)?)?4)(?: +|\z)
-```
-
-| ⚠ Change the `-` to match your server's prefix if applicable |
-| ------------------------------------------------------------ |
+As the setup for this system is not too complicated, we'll leave it at that. Please refer to the instructions in the pages linked above if you have any other questions.
 
 ## Preview
 
 ![img](/img/connect4_0.png)
 
 ![img](/img/connect4_1.png)
+
+## Author
+
+This custom command system was written by [zen | ゼン](https://github.com/z3nn13).

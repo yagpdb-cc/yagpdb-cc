@@ -1,0 +1,47 @@
+---
+sidebar_position: 7
+title: Slowmode
+---
+
+import { AvailablePermissionsDisplay } from '../../src/components/AvailablePermissionsDisplay';
+
+Custom slowmode system that deletes messages that violate the slowmode time configured. Allows configuring permissions that bypass slowmode.
+
+:::note
+
+As stated above, this system does not actually prevent the user from sending messages: it simply deletes messages that violate the slowmode constraints.
+
+:::
+
+## Trigger
+
+**Type:** `Regex`<br />
+**Trigger:** `\A` or `.*`<br />
+**Additional options:** `Errors as custom command output` disabled
+
+## Usage
+
+- `-slowmode on <time>` - Turns on the slowmode, using `time` in seconds as the slowmode time.
+- `-slowmode off` - Disables slowmode.
+
+## Configuration
+
+- `$bypassperms`<br />
+  Permissions required to bypass slowmode.
+
+  <AvailablePermissionsDisplay />
+
+- `$usageperms`<br />
+  Permissions required to run slowmode commands.
+
+  <AvailablePermissionsDisplay />
+
+## Code
+
+```go file=../../../src/moderation/slowmode.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@Spongerooski](https://github.com/Spongerooski).

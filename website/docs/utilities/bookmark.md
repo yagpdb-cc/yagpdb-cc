@@ -3,45 +3,30 @@ sidebar_position: 4
 title: Bookmark Message
 ---
 
-This custom commands functions similar to the reminder command, however it will send a DM instantly.  
-One could say like a private pin command. Nothing much, but quite handy I think :)
+This command functions similar to the reminder command, but sends a DM instantly.
+Alternatively, one could see it as a private pin command.
 
-**Trigger Type:** `Regex`
+## Trigger
 
-**Trigger:** `\A(?:-\s?|<@!?204255221017214977>\s*)b(?:ook)?m(?:ark)?(?:\s+|\z)`
+**Type:** `Regex`<br />
+**Trigger:** `\A(?:-\s?|<@!?204255221017214977>\s*)b(?:ook)?m(?:ark)?(?:\s+|\z)`<br />
 
-**Usage:**  
-`-bookmark <message>`  
-`-bm <message>`
+## Usage
 
-````go
-{{/*
-    This custom commands functions similar to the reminder command, however it will send a DM instantly.
-    One could say like a private pin command. Nothing much, but quite handy I think  :)
+- `-bookmark <message>` - Sends a nicely formatted note with the message provided in DM.
 
-    Usage:
-        Bookmark <message>
-        bm <message>
+:::note Aliases
 
-    Recommended trigger and trigger type: RegEx trigger with `\A(?:-\s?|<@!?204255221017214977>\s*)b(?:ook)?m(?:ark)?(?:\s+|\z)`
+Instead of `bookmark`, you can also use `bm`.
 
-    Author: Luca Z. <https://github.com/l-zeuch>
-    License: MIT
-    Copyright: (c) 2021
-*/}}
+:::
 
-{{/* Actual Code - Only change this when you know what you are doing */}}
-{{$args := parseArgs 1 "```Bookmark <Message:Text>```\nNot enough arguments passed." (carg "string" "Message")}}
-{{$note := $args.Get 0}}
-{{$link := (printf "https://discord.com/channels/%d/%d/%d" .Guild.ID .Channel.ID .Message.ID)}}
-{{$embed := (cembed
-    "title" "Bookmark"
-    "description" "You asked me to bookmark this for you:"
-    "fields" (cslice
-        (sdict "name" "Note" "value" (print $note) "inline" true)
-        (sdict "name" "Info" "value" (printf "Channel: <#%d>\nSource: [Jump!](%s)"  .Channel.ID $link) "inline" true)
-    )
-)}}
-{{sendDM $embed}}
-{{addReactions "📫"}}
-````
+## Code
+
+```go file=../../../src/utilities/bookmark.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@l-zeuch](https://github.com/l-zeuch).

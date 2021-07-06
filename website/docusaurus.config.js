@@ -27,9 +27,15 @@ module.exports = {
 			items: [
 				{
 					type: 'doc',
-					docId: 'overview',
+					docId: 'introduction',
 					position: 'left',
-					label: 'YAGPDB CCs',
+					label: 'Introduction',
+				},
+				{
+					type: 'doc',
+					docId: 'adding-ccs',
+					position: 'left',
+					label: 'Adding custom commands',
 				},
 				{
 					href: 'https://github.com/yagpdb-cc/yagpdb-cc/tree/master',

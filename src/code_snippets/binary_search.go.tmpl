@@ -1,0 +1,32 @@
+{{/*
+    Searches a sorted slice/array in O(log n) time using binary search.
+	See <LINK> for more information.
+
+	Author: Alikuxac <https://github.com/alikuxac>
+*/}}
+
+{{define "binary_search"}}
+	{{- $list := .List}}
+	{{- $left := or .Left 0}}
+	{{- $right := or .Right (sub (len $list) 1)}}
+	{{- $value := .Value}}
+	{{- if .Found}}
+		{{- if ge $right 1}}
+			{{- $mid := (div (add $left $right) 2) | toInt}}
+			{{- if eq (index $list $mid) $value}}
+				{{- .Set "Result" $mid}}
+				{{- .Set "Found" false}}
+			{{- end}}
+			{{- if gt (index $list $mid) $value}}
+				{{- .Set "Right" (sub $mid 1)}}
+				{{- template "binary_search" .}}
+			{{- else}}
+				{{- .Set "Left" (add $mid 1)}}
+				{{- template "binary_search" .}}
+			{{- end}}
+		{{- else}}
+			{{- .Set "Result" -1}}
+			{{- .Set "Found" false}}
+		{{- end}}
+	{{- end -}}
+{{end}}

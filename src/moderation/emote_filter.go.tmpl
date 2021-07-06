@@ -1,0 +1,113 @@
+{{/*
+	Triggers on emoji-only message chains and punishes the user.
+	See <LINK> for more information.
+
+	Author: DV0RAK <https://github.com/dvoraknt/>
+*/}}
+
+{{/* Configurable values */}}
+{{$length := 120}}
+{{$emoteDelete := 3}}
+
+{{$logEnable := true}}
+{{$logChannel := 503913846684123166}}
+
+{{$banEnable := true}}
+{{$banRole := 539502463649185794}}
+{{$banTime := 3600}}
+{{$banNum := 5}}
+{{$banWarn := 3}}
+{{$banMsg := true}}
+{{/* End of configurable values */}}
+
+{{/* ===============================DO NOT TOUCH=============================== */}}
+{{$x := ""}}
+{{$spammers := ""}}
+{{$spammerList := ""}}
+{{$spammersdict := ""}}
+
+{{if hasRoleID $banRole}}
+	{{deleteTrigger 0}}
+{{end}}
+
+{{if and (dbGet .Channel.ID "cooldown") (not (hasRoleID $banRole))}}
+	{{if eq (dbIncr .Channel.ID "emoteCount" 1|toInt) $emoteDelete}}
+		{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
+		{{if $logEnable}}{{$x = sendMessageRetID $logChannel (print "Emote filter triggered in <#" .Channel.ID ">")}}{{end}}
+		{{dbSetExpire .Channel.ID "messageID" ($x|toString) $length}}
+
+		{{$spammersdict := sdict (dbGet .Channel.ID "spammers").Value}}
+		{{if $count := $spammersdict.Get (str .User.ID)}}
+			{{$count = add $count 1}}
+			{{$spammersdict.Set (str .User.ID) $count}}
+			{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
+			{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+		{{else}}
+			{{$spammersdict.Set (str .User.ID) 1}}
+			{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+		{{end}}
+
+	{{range $k, $v := $spammersdict}}
+		{{- $spammerList = joinStr "\n" $spammerList (printf "<@%s> - %s" $k (str $v)) -}}
+	{{end}}
+
+	{{if $logEnable}}{{editMessage $logChannel $x (cembed "title" "Emotes Filtered" "description" $spammerList)}}{{end}}
+	{{dbSetExpire .Channel.ID "messageID" ($x|toString) $length}}
+
+	{{else if lt (dbIncr .Channel.ID "emoteCount" 1|toInt) $emoteDelete}}
+		{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
+		{{$spammersdict := sdict (dbGet .Channel.ID "spammers").Value}}
+			{{if $count := $spammersdict.Get (str .User.ID)}}
+				{{$count = add $count 1}}
+				{{$spammersdict.Set (str .User.ID) $count}}
+				{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
+				{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+			{{else}}
+				{{$spammersdict.Set (str .User.ID) 1}}
+				{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+			{{end}}
+
+	{{else if gt (dbIncr .Channel.ID "emoteCount" 1|toInt) $emoteDelete}}
+		{{deleteTrigger 0}}{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
+		{{$x = (dbGet .Channel.ID "messageID").Value|toString}}
+
+		{{$spammersdict := sdict (dbGet .Channel.ID "spammers").Value}}
+		{{if $count := $spammersdict.Get (str .User.ID)}}
+			{{$count = add $count 1}}
+			{{$spammersdict.Set (str .User.ID) $count}}
+			{{if and $banEnable (eq $count $banWarn)}}{{sendDM "You have sent (" $banWarn ") emote only messages in a short time period, if you continue sending these messages you will have your permissions revoked. To keep channels conversation focused please limit single emote uses to reactions or incorporated into other messages."}}{{end}}
+			{{if and (ge $count $banNum) ($banEnable)}}
+				{{addRoleID $banRole}}
+				{{removeRoleID $banRole $banTime}}
+				{{$spammersdict.Set (str .User.ID) (print $banNum " - User has been emote banned.")}}
+				{{$banMin := div $banTime 60}}
+				{{if $banMsg}}
+					{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to use external emotes (if you are a nitro user) and will not be able to send emote-only messages during this time."}}
+				{{else}}
+					{{sendDM "You have been emote banned for " $banMin " minutes. You will not be able to send emote-only messages during this time."}}
+				{{end}}
+			{{end}}
+		{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+	{{else}}
+		{{$spammersdict.Set (str .User.ID) 1}}
+		{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+	{{end}}
+
+
+	{{range $k, $v := $spammersdict}}
+		{{- $spammerList = joinStr "\n" $spammerList (printf "<@%s> - %s" $k (str $v)) -}}
+	{{end}}
+
+	{{if $logEnable}}{{editMessage $logChannel $x (cembed "title" "Emotes Filtered" "description" $spammerList)}}{{end}}
+	{{dbSetExpire .Channel.ID "messageID" ($x|toString) $length}}
+	{{end}}
+{{else if not (hasRoleID $banRole)}}
+
+{{dbSetExpire .Channel.ID "cooldown" "cooldown" $length}}
+{{dbDel .Channel.ID "emoteCount"}}
+
+{{$spammersdict = sdict (str .User.ID) 1}}
+{{dbSetExpire .Channel.ID "spammers" $spammersdict $length}}
+
+
+{{end}}

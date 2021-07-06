@@ -3,6 +3,6 @@ sidebar_position: 1
 title: Overview
 ---
 
-These commands are standalone. Pick and choose which CCs you wish to add. These commands are all based around fun concepts, i.e quoting messages, text to emoji, etc.
+These commands are centered around bringing fun to your server. They are, for the most part, standalone: pick and choose which CCs you wish to add.
 
-As usual, there is a leading comment showing the trigger and description of the CC.
+As usual, there are instructions describing where to put the script and which trigger to use on the pages corresponding to the individual commands.

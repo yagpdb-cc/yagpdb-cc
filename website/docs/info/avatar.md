@@ -3,32 +3,30 @@ sidebar_position: 2
 title: View Avatar
 ---
 
-This command allows you to view the avatar of a given user, defaulting to yourself.
+This command views the avatar of a user, defaulting to the triggering user.
 
-**Trigger Type:** `Regex`
+## Trigger
 
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(avatar|av|pfp)(\s+|\z)`
 
-**Usage:**  
-`-avatar [user]`
+## Usage
 
-```go
-{{/*
-	This command allows you to view the avatar of a given user defaulting to yourself.
-	Usage: `-avatar [user]`.
+- `-avatar` - Views your own avatar.
+- `-avatar <user>` - Views the avatar of the user provided.
 
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(avatar|av|pfp)(\s+|\z)`
-*/}}
+:::tip Aliases
 
-{{ $user := .User }}
-{{ $args := parseArgs 0 "**Syntax:** `-avatar [user]`" (carg "userid" "user") }}
-{{ if $args.IsSet 0 }}
-	{{ $user = userArg ($args.Get 0) }}
-{{ end }}
-{{ sendMessage nil (cembed
-	"author" (sdict "name" (printf "%s (%d)" $user.String $user.ID) "icon_url" ($user.AvatarURL "256"))
-	"title" "❯ Avatar"
-	"image" (sdict "url" ($user.AvatarURL "2048"))
-	"color" 14232643
-) }}
+Instead of `avatar`, you can also use `av` or `pfp`.
+
+:::
+
+## Code
+
+```go file=../../../src/info/avatar.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

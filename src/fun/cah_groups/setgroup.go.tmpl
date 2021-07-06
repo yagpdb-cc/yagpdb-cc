@@ -1,0 +1,15 @@
+{{/*
+	Creates a new group of CAH card packs, or edits an existing one.
+	See <LINK> for more information.
+
+	Author: LRitzdorf <https://github.com/LRitzdorf>
+*/}}
+
+{{ if ne (len .CmdArgs) 2 }}
+    Command usage: `-setgroup "group name" "pack1 pack2 etc"`
+Use pack names from the `-cah packs` command. All packs must be in one set of quotes, separated by spaces.
+You can have a group name with spaces, but make sure to put it in quotes!
+{{ else }}
+    {{ dbSet 0 (joinStr "" "group " (index .CmdArgs 0)) (index .CmdArgs 1) }}
+    Pack group `{{index .CmdArgs 0}}` set to `{{index .CmdArgs 1}}`.
+{{ end }}

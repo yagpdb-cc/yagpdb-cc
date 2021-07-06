@@ -1,0 +1,51 @@
+---
+sidebar_position: 6
+title: Nickname Moderation
+---
+
+import { AvailablePermissionsDisplay } from '../../src/components/AvailablePermissionsDisplay';
+
+Helps moderate inappropriate or unpingable nicknames.
+Instead of having to change members' nicknames manually, staff members can moderate nicknames with a single command.
+
+:::note
+
+Due to limitations for editing nicknames in YAGPDB template scripting, the offending member's nickname will be edited once they send another message, not when you run the command.
+
+:::
+
+## Trigger
+
+**Type:** `Regex`<br />
+**Trigger:** `\A` or `.*`<br />
+**Additional options:** `Errors as custom command output` disabled
+
+## Usage
+
+- `-modnick <user>` - Changes the nickname of the user provided.
+- `-unmodnick <user>` - Changes the nickname of a user previously moderated using this command to its original value.
+- `-nick-numerreset` - Makes the next moderated nickname start at `1`.
+
+## Configuration
+
+- `$name`<br />
+  What should be in front of the auto-generated nicknames when a nickname is moderated.
+
+- `$padding`<br />
+  How many digits the number should have.<br />
+  **Recommended value:** Between 3 and 7.
+
+- `$modPerms`<br />
+  Permissions required to moderate nicknames.
+
+  <AvailablePermissionsDisplay />
+
+## Code
+
+```go file=../../../src/moderation/nickname_moderation.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@2x2Master1](https://github.com/2x2master1).

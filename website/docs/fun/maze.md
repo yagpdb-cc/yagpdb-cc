@@ -1,38 +1,32 @@
 ---
-sidebar_position: 10
+sidebar_position: 13
 title: Maze Generator
 ---
 
-This command sends a maze with an optional amount crossings/bridges. It also includes a link to a downloadable solution and intuitive `execCC` support.
+This command generates a maze image with an optional number of crossings/bridges. It also includes a link to a downloadable solution and `execCC` support.
 
-**Trigger Type:** `Command`
+## Trigger
 
+**Type:** `Command`<br />
 **Trigger:** `maze`
 
-**Usage:**  
-`-maze <cross amount>` - `<cross amount>` is an optional argument on how many bridges/crossings you want
+## Usage
 
-```go
-{{/*
-     Made by Crenshaw#7860
-	    This command sends a maze with an optional amount crossings/bridges. It also includes a link to a downloadable solution and .ExecData support.
-     Usage: `-maze <cross amount>` <cross amount> is an optional argument on how many bridges/crossings you want
+- `-maze` - Generates a maze with 0 crossings.
+- `-maze <crossings>` - Generates a maze with the given number of crossings.
 
- 	  Recommended Trigger: Command trigger with trigger `maze`
-*/}}
+:::tip `execCC` usage
 
-{{/* No touchy touchy */}}
-{{ $seed := randInt 100000000 999999999 }}
-{{ $embed := sdict "thumbnail" (sdict "url" (.User.AvatarURL "128")) "title" (title "maze") "description" (joinStr "" "Requested by " .User.String " -") "image" (sdict "url" nil) "color" 123 }}
-{{ $crossings := 0 }}
-{{ if .CmdArgs }}
-	{{ $crossings = (index .CmdArgs 0) }}
-{{ else if .ExecData }}
-	{{$crossings = .ExecData }}
-{{ end }}
-{{ $maze := joinStr "" "http://maze5.de/cgi-bin/maze?sample=1&type=4&rows=12&columns=12&crossings=" $crossings "&seed=" $seed "&algorithm=backtracker&algorithm=0.5&foreground=%23ffffff&background=%2336393f&bordersize=16&cellsize=32&linewidth=2.5&format=png" }}
-{{ $embed.image.Set "url" $maze }}
-{{ $maze:= (joinStr "" $maze "&solution=true") }}
-{{ $embed.Set "description" (print $embed.description " [Solution](" $maze ")") }}
-{{ sendMessage nil (cembed $embed) }}
+To trigger the command via execCC, just call the CC with data set to the number of crossings.
+
+:::
+
+## Code
+
+```go file=../../../src/fun/maze.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@Crenshaw1312](https://github.com/Crenshaw1312).
