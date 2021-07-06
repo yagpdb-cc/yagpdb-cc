@@ -22,7 +22,7 @@ In case you need a refresher, or don't know how to add a custom command, please 
 
 For now, we will just add the system to your server and elaborate later on the various configuration variables as well as commands and subcommands.
 
-Copy the entire script from [suggestion](suggestion) and add it as a new custom command. Set the trigger type to RegEx and paste the following as the trigger:
+Copy the entire script from [the main cc](main-cc) and add it as a new custom command. Set the trigger type to RegEx and paste the following as the trigger:
 
 ##### Suggestion System Trigger
 

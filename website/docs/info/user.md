@@ -3,50 +3,36 @@ sidebar_position: 5
 title: View User Info
 ---
 
-This command allows you to view information about a given user, defaulting to yourself.
+This command views information about a user, defaulting to the triggering user.
 
-**Trigger Type:** `Regex`
+:::note Differences between this and `whois`
 
+This command is quite similar to `whois` but also shows the user's role and uses their display colour. Other than that, there's not much of a difference. It's mainly here for consistency with the other informational commands.
+
+:::
+
+## Trigger
+
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(user|member)(-?info)?(\s+|\z)`
 
-**Usage:**  
-`-userinfo [user]`
+## Usage
 
-```go
-{{/*
-	This command allows you to view information about a given user defaulting to yourself.
-	Usage: `-userinfo [user]`.
+- `-user` - Views information about yourself.
+- `-user <user>` - Views information about the user provided.
 
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(user|member)(-?info)?(\s+|\z)`
-*/}}
+:::tip Aliases
 
-{{ $member := .Member }}
-{{ $user := .User }}
-{{ $args := parseArgs 0 "**Syntax:** `-userinfo [user]`" (carg "member" "target") }}
-{{ if $args.IsSet 0 }}
-	{{ $member = $args.Get 0 }}
-	{{ $user = $member.User }}
-{{ end }}
+Instead of `user`, you can also use `member`, `memberinfo`, `member-info`, `userinfo`, or `user-info`.
 
-{{ $roles := "" }}
-{{ range $k, $v := $member.Roles }}
-	{{- if eq $k 0 }} {{- $roles = printf "<@&%d>" . }}
-	{{- else }} {{- $roles = printf "%s, <@&%d>" $roles . }} {{- end -}}
-{{ end }}
-{{ $bot := "No" }}
-{{ if $user.Bot }} {{ $bot = "Yes" }} {{ end }}
-{{ $createdAt := div $user.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
+:::
 
-{{ sendMessage nil (cembed
-	"author" (sdict "name" (printf "%s (%d)" $user.String $user.ID) "icon_url" ($user.AvatarURL "256"))
-	"fields" (cslice
-		(sdict "name" "❯ Nickname" "value" (or $member.Nick "*None set*"))
-		(sdict "name" "❯ Joined At" "value" ($member.JoinedAt.Parse.Format "Jan 02, 2006 3:04 AM"))
-		(sdict "name" "❯ Created At" "value" ($createdAt.Format "Monday, January 2, 2006 at 3:04 AM"))
-		(sdict "name" (printf "❯ Roles (%d Total)" (len $member.Roles)) "value" (or $roles "n/a"))
-		(sdict "name" "❯ Bot" "value" $bot)
-	)
-	"color" 14232643
-	"thumbnail" (sdict "url" ($user.AvatarURL "256"))
-) }}
+## Code
+
+```go file=../../../src/info/user.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

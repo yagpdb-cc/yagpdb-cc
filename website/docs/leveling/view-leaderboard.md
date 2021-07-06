@@ -3,44 +3,30 @@ sidebar_position: 7
 title: View Leaderboard
 ---
 
-This command manages the leaderboard.
+This command displays a paginated leaderboard where users with higher experience come first.
 
-**Trigger Type:** `Regex`
+## Trigger
 
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(leaderboard|lb|top)(\s+|\z)`
 
-**Usage:**  
-`-leaderboard [page]`
+## Usage
 
-```go
-{{/*
-	This command manages the leaderboard. Usage is -leaderboard [page] where page is optional.
+- `-leaderboard` - Views the first page of the leaderboard.
+- `-leaderboard <page>` - Views a specific page of the leaderboard.
 
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(leaderboard|lb|top)(\s+|\z)`.
-*/}}
-{{ $page := 1 }} {{/* Default page to start at */}}
-{{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }} {{/* If the user provided a page, change $page variable to that */}}
-{{ $skip := mult (sub $page 1) 10 }} {{/* Amount of entries to skip */}}
-{{ $users := dbTopEntries "xp" 10 $skip }} {{/* Retrieve the relevant DB entries with the parameters provided */}}
-{{ if not (len $users) }}
-	There were no users on that page! {{/* If there were no users, return */}}
-{{ else }}
-	{{ $rank := $skip }} {{/* Instantiate rank variable with value of $skip */}}
-	{{ $display := "" }} {{/* The description for the leaderboard description */}}
-	{{ range $users }}
-		{{- $xp := toInt .Value }} {{/* XP for this user entry */}}
-		{{- $rank = add $rank 1 }} {{/* Increment rank variable */}}
-		{{- $display = printf "%s\n• **%d.** [%s](https://yagpdb.xyz) :: Level %d (%d XP)"
-			$display $rank .User.String (toInt (roundFloor (mult 0.1 (sqrt $xp)))) $xp
-		}} {{- /* Format this line */ -}}
-	{{ end }}
-	{{ $id := sendMessageRetID nil (cembed
-		"title" "❯ Leaderboard"
-		"thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")
-		"color" 14232643
-		"description" $display
-		"footer" (sdict "text" (joinStr "" "Page " $page))
-	) }} {{/* Construct and send the embed */}}
-	{{ addMessageReactions nil $id "◀️" "▶️" }} {{/* Add reactions for pagination */}}
-{{ end }}
+:::info Aliases
+
+Instead of using `leaderboard`, you can also use `lb` or `top`.
+
+:::
+
+## Code
+
+```go file=../../../src/leveling/leaderboard.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

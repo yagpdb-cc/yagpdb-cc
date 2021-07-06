@@ -3,27 +3,31 @@ sidebar_position: 3
 title: End Game
 ---
 
-This command deletes a group of CAH card packs.
+This command ends the current CAH game.
 
-**Trigger Type:** `Command`
+For more information about the CAH card pack system, see [this](overview) page.
 
+:::info
+
+This command is nothing more than an alias for `-cah end` for consistency, so feel free to use that instead if you prefer.
+
+:::
+
+## Trigger
+
+**Type:** `Command`<br />
 **Trigger:** `endgame`
 
-**Usage:**  
-`-endgame`
+## Usage
 
-```go
-{{/*
-	This command ends the current CAH game. It's really just an alias of `cah end`, added for syntactic consistency with `newgame` in this command set.
+- `-endgame` - Ends the current CAH game.
 
-	Usage: `-endgame`
+## Code
 
-	Recommended trigger: `endgame`
-	Trigger type: Command
+```go file=../../../../src/fun/cah_groups/endgame.go.tmpl
 
-	Credits:
-	LRitzdorf <https://github.com/LRitzdorf>
-*/}}
-
-{{ exec "cah end" }}
 ```
+
+## Author
+
+This custom command was written by [@LRitzdorf](https://github.com/LRitzdorf).

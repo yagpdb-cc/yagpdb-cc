@@ -3,66 +3,49 @@ sidebar_position: 5
 title: Start New Game
 ---
 
-This command starts a new CAH game using the specified packs and pack groups.  
-It first checks whether each argument is a valid pack group and, if so, expands it into its component packs. If not, that argment is assumed to be an individual pack and is skipped.  
-After expanding all applicable pack groups, the resulting list of packs is used to start a new game, and all members with the CAH role are pinged.
+This command starts a new CAH game using the specified packs and pack groups.
+It first checks whether each argument is a valid pack group and, if so, expands it into its component packs. If not, that argment is assumed to be an individual pack and is skipped. After expanding all applicable pack groups, the resulting list of packs is used to start a new game, and all members with the CAH role are pinged.
 
-**Trigger Type:** `Command`
+For more information about the CAH card pack system, see [this](overview) page.
 
+## Trigger
+
+**Type:** `Command`<br />
 **Trigger:** `newgame`
 
-**Usage:**  
-`-newgame pack1 "pack 2" packGroup1 "pack group 2" etc` (no specific ordering necessary)
+## Usage
 
-```go
-{{/*
-	This command starts a new CAH game using the specified packs and pack groups.
-	It first checks whether each argument is a valid pack group and, if so, expands it into its component packs. If not, that argment is assumed to be an individual pack and is skipped. After expanding all applicable pack groups, the resulting list of packs is used to start a new game, and all members with the CAH role are pinged.
+- `-newgame <packOrPackGroups...>` - Starts a new CAH game using the specified packs and pack groups.
+- `-newgame` - Starts a new CAH game using the default list of packs.
 
-	Usage: `-newgame pack1 "pack 2" packGroup1 "pack group 2" etc` (no specific ordering necessary)
+### Example
 
-	Recommended trigger: `newgame`
-	Trigger type: Command
-
-	Credits:
-	LRitzdorf <https://github.com/LRitzdorf>
-*/}}
-
-{{/* This is the default list of packs to use if nothing is specified: */}}
-{{ $packs := "*" }}
-{{/* This is the ID of the CAH role, which will be pinged when a new game is started: */}}
-{{ $CAHrole := 123456789 }}
-
-{{ if gt (len .CmdArgs) 0 }}
-    {{ $star := false }}
-    {{ $reqst := cslice }}
-    {{ range .CmdArgs }}
-        {{- $dbResult := dbGet 0 (joinStr "" "group " .) }}
-        {{- if $dbResult }}
-            {{- $reqst = $reqst.Append $dbResult.Value }}
-        {{- else }}
-            {{- $reqst = $reqst.Append . }}
-        {{- end }}
-    {{- end }}
-    {{ $packs = "" }}
-    {{ range $reqst }}
-        {{- if (eq . "*") }}
-            {{- $star = true }}
-        {{- else }}
-            {{- if eq (len (reFindAll (joinStr "" "(" . ")") $packs)) 0 }}
-                {{- $packs = joinStr " " $packs . }}
-           {{- end }}
-        {{- end }}
-    {{- end }}
-    {{ if $star }}
-        {{ $packs = "*" }}
-    {{ end }}
-{{ end }}
-
-{{ $resp := exec "cah create" $packs }}
-{{ if eq (len (reFind "Unknown pack" $resp)) 0 }}
-    {{.User.Mention}} has summoned all the{{mentionRoleID $CAHrole}}s to a new game!
-We'll be using the following pack(s): `{{$packs}}`.
-{{ end }}
-{{ $resp }}
 ```
+-newgame 40-blanks family-friendly packGroup1 "pack group 2"
+```
+
+Starts a new CAH game using the built-in packs `40-blanks` and `family-friendly` in addition to the CAH pack groups `packGroup1` and `pack group 2`, assumed to have been configured beforehand using `-setgroup`.
+
+:::tip
+
+There's no specific order that you have to put the pack/pack groups in: the above example would have worked with `-newgame family-friendly packGroup1 40-blanks "pack group 2"` as well.
+
+:::
+
+## Configuration
+
+- `$packs`<br />
+  Default list of packs to use if no arguments were provided. For example, setting this value to `"40-blanks family-friendly"` would use the packs `40-blanks` and `family-friendly` by default.
+
+- 📌 `$CAHrole`<br />
+  The ID of the CAH role, which will be pinged when a new game is started.
+
+## Code
+
+```go file=../../../../src/fun/cah_groups/newgame.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@LRitzdorf](https://github.com/LRitzdorf).

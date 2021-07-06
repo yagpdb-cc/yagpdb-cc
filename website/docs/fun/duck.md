@@ -1,29 +1,25 @@
 ---
-sidebar_position: 7
+sidebar_position: 10
 title: Duck Image Generator
 ---
 
-A simple command which generates random duck embedded pictures because ducks are important!!
+This command generates random embedded duck pictures. Quack! 🦆🦆🦆
 
-**Trigger Type:** `Command`
+## Trigger
 
+**Type:** `Command`<br />
 **Trigger:** `randduck`
 
-**Usage:**  
-`-randduck`
+## Usage
 
-```go
-{{/*
-	A simple command which generates random duck embedded pictures because ducks are important!!
-     Recommended trigger: Command trigger with trigger `randduck`
-*/}}
+- `-randduck` - Generates a random embedded duck picture.
 
-{{ $link := "https://random-d.uk/api/" }}
-{{ $c := randInt 10 }}
-{{ if lt $c 7 }}
-	{{ $link = joinStr "" $link (toString (randInt 1 130) ) ".jpg" }}
-{{ else }}
-	{{ $link = joinStr "" $link (toString (randInt 1 29)) ".gif" }}
-{{ end }}
-{{ sendMessage nil (cembed "image" (sdict "url" $link)) }}
+## Code
+
+```go file=../../../src/fun/duck.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@Satty9361](https://github.com/Satty9361).

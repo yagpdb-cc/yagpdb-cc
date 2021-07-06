@@ -1,0 +1,28 @@
+{{/*
+	Separates predefined flags from positional arguments within input.
+	See <LINK> for more information.
+
+	Author: jo3-l <https://github.com/jo3-l>
+*/}}
+
+{{define "parseFlags"}}
+	{{.Set "Out" (sdict
+		"Positional" (cslice)
+		"Flags" (dict)
+	)}}
+
+	{{$curFlag := ""}}
+	{{$lastIdx := sub (len .Args) 1}}
+	{{range $i, $arg := .Args}}
+		{{- if $curFlag}}
+			{{- $.Out.Flags.Set $curFlag $arg}}
+			{{- $curFlag = ""}}
+		{{- else if and ($id := $.Flags.Get $arg) (ne $i $lastIdx)}}
+			{{- $curFlag = $id}}
+		{{- else if $id := $.Switches.Get $arg}}
+			{{- $.Out.Flags.Set $id true}}
+		{{- else}}
+			{{- $.Out.Set "Positional" ($.Out.Positional.Append $arg)}}
+		{{- end -}}
+	{{end}}
+{{end}}

@@ -1,0 +1,44 @@
+{{/*
+	Starts a new CAH game using the specified packs and pack groups.
+	See <LINK> for more information.
+
+	Author: LRitzdorf <https://github.com/LRitzdorf>
+*/}}
+
+{{/* Configurable values */}}
+{{ $packs := "*" }}
+{{ $CAHrole := 123456789 }}
+{{/* End of configurable values */}}
+
+{{ if gt (len .CmdArgs) 0 }}
+    {{ $star := false }}
+    {{ $reqst := cslice }}
+    {{ range .CmdArgs }}
+        {{- $dbResult := dbGet 0 (joinStr "" "group " .) }}
+        {{- if $dbResult }}
+            {{- $reqst = $reqst.Append $dbResult.Value }}
+        {{- else }}
+            {{- $reqst = $reqst.Append . }}
+        {{- end }}
+    {{- end }}
+    {{ $packs = "" }}
+    {{ range $reqst }}
+        {{- if (eq . "*") }}
+            {{- $star = true }}
+        {{- else }}
+            {{- if eq (len (reFindAll (joinStr "" "(" . ")") $packs)) 0 }}
+                {{- $packs = joinStr " " $packs . }}
+           {{- end }}
+        {{- end }}
+    {{- end }}
+    {{ if $star }}
+        {{ $packs = "*" }}
+    {{ end }}
+{{ end }}
+ 
+{{ $resp := exec "cah create" $packs }}
+{{ if eq (len (reFind "Unknown pack" $resp)) 0 }}
+    {{.User.Mention}} has summoned all the{{mentionRoleID $CAHrole}}s to a new game!
+We'll be using the following pack(s): `{{$packs}}`.
+{{ end }}
+{{ $resp }}

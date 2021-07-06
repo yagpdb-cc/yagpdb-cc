@@ -3,126 +3,46 @@ sidebar_position: 2
 title: Configure Settings
 ---
 
-This command manages the general level settings of the guild.
+This command allows administrators to configure general leveling settings.
 
-**Trigger Type:** `Regex`
+## Trigger
 
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(leveling|(level|lvl)-?conf|(level|lvl)-?settings)(\s+|\z)`
 
-**Usage:**  
-`-leveling set <key> value` - example: `-leveling set cooldown 1 minute 30 seconds`  
-`-leveling use-default` | `use default settings`  
-`-leveling view` | `view settings`
+:::caution
 
-```go
-{{/*
-	This command manages the general level settings of the guild.
-	Possible usage:
+Unless you would like everyone to be able to configure general leveling settings, we advise that you restrict this command to a staff role in the role restrictions.
 
-	-leveling set <key> value | example: -leveling set cooldown 1 minute 30 seconds
-	-leveling use-default | use default settings
-	-leveling view | view settings
+:::
 
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(leveling|(level|lvl)-?conf|(level|lvl)-?settings)(\s+|\z)`.
-*/}}
-{{/* Help message for convenience in sending */}}
-{{ $helpMsg := cembed
-	"title" "🏆 Leveling"
-	"description" (joinStr "\n\n"
-		"`leveling use-default`: Use the default settings"
-		"`leveling set <key> <value>`: Sets the given settings to the value provided. Valid keys are \"min\", \"max\", and \"cooldown\" (duration)."
-		"`leveling set-channel <channel|none>`: Sets the channel where level up messages will be sent (defaults to current channel). If you want to make it the current channel, use `leveling set-channel none`."
-        	"`leveling set-announcements`: Sets if you want to display the level up messages."
-		"`leveling view`: Views the current settings."
-	)
-	"color" 14232643
-}}
-{{ if .CmdArgs }}
-	{{ $isSaved := false }} {{/* Whether the settings are saved */}}
-	{{ $currentSettings := sdict
-		"min" 15
-		"max" 25
-		"cooldown" .TimeMinute
-        	"announcements" true
-	}} {{/* Defaults for level settings */}}
-	{{ with (dbGet 0 "xpSettings") }}
-		{{ $isSaved = true }} {{/* Settings are in DB */}}
-		{{ $currentSettings = sdict .Value }} {{/* Convert value to sdict */}}
-	{{ end }}
+## Usage
 
-	{{ if eq (index .CmdArgs 0) "use-default" }}
-		{{ $s := dbSet 0 "xpSettings" $currentSettings }} {{/* Set defaults */}}
-		Done! You are now using the default settings for the leveling system.
+:::tip
 
-	{{ else if and (eq (index .CmdArgs 0) "set") (ge (len .CmdArgs) 3) }}
-		{{ $key := index .CmdArgs 1 }} {{/* The key of the setting being set */}}
-		{{ $value := slice .CmdArgs 2 | joinStr " " }} {{/* The value of the new setting */}}
-		{{ if in (cslice "min" "max" "cooldown") $key }} {{/* Check that key is valid */}}
-			{{ $parsed := or (and (eq $key "cooldown") (toDuration $value)) (toInt $value) }} {{/* Find the proper type of conversion needed */}}
-			{{ if not $parsed }} {{/* Check whether it was parsed correctly / whether it was valid value */}}
-				Please provide a valid value for the key `{{ $key }}`.
-			{{ else }}
-				{{ $currentSettings.Set $key $parsed }} {{/* Set key to value */}}
-				{{ if ge $currentSettings.min $currentSettings.max }} {{/* Preemptively prevent user from setting larger min value than max which would cause error later */}}
-					The minimum xp cannot be larger than or equal to the max xp.
-				{{ else }}
-					{{ $s := dbSet 0 "xpSettings" $currentSettings }} {{/* Save it */}}
-					Successfully set the key `{{ $key }}` to `{{ $value }}`!
-				{{ end }}
-			{{ end }}
-		{{ else }}
-			That was not a valid key. The only valid settings are "min", "max", and "cooldown".
-		{{ end }}
+You can view a similar help message to the following in Discord by running `-leveling` with no arguments.
 
-	{{ else if and (eq (index .CmdArgs 0) "set-channel") (ge (len .CmdArgs) 2) }}
-		{{ $input := index .CmdArgs 1 }}
-		{{ with reFindAllSubmatches `<#(\d+)>` $input }} {{ $input = toInt64 (index . 0 1) }} {{ end }}
-		{{ $channel := getChannel $input }}
-		{{ if $channel }}
-			{{ $currentSettings.Set "channel" $channel.ID }}
-			{{ $s := dbSet 0 "xpSettings" $currentSettings }}
-			Successfully set channel to <#{{ $channel.ID }}>!
-		{{ else if eq $input "none" }}
-			{{ $currentSettings.Del "channel" }}
-			{{ $s := dbSet 0 "xpSettings" $currentSettings }}
-			Successfully set the channel for level up notifications to none.
-		{{ else }}
-			That was not a valid channel. Try again.
-		{{ end }}
+:::
 
-    {{ else if eq (index .CmdArgs 0) "set-announcements" }}
-        {{ $input := index .CmdArgs 1 | lower }}
-        {{ if eq $input "true" "y" }}
-            {{ $currentSettings.Set "announcements" true }}
-            Successfully set the value for announcements to `true`
-            {{ dbSet 0 "xpSettings" $currentSettings }}
-        {{ else if eq $input "false" "n" }}
-            {{ $currentSettings.Set "announcements" false }}
-            Successfully set the value for announcements to `false`
-            {{ dbSet 0 "xpSettings" $currentSettings }}
-        {{ else }}
-            That was not a valid option. The only valid options are "true" and "false".
-        {{ end }}
+- `-leveling set cooldown <duration>` - Sets the cooldown between giving messages.
+- `-leveling set min <num>` - Sets the lower bound of the range of experience that can be given when a user sends a message.
+- `-leveling set max <num>` - Sets the upper bound of the range of experience that can be given when a user sends a message.
+- `-leveling set-channel <channel|'none'>` - Sets the channel where level-up announcements will be sent. The default is to send it in the channel where the user leveled up, but you can also set it to a fixed channel by providing a channel. To use the default of the channel where the user leveled up, use `none` as the channel.
+- `-leveling set-announcements <bool>` - Sets whether level-up announcements should be sent.
+- `-leveling view` - Views the current leveling settings.
 
-	{{ else if eq (index .CmdArgs 0) "view" }}
-		{{ $channel := "*None set*" }}
-		{{ with $currentSettings.channel }} {{ $channel = printf "<#%d>" . }} {{ end }}
-		{{ $formatted := printf "**❯ Minimum XP:** %d\n**❯ Maximum XP:** %d\n**❯ Cooldown:** %s\n**❯ Level-up Channel:** %s\n**❯ Announcements:** %v\n"
-			$currentSettings.min
-			$currentSettings.max
-			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration))
-			$channel
-           		$currentSettings.announcements
-		}} {{/* Construct the embed description */}}
-		{{ if $isSaved }} {{/* If the settings are in DB */}}
-			{{ sendMessage nil (cembed "title" "Level Settings" "description" $formatted "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")) }}
-		{{ else }}
-			This server has not set up the leveling system. Run `-leveling use-default` to use the default settings or customize it using `-leveling set <key> <value>`.
-		{{ end }}
-	{{ else }} {{/* Send help messages */}}
-		{{ sendMessage nil $helpMsg }}
-	{{ end }}
-{{ else }}
-	{{ sendMessage nil $helpMsg }}
-{{ end }}
+:::info Aliases
+
+Instead of using `leveling`, you can also use `levelconf`, `lvlconf`, `level-conf,` `lvl-conf`, `levelsettings`, `lvlsettings`, `level-settings`, or `lvl-settings`.
+
+:::
+
+## Code
+
+```go file=../../../src/leveling/leveling.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

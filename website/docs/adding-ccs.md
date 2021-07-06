@@ -40,9 +40,8 @@ For example:
         (Can also work with `regex` and `starts with` triggers if triggers are correctly set)
 
         Note: Command is very long so you MUST remove this comment and the next one after it for it to save properly.
-
-{{/*CONFIGURATION VALUES START*/}}
 */}}
+{{/*CONFIGURATION VALUES START*/}}
 ```
 
 Follow the instructions as it states. Remove the leading comment, and further comments to remove if it says to do so.
