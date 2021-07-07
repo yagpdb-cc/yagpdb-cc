@@ -10,6 +10,8 @@ jobs:
       run:
         working-directory: ./website
     name: Build website
+    # CD workflow already builds and deploys the website for pushes to master, no need to do it twice.
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/head/master' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
