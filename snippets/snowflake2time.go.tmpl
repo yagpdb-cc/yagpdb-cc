@@ -1,4 +1,5 @@
 {{/* Let $snowflake be the ID. */}}
+{{ $snowflake := .User.ID }}
 
 {{/* snowflake >> 22 can be evaluated as snowflake / 2 ^ 22. 2 ^ 22 is 4194304. */}}
 {{ $time := div $snowflake 4194304 }}

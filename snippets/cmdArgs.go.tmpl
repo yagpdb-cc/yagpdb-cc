@@ -3,6 +3,7 @@
 */}}
 
 {{/* Let $text be the text. */}}
+{{ $text := .StrippedMsg }}
 
 {{ $regex := `\x60(.*?)\x60|"(.*?)"|[^\s]+` }}
 {{ $clean := cslice }}
