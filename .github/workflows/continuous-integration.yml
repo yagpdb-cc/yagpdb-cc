@@ -46,3 +46,15 @@ jobs:
         with:
           prettier_options: --write **/*.{md,json,js,css,yaml,yml}
           commit_message: 'style(*): run prettier on codebase'
+
+  check-syntax:
+    name: Check template syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check template syntax
+        uses: jo3-l/action-check-yag-tmpl-syntax@v1.0.1
+        with:
+          include: '**/*.go.tmpl'
