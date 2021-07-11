@@ -3,71 +3,44 @@ sidebar_position: 10
 title: Ghost-Ping Detector v1
 ---
 
-Ghost-Ping Detector CC v1
+:::caution
 
-**Trigger Type:** `Regex`
+If you are adding this command for the first time, consider looking at [version two](ghost-ping-v2) of the ghost-ping detector instead.
 
-**Trigger:** `.*`  
-Optional Trigger: `<@!?\d{17,19}>`
+:::
 
-```go
-{{/*
-    Ghost-Ping Detector CC v1
+This command detects ghost pings.
 
-    Recommended Trigger Type: Regex
-    Recommended Trigger: `.*`
-    Optional Trigger: `<@!?\d{17,19}>`
+:::tip Ghost pings
 
-    Credits:
-    Devonte <https://github.com/devnote-dev>
-*/}}
+A ghost ping is when you mention a user and then delete the message, leaving a ping that cannot be found: hence the term "ghost ping".
 
-{{/* THINGS TO CHANGE */}}
+:::
 
-{{ $CHECK := false }} {{/* Change to "true" for double exec-check */}}
+:::note
 
-{{/* ACTUAL CODE - DO NOT TOUCH */}}
+This command only works if the ghost ping was deleted within 5 seconds of being sent (or 10 seconds if [`$CHECK` is enabled](ghost-ping-v1/#configuration)).
 
-{{ if .ExecData }}
-    {{ $mentions := "" }}{{ $ping := false }}
+:::
 
-    {{ if ($m := getMessage nil .ExecData.message) }}
-        {{ if not $m.Mentions }}
-            {{ $ping = true }}
-        {{ end }}
-    {{ else }}
-        {{ $ping = true }}
-    {{ end }}
+## Trigger
 
-    {{ if $ping }}
-        {{ if gt (len .ExecData.mentions) 1 }}
-            {{ range .ExecData.mentions }}
-                {{- $mentions = joinStr ">, <@" $mentions . -}}
-            {{ end }}
-        {{ else }}
-            {{ $mentions = index .ExecData.mentions 0 }}
-        {{ end }}
+**Type:** `Regex`<br />
+**Trigger:** `<@!?\d{17,19}>` or `\A`.
 
-        {{/* Message to send when a ping is detected: */}}
-        {{ sendMessage nil (print "Ghost ping detected by <@" .ExecData.author "> - <@" $mentions ">") }}
-    {{ else }}
-        {{ if and $CHECK (not .ExecData.break) }}
-            {{ $ids := cslice }}
-            {{ range .Message.Mentions }}
-                {{- $ids = $ids.Append (str .ID) -}}
-            {{ end }}
+## Configuration
 
-            {{ execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "content" .Message.Content "break" true) }}
-        {{ end }}
-    {{ end }}
-{{ else }}
-    {{ if .Message.Mentions }}
-        {{ $ids := cslice }}
-            {{ range .Message.Mentions }}
-                {{ $ids = $ids.Append (str .ID) }}
-            {{ end }}
+- `$CHECK`<br />
+  Whether to schedule two `execCC` checks. The way this command works is that it checks after 5 seconds whether the message was deleted. This does mean that if you delete the message more than 5 seconds after message creation, this CC won't catch it by default.
 
-        {{ execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "break" false) }}
-    {{ end }}
-{{ end }}
+  By enabling this option, the command will check twice instead of once, meaning that messages deleted between 5 and 10 seconds of being sent will be caught as well.
+
+## Code
+
+```go file=../../../src/utilities/ghostping_v1.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@devnote-dev](https://github.com/devnote-dev).

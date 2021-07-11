@@ -3,45 +3,33 @@ sidebar_position: 9
 title: Flag Message
 ---
 
-This command allows users to flag messages by reacting with a custom emoji.
+This command allows users to flag messages for staff review through reactions.
 
-**Trigger Type:** `Reaction` on `Reaction Added only`.
+## Trigger
 
-```go
-{{/*
-	This command allows users to flag messages by reacting with a custom emoji.
+**Type:** `Reaction`<br />
+**Additional options:** `Added reactions only`
 
-	Recommended trigger: Reaction trigger on REACTION ADD only.
-*/}}
+## Configuration
 
-{{/* CONFIGURATION VARIABLES START */}}
-{{ $reportEmoji := 675512907391434759 }} {{/* ID of report emoji */}}
-{{ $reportChannel := 675513854888771595 }}
-{{/* CONFIGURATION VARIABLES END */}}
+- 📌 `$reportEmoji`<br />
+  ID of the report emoji.
 
-{{ if eq .Reaction.Emoji.ID $reportEmoji }}
-	{{ $isFirst := true }}
-	{{ range .ReactionMessage.Reactions }}
-		{{- if and (eq .Emoji.ID $reportEmoji) (gt .Count 1) }} {{- $isFirst = false }} {{- end -}}
-	{{ end }}
-	{{ if $isFirst }}
-		{{ $attachment := "" }}
-		{{ with .ReactionMessage.Attachments }} {{ $attachment = (index . 0).ProxyURL }} {{ end }}
-		{{ sendMessage $reportChannel (cembed
-			"title" (printf "❯ Message was flagged in #%s" .Channel.Name)
-			"color" 0xDC143C
-			"description" (or .ReactionMessage.Content "*No content*")
-			"image" (sdict "url" $attachment)
-			"fields" (cslice
-				(sdict "name" "❯ Flagged by" "value" .User.String "inline" true)
-				(sdict "name" "❯ Message Author" "value" .ReactionMessage.Author.String "inline" true)
-				(sdict "name" "❯ Message" "value" (printf "[Jump to](https://discordapp.com/channels/%d/%d/%d)" .Guild.ID .Channel.ID .ReactionMessage.ID) "inline" true)
-				(sdict "name" "❯ Logs" "value" (printf "[View here](%s)" (execAdmin "log")) "inline" true)
-			)
-			"footer" (sdict "text" "Flagged at")
-			"timestamp" currentTime
-		) }}
-	{{ end }}
-	{{ deleteMessageReaction nil .ReactionMessage.ID .User.ID (printf "%s:%d" .Reaction.Emoji.Name $reportEmoji) }}
-{{ end }}
+  :::note
+
+  This system only supports using custom emojis for now. Support for default Discord emojis may be added in a future update.
+
+  :::
+
+- 📌 `$reportChannel`<br />
+  Channel to post flagged messages.
+
+## Code
+
+```go file=../../../src/utilities/flag_message.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).
