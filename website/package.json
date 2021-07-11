@@ -1,6 +1,7 @@
 {
 	"name": "website",
 	"version": "0.0.0",
+	"license": "MIT",
 	"private": true,
 	"scripts": {
 		"docusaurus": "docusaurus",
