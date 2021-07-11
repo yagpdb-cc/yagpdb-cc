@@ -36,7 +36,7 @@ The usage of this command is very similar to that of the `SimpleEmbed` built-in 
 
 #### Flags to modify edit behaviour
 
-- `-force` - Completely overwrites the existing message. By default, the changes are merged into the existing message - for example, `-edit 123 -color FF0000` would just edit the color and keep the embed. However, by supplying the `-force` flag, `-edit 123 -color FF0000` would remove any other parts of the embed, keeping only the new color.
+- `-force` - Completely overwrites the existing message. By default, the changes are merged into the existing message - for example, `-edit 123 -color FF0000` would just edit the color and keep the embed. However, by supplying the `-force` flag, `-edit 123 -color FF0000 -force` would remove any other parts of the embed, keeping only the new color.
 
 - `-clrembed` - Removes the embed from a message previously containing an embed, such that it only contains the content.
 
