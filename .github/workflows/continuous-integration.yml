@@ -59,4 +59,4 @@ jobs:
       - name: Check template syntax
         uses: jo3-l/action-check-yag-tmpl-syntax@v2
         with:
-          include: '**/**.go.tmpl'
+          include: '**/*.go.tmpl'
