@@ -3,7 +3,7 @@ sidebar_position: 2
 title: Main CC
 ---
 
-Main tag command, provides CRUD tag functionality.
+Main tag command, allows users to create/update/delete/view tags.
 
 For more information about the tag system, see [this](overview) page.
 

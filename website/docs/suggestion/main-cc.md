@@ -3,7 +3,7 @@ sidebar_position: 2
 title: Main CC
 ---
 
-Main suggestion command, provides CRUD functionality for suggestions and admin commands to manage suggestions.
+Main suggestion command; allows users to create/update/delete suggestions in addition to allowing admins to manage suggestions.
 
 For more information about the suggestion system, see [this](overview) page.
 
