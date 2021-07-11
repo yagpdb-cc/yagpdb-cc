@@ -28,9 +28,9 @@ Now take your time to read through the leading comment and decide if you want to
 #### Disable removeAfkOnMessage
 
 ```go {2}
-{{/* CONFIGURATION VALUE STARTS HERE */}}
-{{ $removeAfkOnMessage := false}}{{/* Whether or not to remove the AFK status from users when they send a message. */}}
-{{/* CONFIGURATION VALUE ENDS HERE */}}
+{{/* Configuration values */}}
+{{ $removeAfkOnMessage := false}}
+{{/* End of configuration values */}}
 ```
 
 ### Leave Feed
