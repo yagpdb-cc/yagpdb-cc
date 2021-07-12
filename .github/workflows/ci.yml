@@ -66,6 +66,7 @@ jobs:
     name: Build and deploy website to GitHub Pages
     # Only run on pushes to master.
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    needs: [run-prettier]
     runs-on: ubuntu-latest
     defaults:
       run:
