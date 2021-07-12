@@ -1,5 +1,4 @@
 ---
-sidebar_position: 20
 title: Text to Emoji Convertor
 ---
 

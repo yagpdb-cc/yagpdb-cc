@@ -1,5 +1,4 @@
 ---
-sidebar_position: 16
 title: Question of the Day
 ---
 

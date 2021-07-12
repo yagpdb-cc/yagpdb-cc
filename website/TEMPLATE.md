@@ -1,5 +1,4 @@
 ---
-sidebar_position: replace-this-with-a-number
 title: name-of-your-command
 ---
 

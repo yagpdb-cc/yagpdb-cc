@@ -1,5 +1,4 @@
 ---
-sidebar_position: 19
 title: Starboard V1
 ---
 

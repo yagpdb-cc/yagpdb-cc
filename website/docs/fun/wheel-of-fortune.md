@@ -1,5 +1,4 @@
 ---
-sidebar_position: 22
 title: Wheel of Fortune
 ---
 

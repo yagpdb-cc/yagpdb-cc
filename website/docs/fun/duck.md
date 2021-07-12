@@ -1,5 +1,4 @@
 ---
-sidebar_position: 10
 title: Duck Image Generator
 ---
 

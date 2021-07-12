@@ -1,6 +1,5 @@
 ---
 title: Overview
-sidebar_position: 1
 ---
 
 These commands are centered around moderation. They are, for the most part, standalone: pick and choose which CCs you wish to add.

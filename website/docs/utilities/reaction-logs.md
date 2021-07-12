@@ -1,5 +1,4 @@
 ---
-sidebar_position: 14
 title: Reaction Logs
 ---
 

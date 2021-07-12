@@ -1,5 +1,4 @@
 ---
-sidebar_position: 17
 title: View Time
 ---
 
