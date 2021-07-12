@@ -6,6 +6,7 @@ Thanks for considering a contribution to **yagpdb-cc**. We accept contributions 
 
 To understand how this repository is structured:
 
+- [`bin/`](./bin/) is a collection of short scripts for maintainers to help with keeping the repository tidy.
 - [`src/`](./src/) is where the custom command code is stored.
 - [`website/docs/`](./website/docs/) is where the documentation (part of the website) is stored.
 
@@ -13,7 +14,7 @@ To understand how this repository is structured:
 
 As noted above, there's a few things you have to do before contributing a new command to this repository. The sections below serve as a guide for new contributors.
 
-> **Note:** If you have questions, feel free to DM a project maintainer on Discord, ask in `#programming-discussion` channel on the YAGPDB support server, or open an issue here on GitHub.
+> **Note:** If you have questions, feel free to DM a project maintainer on Discord, ask in the `#programming-discussion` channel on the YAGPDB support server, or open an issue here on GitHub.
 
 ## Add a leading comment
 
@@ -115,41 +116,41 @@ Now, you're done with changes to your code. It's time to write summon your inner
 
 > **Note:** We know this part can be a bit confusing, so feel free to open an issue or just skip this part and ask for help when you make a Pull Request to the repository.
 
-One of the cool things about this repository is that we have a website! What's pretty cool about it is that you can write normal Markdown - the file format of what you're reading right now - and have it come out looking like a consistently styled document.
+Documentation is very important if you plan on contributing to this repository. As it's a bit complicated, we have a [page dedicated to explaining it](./WRITING-DOCUMENTATION.md) to it. which you should read now.
 
-All you need to do if you're adding a single command, really, is the following:
+## After you've finished...
 
-- Clone the [template](website/TEMPLATE.md) into `docs/some-folder/command-name.md`, e.g. `docs/fun/my-new-command.md`.
-- Fill out the values in the template to match your command.
-- That's it!
+Almost done! All you need to do now is to link to the website page in the code in the leading comment. The URL will be `https://yagpdb-cc.github.io/path/to/file`. For example, if the path to the documentation file was `website/docs/fun/my-command`, the URL would be `https://yagpdb-cc.github.io/fun/my-command`.
 
-If you need some examples, [the documentation for the edit command](./website/docs/utilities/edit.md) and [the documentation for the original starboard command](./website/docs/fun/starboardv1.md) are decent examples.
+Change your leading comment to use the following format:
 
-If you are adding a system of custom commands, it's a bit more complicated.
+```
+Brief description of command.
 
-### Is it hard to install?
+See <LINK> for more information.
 
-First, consider how hard it is (relative to other commands) to install your system of custom commands. Does it have many parts users might be confused about / have a lot of complex configuration? If so, you might need to write an installation guide. We have no template for this, but there are several examples.
+Author: name <https://github.com/your-handle-on-github>
+```
 
-See:
+For example, for our previous example with `sendMessage`, the final code might be:
 
-- [Version 2 of the giveaway system](./website/docs/giveaway/basic-v2/)
-- [Version 2 of the starboard system](./website/docs/fun/starboard/)
+```
+{{/*
+	Sends a greeting to YAGPDB in the chat.
 
-Note the structure: there is an `overview.md`, where the installation guide lies, and several files (one for each command) around it.
+	See <https://yagpdb-cc.github.io/fun/send-greeting>
 
-### Is it easy to install?
+	Author: jo3-l <https://github.com/jo3-l>
+*/}}
 
-If there's little to no configuration for your commands & you feel it's reasonably simple to install, you can skip the installation guide and instead simply write a quick overview of what your system does and then write documentation for your commands.
+{{sendMessage nil "Hello world, YAGPDB!"}}
+```
 
-See:
-
-- [The CAH Groups system](./website/docs/fun/cah-groups/)
-- [The Connect4 system](./website/docs/connect-four/)
+And you're done! Time to [open a PR](#how-do-i-request-for-my-code-to-be-added) : )
 
 # How do I request for my code to be added?
 
-After you've followed these steps, you are now ready to make a **Pull Request** (PR) to this repository. Take a look at [this article](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) if you aren't quite familiar with PRs or need a refresher. We have a PR description template in place that we recommend you follow.
+After you've followed these steps, you are now ready to make a **Pull Request** (PR) to this repository. Take a look at [this article](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) if you aren't quite familiar with PRs or need a refresher. We have a template for the PR description in place that we recommend you follow.
 
 ## What then?
 
