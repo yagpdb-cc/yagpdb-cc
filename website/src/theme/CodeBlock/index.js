@@ -96,7 +96,13 @@ export default function CodeBlock({ children, className: languageClassName, meta
 	let highlightLines = [];
 	const prismTheme = usePrismTheme(); // In case interleaved Markdown (e.g. when using CodeBlock as standalone component).
 
-	const content = Array.isArray(children) ? children.join('') : children;
+	let content = Array.isArray(children) ? children.join('') : children;
+
+	// Replace 4 spaces with tabs.
+	// Somewhere in the site generation process, tabs are being replaced with 4 spaces, which is undesirable.
+	// This is just a quick hotfix until we can find the root cause of the issue.
+	// TODO: Remove this once the above issue is fixed properly.
+	content = content.replace(/ {4}/g, '\t');
 
 	if (metastring && highlightLinesRangeRegex.test(metastring)) {
 		// Tested above
@@ -186,13 +192,6 @@ export default function CodeBlock({ children, className: languageClassName, meta
 						>
 							<code className={styles.codeBlockLines}>
 								{tokens.map((line, i) => {
-									// Replace 4 spaces with tabs.
-									// Somewhere in the site generation process, tabs are being replaced with 4 spaces, which is undesirable.
-									// This is just a quick hotfix until we can find the root cause of the issue.
-									// TODO: Remove this once the above issue is fixed properly.
-									for (const token of line) {
-										token.content = token.content.replace(/ {4}/g, '\t');
-									}
 									if (line.length === 1 && line[0].content === '') {
 										line[0].content = '\n'; // eslint-disable-line no-param-reassign
 									}
