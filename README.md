@@ -2,7 +2,7 @@
 
 <h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
-> <p align="center">An curated collection of CCs for your server</p>
+> <p align="center">A curated collection of CCs for your server</p>
 
 <p align="center">
 	<i>
