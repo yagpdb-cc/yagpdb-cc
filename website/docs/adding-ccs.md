@@ -6,7 +6,7 @@ title: Adding Custom Commands
 This collection of custom commands is separated into different categories.
 For example, fun commands can be found [here](fun/overview), while the giveaway system is located [here](giveaway/overview).
 
-Generally speaking, there are two kinds of commands. These are as follows:
+Generally speaking, there are two kinds of custom commands. These are as follows:
 
 - A **standalone** command, which you can add by itself. It should "just work" after you set it up.
 - A **system** of commands (sometimes called a **package**). As the name suggests, it is comprised of several custom commands.
