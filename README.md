@@ -41,7 +41,7 @@ If you are looking to contribute, please read our [contributing guide](https://g
 
 **[yagpdb-cc](https://github.com/yagpdb-cc/yagpdb-cc)** is currently maintained by a group of YAGPDB staff members: [@jo3-l](https://github.com/jo3-l), [@Satty9361](https://github.com/Satty9361), [@l-zeuch](https://github.com/l-zeuch), [@Pedro-Pessoa](https://github.com/Pedro-Pessoa), and [@DaviiD1337](https://github.com/DaviiD1337).
 
-It is licensed under the MIT License.
+It is licensed under the [MIT License](LICENSE.md).
 
 We would also like to thank everyone who has contributed, a list of which can be found [here](https://github.com/yagpdb-cc/yagpdb-cc/graphs/contributors). Thank you!
 
