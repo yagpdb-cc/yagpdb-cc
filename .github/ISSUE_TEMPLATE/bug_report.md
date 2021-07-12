@@ -1,8 +1,8 @@
 ---
 name: Bug report
-about: Create a issue about a possible bug in one of the CCs here
+about: Create a issue about a possible bug
 title: 'bug: '
-labels: 'bug'
+labels: 'kind/bug'
 assignees: ''
 ---
 

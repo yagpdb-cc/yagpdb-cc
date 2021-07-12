@@ -1,8 +1,8 @@
 ---
 name: Feature request
-about: Suggest an idea for the YAGPDB-CC repo
+about: Suggest an idea for the repository
 title: 'request: '
-labels: 'enhancement'
+labels: 'kind/feature'
 assignees: ''
 ---
 
