@@ -1,22 +1,45 @@
 ---
-sidebar_position: 4
 title: Parse Text
 ---
 
-Example of manually parsing into a `.CmdArgs` like slice from text.
+Code snippet to parse text into a slice of arguments, much like how `.CmdArgs` is constructed.
+
+## Code
+
+```go file=../../../src/code_snippets/parse_text.go.tmpl
+
+```
+
+## Usage
+
+First, add in the code snippet above:
 
 ```go
-{{/*
-	Example of manually parsing into a .CmdArgs like slice from text.
-*/}}
-
-{{/* Let $text be the text. */}}
-
-{{ $regex := `\x60(.*?)\x60|"(.*?)"|[^\s]+` }}
-{{ $clean := cslice }}
-{{ range reFindAllSubmatches $regex $text }}
-	{{- $clean = $clean.Append (or (index . 2) (index . 1) (index . 0)) -}}
-{{ end }}
-
-{{ $cmdArgs := $clean.StringSlice }}
+{{/* code snippet goes here */}}
 ```
+
+Next, change the value of `$text` to the value you like. Say we wanted to use `.Message.Content` rather than `.StrippedMsg`:
+
+```diff {3}
+{{/* Let $text be the text. */}}
+- {{ $text := .StrippedMsg }}
++ {{ $text := .Message.Content }}
+{{/* rest of code snippet goes here */}}
+```
+
+You may now access the parsed slice of arguments using `$clean`, which will be a `cslice`.
+
+```go {2}
+{{/* code snippet goes here */}}
+Parsed args: `{{json $clean}}`
+```
+
+:::tip
+
+You can convert `$clean` to a string slice (what `.CmdArgs`, `.Args`, and so on are) by using the `StringSlice` method: `{{$clean.StringSlice}}`.
+
+:::
+
+## Author
+
+This code snippet was written by [@jo3-l](https://github.com/jo3-l).

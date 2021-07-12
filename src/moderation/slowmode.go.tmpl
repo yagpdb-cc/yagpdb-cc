@@ -1,0 +1,49 @@
+{{/*
+	Custom slowmode system that deletes messages that violate the slowmode time configured. Allows configuring permissions that bypass slowmode.
+	See <https://yagpdb-cc.github.io/moderation/slowmode> for more information.
+ 
+	Author: sponge <https://github.com/Spongerooski>
+*/}}
+ 
+{{/* Configurable values */}}
+{{ $bypassperms := "ManageMessages" }}
+{{ $usageperms := "ManageMessages" }}
+{{/* End of configurable values */}}
+ 
+{{/* ACTUAL CODE */}}
+{{ $viewperms := (split (index (split (exec "viewperms") "\n") 2) ", ") }}
+{{ $usageaccess := in $viewperms $usageperms }}
+{{ $bypassaccess := in $viewperms $bypassperms }}
+{{ if $usageaccess }}
+{{ if $matches := reFindAllSubmatches `\A-slowmode on (\d+)` .Message.Content }}
+{{ $slowmodeduration := (index $matches 0 1) }}
+{{ with (dbGet 660 "channels").Value }}
+{{ $value := sdict . }}
+{{ $value.Set (str $.Channel.ID) (str $slowmodeduration) }}
+{{ dbSet 660 "channels" $value }}
+{{ else }}
+{{ dbSet 660 "channels" (sdict (str $.Channel.ID) (str $slowmodeduration)) }}
+{{ end }}
+done! slowmode has been set to `{{ $slowmodeduration }}s`
+{{ else if reFind `\A-slowmode off` .Message.Content }}
+{{ if $db := (dbGet 660 "channels").Value }}
+{{ $value := sdict $db }}
+{{ $value.Del (str $.Channel.ID) }}
+{{ dbSet 660 "channels" $value }}
+{{ end }}
+the slowmode has been removed from this channel
+{{ end }}
+{{ end }}
+{{ if not $bypassaccess }}
+{{ if $db := (dbGet 660 "channels").Value }}
+{{ $value := sdict $db }}
+{{ $get := $value.Get (str .Channel.ID) }}
+{{ if $get }}
+{{ if $slowmode := dbGet .User.ID (str .Channel.ID) }}
+{{ deleteTrigger 0 }}
+{{ else }}
+{{ dbSetExpire .User.ID (str .Channel.ID) "epic" (toInt $get) }}
+{{ end }}
+{{ end }}
+{{ end }}
+{{ end }}

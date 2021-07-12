@@ -1,49 +1,31 @@
 ---
-sidebar_position: 3
 title: View Channel Info
 ---
 
-This command allows you to view information about a given channel (defaulting to the current channel).
+This command views information about channels, defaulting to the current channel.
 
-**Trigger Type:** `Regex`
+## Trigger
 
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(channel)(-?info)?(\s+|\z)`
 
-**Usage:**  
-`-channelinfo [channel]`
+## Usage
 
-```go
-{{/*
-	This command allows you to view information about a given channel (defaulting to the current channel).
-	Usage: `-channelinfo [channel]`.
+- `-channel` - Views information about the current channel.
+- `-channel <channel>` - Views information about the channel provided.
 
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(channel)(-?info)?(\s+|\z)`
-*/}}
+:::tip Aliases
 
-{{ $channel := .Channel }}
-{{ $args := parseArgs 0 "**Syntax:** -channel [channel]" (carg "channel" "channel") }}
-{{ if $args.IsSet 0 }}
-	{{ $channel = $args.Get 0 }}
-{{ end }}
+Instead of `channel`, you can also use `channelinfo`.
 
-{{ $types := cslice "Text" "DM" "Voice" "Group DM" "Category" "News" "Store" }}
-{{ $nsfw := "No" }}
-{{ $parent := "*None set*" }}
-{{ if $channel.NSFW }} {{ $nsfw = "Yes" }} {{ end }}
-{{ with $channel.ParentID }} {{ $parent = printf "<#%d>" . }} {{ end }}
-{{ $createdAt := div $channel.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
-{{ sendMessage nil (cembed
-	"title" (printf "❯ Info for #%s" $channel.Name)
-	"fields" (cslice
-		(sdict "name" "❯ ID" "value" (str $channel.ID) "inline" true)
-		(sdict "name" "❯ Topic" "value" (or $channel.Topic "*None set*") "inline" true)
-		(sdict "name" "❯ Parent Channel" "value" $parent "inline" true)
-		(sdict "name" "❯ NSFW" "value" $nsfw "inline" true)
-		(sdict "name" "❯ Position" "value" (str (add $channel.Position 1)) "inline" true)
-		(sdict "name" "❯ Type" "value" (index $types $channel.Type) "inline" true)
-	)
-	"color" 14232643
-	"footer" (sdict "text" "Created at")
-	"timestamp" $createdAt
-) }}
+:::
+
+## Code
+
+```go file=../../../src/info/channel.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

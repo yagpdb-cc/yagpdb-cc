@@ -1,84 +1,45 @@
 ---
-sidebar_position: 13
 title: Question of the Day
 ---
 
-**Setup:**
+This command helps you manage a "Question of the Day" channel. It will resend QOTD messages and sends automatic reports about the last day's QOTD to a channel of your choice once you create a new QOTD.
 
-- Set the restrictions to only run in your QOTD channel
+## Trigger
 
-**Trigger Type:** `Regex`
-
+**Type:** `Regex`<br />
 **Trigger:** `\A`
 
-**Usage:**
+:::note Restrictions
 
-- "@QOTD What is your favourite food?" or "What is @QOTD's fav movie?". As long as you mention your QOTD role, it will work.
-- The bot will then remove that message and resend it. (So you don't get pinged when people reply to your message 😉)
-- On the next Question Of The Day, the bot will send a report to a channel of your choice with some info on the previous QOTD.
+Set this command to _only run_ in your QOTD channel in the channel restrictions.
 
-```go
-{{/*
-    SETUP:
-    - Set the restrictions to only run in your QOTD channel
-    - Set the trigger type to Regex and the trigger to: `\A`
+:::
 
-    USAGE:
-    - "@QOTD What is your favourite food?" or "What is @QOTD's fav movie?". As long as you mention your QOTD role, it will work.
-    - The bot will then remove that message and resend it. (So you don't get pinged when people reply to your message 😉)
-    - On the next Question Of The Day, the bot will send a report to a channel of your choice with some info on the previous QOTD.
+## Usage
 
-    CREDITS: SpecialEliteSNP <https://github.com/SpecialEliteSNP>
-*/}}
+- Simply mention your Question of the Day role in the right channel with a message, e.g. `@QOTD what is your favourite food?`
+  - The bot will then remove your message and re-send it.
 
-{{/* VARIABLES - You can edit these values */}}
-  {{/* Message when they try to answer the QOTD twice */}}
-    {{ $twice := "you can only answer the question once 😉" }}
+## Configuration
 
-  {{/* Your QOTD role */}}
-    {{ $qotd_role := 778990627534536745 }}
-  {{/* Role able to ask a QOTD. These are also an exception for answering a question twice */}}
-    {{ $staff_roles := cslice 763447831829938176 764103587223044116 778952687986802698 764054381535821825 775003755842109440 }}
+- `$twice`<br />
+  Warning message when users attempt to answer the QOTD twice.
 
-  {{/* Channel to send the QOTD report in after a new one is started */}}
-    {{ $report_channel := 797104575076368444 }}
+- 📌 `$qotd_role`<br />
+  ID of your question of the day role.
 
+- 📌 `$staff_roles`<br />
+  List of staff role IDs. Members with any of these roles are able to ask a QOTD. There is also an exception for answering a question twice.
 
-{{/* CODE - Don't edit this part */}}
-{{ $q := sdict }}{{ with (dbGet 20 "qotd").Value }}{{ $q = sdict . }}{{ end }}
-{{ $s := false }}{{ range .Member.Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
-{{ if not $q }}
-  {{ dbSet 20 "qotd" (sdict "l" (sdict "m" 0 "t" 0 "u" 0)) }}
-  {{ addReactions "☑" }}
-  {{ print .User.Mention ", <#" .Channel.ID "> is all set up as your QOTD channel!" }}
-{{ else if and $s (in .Message.MentionRoles $qotd_role) }}
-  {{ $e := sdict "title" "No report available!" "description" "QOTD was deleted" "color" 16734296 }}
-  {{ with getMessage nil $q.l.m }}
-    {{ $u := getMember $q.l.u }}
-    {{ $e = sdict "title" "QOTD Report" "color" 49306
-      "description" (printf "[**Question:**](https://discord.com/channels/%d/%d/%d)\n%s\n\n**Answers:**\n%d" $.Guild.ID $.Channel.ID $q.l.m .Content $q.l.t)
-      "footer" (sdict "text" $u.User.String "icon_url" ($u.User.AvatarURL "128"))
-      "timestamp" .Timestamp }}
-  {{ end }}
-  {{ if $q.l.m }}
-    {{ sendMessage $report_channel (cembed $e) }}
-  {{ end }}
-  {{ deleteTrigger 1 }}
-  {{ $m := sendMessageNoEscapeRetID nil .Message.Content }}
-  {{ range $k, $v := $q }}
-    {{ if eq $k "l" }}{{ $q.Set $k (sdict "m" $m "t" 0 "u" $.User.ID) }}
-    {{ else }}{{ $q.Set $k (sdict "a" 0 "n" $v.n) }}{{ end }}
-  {{ end }}
-  {{ dbSet 20 "qotd" $q}}
-{{ else }}
-  {{ if not ($q.Get (str .User.ID)).a }}
-    {{ $q.Set (str .User.ID) (sdict "a" 1 "n" (add ($q.Get (str .User.ID)).n 1)) }}
-    {{ $q.Set "l" (sdict "m" $q.l.m "t" (add $q.l.t 1) "u" $q.l.u) }}
-    {{ dbSet 20 "qotd" $q }}
-  {{ else if not $s }}
-    {{ deleteTrigger 1 }}
-    {{ print .User.Mention ", " $twice }}
-    {{ deleteResponse 5 }}
-  {{ end }}
-{{ end }}
+- 📌 `$report_channel`<br />
+  Channel to send the QOTD report to.
+
+## Code
+
+```go file=../../../src/fun/qotd.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@SpecialEliteSNP](https://github.com/SpecialEliteSNP).

@@ -1,78 +1,38 @@
 ---
-sidebar_position: 3
 title: Cancel Report
 ---
 
-This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes
-Reactions to make things easier for staff.
-This custom command manages and takes care of the cancellation requests.
+This command handles report cancellation requests for the custom report system.
 
-**Trigger Type:** `Regex`
+For more information about the custom report system, see [this](overview) page.
 
+## Trigger
+
+**Type:** `Regex`<br />
 **Trigger:** `\A-c(ancel)?r(eport)?(\s+|\z)`
 
-**Usage:**  
-`-cr <Message:ID> <Key:Text> <Reason:Text>`
+## Usage
 
-````go
-{{/*
-    This handy-dandy custom command-bundle allows a user to cancel their most recent report and utilizes
-    Reactions to make things easier for staff.
-    This custom command manages and takes care of the cancellation requests.
+- `-cr <id> <key> <reason>` - Cancels the report with the ID provided using the user's secret key and the reason given.
 
-    Usage: `-cr <Message:ID> <Key:Text> <Reason:Text>`
+:::tip
 
-    Recommended Trigger type and trigger: Regex trigger with trigger `\A-c(ancel)?r(eport)?(\s+|\z)`
+The values for the ID and key parameters are sent to users in DM when they run the report command.
 
-    Author: Luca Z. <https://github.com/l-zeuch>
-    License: MIT
-    Copyright: (c) 2021
-*/}}
+:::
 
-{{/*ACTUAL CODE*/}}
-{{$p := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "prefix")) 0 1}}
-{{$Escaped_Prefix := reReplace `[\.\[\]\-\?\!\\\*\{\}\(\)\|\+]` $p `\${0}`}}
-{{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}
-Did not set regex to match Server Prefix! {{deleteTrigger}}
-{{else}}
-{{if lt (len .CmdArgs) 3}}
-```{{.Cmd}} <Message:ID> <Key:Text> <Reason:Text>```
-Not enough arguments passed.
-{{else}}
-    {{$s := sdict (dbGet .Guild.ID "reportSettings").Value}}
-    {{$reportLog := (toInt $s.reportLog)}}
-    {{$reportID := ((index .CmdArgs 0)|toInt)}}
-    {{$report := index (getMessage $reportLog $reportID).Embeds 0|structToSdict}}
-    {{range $k, $v := $report}}
-        {{if eq (kindOf $v true) "struct"}}
-            {{$report.Set $k (structToSdict $v)}}
-        {{end}}
-    {{end}}
-    {{$user := index (reFindAllSubmatches `\A<@!?(\d{17,19})>` $report.Description) 0 1|toInt|userArg}}
-    {{$userKey := (dbGet .User.ID "key").Value|str}}
-    {{if eq $user.ID .User.ID}}
-            {{if eq "used" $userKey}}
-Your latest report was already cancelled!
-            {{else}}
-            {{if eq (index .CmdArgs 1) $userKey}}
-                {{if ge (len .CmdArgs) 3}}
-                    {{$reason := joinStr " " (slice .CmdArgs 2)}}
-                    {{with $report}}
-                        {{.Set "Author" (sdict "name" (printf "%s (ID %d)" $user $user.ID) "icon_url" ($user.AvatarURL "256"))}}
-                        {{.Footer.Set "Icon_URL" .Footer.IconURL}}
-                        {{.Set "description" (print .Description (printf "\nCancellation of this report was requested. \n Reason: `%s`" $reason))}}
-                        {{.Set "color" 16711935}}
-                        {{.Set "Fields" ((cslice).AppendSlice .Fields)}}{{.Fields.Set 5 (sdict "name" "Reaction Menu Options" "value" (printf "Deny request with ❌, accept with 👌, or ask for more information with ⚠️."))}}
-                    {{end}}
-                    {{editMessage $reportLog $reportID (complexMessageEdit "embed" $report)}}
-                    Cancellation requested, have a nice day!
-                    {{dbSet .User.ID "key" "used"}}
-                {{end}}
-            {{else}}
-Invalid key provided!
-            {{end}}
-        {{end}}
-        {{else}}
-You are not the author of this report!
-    {{end}}{{end}}{{end}}{{deleteResponse}}
-````
+:::info Aliases
+
+Instead of `cr`, you can also use `cancelreport`, `cancelr`, or `creport`.
+
+:::
+
+## Code
+
+```go file=../../../../src/moderation/report_system/cancel_report.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@l-zeuch](https://github.com/l-zeuch).

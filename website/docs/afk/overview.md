@@ -1,11 +1,5 @@
 ---
-sidebar_position: 1
 title: Overview
----
-
-This package includes two custom commands, both of which you will have to add to your server.
-In case you need a refresher, or don't know how to add a custom command, please read [this](https://learn.yagpdb.xyz/the-custom-command-interface) tutorial.
-
 ---
 
 ## Features
@@ -14,30 +8,33 @@ In case you need a refresher, or don't know how to add a custom command, please 
 - Notification in chat when an AFK member was mentioned
   - Estimated time of arrival, when set
 
----
+## Installation
 
-## Installing
-
-As usual, there are leading comments in each file describing where to put the script and which trigger to use. Additionally, we've documented how and where to add these scripts down below.
-
-| ⚠ To be able to add custom commands, you need contol panel write access. |
-| ------------------------------------------------------------------------ |
+As usual, there are instructions describing where to put the script and which trigger to use on the pages corresponding to the individual commands. Additionally, we've documented how and where to add these scripts down below.
 
 ### Main Command
 
-Add the main command [AFK CC](main-cc) as a new custom command. The trigger is a RegEx trigger type with `\A` or `.*`.  
-Alternatively, you can append the code to your already existing `\A` or `.*` trigger. Please do so only once, though.  
+Add the [main command](main-cc) as a new custom command. The trigger is a RegEx trigger type with `\A` or `.*`.
+
+:::tip
+
+If you're short on CC space, you can append the code to your already existing `\A` or `.*` trigger. Please do so only once, though.
+
+:::
+
 Now take your time to read through the leading comment and decide if you want to remove the AFK status of users, once they send a message. If so, leave it as is, otherwise set the config variable to `false`, as follows:
 
 #### Disable removeAfkOnMessage
 
-```go
-{{ $removeAfkOnMessage := false }}
+```go {2}
+{{/* Configuration values */}}
+{{ $removeAfkOnMessage := false}}
+{{/* End of configuration values */}}
 ```
 
 ### Leave Feed
 
-This is entirely optional, however generally encouraged to keep your custom command database clean. Add the code in [leaveFeed](leave-feed) to your leave message, which you can find like this:
+This is entirely optional, however generally encouraged to keep your custom command database clean. Add the code [here](leave-feed) to your leave message, which you can find like this:
 
 - Go to your control panel
 - Open up the Feeds & Notifications tab
@@ -46,9 +43,12 @@ This is entirely optional, however generally encouraged to keep your custom comm
 
 Once you've found it, just append the code at the end - don't forget to save!
 
-| ✅ The AFK System is now set up and ready to use! |
-| ------------------------------------------------- |
+:::info
 
----
+The AFK system is now set up and ready to use!
 
-This custom command package was authored by [@DaviiD1337](https://github.com/DaviiD1337). If you are experiencing any problems, feel free to open up an [issue](https://github.com/yagpdb-cc/yagpdb-cc/issues) or ask in the [support server](https://discord.com/invite/4udtcA5).
+:::
+
+## Author
+
+This custom command system was written by [@DaviiD1337](https://github.com/DaviiD1337).

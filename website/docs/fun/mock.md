@@ -1,35 +1,32 @@
 ---
-sidebar_position: 12
 title: Mock Text
 ---
 
 This command mocks text which is given (capitalizes every second letter, small-cases all other letters).
 
-**Trigger Type:** `Command`
+## Trigger
 
+**Type:** `Command`<br />
 **Trigger:** `mock`
 
-**Usage:**  
-`-mock <text>`
+## Usage
 
-```go
-{{/*
-	This command mocks text which is given (capitalizes every second letter, small-cases all other letters). Usage: `-mock <text>`.
+- `-mock <text>` - Mocks the text given.
 
-	Recommended trigger: Command trigger with trigger `mock`
-*/}}
-{{ with .StrippedMsg }}
-	{{ $out := "" }}
-	{{ range $k, $v := split (lower .) "" }}
-		{{- if mod $k 2 }} {{- $out = joinStr "" $out (upper $v) }}
-		{{- else }} {{- $out = joinStr "" $out $v }} {{- end -}}
-	{{ end }}
-	{{ sendMessage nil (cembed
-		"description" $out
-		"thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/316315555453730817.png?v=1")
-		"color" 16776960
-	) }}
-{{ else }}
-	Please provide some text for me to mock.
-{{ end }}
+### Example
+
 ```
+-mock hello world
+```
+
+Results in `hElLo WoRlD`.
+
+## Code
+
+```go file=../../../src/fun/mock.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

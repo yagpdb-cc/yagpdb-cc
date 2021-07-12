@@ -1,130 +1,47 @@
 ---
-sidebar_position: 6
 title: Lockdown
 ---
 
-This code is to simulate a lockdown command.
-What it does is delete every msg sent if the channel is locked, it doesnt actually change any permissions.
-No role or channel restriction needed, unless you want it.
-You only need to change the role IDs for you mods inside the CC, and NOTHING else.
+Simulates a lockdown command.
 
-**Trigger type:** `Regex`
+It accomplishes this by deleting every message sent if the channel is locked; it does not actually change any role permissions.
 
-**Trigger:** `.*`
+:::note
 
-**Usage 1:**  
-`-lock <channelID> <amount>`  
-`channelID` can be any channel in your server, and can also be `nil`  
-`amount` is the amount of msgs that will get deleted when you use the command (the most recent ones). It can be `0` or up to `50`.  
-Notice: Msg from moderators (if their roles ID is correctly listed) and pinned msgs won't be deleted.
+The reason this command locks down channels in such a roundabout way is because modifying channel permissions directly is not supported in YAGPDB template scripting.
+This may change in the future, but for now, this command is the closest you can get to a lockdown command.
 
-**Usage 2:**  
-`-unlock <channelID>`  
-Same principles as above, but it now unlocks the channel.
+:::
 
-```go
-{{/*
-     Lockdown CC
-	This code is to simulate a lockdown command.
-	What it does is delete every msg sent if the channel is locked, it doesnt actually change any permissions.
-	No role or channel restriction needed, unless you want it.
-	You only need to change the role IDs for you mods inside the CC, and NOTHING else.
+## Trigger
 
-	Trigger type: Regex
-	Trigger: `.*`
+**Type:** `Regex`<br />
+**Trigger:** `\A` or `.*`
 
-	Usage 1: -lock <channelID> <amount>
-	ChannelID can be any channel in your server, and can also be nil
-	Amount is the amount of msgs that will get deleted when you use the command (the most recent ones). It can be 0 or up to 50.
-	Notice: Msg from moderators (if their roles ID is correctly listed) and pinned msgs wont be deleted.
+## Usage
 
-	Usage 2: -unlock <channelID>
-	Same principles as above, but it now unlocks the channel.
-*/}}
+- `-lock <channel|'nil'> <amount>` - Locks down the channel provided (`nil` denotes the current channel) and deletes the `amount` most recent messages. To delete no messages, use `0` for amount. Messages from moderators will not be deleted.
+- `-unlock <channel>` - Unlocks a channel previously locked using this command.
 
+### Example
 
-{{/* USER VARIABLES */}}
-{{$ModsRoles := cslice 674429313097007106 673258482211749917}}
-{{/* END OF USER VARIABLES */}}
-
-
-
-{{/* ACTUAL CODE DONT TOUCH */}}
-{{$isMod := false}} {{range .Member.Roles}} {{if in $ModsRoles .}} {{$isMod = true}} {{end}} {{end}}
-{{$isCmd := false}} {{if (and (reFind `\A-(un)?lock` (lower .Cmd)) ($isMod))}} {{$isCmd = true}} {{end}}
-{{if and (dbGet .Channel.ID "is_blocked") (not $isMod)}} {{deleteTrigger 1}}
-{{else}}
-    {{if not $isMod}}
-        {{with (dbGet .Channel.ID "msg_tracker").Value}}
-            {{$slice := cslice.AppendSlice .}}
-            {{if lt (len $slice) 50}}
-                {{$slice = $slice.Append $.Message.ID}}
-                {{dbSet $.Channel.ID "msg_tracker" $slice}}
-            {{else}}
-                {{$slice = slice $slice 1}}
-                {{$slice = $slice.Append $.Message.ID}}
-                {{dbSet $.Channel.ID "msg_tracker" $slice}}
-            {{end}}
-        {{else}}
-            {{$firstID := cslice .Message.ID}}
-            {{dbSet .Channel.ID "msg_tracker" $firstID}}
-        {{end}}
-    {{end}}
-{{end}}
-{{if $isCmd}}
-    {{$split := split .Cmd " "}}
-    {{if ge (len $split) 2}}
-        {{$channel := reReplace `<|>|#` (index $split 1) ""}}
-        {{if eq (lower $channel) "nil"}} {{$channel = .Channel.ID}}
-		{{else if reFind `\d{17,19}` $channel}} {{$channel = toInt $channel}}
-        {{end}}
-        {{if getChannel $channel}}
-            {{if not (reFind `^-un` (lower .Cmd))}}
-                {{if eq (len $split) 3}}
-                    {{$amount := (toInt (index $split 2))}}
-                    {{if dbGet $channel "is_blocked"}}
-                        The channel <#{{$channel}}> is already blocked.
-                    {{else}}
-                        {{dbSet $channel "is_blocked" true}}
-                        {{with (dbGet $channel "msg_tracker").Value}}
-                            {{$slice := cslice.AppendSlice .}}
-                            {{if gt $amount (len $slice)}} {{$amount = sub (len $slice) 1}} {{end}}
-                            {{if gt $amount 0}}
-                                {{$counter := 1}}
-                                {{range seq 0 $amount}}
-                                    {{- with (getMessage $channel (index $slice (sub (len $slice) $counter))) -}}
-                                        {{- if not .Pinned -}}
-                                            {{- deleteMessage $channel .ID 1 -}}
-                                        {{- end -}}
-                                    {{- end -}}
-                                    {{- $counter = add $counter 1 -}}
-				{{end}}
-                                {{$slice = slice $slice 0 (sub (len $slice) $amount)}}
-                                {{dbSet $channel "msg_tracker" $slice}}
-                            {{end}}
-                        {{end}}
-                        The channel <#{{$channel}}> is now blocked.
-                    {{end}}
-                {{else}}
-                    {{print "Correct usage is: -lock <channelID> <amount of msgs to del>\n``ChannelID`` can be nil and ``amount of msgs`` can be 0."}}
-                {{end}}
-            {{else}}
-                {{if eq (len $split) 2}}
-                    {{if dbGet $channel "is_blocked"}}
-                        The channel <#{{$channel}}> is no longer blocked.
-                        {{dbDel $channel "is_blocked"}}
-                    {{else}}
-                        The channel <#{{$channel}}> is not blocked.
-                    {{end}}
-                {{else}}
-                    {{print "Correct usage is: -unlock <channelID>\n``ChannelID`` can be nil"}}
-                {{end}}
-            {{end}}
-        {{else}}
-            Thats not a valid channel.
-        {{end}}
-    {{else}}
-        {{print "**Correct usage is:**\n`-unlock <channelID>`\n`-lock <channelID> <amount of msgs to del>`"}}
-    {{end}}
-{{end}}
 ```
+-lock nil 5
+```
+
+Would lock the current channel and delete the 5 most recent messages, excluding those of moderators.
+
+## Configuration
+
+- 📌 `$ModsRoles`<br />
+  List of role IDs. A member with any one of these roles will be considered a moderator and will be exempt from lockdown.
+
+## Code
+
+```go file=../../../src/moderation/lockdown.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@Pedro-Pessoa](https://github.com/Pedro-Pessoa).

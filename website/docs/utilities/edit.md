@@ -1,164 +1,68 @@
 ---
-sidebar_position: 6
 title: Edit Message
 ---
 
-This command is a tool for editing messages sent by YAGPDB.
+This command is a tool for editing messages sent by YAGPDB, with embed support.
 
-**Flags:**
-`-content`: To Change Content  
-`-title`, `-desc`, `-image`, `-thumbnail`, `-url`, `-author`, `-authoricon`, `-authorurl`, `-footer`, `-footericon`, `-color`: To Edit Embed  
-`-force`: Makes a new embed with provided fields and discards previous embed (default behavior is simply editing provided fields of embed while preserving other fields)  
-`-clrembed`: To remove the embed from a message previously containing embed (so that now it has only content. Note, You cant remove embed if content is also null)
+## Trigger
 
-**Trigger Type:** `Command`
-
+**Type:** `Command`<br />
 **Trigger:** `edit`
 
-**Usage:**  
-`-edit [channel] <msg> <flags...>`
+## Usage
 
-```go
-{{/*
-	This command is a tool for editing messages sent by YAGPDB.
-	Usage: `-edit [channel] <msg> <flags...>`.
+`-edit [channel] <msg> <flags...>` - Edits the message provided.
 
-	Recommended trigger: Command trigger with trigger `edit`.
-	Flags:  -content : To Change Content
-		-title, -desc, -image, -thumbnail, -url, -author, -authoricon, -authorurl, -footer, -footericon, -color : To Edit Embed
-		-force : Makes a new embed with provided fields and discards previous embed (default behavior is simply editing provided fields of embed while preserving other fields)
-		-clrembed : To remove the embed from a message previously containing embed (so that now it has only content. Note, You cant remove embed if content is also null)
-*/}}
+The usage of this command is very similar to that of the `SimpleEmbed` built-in command. You specify a channel (defaulting to the current channel), a message, and some flags to specify which fields to edit.
 
-{{$helpMsg := sdict
-	"title" "`-edit [channel] <msg> <new-content>`"
-	"color" 14232643
-	"description" "Please provide a valid message (which was sent by YAGPDB).\n\nIf the message is an embed, you can use the syntax from the `-se` command to edit it: `-edit [channel] <msg> -title \"Hello world\" -desc \"Foobar\"`."
-}}
-{{$error := ""}}
+### Available Flags
 
-{{$flags := sdict "-title" "Title" "-desc" "Description" "-url" "URL" "-image" "Image" "-thumbnail" "Thumbnail" "-author" "Author" "-authoricon" "Author" "-authorurl" "Author" "-footer" "Footer" "-footericon" "Footer" "-color" "Color" "-content" "Content" "-force" "Force" "-clrembed"  "Clear"}}
-{{$subField := sdict "-image" "URL" "-thumbnail" "URL" "-author" "Name" "-authoricon" "IconURL" "-authorurl" "URL" "-footer" "Text" "-footericon" "IconURL"}}
-{{$channel := .Channel}}
-{{$multipliers := cslice 1048576 65536 4096 256 16 1}}
-{{$hex2dec := sdict "A" 10 "B" 11 "C" 12 "D" 13 "E" 14 "F" 15}}
-{{$args := cslice}}
-{{$id := ""}}
+#### Flags to edit message
 
-{{if .CmdArgs}}
-	{{$channelID := ""}}
-	{{with reFindAllSubmatches `<#(\d+)>` (index .CmdArgs 0)}}{{$channelID = index . 0 1}}{{end}}
-	{{$temp := getChannel (or $channelID (index .CmdArgs 0))}}
-	{{if $temp}}
-		{{if lt (len .CmdArgs) 3}}
-			{{$error = "Insufficient number of Args"}}
-		{{else}}
-			{{$channel = $temp}}
-			{{$id = toInt64  (index .CmdArgs 1)}}
-			{{$args = slice .CmdArgs 2}}
-		{{end}}
-	{{else if (ge (len .CmdArgs) 2)}}
-		{{$id = toInt64 (index .CmdArgs 0)}}
-		{{$args = slice .CmdArgs 1}}
-	{{else}}
-		{{$error = "Insufficient number of Args"}}
-	{{end}}
-{{end}}
+| Flag                 | Description                                          | Example                                            |
+| -------------------- | ---------------------------------------------------- | -------------------------------------------------- |
+| `-content <content>` | Sets the content of the message                      | `-content hello world`                             |
+| `-title <title>`     | Sets the title of the embed in the message           | `-title new title`                                 |
+| `-desc <desc>`       | Sets the description of the embed in the message     | `-desc my desc`                                    |
+| `-image <url>`       | Sets the image URL of the embed in the message       | `-image https://i.imgur.com/vfbFEif.jpeg`          |
+| `-thumbnail <url>`   | Sets the thumbnail URL of the embed in the message   | `-thumbnail https://i.imgur.com/vfbFEif.jpeg`      |
+| `-url <url>`         | Sets the URL of the embed in the message             | `-url https://www.youtube.com/watch?v=oHg5SJYRHA0` |
+| `-author <name>`     | Sets the author name of the embed in the message     | `-author foo`                                      |
+| `-authoricon <url>`  | Sets the author icon of the embed in the message     | `-authoricon https://i.imgur.com/vfbFEif.jpeg`     |
+| `-footer <text>`     | Sets the footer text of the embed in the message     | `-footer bar baz`                                  |
+| `-footericon <url>`  | Sets the footer icon URL of the embed in the message | `-footericon https://i.imgur.com/vfbFEif.jpeg`     |
+| `-color <hex>`       | Sets the color of the embed in the message           | `-color FF0000`                                    |
 
-{{$content := ""}}{{$embed := sdict}}{{$Oembed := sdict}}{{$embedPresent := false}}{{$clear := false}}
-{{if not $error}}
-	{{ $msg := getMessage $channel.ID $id}}
-	{{with $msg}}
-		{{if eq .Author.ID 204255221017214977}}
-			{{$content = .Content}}
-			{{if .Embeds}}{{$embed = structToSdict (index .Embeds 0)}}
-				{{range $k, $v := $embed}}{{if eq (kindOf $v true) "struct"}}{{$embed.Set $k (structToSdict $v)}}{{end}}{{end}}{{$embedPresent = true}}
-			{{end}}
-		{{else}}
-			{{$error = "<@204255221017214977> is not Author"}}
-		{{end}}
-	{{else}}
-		{{$error = "Unknown Message"}}
-	{{end}}
-{{end}}
+#### Flags to modify edit behaviour
 
-{{if not $error}}
-	{{$parseFlag := 2}}{{$currentFlag := ""}}{{$currentField := ""}}{{$skip := 0}}
-	{{range $args}}
-		{{- if and (not $error) (gt $parseFlag 1)}}
-			{{- if ($f := $flags.Get (lower .))}}
-				{{- if eq $f "Force"}}
-					{{- $embed = sdict}}{{range $k,$v :=$Oembed}}{{$embed.Set $k $v}}{{end}}{{$Oembed = sdict}}{{$parseFlag = 1}}{{$currentFlag = ""}}{{$skip = 1}}
-				{{- else if eq $f "Clear"}}
-					{{- $embed = $.nil}}{{$parseFlag = 1}}{{$clear = true}}{{$currentFlag = ""}}{{$skip = 1}}
-				{{- else if and $clear (ne $f "Content")}}
-					{{- $error = print "Parsing Error: Invalid flag: " . ". Attempting to Both Clear and Edit Embed"}}
-				{{- else}}
-					{{- $currentFlag = $f}}{{$parseFlag = 0}}{{$currentField = $subField.Get (lower .)}}
-				{{- end}}
-			{{- end}}
-		{{- end}}
+- `-force` - Completely overwrites the existing message. By default, the changes are merged into the existing message - for example, `-edit 123 -color FF0000` would just edit the color and keep the embed. However, by supplying the `-force` flag, `-edit 123 -color FF0000 -force` would remove any other parts of the embed, keeping only the new color.
 
-		{{- if and (not $error) $parseFlag (not $skip)}}
-			{{- if $currentFlag}}
-				{{- if in (cslice "Description" "Title" "URL") $currentFlag}}
-					{{- if eq $parseFlag 1}}{{$embed.Set $currentFlag ""}}{{$Oembed.Set $currentFlag ""}}{{end}}
-					{{- $embed.Set $currentFlag (joinStr " " ($embed.Get $currentFlag) .)}}{{$Oembed.Set $currentFlag (joinStr " " ($Oembed.Get $currentFlag) .)}}{{$embedPresent = true}}
-				{{- else if eq $currentFlag "Color"}}
-					{{- if eq $parseFlag 1}}
-						{{- $regex := `\A(?:#?([a-fA-F\d]{1,6}))\z`}}
-						{{- with reFindAllSubmatches $regex .}}
-							{{- $hex := printf "%06s" (index . 0 1) | upper}}
-							{{- $dec := 0}}
-							{{- range $k, $v := split $hex ""}}
-								{{- $multiplier := index $multipliers $k}}
-								{{- $num := or ($hex2dec.Get $v) $v }}
-								{{- $dec = add $dec (mult $num $multiplier)}}
-							{{- end}}
-							{{- $embed.Set $currentFlag $dec}}{{$Oembed.Set $currentFlag $dec}}
-						{{- else}}
-							{{- $error = "Parsing Error: color was not in correct format (use hex)" }}
-						{{- end}}
-					{{- else}}
-						{{- $error = "Parse Error: too many arguments to Color"}}
-					{{- end}}
-					{{- $embedPresent = true}}
-				{{- else if eq $currentFlag "Content"}}{{if eq $parseFlag 1}}{{$content = ""}}{{end}}{{$content = joinStr " " $content .}}
-				{{- else}}
-					{{- if eq $parseFlag 1}}
-						{{- $tmp :=or ($embed.Get $currentFlag) sdict}}{{$tmpO :=or ($Oembed.Get $currentFlag) sdict}}
-						{{- $tmp.Set $currentField ""}}{{$tmpO.Set $currentField ""}}
-						{{- $embed.Set $currentFlag $tmp}}{{$Oembed.Set $currentFlag $tmpO}}{{$embedPresent = true}}
-					{{- end}}
-					{{- $cFlag := $embed.Get $currentFlag}}{{$cFlagO := $Oembed.Get $currentFlag}}
-					{{- $cFlag.Set $currentField (joinStr " " ($cFlag.Get $currentField) .)}}{{$cFlagO.Set $currentField (joinStr " " ($cFlagO.Get $currentField) .)}}
-				{{- end}}
-			{{- else}}
-				{{- $error = (print "Parsing Error:  Invalid flag: " . )}}
-			{{- end}}
-		{{- end}}
-		{{- $parseFlag = add $parseFlag 1}}{{$skip = 0}}
-	{{- end}}
+- `-clrembed` - Removes the embed from a message previously containing an embed, such that it only contains the content.
 
-	{{if $embed}}
-		{{if $embed.Author}}{{$embed.Author.Set "Icon_URL" $embed.Author.IconURL}}{{end}}
-		{{if $embed.Footer}}{{$embed.Footer.Set "Icon_URL" $embed.Footer.IconURL}}{{end}}
-	{{end}}
-	{{if (not $embedPresent)}}{{$embed = $.nil}}{{end}}
+### Examples
 
-	{{if not $error}}
-		{{if or $content (ne (print $embed) "<nil>")}}
-			{{editMessage $channel.ID $id (complexMessageEdit "content" $content "embed" $embed)}}
-			Done :+1:
-		{{else}}
-			{{$error = "Content and embed cannot be null at the same time."}}
-		{{end}}
-	{{end}}
-{{end}}
+#### To edit embed
 
-{{if $error}}
-	{{$helpMsg.Set "description" (print "**Error** - `" $error  "`\n" ($helpMsg.Get "description"))}}
-	{{sendMessage nil (cembed $helpMsg)}}
-{{end}}
-{{deleteResponse 5}}
 ```
+-edit #channel 123 -title My new title -url https://www.youtube.com/watch?v=oHg5SJYRHA0
+```
+
+Would edit the message with ID `123` in channel `#channel` to have embed title `My new title` and set the embed URL to `https://www.youtube.com/watch?v=oHg5SJYRHA0`.
+
+#### To completely overwrite
+
+```
+-edit 123 -title foo -desc bar -force
+```
+
+Would edit the message with ID `123` in current channel to have embed title `foo` and description `bar`, removing any other parts of the embed or message content.
+
+## Code
+
+```go file=../../../src/utilities/edit.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@Satty9361](https://github.com/Satty9361).

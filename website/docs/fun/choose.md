@@ -1,27 +1,32 @@
 ---
-sidebar_position: 3
 title: Choose Item
 ---
 
-This command makes YAGPDB choose a given item from the ones provided.
+This command chooses an item from the ones provided.
 
-**Trigger Type:** `Command`
+## Trigger
 
+**Type:** `Command`<br />
 **Trigger:** `choose`
 
-**Usage:**  
-`-choose <...items>`
+## Usage
 
-```go
-{{/*
-	This command makes YAGPDB choose a given item from the ones provided. Usage: `-choose <...items>`.
+- `-choose <...items>` - Choose an item from the ones provided. If an item has spaces in it, put quotes around it.
 
-	Recommended trigger: Command trigger with trigger `choose`.
-*/}}
+### Example
 
-{{ if .CmdArgs }}
-	{{ .User.Mention }}, I choose **{{ index .CmdArgs (randInt (len .CmdArgs)) }}**!
-{{ else }}
-	Please provide some items for me to choose: for example, `-choose "go to sleep" "stay awake" no`.
-{{ end }}
 ```
+-choose "go to sleep" eat "watch tv"
+```
+
+Would result in one of `go to sleep`, `eat`, or `watch tv`.
+
+## Code
+
+```go file=../../../src/fun/choose.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

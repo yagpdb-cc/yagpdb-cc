@@ -1,3 +1,44 @@
+const pagesInRootWithFixedOrder = ['introduction', 'adding-ccs'];
+const pagesInCategoryWithFixedOrder = ['overview'];
+
+function reorderSidebarItems(items, pagesWithFixedOrder) {
+	const result = items.map((item) => {
+		if (item.type === 'category') {
+			return {
+				...item,
+				items: reorderSidebarItems(item.items, pagesInCategoryWithFixedOrder),
+			};
+		}
+		return item;
+	});
+
+	// Shift all categories to the front, then shift all ordered items to the front.
+	const [ordered, rest] = partition(
+		partition(result, (item) => item.type === 'category').flat(1),
+		(item) => item.type === 'doc' && pagesWithFixedOrder.includes(getPageName(item.id)),
+	);
+
+	// Sort the ordered items found by their position.
+	ordered.sort(
+		(a, b) => pagesWithFixedOrder.indexOf(getPageName(a.id)) - pagesWithFixedOrder.indexOf(getPageName(b.id)),
+	);
+	return [...ordered, ...rest];
+}
+
+function getPageName(id) {
+	return id.split('/').pop();
+}
+
+function partition(items, predicate) {
+	const pass = [];
+	const fail = [];
+	for (const item of items) {
+		if (predicate(item)) pass.push(item);
+		else fail.push(item);
+	}
+	return [pass, fail];
+}
+
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
 	title: 'YAGPDB Custom Commands',
@@ -27,9 +68,15 @@ module.exports = {
 			items: [
 				{
 					type: 'doc',
-					docId: 'overview',
+					docId: 'introduction',
 					position: 'left',
-					label: 'YAGPDB CCs',
+					label: 'Introduction',
+				},
+				{
+					type: 'doc',
+					docId: 'adding-ccs',
+					position: 'left',
+					label: 'Adding custom commands',
 				},
 				{
 					href: 'https://github.com/yagpdb-cc/yagpdb-cc/tree/master',
@@ -85,6 +132,10 @@ module.exports = {
 					editUrl: 'https://github.com/yagpdb-cc/yagpdb-cc/edit/master/website',
 					routeBasePath: '/',
 					remarkPlugins: [require('remark-code-import')],
+					sidebarItemsGenerator: async function ({ defaultSidebarItemsGenerator, ...options }) {
+						const sidebarItems = await defaultSidebarItemsGenerator(options);
+						return reorderSidebarItems(sidebarItems, pagesInRootWithFixedOrder);
+					},
 				},
 				blog: false,
 				theme: {

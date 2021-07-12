@@ -1,44 +1,25 @@
 ---
-sidebar_position: 14
 title: Repeat Phrase
 ---
 
-This command repeats a given phrase.
+This command repeats text provided.
 
-**Trigger Type:** `Command`
+## Trigger
 
+**Type:** `Command`<br />
 **Trigger:** `repeat`
 
-**Usage:**  
-`-repeat <amount> <phrase>`
+## Usage
 
-```go
-{{/*
-	This command repeats a given phrase. Usage: `-repeat <phrase>` or `-repeat <amount> <phrase>`.
+- `-repeat <phrase>` - Repeats `phrase` 5 times (you can change this in the code). If `phrase` has spaces in it, you should put quotes around it; for example, `-repeat "hello world"`.
+- `-repeat <amount> <phrase>` - Repeats `phrase` the specified number of times.
 
-	Recommended trigger: Command trigger with trigger `repeat`
-*/}}
+## Code
 
-{{ $msg := "" }}
-{{ if eq (len .CmdArgs) 1 }}
-	{{ $phrase := index .CmdArgs 0 }}
-	{{ range seq 0 5 }}
-		{{- $msg = joinStr "\n" $msg $phrase -}}
-	{{ end }}
-	{{ sendMessage nil $msg }}
-{{ else if .CmdArgs }}
-	{{ $count := index .CmdArgs 0 | toInt }}
-	{{ $phrase := slice .CmdArgs 1 | joinStr " " }}
-	{{ if and $count (le $count 2000) }}
-		{{ range seq 0 $count }}
-			{{- $msg = joinStr "\n" $msg $phrase -}}
-		{{ end }}
-		{{ if le (len $msg) 2000 }} {{ sendMessage nil $msg }}
-		{{ else }} That message was too long! {{ end }}
-	{{ else }}
-		**Syntax:** `-repeat <amount> <phrase>`
-	{{ end }}
-{{ else }}
-	**Syntax:** `-repeat <amount> <phrase>`
-{{ end }}
+```go file=../../../src/fun/repeat.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

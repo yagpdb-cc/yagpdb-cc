@@ -1,31 +1,30 @@
 ---
-sidebar_position: 12
 title: Random Color
 ---
 
-This command shows a random color.
+This command generates and displays information about a random color.
 
-**Trigger Type:** `Regex`
+## Trigger
 
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(rand(om)?-?color)(\s+|\z)`
 
-**Usage:**  
-`-randcolor`
+## Usage
 
-```go
-{{/*
-	This command shows a random color.
-	Usage: `-randcolor`.
+- `-randcolor` - Generates a random color.
 
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(rand(om)?-?color)(\s+|\z)`
-*/}}
+:::tip Aliases
 
-{{ $dec := randInt 0 16777216 }}
-{{ $hex := printf "%06x" $dec }}
-{{ sendMessage nil (cembed
-	"title" "❯ Random Color"
-	"color" $dec
-	"description" (printf "❯ **Decimal:** %d\n❯ **Hex:** #%s" $dec $hex)
-	"thumbnail" (sdict "url" (printf "https://dummyimage.com/400x400/%s/%s" $hex $hex))
-) }}
+Instead of `randcolor`, you can also use `randomcolor`, `random-color`, or `rand-color`.
+
+:::
+
+## Code
+
+```go file=../../../src/utilities/random_color.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

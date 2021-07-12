@@ -1,92 +1,89 @@
 ---
-sidebar_position: 14
 title: Send Message
 ---
 
-This is just like the simpleembed command. The difference being that is allows you to add fields to the embed.
+This command is a tool for sending messages through YAGPDB, with embed support.
 
-**Trigger Type:** `Command`
+:::note Differences between this and `simpleembed`
 
+This command is very similar to the built-in `simpleembed` command, but differs in that it allows you to add fields to the embed.
+See [this section](#specifying-fields) for more information.
+
+:::
+
+## Trigger
+
+**Type:** `Command`<br />
 **Trigger:** `embed`
 
-**Example of usage:**  
-`-embed -color 1752220 -title i am the title -description i am the description -channel 693662119765344257 -fields /name field name /value 1540 /inline true -fields /name field name 2 /value valueeee /inline true -fields /name vou ficar em baixo /value 4861 -image https://cdn.discordapp.com/attachments/682204005723799553/694677663717261402/PokecordSpawn.jpg -thumb https://cdn.discordapp.com/attachments/693662119765344257/698088081718247504/PokecordSpawn.jpg -author /name hello there /icon https://cdn.discordapp.com/attachments/693662119765344257/698087514484768818/PokecordSpawn.jpg -footer /text hello /icon https://cdn.discordapp.com/attachments/693662119765344257/698078976727318558/PokecordSpawn.jpg -timestamp`
+## Usage
 
-Every flag (title, color, description, etc) should start with an `-`
+`-embed <flags...>` - Sends a message using the flags provided.
 
-- Example: `-embed -color 1752220 -title i am the title -description i am the description`
+The usage of this command is very similar to that of the `SimpleEmbed` built-in command; you specify certain flags to change parts of the message.
 
-Every field argument (value, name, inline) should start with an `/`
+### Available Flags
 
-- Example: `-embed -fields /name field name /value 1540 /inline true -fields /name field name 2 /value valueeee /inline true`
+#### Flags to modify message
 
-```go
-{{/*
-	This is just like the simpleembed command. The difference being that is allows you to add fields to the embed.
-	Suggested trigger type: Command
-	Suggested trigger: `embed`
+:::caution
 
-	Example of usage: -embed -color 1752220 -title i am the title -description i am the description -channel 693662119765344257 -fields /name field name /value 1540 /inline true -fields /name field name 2 /value valueeee /inline true -fields /name vou ficar em baixo /value 4861 -image https://cdn.discordapp.com/attachments/682204005723799553/694677663717261402/PokecordSpawn.jpg -thumb https://cdn.discordapp.com/attachments/693662119765344257/698088081718247504/PokecordSpawn.jpg -author /name hello there /icon https://cdn.discordapp.com/attachments/693662119765344257/698087514484768818/PokecordSpawn.jpg -footer /text hello /icon https://cdn.discordapp.com/attachments/693662119765344257/698078976727318558/PokecordSpawn.jpg -timestamp
+The flags used to create fields are documented separately, in [this section](#specifying-fields).
 
-	Every flag (title, color, description, etc) should start with an -
-		Example: -embed -color 1752220 -title i am the title -description i am the description
-	Every field argument (value, name, inline) should start with an /
-		Example: -embed -fields /name field name /value 1540 /inline true -fields /name field name 2 /value valueeee /inline true
-*/}}
+:::
 
-{{/* ACTUAL CODE DONT TOUCH */}}
-{{$capture := false}} {{$field := sdict}} {{$name := false}} {{$value := false}} {{$boolean := false}} {{$hasField := false}} {{$nameV := ""}} {{$valueV := ""}} {{$booleanV := false}} {{$color := false}} {{$colorV := 123456}} {{$fields := cslice}} {{$isEmbed := false}} {{$description := false}} {{$descriptionV := ""}} {{$channel := false}} {{$channelV := .Channel.ID}} {{$title := false}} {{$titleV := ""}} {{$image := false}} {{$imageV := sdict}} {{$thumbnail := false}} {{$thumbnailV := sdict}} {{$author := false}} {{$authorV := sdict}} {{$authorName := false}} {{$authorNameV := ""}} {{$authorIcon := false}} {{$footer := false}} {{$footerV := sdict}} {{$footerText := false}} {{$footerIcon := false}} {{$footerTextV := ""}} {{$timeStamp := false}} {{$embed := sdict}}
-{{$flags := cslice "-channel" "-fields" "-color" "-description" "-title" "-image" "-thumb" "-author" "-footer" "-timestamp"}}
-{{- range $k, $v := .CmdArgs -}}
-	{{- if eq . "-fields"}} {{$capture = true}} {{else if in $flags .}} {{$capture = false}} {{end -}}
-	{{- if $capture -}}
-		{{- $hasField = true -}}
-		{{- if eq . "/name"}} {{$name = true}} {{$value = false}} {{$boolean = false -}}
-		{{- else if eq . "/value"}} {{$name = false}} {{$value = true}} {{$boolean = false -}}
-		{{- else if eq . "/inline"}} {{$name = false}} {{$value = false}} {{$boolean = true -}}
-		{{- end -}}
-		{{- if and ($name) (not (eq . "/name"))}} {{$nameV = joinStr " " $nameV .}} {{$field.Set "name" $nameV -}}
-		{{- else if and ($value) (not (eq . "/value")) }} {{$valueV = joinStr " " $valueV .}} {{$field.Set "value" $valueV -}}
-		{{- else if $boolean}} {{if eq . "true"}} {{$booleanV = true}} {{end}} {{$field.Set "inline" $booleanV -}}
-		{{- else}} {{$field.Set "inline" $booleanV -}}
-		{{- end -}}
-	{{- end -}}
-	{{- if and (ne $valueV "") (or (and ($hasField) (not $capture)) (and ($hasField) (eq $k (sub (len $.CmdArgs) 1))) (and (eq . "-fields") ($field.Get "name")))}} {{$hasField = false}} {{$isEmbed = true}} {{$fields = $fields.Append $field}} {{$field = sdict}} {{$nameV = ""}} {{$valueV = ""}} {{$booleanV = false}} {{end -}}
-	{{- if eq . "-color"}} {{$color = true}} {{else if in $flags .}} {{$color = false}} {{end -}}
-	{{- if and ($color) (not (eq . "-color"))}} {{with toInt .}} {{$isEmbed = true}} {{$colorV = .}} {{end}} {{end -}}
-	{{- if eq . "-description"}} {{$description = true}} {{else if in $flags .}} {{$description = false}} {{end -}}
-	{{- if and ($description) (not (eq . "-description"))}} {{$isEmbed = true}} {{$descriptionV = joinStr " " $descriptionV .}} {{end -}}
-	{{- if eq . "-channel"}} {{$channel = true}} {{else if in $flags .}} {{$channel = false}} {{end -}}
-	{{- if and ($channel) (not (eq . "-channel"))}} {{$checkChannel := reReplace `<|>|#` . ""}} {{with getChannel $checkChannel}} {{$channelV = .ID}} {{end}} {{end -}}
-	{{- if eq . "-title"}} {{$title = true}} {{else if in $flags .}} {{$title = false}} {{end -}}
-	{{- if and ($title) (not (eq . "-title"))}} {{$isEmbed = true}} {{$titleV = joinStr " " $titleV .}} {{end -}}
-	{{- if eq . "-image"}} {{$image = true}} {{else if in $flags .}} {{$image = false}} {{end -}}
-	{{- if and ($image) (not (eq . "-image"))}} {{if reFind `https?:\/\/\w+` .}} {{$isEmbed = true}} {{$imageV.Set "url" .}} {{end}} {{end -}}
-	{{- if eq . "-thumb"}} {{$thumbnail = true}} {{else if in $flags .}} {{$thumbnail = false}} {{end -}}
-	{{- if and ($thumbnail) (not (eq . "-thumb"))}} {{if reFind `https?:\/\/\w+` .}} {{$isEmbed = true}} {{$thumbnailV.Set "url" .}} {{end}} {{end -}}
-	{{- if eq . "-author"}} {{$author = true}} {{else if in $flags .}} {{$author = false}} {{end -}}
-	{{- if $author}}
-		{{- if eq . "/name"}} {{$authorName = true}} {{$authorIcon = false -}}
-		{{- else if eq . "/icon"}} {{$authorName = false}} {{$authorIcon = true -}}
-		{{- end -}}
-		{{- if and ($authorName) (not (eq . "/name"))}} {{$authorNameV = joinStr " " $authorNameV .}} {{$isEmbed = true}} {{$authorV.Set "name" $authorNameV -}}
-		{{- else if and ($authorIcon) (not (eq . "/icon"))}} {{if reFind `https?:\/\/\w+` .}} {{$isEmbed = true}} {{$authorV.Set "icon_url" .}} {{end -}}
-		{{- end -}}
-	{{- end -}}
-	{{- if eq . "-footer"}} {{$footer = true}} {{else if in $flags .}} {{$footer = false}} {{end -}}
-	{{- if $footer}}
-		{{- if eq . "/text"}} {{$footerText = true}} {{$footerIcon = false -}}
-		{{- else if eq . "/icon"}} {{$footerText = false}} {{$footerIcon = true -}}
-		{{- end -}}
-		{{- if and ($footerText) (not (eq . "/text"))}} {{$footerTextV = joinStr " " $footerTextV .}} {{$isEmbed = true}} {{$footerV.Set "text" $footerTextV -}}
-		{{- else if and ($footerIcon) (not (eq . "/icon"))}} {{if reFind `https?:\/\/\w+` .}} {{$isEmbed = true}} {{$footerV.Set "icon_url" .}} {{end -}}
-		{{- end -}}
-	{{- end -}}
-	{{- if eq . "-timestamp"}} {{$timeStamp = currentTime}} {{$isEmbed = true}} {{end -}}
-{{- end -}}
+| Flag                  | Description                                              | Example                                   |
+| --------------------- | -------------------------------------------------------- | ----------------------------------------- |
+| `-channel <channel>`  | Sets the channel where the message should be sent        | `-channel #my-channel`                    |
+| `-color <decimal>`    | Sets the color of the embed; only supports decimal color | `-color 111111`                           |
+| `-description <desc>` | Sets the description of the embed                        | `-description hello world`                |
+| `-title <title>`      | Sets the title of the embed                              | `-title very cool`                        |
+| `-image <url>`        | Sets the image URL of the embed                          | `-image https://i.imgur.com/vfbFEif.jpeg` |
+| `-thumb <url>`        | Sets the thumbnail URL of the embed                      | `-thumb https://i.imgur.com/vfbFEif.jpeg` |
+| `-author <name>`      | Sets the author name of the embed                        | `-author foo`                             |
+| `-footer <text>`      | Sets the footer text of the embed                        | `-footer bar`                             |
+| `-timestamp`          | Sets the timestamp of the embed to the current time      | `-timestamp`                              |
 
-{{if $isEmbed}}
-{{$embed.Set "fields" $fields}} {{$embed.Set "color" $colorV}} {{$embed.Set "description" $descriptionV}} {{$embed.Set "title" $titleV}} {{$embed.Set "image" $imageV}} {{$embed.Set "thumbnail" $thumbnailV}} {{$embed.Set "author" $authorV}} {{$embed.Set "footer" $footerV}} {{with $timeStamp}} {{$embed.Set "timestamp" .}} {{end}}
-{{sendMessage $channelV (cembed $embed)}}
-{{end}}
+#### Specifying fields
+
+At any point in the command, you can enter _field mode_ by using `-fields`.
+After that, you use a combination of the following flags to specify the current field:
+
+- `/name <name>` - Sets the name of the field.
+  **Example:** `/name foo bar`
+
+- `/value <value>` - Sets the value of the field.
+  **Example:** `/value baz buz`
+
+- `/inline <bool>` - Specifies whether the field should be inline.
+  **Example:** `/inline true`
+
+### Examples
+
+#### Create simple embed
+
 ```
+-embed -channel #channel -color 111 -title hello world -footer foo bar -description bar buz
+```
+
+Creates a new embed in channel `#channel` with the color `111`, title `hello world`, footer text `foo bar`, and description `bar buz`.
+
+#### Create embed with fields
+
+```
+-embed -color 111 -title hello world -fields /name field name 0 /value field value 0 /inline true -fields /name field name 1 /value field value 1 /inline false
+```
+
+Creates a new embed in the current channel with the color `111`, title `hello world`, and two fields.
+The first is inline and has the name `field name 0` and the value `field value 0`.
+The second is not inline and has the name `field name 1` and the value `field value 1`.
+
+## Code
+
+```go file=../../../src/utilities/send.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@Pedro-Pessoa](https://github.com/Pedro-Pessoa).

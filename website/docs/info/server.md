@@ -1,83 +1,31 @@
 ---
-sidebar_position: 4
 title: View Server Info
 ---
 
-This command allows you to view information about the server.
+This command views information about the server. It also includes a subcommand that allows you to view the server icon.
 
-**Trigger Type:** `Regex`
+## Trigger
 
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(server|guild)(-?info)?(\s+|\z)`
 
-**Usage:**  
-`-serverinfo`  
-(Use `-server icon` to view the server icon).
+## Usage
 
-```go
-{{/*
-	This command allows you to view information about the server.
-	Usage: `-serverinfo`. (Use `-server icon` to view the server icon).
+- `-serverinfo` - Views information about the server.
+- `server icon` - Views the server icon.
 
-	Recommended trigger: Regex trigger with trigger `\A(-|<@!?204255221017214977>\s*)(server|guild)(-?info)?(\s+|\z)`
-*/}}
+:::tip Aliases
 
-{{ $icon := "" }}
-{{ $name := printf "%s (%d)" .Guild.Name .Guild.ID }}
-{{ if .Guild.Icon }}
-	{{ $ext := "webp" }}
-	{{ if eq (slice .Guild.Icon 0 2) "a_" }} {{ $ext = "gif" }} {{ end }}
-	{{ $icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext }}
-{{ end }}
+Instead of `serverinfo`, you can also use `server`, `guild`, `guildinfo`, `serverinfo`, `guild-info`, or `server-info`.
 
-{{ $owner := userArg .Guild.OwnerID }}
-{{ $levels := cslice
-	"None: Unrestricted"
-	"Low: Must have a verified email on their Discord account."
-	"Medium: Must also be registered on Discord for longer than 5 minutes."
-	"(╯°□°）╯︵ ┻━┻: Must also be a member of this server for longer than 10 minutes."
-	"┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻: Must have a verified phone on their Discord account."
-}}
-{{ $afk := "n/a" }}
-{{ if .Guild.AfkChannelID }}
-	{{ $afk = printf "**Channel:** <#%d> (%d)\n**Timeout:** %s"
-		.Guild.AfkChannelID
-		.Guild.AfkChannelID
-		(humanizeDurationSeconds (toDuration (mult .Guild.AfkTimeout .TimeSecond)))
-	}}
-{{ end }}
-{{ $embedsEnabled := "No" }}
-{{ if .Guild.EmbedEnabled }} {{ $embedsEnabled = "Yes" }} {{ end }}
-{{ $createdAt := div .Guild.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
+:::
 
-{{ $infoEmbed := cembed
-	"author" (sdict "name" $name "icon_url" $icon)
-	"color" 14232643
-	"thumbnail" (sdict "url" $icon)
-	"fields" (cslice
-		(sdict "name" "❯ Verification Level" "value" (index $levels .Guild.VerificationLevel))
-		(sdict "name" "❯ Region" "value" .Guild.Region)
-		(sdict "name" "❯ Members" "value" (printf "**• Total:** %d Members\n**• Online:** %d Members" .Guild.MemberCount onlineCount))
-		(sdict "name" "❯ Roles" "value" (printf "**• Total:** %d\nUse `-listroles` to list all roles." (len .Guild.Roles)))
-		(sdict "name" "❯ Owner" "value" (printf "%s (%d)" $owner.String $owner.ID))
-		(sdict "name" "❯ AFK" "value" $afk)
-		(sdict "name" "❯ Embeds Enabled" "value" $embedsEnabled)
-	)
-	"footer" (sdict "text" "Created at")
-	"timestamp" $createdAt
-}}
+## Code
 
-{{ if .CmdArgs }}
-	{{ if eq (index .CmdArgs 0) "icon" }}
-		{{ sendMessage nil (cembed
-			"author" (sdict "name" $name "icon_url" $icon)
-			"title" "❯ Server Icon"
-			"color" 14232643
-			"image" (sdict "url" $icon)
-		) }}
-	{{ else }}
-		{{ sendMessage nil $infoEmbed }}
-	{{ end }}
-{{ else }}
-	{{ sendMessage nil $infoEmbed }}
-{{ end }}
+```go file=../../../src/info/server.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

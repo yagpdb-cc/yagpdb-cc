@@ -1,0 +1,15 @@
+{{/*
+	Parses text into a slice of arguments, much like how .CmdArgs is constructed.
+	See <https://yagpdb-cc.github.io/code-snippets/parse-text> for more information.
+
+	Author: jo3-l <https://github.com/jo3-l>
+*/}}
+
+{{/* Let $text be the text. */}}
+{{ $text := .StrippedMsg }}
+
+{{ $regex := `\x60(.*?)\x60|"(.*?)"|[^\s]+` }}
+{{ $clean := cslice }}
+{{ range reFindAllSubmatches $regex $text }}
+	{{- $clean = $clean.Append (or (index . 2) (index . 1) (index . 0)) -}}
+{{ end }}

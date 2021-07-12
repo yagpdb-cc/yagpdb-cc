@@ -1,43 +1,26 @@
 ---
-sidebar_position: 4
 title: List Groups
 ---
 
-This command deletes a group of CAH card packs.
+This command lists all currently configured CAH card pack groups.
 
-**Trigger Type:** `Command`
+For more information about the CAH card pack system, see [this](overview) page.
 
+## Trigger
+
+**Type:** `Command`<br />
 **Trigger:** `listgroups`
 
-**Usage:**  
-`-listgroups`
+## Usage
 
-```go
-{{/*
-	This command lists all currently configured CAH card pack groups.
+- `-listgroups` - Lists all currently configured CAH card pack groups.
 
-	Usage: `-listgroups`
+## Code
 
-	Recommended trigger: `listgroups`
-	Trigger type: Command
+```go file=../../../../src/fun/cah_groups/listgroups.go.tmpl
 
-	Credits:
-	LRitzdorf <https://github.com/LRitzdorf>
-*/}}
-
-{{ $pattern := "" }}
-{{ if ne (len .CmdArgs) 0 }}
-    Filtering groups by `{{index .CmdArgs 0}}` and ignoring other arguments.
-    {{- $pattern = joinStr "" "group %" (index .CmdArgs 0) "%" }}
-{{- else }}
-    {{- $pattern = "group %" }}
-{{- end }}
-{{- $groups := dbGetPattern 0 $pattern 100 0 }}
-`Group name` - pack-1 pack-2 ...
-{{ range $groups }}
-    {{- $strippedKey := slice .Key 6 (len .Key) }}
-`{{$strippedKey}}` - {{.Value}}
-{{- else }}
-    No pack groups defined. Use `-setgroup "group name" "pack-1 pack-2 ..."` to set some up!
-{{ end }}
 ```
+
+## Author
+
+This custom command was written by [@LRitzdorf](https://github.com/LRitzdorf).

@@ -1,207 +1,70 @@
 ---
-sidebar_position: 6
 title: Staff On Duty
 ---
 
-On-duty staffing system for discord server staff. You will need to set up a member pingable "on duty" role. The idea behind this CC is to have an easy way for server members to ping only the staff who have self designated themselves as available to moderate. In most servers pinging staff is discouraged to the point that people won't do it even when swift moderation is necessary. By providing an encouraged method of reaching only the active staff members it should provide faster response time to issues without members needing to ping a specific person who may or may not be available.
+On-duty staffing system. You will need to set up an "on duty" role pingable by members.
 
-**Trigger Type:** `Regex`
+The idea behind this CC is to have an easy way for server members to ping only the staff who have self designated themselves as available to moderate. In most servers pinging staff is discouraged to the point that people won't do it even when swift moderation is necessary. By providing an encouraged method of reaching only the active staff members, it should provide faster response time to issues without members needing to ping a specific person who may or may not be available.
 
+## Features
+
+- Adds/removes an "on duty" role of your choice
+  - Automatically adds back "only duty" role to staff who've manually removed the role but are designated as on duty.
+- Updates channel topic in a given channel to provide a visible on duty staff list
+  - Respects Discord ratelimits for channel updates
+  - Keeps user defined channel topic intact
+- Automatically removes staff from the list after a time
+- List on-duty staff using `-onduty list`
+- Manually remove staff from the list using `-offduty <user>`
+- Force update the channel topic using `-onduty update`
+
+## Trigger
+
+**Type:** `Regex`<br />
 **Trigger:** `\A(-|<@!?204255221017214977>\s*)(o(n|ff)duty)(\s+|\z)`
 
-**Usage:**  
-`-onduty`  
-`-offduty`
+:::caution
 
-**Role restrictions:** limit to only roles that have access to moderation functions
+Unless you would like everyone to be able to use these commands, we advise that you limit it to a staff role in the role restrictions.
 
-**Features:**
+:::
 
-- adds/removes an "on duty" role of your choice
-  - automatically adds "on duty" role back to staff who have manually removed the role but are designated on duty
-    -Will only add the role if CC is run again after manual role removal. Takes effect immediately with `-onduty list` or five minutes after any valid execution.
-- updates channel topic in a specified channel to provide a visible on duty staff list
-  - updates five minutes after execution to prevent hitting discord rate limits
-  - automatically placed after any user defined channel topic
-- automatically removes staff from the list after a specified time (to help with staff members who forget to go off duty)
-- `-offduty <@mention/userID>` allows manual removal of staff from the list (again, to help with staff members who forget to go off duty)
-- `-onduty list` will give a list of staff members designated as on duty and reassign on duty role if necessary
-- `-onduty update` to force an update of the channel topic. Will update five minutes after the command is run
+## Usage
 
-**Warnings/limitations:**
+- `-onduty` - Mark yourself as on duty.
+- `-onduty list` - Display a list of staff members designated as on duty and reassign on duty role if needed.
+- `-onduty update` - Force an update of the channel topic. Will update five minutes after the command is ran.
+- `-offduty` - Mark yourself as off duty.
+- `-offduty <user>` - Manually mark the specified user as off duty.
 
-- on non-premium servers `-onduty` will occasionally require an additional command to be run
-- this CC was built arount channel topic editing. You can use it without editing the topic but some actions will be unnecessary or delayed
+:::caution Limitations
 
-```go
-{{/*
-	Trigger type: regex
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(o(n|ff)duty)(\s+|\z)` (triggers on `-onduty` and `-offduty`)
-	Role restrictions: limit to only roles that have access to moderation functions
+1. On non-premium servers, the `onduty` command will occasionally require an additional command to be run.
 
-	On-duty staffing system for discord server staff. You will need to set up a member pingable "on duty" role. The idea behind
-	this CC is to have an easy way for server members to ping only the staff who have self designated themselves as available to
-	moderate. In most servers pinging staff is discouraged to the point that people won't do it even when swift moderation is
-	necessary. By providing an encouraged method of reaching only the active staff members it should provide faster response time
-	to issues without members needing to ping a specific person who may or may not be available.
+2. This command was built around channel topic editing. You can use it without editing the topic but certain actions will be unnecessary or delayed.
 
-	Features:
-	- adds/removes an "on duty" role of your choice
-		- automatically adds "on duty" role back to staff who have manually removed the role but are designated on duty
-			-Will only add the role if CC is run again after manual role removal. Takes effect immediately with `-onduty list` or
-			five minutes after any valid execution.
-	- updates channel topic in a specified channel to provide a visible on duty staff list
-		- updates five minutes after execution to prevent hitting discord rate limits
-		- automatically placed after any user defined channel topic
-	- automatically removes staff from the list after a specified time (to help with staff members who forget to go off duty)
-	- `-offduty <@mention/userID>` allows manual removal of staff from the list (again, to help with staff members who forget to go off duty)
-	- `-onduty list` will give a list of staff members designated as on duty and reassign on duty role if necessary
-	- `-onduty update` to force an update of the channel topic. Will update five minutes after the command is run
+:::
 
-	Warnings/limitations:
-	- on non-premium servers `-onduty` will occasionally require an additional command to be run
-	- this CC was built arount channel topic editing. You can use it without editing the topic but some actions will be unnecessary or delayed
+## Configuration
 
-	Author: https://github.com/dvoraknt
-	Last Updated: 5/29/2021
+- 📌 `$dutyRole`<br />
+  ID of your "on duty" role.
 
-*/}}
+- `$autoOff`<br />
+  Number of hours before on duty role is automatically removed.
 
-{{/*CONFIGURABLE VARIABLES START HERE*/}}
-{{$dutyRole := 539502575758737408}}{{/*role ID of your "on duty" role*/}}
-{{$autoOff := 10}}{{/*number of hours before on duty role is automatically removed*/}}
+- 📌 `$dutyChannel`<br />
+  ID of the channel where the topic should be updated periodically.
 
-{{$dutyChannel := 503913846684123166}}{{/*channel ID where you want the topic to be edited*/}}
-{{$chanEdit := true}}{{/*enable/disable channel topic editing. note that this CC was built around topic editing and has several built-in cooldowns because of that.*/}}
-{{/*CONFIGURABLE VARIABLES END HERE*/}}
+- `$chanEdit`<br />
+  Whether or not channel topic editing is enabled.
 
-{{if not (dbGet 0 "modOnDuty")}}{{dbSet 0 "modOnDuty" ""}}{{end}}{{/*creates initial database slot. you can delete this after first run if you know what you are doing*/}}
+## Code
 
-{{$onDuty := ""}}
-{{if .ExecData}}
-	{{if eq (str .ExecData) "update"}}
-		{{$current := 0}}{{$name := ""}}{{$member := ""}}{{$dutyList := ""}}
-		{{$onDuty = (dbGet 0 "modOnDuty").Value}}
-		{{$dutySplit := split $onDuty ";"}}
-		{{if eq (len $dutySplit) 1}}{{$dutyList = "None"}}{{else}}
-		{{range $dutySplit}}
-			{{- $current = (toInt . ) -}}
-			{{if $current}}
-				{{$member = getMember $current}}
-				{{$name = or $member.Nick $member.User.Username}}
-				{{- $dutyList = joinStr ", " $dutyList $name -}}
-				{{if not (targetHasRoleID $current $dutyRole)}}{{giveRoleID $current $dutyRole}}{{end}}
-			{{end}}{{end}}
-		{{end}}
-		{{if $chanEdit}}
-			{{$curTopic := index (reSplit `(-\s)?Staff on duty:` (getChannel $dutyChannel).Topic) 0}}
-			{{if $curTopic}}
-				{{$curTopic = print $curTopic " - Staff on duty: " $dutyList}}
-			{{else}}
-				{{$curTopic = print "Staff on duty: " $dutyList}}
-			{{end}}
-			{{if gt (len $curTopic) 1024}}
-				{{sendDM (print "**On duty CC report:** your channel topic could not be changed - topic exceeded 1024 characters. Please shorten your user defined topic text or contact the person in charge of your servers YAGPDB custom commands to disable the staff list.")}}
-			{{else}}
-				{{editChannelTopic $dutyChannel (print $curTopic)}}
-			{{end}}
-		{{end}}
+```go file=../../../src/moderation/staff_on_duty.go.tmpl
 
-	{{else}}
-		{{takeRoleID .ExecData $dutyRole 0}}
-		{{sendDM (print "You have been automatically removed from duty after (" $autoOff ") hour(s), if this is a mistake go back on duty.")}}
-		{{$onDuty = (dbGet 0 "modOnDuty").Value}}
-		{{$onDuty = reReplace (print .ExecData ";") $onDuty ""}}
-		{{dbSet 0 "modOnDuty" $onDuty}}
-		{{if not (dbGet 0 "onDutyCD")}}
-			{{execCC .CCID nil 305 "update"}}
-			{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
-		{{end}}
-	{{end}}
-
-{{else}}
-{{/*==================*/}}
-
-{{if and .CmdArgs (eq .Cmd "-offduty")}}
-	{{if $idiotStaff := reFind `(\d{17,20})` (index .CmdArgs 0)}}
-		{{takeRoleID $idiotStaff $dutyRole 0}}
-		{{sendMessage  nil (print (getMember $idiotStaff).User.String " is no longer on duty.")}}
-		{{$onDuty = (dbGet 0 "modOnDuty").Value}}
-		{{$onDuty = reReplace (print $idiotStaff ";") $onDuty ""}}
-		{{dbSet 0 "modOnDuty" $onDuty}}
-		{{if not (dbGet 0 "onDutyCD")}}
-			{{execCC 48 nil 305 "update"}}
-			{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
-		{{end}}
-	{{else}}
-		{{sendMessage nil (print "No valid mention or user ID found.")}}
-	{{end}}
-{{else if and .CmdArgs (eq .Cmd "-onduty")}}
-	{{$subCmd := index .CmdArgs 0}}
-	{{if eq $subCmd "list"}}
-	{{$current := 0}}{{$name := ""}}{{$member := ""}}{{$dutyList := ""}}
-		{{$onDuty = (dbGet 0 "modOnDuty").Value}}
-		{{$dutySplit := split $onDuty ";"}}
-		{{if eq (len $dutySplit) 1}}{{$dutyList = "None"}}{{else}}
-		{{range $dutySplit}}
-			{{- $current = (toInt . ) -}}
-			{{if $current}}
-				{{$member = getMember $current}}
-				{{$name = or $member.Nick $member.User.Username}}
-				{{- $dutyList = joinStr ", " $dutyList $name -}}
-				{{if not (targetHasRoleID $current $dutyRole)}}{{giveRoleID $current $dutyRole}}{{end}}
-			{{end}}{{end}}
-		{{end}}
-		{{sendMessage nil (print "Staff on duty: " $dutyList)}}
-	{{else if eq $subCmd "update"}}
-		{{if and $chanEdit (not (dbGet 0 "onDutyCD"))}}
-			{{execCC .CCID nil 305 "update"}}
-			{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
-			{{sendMessage nil (print "Thanks! I'll update the channel topic in five minutes.")}}
-		{{else if $chanEdit}}
-			{{sendMessage nil (print "Looks like I don't need that right now.")}}
-		{{else}}
-			{{sendMessage nil (print "Your server has topic edits disabled so this command is pretty much useless. If you want me to double check that all on duty staff members still have the role you can send `-onduty list`")}}
-		{{end}}
-
-	{{else}}
-		{{sendMessage nil (print "You can't force other people on duty!")}}
-	{{end}}
-
-{{else}}
-{{/*==================*/}}
-
-{{if and (hasRoleID $dutyRole) (eq .Cmd "-onduty")}}
-	{{sendMessage nil (print "You're already on duty! Send `-offduty` to take a break.")}}
-
-{{else if and (not (hasRoleID $dutyRole)) (eq .Cmd "-offduty")}}
-	{{sendMessage nil (print "You're already off duty! Send `-onduty` to go on patrol.")}}
-
-{{else if and (hasRoleID $dutyRole) (eq .Cmd "-offduty")}}
-	{{removeRoleID $dutyRole 0}}
-	{{sendMessage  nil (print "You are now off duty.")}}
-	{{$onDuty = (dbGet 0 "modOnDuty").Value}}
-	{{$onDuty = reReplace (print .User.ID ";") $onDuty ""}}
-	{{dbSet 0 "modOnDuty" $onDuty}}
-	{{cancelScheduledUniqueCC .CCID (print "onduty-" .User.ID)}}
-	{{if not (dbGet 0 "onDutyCD")}}
-		{{execCC .CCID nil 305 "update"}}
-		{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
-	{{end}}
-
-{{else if and (not (hasRoleID $dutyRole)) (eq .Cmd "-onduty")}}
-	{{addRoleID $dutyRole}}
-	{{sendMessage nil (print "You are now on duty.")}}
-	{{$onDuty = print (or (dbGet 0 "modOnDuty").Value) .User.ID ";"}}
-	{{dbSet 0 "modOnDuty" $onDuty}}
-	{{scheduleUniqueCC .CCID nil (mult 3600 $autoOff) (print "onduty-" .User.ID) .User.ID}}
-	{{if and $chanEdit (not (dbGet 0 "onDutyCD")) (not .IsPremium)}}
-		{{sendMessage nil (print .User.Mention " Woah there, unfortunately since this server doesn't have YAGPDB premium you're going to have to send `-onduty update` to initiate the channel topic update. Sorry for the extra work but I could only make this work for standard servers using this method. You'll only have to do this step under certain conditions so hopefully not too often.")}}
-	{{else if and $chanEdit (not (dbGet 0 "onDutyCD"))}}
-		{{execCC .CCID nil 305 "update"}}
-		{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
-	{{end}}
-{{end}}
-{{end}}
-{{end}}
 ```
+
+## Author
+
+This custom command was written by [@dvoraknt](https://github.com/dvoraknt).

@@ -1,66 +1,31 @@
 ---
-sidebar_position: 11
 title: Meme Generator
 ---
 
-This command allows you to make a meme.  
-You can provide a link for a custom meme, or use the existing templates: both, buzz, doge, joker and sad-biden.  
-Sometimes, the special characters will mess up the link, so it is recommended that you only use these special characters: " " "?" "%" "#" "/"
+This command generates a meme using a template and top/bottom text.
 
-**Trigger Type:** `Command`
+## Trigger
 
+**Type:** `Command`<br />
 **Trigger:** `meme`
 
-**Usage:**  
-`-meme <meme template> <top text> <bottom text> <link if template is custom>`
+## Usage
 
-**Example:**  
-`-meme custom "this is" "my meme generator" "https://wiki.geogebra.org/uploads/a/a9/Example.jpg"`
+- `-meme <template> <top-text> <bottom-text>` - Generates a meme using the template, top text and bottom text provided. The template may be either `both`, `buzz`, `doge`, `joker`, or `sad-biden`.
+- `-meme custom <top-text> <bottom-text> <image-link>` - Generates a meme using the image, top text and bottom text provided. Instead of an image link, you may also attach an image to the message.
 
-```go
-{{/*
-	This command allows you to make a meme. Usage: `-meme <meme template> <top text> <bottom text> <link if template is custom>`.
-	You can provide a link for a custom meme, or use the existing templates: both, buzz, doge, joker and sad-biden.
-	Sometimes, the special characters will mess up the link, so it is recommended that you only use these special characters: " " "?" "%" "#" "/"
-  Example: `-meme custom "this is" "my meme generator" "https://wiki.geogebra.org/uploads/a/a9/Example.jpg"`
+:::caution Special characters
 
-	Recommend trigger: Command trigger with trigger `meme`.
+Sometimes, special characters will mess up the link, so we advise that you only use the following special characters in the top/bottom text: ` `, `?`, `%`, `#` or `/`.
 
-	If you have any questions, contact me on discord: GenryMg#0001
-*/}}
+:::
 
+## Code
 
-{{ $link := "https://memegen.link" }}
-{{ $args := parseArgs 3 (`Usage: -meme <meme template> "top text" "bottom text"`)
-	(carg "string" "template")
-	(carg "string" "top-text")
-	(carg "string" "bottom-text")
-	(carg "string" "custom-link")
-}}
-{{ $replacers := cslice " " "?" "%" "#" "/" }}
-{{ $replacements := cslice "_" "~q" "~p" "~h" "~s" }}
-{{ $meme := $args.Get 0 }}
-{{ $top := $args.Get 1 }}
-{{ $bottom := $args.Get 2 }}
-{{ range $i, $ := $replacers }}
-	{{- $meme = split $meme . | joinStr (index $replacements $i) }}
-	{{- $top = split $top . | joinStr (index $replacements $i) }}
-	{{- $bottom = split $bottom . | joinStr (index $replacements $i) -}}
-{{ end }}
-{{if $args.IsSet 3 }}
-	{{ $cuslink := $args.Get 3 }}
-	{{ $msglink := joinStr "/" $link $meme $top $bottom }}
-	{{ $msglink = joinStr "" $msglink ".jpg?alt=" }}
-	{{ $msglink1 := joinStr "" $msglink $cuslink }}
-	{{ sendMessage nil (cembed "image" (sdict "url" $msglink1)) }}
-{{else}}
-	{{ $msglink := joinStr "/" $link $meme $top $bottom }}
-	{{ $msglink = joinStr "" $msglink ".jpg" }}
-	{{ $col := randInt 111111 999999 }}
-	{{ sendMessage nil (cembed
-		"title" "Here is your meme"
-		"image" (sdict "url" $msglink)
-		"color" $col
-	) }}
-{{end}}
+```go file=../../../src/fun/meme.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [GenryMg](https://github.com/hng12).

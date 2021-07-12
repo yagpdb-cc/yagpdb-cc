@@ -1,38 +1,40 @@
 ---
-sidebar_position: 6
 title: Set Group
 ---
 
-This command creates a new group of CAH card packs, or edits an existing one.  
-Note that the packs to form the specified group must all be in the same set of quotes.
+This command creates a new group of CAH card packs, or edits an existing one.
 
-**Trigger Type:** `Command`
+For more information about the CAH card pack system, see [this](overview) page.
 
+## Trigger
+
+**Type:** `Command`<br />
 **Trigger:** `setgroup`
 
-**Usage:**  
-`-setgroup "group name" "pack1 pack2 etc"`
+## Usage
 
-```go
-{{/*
-	This command creates a new group of CAH card packs, or edits an existing one.
-	Note that the packs to form the specified group must all be in the same set of quotes.
+- `-setgroup <group-name> <packs>` - Creates a new group of CAH card packs, or overwrites an existing one.
 
-	Usage: `-setgroup "group name" "pack1 pack2 etc"`
+:::note
 
-	Recommended trigger: `setgroup`
-	Trigger type: Command
+The packs to form the specified group must all be in the same set of quotes. See the example below.
 
-	Credits:
-	LRitzdorf <https://github.com/LRitzdorf>
-*/}}
+:::
 
-{{ if ne (len .CmdArgs) 2 }}
-    Command usage: `-setgroup "group name" "pack1 pack2 etc"`
-Use pack names from the `-cah packs` command. All packs must be in one set of quotes, separated by spaces.
-You can have a group name with spaces, but make sure to put it in quotes!
-{{ else }}
-    {{ dbSet 0 (joinStr "" "group " (index .CmdArgs 0)) (index .CmdArgs 1) }}
-    Pack group `{{index .CmdArgs 0}}` set to `{{index .CmdArgs 1}}`.
-{{ end }}
+### Example
+
 ```
+-setgroup "group name" "20-blanks ai sanity"
+```
+
+Creates a new pack called `group name` that expands to the following packs: `20-blanks`, `ai`, `sanity`.
+
+## Code
+
+```go file=../../../../src/fun/cah_groups/setgroup.go.tmpl
+
+```
+
+## Author
+
+This custom command was written by [@LRitzdorf](https://github.com/LRitzdorf).

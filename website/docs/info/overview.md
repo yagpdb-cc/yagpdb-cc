@@ -1,8 +1,7 @@
 ---
-sidebar_position: 1
 title: Overview
 ---
 
-These commands are all standalone (you can pick and choose which commands to add). Most of these commands are for adding information commands which are not currently avaliable to YAGPDB (channel info, avatar, server info, etc.)
+These commands are all standalone (you can pick and choose which commands to add). Most of these commands are informational commands which are not currently available to YAGPDB (channel info, avatar, server info, etc.)
 
-As usual, there is a leading comment showing the trigger and description of the CC.
+As usual, there are instructions describing where to put the script and which trigger to use on the pages corresponding to the individual commands.

@@ -1,0 +1,21 @@
+{{/*
+    Allows you to bookmark messages.
+	See <https://yagpdb-cc.github.io/utilities/bookmark> for more information.
+
+    Author: Luca Z. <https://github.com/l-zeuch>
+*/}}
+
+{{/* Actual Code - Only change this when you know what you are doing */}}
+{{$args := parseArgs 1 "```Bookmark <Message:Text>```\nNot enough arguments passed." (carg "string" "Message")}}
+{{$note := $args.Get 0}}
+{{$link := (printf "https://discord.com/channels/%d/%d/%d" .Guild.ID .Channel.ID .Message.ID)}}
+{{$embed := (cembed
+    "title" "Bookmark"
+    "description" "You asked me to bookmark this for you:"
+    "fields" (cslice
+        (sdict "name" "Note" "value" (print $note) "inline" true)
+        (sdict "name" "Info" "value" (printf "Channel: <#%d>\nSource: [Jump!](%s)"  .Channel.ID $link) "inline" true)
+    )
+)}}
+{{sendDM $embed}}
+{{addReactions "📫"}}

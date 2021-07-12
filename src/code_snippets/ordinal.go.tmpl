@@ -1,0 +1,20 @@
+{{/*
+	Computes the ordinal for an integer: 
+	1 -> 1st, 11 -> 11th, 122 -> 122nd.
+	See <https://yagpdb-cc.github.io/code-snippets/ordinal> for more information.
+
+	Author: jo3-l <https://github.com/jo3-l>
+*/}}
+
+{{/* Let $int be the integer. */}}
+{{ $int := 123 }}
+
+{{ $ord := "th" }}
+{{ $cent := toInt (mod $int 100) }}
+{{ $dec := toInt (mod $int 10) }}
+{{ if not (and (ge $cent 10) (le $cent 19)) }}
+	{{ if eq $dec 1 }} {{ $ord = "st" }}
+	{{ else if eq $dec 2 }} {{ $ord = "nd" }}
+	{{ else if eq $dec 3 }} {{ $ord = "rd" }}
+	{{ end }}
+{{ end }}

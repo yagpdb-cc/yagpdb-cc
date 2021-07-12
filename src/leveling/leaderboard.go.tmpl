@@ -1,0 +1,31 @@
+{{/*
+	Views the leaderboard of the server for the leveling system.
+	See <https://yagpdb-cc.github.io/leveling/view-leaderboard> for more information.
+
+	Author: jo3-l <https://github.com/jo3-l>
+*/}}
+
+{{ $page := 1 }}
+{{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }}
+{{ $skip := mult (sub $page 1) 10 }}
+{{ $users := dbTopEntries "xp" 10 $skip }}
+{{ if not (len $users) }}
+	There were no users on that page!
+{{ else }}
+	{{ $rank := $skip }}
+	{{ $display := "" }}
+	{{ range $users }}
+		{{- $xp := toInt .Value }}
+		{{- $rank = add $rank 1 }}
+		{{- $display = printf "%s\n• **%d.** [%s](https://yagpdb.xyz) :: Level %d (%d XP)"
+			$display $rank .User.String (toInt (roundFloor (mult 0.1 (sqrt $xp)))) $xp -}}
+	{{ end }}
+	{{ $id := sendMessageRetID nil (cembed
+		"title" "❯ Leaderboard"
+		"thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")
+		"color" 14232643
+		"description" $display
+		"footer" (sdict "text" (joinStr "" "Page " $page))
+	) }}
+	{{ addMessageReactions nil $id "◀️" "▶️" }}
+{{ end }}

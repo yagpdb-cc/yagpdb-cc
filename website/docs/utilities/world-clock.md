@@ -1,51 +1,35 @@
 ---
-sidebar_position: 17
 title: World Clock
 ---
 
-Simple world clock.
+This command shows the current time in various cities around the world.
 
-**Trigger Type:** `Command`
+## Trigger
 
+**Type:** `Command`<br />
 **Trigger:** `worldclock`
 
-**Usage:**  
-`-worldclock`
+## Usage
 
-```go
-{{/*
-	Simple world clock. Usage: `-worldclock`.
-	Recommended trigger: Command trigger with trigger `worldclock`.
-*/}}
+- `-worldclock` - Shows the current time in various cities around the world.
 
-{{ $clocks := sdict
-	"Vancouver" "America/Vancouver"
-	"New York" "America/New_York"
-	"London" "Europe/London"
-	"Moscow" "Europe/Moscow"
-	"Tokyo" "Asia/Tokyo"
-}}
-{{ $hour := .TimeHour }}
+## Changing the cities used
 
-{{ $embed := sdict
-	"title" "🕰️ World Clock"
-	"fields" cslice
-	"color" 0x0070BB
-	"footer" (sdict "text" "Your time")
-	"timestamp" currentTime
-}}
+To change the cities displayed, just modify the `$clocks` variable.
+The key is the city name and the value is its timezone database name.
 
-{{ range $name, $ := $clocks }}
-	{{- $time := currentTime.In (newDate 0 0 0 0 0 0 .).Location }}
-	{{- $formatted := printf "%s, %s"
-		$time.Weekday.String
-		($time.Format "3:04:05 PM")
-	}}
-	{{- $embed.fields.Append (sdict
-		"name" $name
-		"value" $formatted
-	) | $embed.Set "fields" -}}
-{{ end }}
+:::tip
 
-{{ sendMessage nil (cembed $embed) }}
+To get the latter value, you can use [this tool](https://kevinnovak.github.io/Time-Zone-Picker/) to find it (select the `Area/City` option).
+
+:::
+
+## Code
+
+```go file=../../../src/utilities/world_clock.go.tmpl
+
 ```
+
+## Author
+
+This custom command was written by [@jo3-l](https://github.com/jo3-l).

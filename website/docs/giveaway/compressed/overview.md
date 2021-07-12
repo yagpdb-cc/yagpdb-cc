@@ -1,95 +1,141 @@
 ---
-sidebar_position: 1
 title: Overview
 ---
 
-This is a giveaway package for YAGPDB bot consisting of 2 Custom Commands (CCs). Both must be saved for it to work as expected.
+This is a highly compressed version of the giveaway system.
 
----
+For more information about the giveaway packages in general, see [this](../overview) page.
 
-## Sub-Commands (precede all commands by the prefix for YOUR server to invoke them):
+## Features
 
-1. `giveaway start <Time> [Prize]`
+- Start giveaways with duration, optional prize, number of participants, number of winners, and giveaway channel.
+- End giveaways and announce winners instantly.
+- Cancel giveaways without announcing winners.
+- Re-roll an old giveaway to find new winners.
+- List all active giveaways.
+- `execCC` support for automating giveaway creation/cancellation/etc. from custom commands.
 
-   Use: To start a new giveaway.
+## Installation
 
-   - `<Time>` It is specified as the amount of time after which giveaway winners will be announced or how long giveaway will be active.  
-     Format is (num)y(num)mo(num)w(num)d(num)h(num)m(num)s.
+This package contains two custom commands: the [main command](main-cc), and a [reaction handler](reaction-handler).
 
-     ```
-     eg: 1y7mo2w1d3h4m15s = 1 year 7 months 2 weeks 1 day 3 hours 4 minutes and 15 seconds.
-     ```
+Both must be added for the system to work as expected. As usual, there are instructions describing where to put the script and which trigger to use on the pages corresponding to the individual commands. Additionally, we've documented how and where to add these scripts down below.
 
-     **Note:** must not contain spaces in between and use the mentioned format only i.e d not days for specifying days so on.
+### Main Command
 
-   - `[Prize]` A string which will contain the prize of the giveaway , can be multiple words.
+Add the [main command](main-cc) as a new custom command.
+The trigger is a command trigger type with value `giveaway`, but it will also work with a `StartsWith` or `Regex` trigger if set up properly.
 
-     **Optional Flags:**
+:::caution
 
-     | Flag |    Argument Type     |                                        Usage                                        |
-     | ---- | :------------------: | :---------------------------------------------------------------------------------: |
-     | -p   |        number        |          for specifying max number of participants( default is unlimited).          |
-     | -w   |        number        |                  for specifying number of winners ( default is 1)                   |
-     | -c   | Channel (ID/Mention) | for specifying the channel for giveaway to take place ( default is current channel) |
+Unless you would like everyone to be able to manage giveaways, we advise that you restrict this command to a staff role in the role restrictions.
 
-     **Example:** `(prefix)giveaway start 1d12h Ps4 Pro -p 50 -w 2 -c #giveaway-channel` will start a giveaway in the #giveaway-channel which will remain active for 1 day 12 hours with max participants as 50 and max winners as 2.
+:::
 
-2. `giveaway end <ID>`
+Save for now, we'll come back to it later.
 
-   Ends a giveaway with specified ID and will announce the winners instantly. Will update giveaway announcement message.
+### Reaction Handler
 
-   **Note:** ID is the long number which can be obtained using: `g list` command and is also mentioned in the giveaway announcement embed.
+Next, add the [reaction handler](reaction-handler) as a new custom command. The trigger is a reaction type with the `Added + Removed Reactions` option enabled.
 
-3. `giveaway cancel <ID>`
+:::info
 
-   Cancels a giveaway with specified ID WITHOUT announcing winners. Will update giveaway announcement message.
+At this point, your giveaway system should be usable! If you would like to customize the giveaway emoji, see [here](overview/#configuration).
+For how to use it, please refer to the [usage](overview/#usage) section.
 
-   **Note:** ID is the long number which can be obtained using: `g list` command and is also mentioned in the giveaway announcement embed.
+:::
 
-4. `giveaway reroll [ID or N Giveaways Old]`
+## Configuration
 
-   Re-rolls an old giveaway, which was finished earlier, to find new winner(s). If no argument is passed, the most recently finished giveaway is re-rolled.
+There is one configurable value in this package, `$gEmoji`, which corresponds to the giveaway emoji that should be used.
 
-   Accpets an optional argument which could be either the ID of the older giveaway or you can specify the nth previously finished giveaway (between 1 - 10).
+:::danger
 
-   For example, if 2 is passed, it will re-roll the giveaway finished before the most recently finished giveaway.
+If you change the giveaway emoji to something different from the default, you need to change it in both the [main command](main-cc) and the [reaction handler](reaction-handler).
+Otherwise, unexpected behavior may occur.
 
-5. `giveaway list`
+:::
 
-   Lists all active giveaways with their IDs , Prize and Ending Time.
+## Usage
 
----
+### `giveaway start <time> [prize]`
 
-## ExecCC support:
+Starts a new giveaway.
 
-Code has inbuilt intuitive execCC support. ExecData for invoking command via execCC is simply:
+#### Arguments
+
+- `<time>` - Specifies the amount of time after which the giveaway winners will be announced/how long the giveaway will be active. Format is `(num)y(num)mo(num)w(num)d(num)h(num)m(num)s`.
+
+  **Example:** `1y7mo2w1d3h4m15s = 1 year 7 months 2 weeks 1 day 3 hours 4 minutes and 15 seconds`.
+
+  **Note:** Must not contain spaces in between. Stick to the format above only, i.e. use `d`, not `days` for specifying days and so on.
+
+- `[prize]` - The prize of the giveaway, can be multiple words.
+
+#### Optional Flags
+
+| Flag |    Argument Type     |                                     Usage                                      |
+| ---- | :------------------: | :----------------------------------------------------------------------------: |
+| -p   |        number        |        specifies the max number of participants (default is unlimited).        |
+| -w   |        number        |                specifies the number of winners (default is 1).                 |
+| -c   | Channel (ID/Mention) | specifies the channel for giveaway to take place (default is current channel). |
+
+#### Example
 
 ```
-"giveaway <Sub_Command> <argument_1> <argument_2> ..."
+-giveaway start 1d12h Ps4 Pro -p 50 -w 2 -c #giveaways
 ```
 
-#### Examples:
+Starts a giveaway in `#giveaways` which will remain active for 1 day 12 hours with the maximum participants set to 50 and number of winners set to 2.
 
-- `{{execCC $CCID_for_giveaway_cc nil 0 "-giveaway start 1d Coins -w 2"}}` is equivalent to: `-giveaway start 1d Coins`  
-   Above will start a giveaway in the same channel in which execCC is invoked with a duration of 1 day with max winners: 2 and prize: Coins
+### `giveaway end <id>`
 
-- `{{execCC $CCID_for_giveaway_cc nil 0 "-givewaway end 11106339"}}` is equivalent to: `-giveaway end 11106339`  
-   Above will end the giveaway with ID = `11106339` immediately and announce the winners.
+Ends the giveaway with the ID provided and announces the winners instantly. Updates the giveaway announcement message.
 
-So in general you can pass the ExecData as simply trigger followed by Sub-Command and arguments separated by a space " " all joined into a single string.
+:::info
 
----
+The ID is the long number which can be obtained using the `giveaway list` command. It is also mentioned in the giveaway announcement embed.
 
-## Inbuilt syntax displayer:
+:::
 
-The main command also has an inbuilt syntax displayer which can be invoked by simply typing the trigger without any arguments.
+### `giveaway cancel <id>`
 
----
+Cancels the giveaway with the ID provided without announcing the winners. Updates the giveaway announcement message.
 
-## Things which can be modified:
+### `giveaway reroll [id-or-n]`
 
-The giveaway emoji is present as the Top of both commands and can be modified according to choice but remember!! needs to be modified for both commands (CCs).
+Re-rolls an old giveaway, which was finished earlier, to find new winner(s). If no argument is passed, the most recently finished giveaway is re-rolled.
 
----
+Accepts an optional argument which could either be the ID of an old giveway or a number between 1-10, which represents the *n*th previously finished giveaway.
 
-#### This custom command was authored and developed by [@Satty9361](https://github.com/Satty9361).
+#### Example
+
+```
+giveaway reroll 2
+```
+
+Re-rolls the giveaway finished before the most recently finished giveaway.
+
+### `giveaway list`
+
+Lists all active giveaways with their IDs, prize, and ending time.
+
+## execCC support
+
+This command package has intuitive support for `execCC`. Simply call the command with data set to a string structured like follows:
+
+```
+giveaway <subcommand> <arg0> <arg1> ...
+```
+
+### Examples
+
+- `{{execCC $CCID_for_giveaway_cc nil 0 "-giveaway start 1d Coins -w 2"}}` is equivalent to `-giveaway start 1d Coins`
+  Starts a giveaway in the same channel in which `execCC` is invoked with a duration of 1 day with max winners set to 2 and prize set to `Coins`.
+
+- `{{execCC $CCID_for_giveaway_cc nil 0 "-givewaway end 11106339"}}` is equivalent to `-giveaway end 11106339`
+  Ends the giveaway with ID `11106339` immediately and announces the winners.
+
+## Author
+
+This custom command package was written by [@Satty9361](https://github.com/Satty9361).

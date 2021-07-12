@@ -57,6 +57,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Check template syntax
-        uses: jo3-l/action-check-yag-tmpl-syntax@v1.0.1
+        uses: jo3-l/action-check-yag-tmpl-syntax@v2
         with:
           include: '**/*.go.tmpl'
