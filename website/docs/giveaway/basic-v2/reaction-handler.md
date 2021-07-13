@@ -17,7 +17,7 @@ See the [giveaway package overview](overview/#configuration) for more informatio
 
 ## Code
 
-```go file=../../../../src/giveaway/basic_v2/reaction_handler.go.tmpl
+```gotmpl file=../../../../src/giveaway/basic_v2/reaction_handler.go.tmpl
 
 ```
 

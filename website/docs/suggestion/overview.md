@@ -98,14 +98,14 @@ Do not leave any channel ID blank, as this will break the system.
 
 ##### Upvote and Downvote example with unicode (inbuilt) emoji
 
-```go
+```gotmpl
 {{$Upvote:="👍"}}
 {{$Downvote:="👎"}}
 ```
 
 ##### Upvote and Downvote example with custom emoji
 
-```go
+```gotmpl
 {{$Upvote:="upvote:524907425531428864"}}
 {{$Downvote:="downvote:524907425032175638"}}
 ```

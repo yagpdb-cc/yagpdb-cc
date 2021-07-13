@@ -32,7 +32,7 @@ Set this command to _only run_ in your x-word-story channel in the channel restr
 
 ## Code
 
-```go file=../../../src/fun/x_word_story.go.tmpl
+```gotmpl file=../../../src/fun/x_word_story.go.tmpl
 
 ```
 

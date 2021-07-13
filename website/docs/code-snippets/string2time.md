@@ -22,7 +22,7 @@ Time is mentioned as `hh:mm:ss` or `hh:mm` or `hh`. May or may not be followed b
 
 ## Code
 
-```go file=../../../src/code_snippets/string_to_time.go.tmpl
+```gotmpl file=../../../src/code_snippets/string_to_time.go.tmpl
 
 ```
 
@@ -30,7 +30,7 @@ Time is mentioned as `hh:mm:ss` or `hh:mm` or `hh`. May or may not be followed b
 
 First, add the code snippet above:
 
-```go
+```gotmpl
 {{/* code snippet goes here */}}
 ```
 
@@ -45,7 +45,7 @@ Next, change the value of `$timeString` to the value you want to parse. Say we w
 
 You can now reference the parsed time using `$timeConverted`, which will be a _time.Time_:
 
-```go {2}
+```gotmpl {2}
 {{/* code snippet goes here */}}
 Resulting time: {{$timeConverted}}
 ```

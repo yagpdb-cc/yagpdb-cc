@@ -45,7 +45,7 @@ Sends the code for the custom command with the ID 10, the custom command with th
 
 ## Code
 
-```go file=../../../src/utilities/cc2file.go.tmpl
+```gotmpl file=../../../src/utilities/cc2file.go.tmpl
 
 ```
 

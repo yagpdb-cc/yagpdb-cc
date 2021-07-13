@@ -26,7 +26,7 @@ To get the latter value, you can use [this tool](https://kevinnovak.github.io/Ti
 
 ## Code
 
-```go file=../../../src/utilities/world_clock.go.tmpl
+```gotmpl file=../../../src/utilities/world_clock.go.tmpl
 
 ```
 

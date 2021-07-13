@@ -33,7 +33,7 @@ This is _not_ a custom command! Rather, it's meant to be added to your **Join Fe
 
 ## Code
 
-```go file=../../../../src/moderation/raid_guard/join_trigger.go.tmpl
+```gotmpl file=../../../../src/moderation/raid_guard/join_trigger.go.tmpl
 
 ```
 

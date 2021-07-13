@@ -25,7 +25,7 @@ This command allows users to flag messages for staff review through reactions.
 
 ## Code
 
-```go file=../../../src/utilities/flag_message.go.tmpl
+```gotmpl file=../../../src/utilities/flag_message.go.tmpl
 
 ```
 

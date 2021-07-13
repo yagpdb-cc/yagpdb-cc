@@ -21,7 +21,7 @@ Instead of `struct`, you can also use `structure`.
 
 ## Code
 
-```go file=../../../src/utilities/struct.go.tmpl
+```gotmpl file=../../../src/utilities/struct.go.tmpl
 
 ```
 

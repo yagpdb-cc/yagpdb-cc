@@ -31,7 +31,7 @@ Instead of `ru`, you can also use `reportuser`, `reportu`, or `ruser`.
 
 ## Code
 
-```go file=../../../../src/moderation/report_system/custom_report.go.tmpl
+```gotmpl file=../../../../src/moderation/report_system/custom_report.go.tmpl
 
 ```
 

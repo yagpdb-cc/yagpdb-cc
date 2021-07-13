@@ -41,7 +41,7 @@ Instead of `wheeloffortune`, you can also use `wheel` and `wheelOfFortune` (the 
 
 ## Code
 
-```go file=../../../src/fun/wheel_of_fortune.go.tmpl
+```gotmpl file=../../../src/fun/wheel_of_fortune.go.tmpl
 
 ```
 

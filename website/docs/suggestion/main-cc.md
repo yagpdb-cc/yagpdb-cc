@@ -21,7 +21,7 @@ Again, see the [suggestion package overview](overview/#configuration) for more i
 
 ## Code
 
-```go file=../../../src/suggestion/suggestion.go.tmpl
+```gotmpl file=../../../src/suggestion/suggestion.go.tmpl
 
 ```
 

@@ -38,7 +38,7 @@ Instead of using `leveling`, you can also use `levelconf`, `lvlconf`, `level-con
 
 ## Code
 
-```go file=../../../src/leveling/leveling.go.tmpl
+```gotmpl file=../../../src/leveling/leveling.go.tmpl
 
 ```
 

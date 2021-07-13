@@ -28,7 +28,7 @@ Instead of `user`, you can also use `member`, `memberinfo`, `member-info`, `user
 
 ## Code
 
-```go file=../../../src/info/user.go.tmpl
+```gotmpl file=../../../src/info/user.go.tmpl
 
 ```
 

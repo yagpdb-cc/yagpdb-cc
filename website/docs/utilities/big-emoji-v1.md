@@ -21,7 +21,7 @@ Instead of `bigemoji`, you can also use `be`, `bigemote`, `big-emote`, and `big-
 
 ## Code
 
-```go file=../../../src/utilities/big_emoji.go.tmpl
+```gotmpl file=../../../src/utilities/big_emoji.go.tmpl
 
 ```
 

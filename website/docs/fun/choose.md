@@ -23,7 +23,7 @@ Would result in one of `go to sleep`, `eat`, or `watch tv`.
 
 ## Code
 
-```go file=../../../src/fun/choose.go.tmpl
+```gotmpl file=../../../src/fun/choose.go.tmpl
 
 ```
 

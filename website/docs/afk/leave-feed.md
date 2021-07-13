@@ -19,7 +19,7 @@ This is _not_ a custom command! Rather, it's meant to be added to your **Leave F
 
 ## Code
 
-```go file=../../../src/afk/leave_feed.go.tmpl
+```gotmpl file=../../../src/afk/leave_feed.go.tmpl
 
 ```
 

@@ -83,7 +83,7 @@ This command assumes that you have an existing currency system set up to provide
 
 ## Code
 
-```go file=../../../src/fun/slot_machine.go.tmpl
+```gotmpl file=../../../src/fun/slot_machine.go.tmpl
 
 ```
 

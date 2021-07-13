@@ -22,7 +22,7 @@ Instead of `bookmark`, you can also use `bm`.
 
 ## Code
 
-```go file=../../../src/utilities/bookmark.go.tmpl
+```gotmpl file=../../../src/utilities/bookmark.go.tmpl
 
 ```
 

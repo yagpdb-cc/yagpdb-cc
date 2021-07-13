@@ -14,7 +14,7 @@ For more information, see [this section](https://discord.com/developers/docs/ref
 
 ## Code
 
-```go file=../../../src/code_snippets/snowflake2time.go.tmpl
+```gotmpl file=../../../src/code_snippets/snowflake2time.go.tmpl
 
 ```
 
@@ -22,7 +22,7 @@ For more information, see [this section](https://discord.com/developers/docs/ref
 
 First, add the code snippet above:
 
-```go
+```gotmpl
 {{/* code snippet goes here */}}
 ```
 
@@ -37,7 +37,7 @@ Next, change the value of `$snowflake` to your input value. Say we wanted to use
 
 You can now access the time when `$snowflake` was created using `$time`:
 
-```go {2}
+```gotmpl {2}
 {{/* code snippet goes here */}}
 Time `$snowflake` was created: {{$time}}
 ```

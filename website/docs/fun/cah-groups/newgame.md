@@ -41,7 +41,7 @@ There's no specific order that you have to put the pack/pack groups in: the abov
 
 ## Code
 
-```go file=../../../../src/fun/cah_groups/newgame.go.tmpl
+```gotmpl file=../../../../src/fun/cah_groups/newgame.go.tmpl
 
 ```
 

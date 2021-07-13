@@ -17,7 +17,7 @@ For more information about the CAH card pack system, see [this](overview) page.
 
 ## Code
 
-```go file=../../../../src/fun/cah_groups/listgroups.go.tmpl
+```gotmpl file=../../../../src/fun/cah_groups/listgroups.go.tmpl
 
 ```
 

@@ -34,7 +34,7 @@ To prevent this command from overloading YAGPDB, no more than 5 deathmatch games
 
 ## Code
 
-```go file=../../../src/fun/deathmatch.go.tmpl
+```gotmpl file=../../../src/fun/deathmatch.go.tmpl
 
 ```
 

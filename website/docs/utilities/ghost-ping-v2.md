@@ -33,7 +33,7 @@ This command only works if the ghost ping was deleted within 5 seconds of being 
 
 ## Code
 
-```go file=../../../src/utilities/ghostping_v2.go.tmpl
+```gotmpl file=../../../src/utilities/ghostping_v2.go.tmpl
 
 ```
 

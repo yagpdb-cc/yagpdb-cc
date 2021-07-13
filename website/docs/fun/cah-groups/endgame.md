@@ -23,7 +23,7 @@ This command is nothing more than an alias for `-cah end` for consistency, so fe
 
 ## Code
 
-```go file=../../../../src/fun/cah_groups/endgame.go.tmpl
+```gotmpl file=../../../../src/fun/cah_groups/endgame.go.tmpl
 
 ```
 

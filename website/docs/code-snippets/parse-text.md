@@ -6,7 +6,7 @@ Code snippet to parse text into a slice of arguments, much like how `.CmdArgs` i
 
 ## Code
 
-```go file=../../../src/code_snippets/parse_text.go.tmpl
+```gotmpl file=../../../src/code_snippets/parse_text.go.tmpl
 
 ```
 
@@ -14,7 +14,7 @@ Code snippet to parse text into a slice of arguments, much like how `.CmdArgs` i
 
 First, add in the code snippet above:
 
-```go
+```gotmpl
 {{/* code snippet goes here */}}
 ```
 
@@ -29,7 +29,7 @@ Next, change the value of `$text` to the value you like. Say we wanted to use `.
 
 You may now access the parsed slice of arguments using `$clean`, which will be a `cslice`.
 
-```go {2}
+```gotmpl {2}
 {{/* code snippet goes here */}}
 Parsed args: `{{json $clean}}`
 ```

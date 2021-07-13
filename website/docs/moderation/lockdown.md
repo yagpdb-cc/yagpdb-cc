@@ -38,7 +38,7 @@ Would lock the current channel and delete the 5 most recent messages, excluding 
 
 ## Code
 
-```go file=../../../src/moderation/lockdown.go.tmpl
+```gotmpl file=../../../src/moderation/lockdown.go.tmpl
 
 ```
 

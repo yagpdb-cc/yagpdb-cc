@@ -16,7 +16,7 @@ This command generates random images of different animals.
 
 ## Code
 
-```go file=../../../src/fun/animal.go.tmpl
+```gotmpl file=../../../src/fun/animal.go.tmpl
 
 ```
 

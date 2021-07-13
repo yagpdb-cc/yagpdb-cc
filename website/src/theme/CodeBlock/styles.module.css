@@ -26,6 +26,7 @@
 
 .codeBlock {
 	padding: 0;
+	tab-size: 2;
 	white-space: pre-wrap;
 }
 

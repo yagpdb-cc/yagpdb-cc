@@ -57,7 +57,7 @@ There is nothing that can be done about this so it's not an issue of this comman
 
 ## Code
 
-```go file=../../../src/moderation/emote_filter.go.tmpl
+```gotmpl file=../../../src/moderation/emote_filter.go.tmpl
 
 ```
 

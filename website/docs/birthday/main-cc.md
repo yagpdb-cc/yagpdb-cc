@@ -21,7 +21,7 @@ Again, see the [birthday system overview](overview/#configuration) for instructi
 
 ## Code
 
-```go file=../../../src/birthday/birthday.go.tmpl
+```gotmpl file=../../../src/birthday/birthday.go.tmpl
 
 ```
 

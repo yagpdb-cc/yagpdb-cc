@@ -15,7 +15,7 @@ This command generates random embedded duck pictures. Quack! 🦆🦆🦆
 
 ## Code
 
-```go file=../../../src/fun/duck.go.tmpl
+```gotmpl file=../../../src/fun/duck.go.tmpl
 
 ```
 

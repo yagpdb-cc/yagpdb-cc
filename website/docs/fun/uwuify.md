@@ -21,7 +21,7 @@ Don't know what "uwuifying" text is? Add this CC to your server and find out...
 
 ## Code
 
-```go file=../../../src/fun/uwuify.go.tmpl
+```gotmpl file=../../../src/fun/uwuify.go.tmpl
 
 ```
 

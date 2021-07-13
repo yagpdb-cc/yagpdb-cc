@@ -16,7 +16,7 @@ This command repeats text provided.
 
 ## Code
 
-```go file=../../../src/fun/repeat.go.tmpl
+```gotmpl file=../../../src/fun/repeat.go.tmpl
 
 ```
 

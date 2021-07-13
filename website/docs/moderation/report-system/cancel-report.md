@@ -29,7 +29,7 @@ Instead of `cr`, you can also use `cancelreport`, `cancelr`, or `creport`.
 
 ## Code
 
-```go file=../../../../src/moderation/report_system/cancel_report.go.tmpl
+```gotmpl file=../../../../src/moderation/report_system/cancel_report.go.tmpl
 
 ```
 

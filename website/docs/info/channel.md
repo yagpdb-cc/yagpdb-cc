@@ -22,7 +22,7 @@ Instead of `channel`, you can also use `channelinfo`.
 
 ## Code
 
-```go file=../../../src/info/channel.go.tmpl
+```gotmpl file=../../../src/info/channel.go.tmpl
 
 ```
 

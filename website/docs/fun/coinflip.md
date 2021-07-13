@@ -32,7 +32,7 @@ This command is a game of heads or tails which users can play.
 
 ## Code
 
-```go file=../../../src/fun/coinflip.go.tmpl
+```gotmpl file=../../../src/fun/coinflip.go.tmpl
 
 ```
 

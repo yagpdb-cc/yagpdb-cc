@@ -111,7 +111,7 @@ You may now install the latest version as described above.
 
 :::
 
-```go
+```gotmpl
 {{with .ExecData}}
    {{if eq . "1"}}
       {{range seq 0 10}}

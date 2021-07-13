@@ -22,7 +22,7 @@ Instead of using `leaderboard`, you can also use `lb` or `top`.
 
 ## Code
 
-```go file=../../../src/leveling/leaderboard.go.tmpl
+```gotmpl file=../../../src/leveling/leaderboard.go.tmpl
 
 ```
 

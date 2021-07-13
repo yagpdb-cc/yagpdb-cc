@@ -80,7 +80,7 @@ The second is not inline and has the name `field name 1` and the value `field va
 
 ## Code
 
-```go file=../../../src/utilities/send.go.tmpl
+```gotmpl file=../../../src/utilities/send.go.tmpl
 
 ```
 

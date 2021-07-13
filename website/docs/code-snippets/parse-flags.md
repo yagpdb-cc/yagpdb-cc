@@ -19,7 +19,7 @@ flags:
 
 ## Code
 
-```go file=../../../src/code_snippets/parse_flags.go.tmpl
+```gotmpl file=../../../src/code_snippets/parse_flags.go.tmpl
 
 ```
 
@@ -30,7 +30,7 @@ To use it, you will need to construct a map holding the flags, switches, and inp
 
 In this example, we will be parsing a command similar in structure to the `rolemenu create` built-in command.
 
-```go
+```gotmpl
 {{/* code snippet goes here */}}
 {{$query := dict
 	"Flags" (dict
@@ -56,7 +56,7 @@ Flags take on the value that is after them, while switches are simple on-off swi
 
 Now, let's run the template, passing our query as the data:
 
-```go {18}
+```gotmpl {18}
 {{/* code snippet goes here */}}
 {{$query := dict
 	"Flags" (dict

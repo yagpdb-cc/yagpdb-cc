@@ -33,7 +33,7 @@ Instead of using `-connect4`, you can also use `-con4` or `-c4`.
 
 ## Code
 
-```go file=../../../../src/fun/connect4_system/start_game.go.tmpl
+```gotmpl file=../../../../src/fun/connect4_system/start_game.go.tmpl
 
 ```
 

@@ -23,7 +23,7 @@ Results in `hElLo WoRlD`.
 
 ## Code
 
-```go file=../../../src/fun/mock.go.tmpl
+```gotmpl file=../../../src/fun/mock.go.tmpl
 
 ```
 

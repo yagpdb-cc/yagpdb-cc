@@ -149,7 +149,7 @@ Codeblocks can link to files (useful for showing custom command code):
 `./docs.md`
 
 ````
-```go file=./file.go.tmpl
+```gotmpl file=./file.go.tmpl
 
 ```
 ````
@@ -157,7 +157,7 @@ Codeblocks can link to files (useful for showing custom command code):
 Would become:
 
 ````
-```go
+```gotmpl
 {{sendMessage nil "hello world"}}
 ```
 ````

@@ -15,7 +15,7 @@ Retrieves the most recently deleted message in the past hour (non-premium) / 12 
 
 ## Code
 
-```go file=../../../src/utilities/snipe.go.tmpl
+```gotmpl file=../../../src/utilities/snipe.go.tmpl
 
 ```
 

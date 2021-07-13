@@ -39,7 +39,7 @@ Instead of `rr`, you can also use `rolerewards` or `role-rewards`.
 
 ## Code
 
-```go file=../../../src/leveling/role_rewards.go.tmpl
+```gotmpl file=../../../src/leveling/role_rewards.go.tmpl
 
 ```
 

@@ -30,7 +30,7 @@ To use hex for the colour, simply append a `0x` in front, e.g. `0xFF0FF`.
 
 ## Code
 
-```go file=../../../src/fun/funinfo.go.tmpl
+```gotmpl file=../../../src/fun/funinfo.go.tmpl
 
 ```
 

@@ -29,7 +29,7 @@ There are also overloads to set your rank card background (if enabled) and rank 
 
 ## Code
 
-```go file=../../../src/leveling/rank.go.tmpl
+```gotmpl file=../../../src/leveling/rank.go.tmpl
 
 ```
 

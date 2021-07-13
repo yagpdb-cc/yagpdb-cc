@@ -36,7 +36,7 @@ This command runs a "guess the number" game where users send numbers between 1 a
 
 ## Code
 
-```go file=../../../src/fun/guess_the_number.go.tmpl
+```gotmpl file=../../../src/fun/guess_the_number.go.tmpl
 
 ```
 

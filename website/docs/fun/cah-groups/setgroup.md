@@ -31,7 +31,7 @@ Creates a new pack called `group name` that expands to the following packs: `20-
 
 ## Code
 
-```go file=../../../../src/fun/cah_groups/setgroup.go.tmpl
+```gotmpl file=../../../../src/fun/cah_groups/setgroup.go.tmpl
 
 ```
 

@@ -12,7 +12,7 @@ This may be useful for join feeds - showing `You're the 5th member` is nicer tha
 
 ## Code
 
-```go file=../../../src/code_snippets/ordinal.go.tmpl
+```gotmpl file=../../../src/code_snippets/ordinal.go.tmpl
 
 ```
 
@@ -20,7 +20,7 @@ This may be useful for join feeds - showing `You're the 5th member` is nicer tha
 
 First, add the code snippet:
 
-```go
+```gotmpl
 {{/* code snippet goes here */}}
 ```
 
@@ -35,7 +35,7 @@ Next, change the value of `$int` to what you want:
 
 And that's it! `$ord` will be the ordinal for the integer `$int`.
 
-```go {2}
+```gotmpl {2}
 {{/* code snippet goes here */}}
 You are the {{$int}}{{$ord}} member!
 ```

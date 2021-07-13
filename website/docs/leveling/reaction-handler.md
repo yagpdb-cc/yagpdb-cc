@@ -11,7 +11,7 @@ This command handles reactions for the leveling system.
 
 ## Code
 
-```go file=../../../src/leveling/reaction_handler.go.tmpl
+```gotmpl file=../../../src/leveling/reaction_handler.go.tmpl
 
 ```
 

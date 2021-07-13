@@ -22,7 +22,7 @@ See the [AFK system overview](overview/#installation) for instructions regarding
 
 ## Code
 
-```go file=../../../src/afk/afk.go.tmpl
+```gotmpl file=../../../src/afk/afk.go.tmpl
 
 ```
 

@@ -42,7 +42,7 @@ As you have to hardcode your time/weather/name currently this is more useful as 
 
 ## Code
 
-```go file=../../../src/utilities/time.go.tmpl
+```gotmpl file=../../../src/utilities/time.go.tmpl
 
 ```
 

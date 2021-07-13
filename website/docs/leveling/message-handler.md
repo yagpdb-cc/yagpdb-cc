@@ -11,7 +11,7 @@ This command handles messages for the leveling system.
 
 ## Code
 
-```go file=../../../src/leveling/message_handler.go.tmpl
+```gotmpl file=../../../src/leveling/message_handler.go.tmpl
 
 ```
 

@@ -13,7 +13,7 @@ For more information about the connect-4 game, see [this](overview) page.
 
 ## Code
 
-```go file=../../../../src/fun/connect4_system/reaction_handler.go.tmpl
+```gotmpl file=../../../../src/fun/connect4_system/reaction_handler.go.tmpl
 
 ```
 

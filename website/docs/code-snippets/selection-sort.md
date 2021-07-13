@@ -12,7 +12,7 @@ Though this works fine for small slices/array, due to the inefficient nature of 
 
 ## Code
 
-```go file=../../../src/code_snippets/selection_sort.go.tmpl
+```gotmpl file=../../../src/code_snippets/selection_sort.go.tmpl
 
 ```
 
@@ -20,7 +20,7 @@ Though this works fine for small slices/array, due to the inefficient nature of 
 
 First, add the code snippet above:
 
-```go
+```gotmpl
 {{/* code snippet goes here */}}
 ```
 
@@ -35,7 +35,7 @@ Next, change the value of `$arr` to the value you want to sort:
 
 Voila, `$arr` is now sorted! You can check that it was by outputting `$arr`:
 
-```go {2}
+```gotmpl {2}
 {{/* code snippet goes here */}}
 `$arr` after sorting: `{{json $arr}}`
 ```

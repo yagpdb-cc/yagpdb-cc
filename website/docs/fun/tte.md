@@ -21,7 +21,7 @@ Instead of `tte`, you can also use `emojify` or `emotify`.
 
 ## Code
 
-```go file=../../../src/fun/tte.go.tmpl
+```gotmpl file=../../../src/fun/tte.go.tmpl
 
 ```
 

@@ -13,7 +13,7 @@ For more information about the tag system, see [this](overview) page.
 
 ## Code
 
-```go file=../../../src/tags/reaction_handler.go.tmpl
+```gotmpl file=../../../src/tags/reaction_handler.go.tmpl
 
 ```
 

@@ -27,7 +27,7 @@ Again, see the [giveaway package overview](overview/#configuration) for more inf
 
 ## Code
 
-```go file=../../../../src/giveaway/basic/giveaway.go.tmpl
+```gotmpl file=../../../../src/giveaway/basic/giveaway.go.tmpl
 
 ```
 

@@ -22,7 +22,7 @@ Sometimes, special characters will mess up the link, so we advise that you only 
 
 ## Code
 
-```go file=../../../src/fun/meme.go.tmpl
+```gotmpl file=../../../src/fun/meme.go.tmpl
 
 ```
 

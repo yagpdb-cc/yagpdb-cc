@@ -28,7 +28,7 @@ Instead of `preview`, you can also use `color`.
 
 ## Code
 
-```go file=../../../src/utilities/preview.go.tmpl
+```gotmpl file=../../../src/utilities/preview.go.tmpl
 
 ```
 

@@ -21,7 +21,7 @@ Instead of `randcolor`, you can also use `randomcolor`, `random-color`, or `rand
 
 ## Code
 
-```go file=../../../src/utilities/random_color.go.tmpl
+```gotmpl file=../../../src/utilities/random_color.go.tmpl
 
 ```
 

@@ -52,7 +52,7 @@ If the command usage is complex, consider including an example here.
 
 ## Code
 
-```go file=../../../src/path/to/file
+```gotmpl file=../../../src/path/to/file
 
 ```
 

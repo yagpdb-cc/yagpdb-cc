@@ -28,7 +28,7 @@ Instead of using `setxp`, you can also use `set-xp`. Similarly, in place of `set
 
 ## Code
 
-```go file=../../../src/leveling/set_xp.go.tmpl
+```gotmpl file=../../../src/leveling/set_xp.go.tmpl
 
 ```
 

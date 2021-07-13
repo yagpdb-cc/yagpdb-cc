@@ -23,7 +23,7 @@ See the [starboard system overview](overview/#configuration) for more informatio
 
 ## Code
 
-```go file=../../../../src/fun/starboard_v2/starboard.go.tmpl
+```gotmpl file=../../../../src/fun/starboard_v2/starboard.go.tmpl
 
 ```
 

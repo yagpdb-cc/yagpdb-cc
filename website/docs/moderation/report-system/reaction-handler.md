@@ -13,7 +13,7 @@ For more information about the custom report system, see [this](overview) page.
 
 ## Code
 
-```go file=../../../../src/moderation/report_system/reaction_handler.go.tmpl
+```gotmpl file=../../../../src/moderation/report_system/reaction_handler.go.tmpl
 
 ```
 

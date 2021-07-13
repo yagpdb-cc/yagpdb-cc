@@ -22,7 +22,7 @@ Instead of `serverinfo`, you can also use `server`, `guild`, `guildinfo`, `serve
 
 ## Code
 
-```go file=../../../src/info/server.go.tmpl
+```gotmpl file=../../../src/info/server.go.tmpl
 
 ```
 

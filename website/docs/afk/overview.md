@@ -26,7 +26,7 @@ Now take your time to read through the leading comment and decide if you want to
 
 #### Disable removeAfkOnMessage
 
-```go {2}
+```gotmpl {2}
 {{/* Configuration values */}}
 {{ $removeAfkOnMessage := false}}
 {{/* End of configuration values */}}

@@ -59,7 +59,7 @@ Would edit the message with ID `123` in current channel to have embed title `foo
 
 ## Code
 
-```go file=../../../src/utilities/edit.go.tmpl
+```gotmpl file=../../../src/utilities/edit.go.tmpl
 
 ```
 

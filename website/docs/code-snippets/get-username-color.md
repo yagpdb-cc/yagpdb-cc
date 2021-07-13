@@ -6,7 +6,7 @@ This code snippet gets the display colour of a member.
 
 ## Code
 
-```go file=../../../src/code_snippets/get_username_color.go.tmpl
+```gotmpl file=../../../src/code_snippets/get_username_color.go.tmpl
 
 ```
 
@@ -16,7 +16,7 @@ First, copy the above snippet just above where you want to get the username colo
 
 For example, the following code uses it for an embed:
 
-```go {4}
+```gotmpl {4}
 {{/* code snippet here */}}
 {{sendMessage nil (cembed
 	"title" (print "Hello " .User.Username "!")

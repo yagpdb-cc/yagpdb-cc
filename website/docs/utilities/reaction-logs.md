@@ -16,7 +16,7 @@ This command logs reactions.
 
 ## Code
 
-```go file=../../../src/utilities/reaction_logs.go.tmpl
+```gotmpl file=../../../src/utilities/reaction_logs.go.tmpl
 
 ```
 

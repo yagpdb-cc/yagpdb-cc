@@ -22,7 +22,7 @@ To trigger the command via execCC, just call the CC with data set to the number 
 
 ## Code
 
-```go file=../../../src/fun/maze.go.tmpl
+```gotmpl file=../../../src/fun/maze.go.tmpl
 
 ```
 

@@ -44,7 +44,7 @@ Last, sometimes, you will need to configure the command. To see whether you need
 
 Several custom commands here provide a way to change some behavior of the command without having to dig deep into the code through **configuration variables**. Custom commands that do this will typically have the following structure:
 
-```go
+```gotmpl
 {{/*
 	Leading comment here.
 */}}

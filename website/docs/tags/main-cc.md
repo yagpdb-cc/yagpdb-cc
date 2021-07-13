@@ -34,7 +34,7 @@ Tag names must not contain the `|`, `_`, or `%` characters and be between 1 and 
 
 ## Code
 
-```go file=../../../src/tags/tags.go.tmpl
+```gotmpl file=../../../src/tags/tags.go.tmpl
 
 ```
 

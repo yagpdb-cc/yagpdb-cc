@@ -61,7 +61,7 @@ Unless you would like everyone to be able to use these commands, we advise that 
 
 ## Code
 
-```go file=../../../src/moderation/staff_on_duty.go.tmpl
+```gotmpl file=../../../src/moderation/staff_on_duty.go.tmpl
 
 ```
 

@@ -22,7 +22,7 @@ Instead of `avatar`, you can also use `av` or `pfp`.
 
 ## Code
 
-```go file=../../../src/info/avatar.go.tmpl
+```gotmpl file=../../../src/info/avatar.go.tmpl
 
 ```
 

@@ -25,7 +25,7 @@ The command may take a bit to finish running, as it has to run the action on all
 
 ## Code
 
-```go file=../../../../src/moderation/raid_guard/raid_admin.go.tmpl
+```gotmpl file=../../../../src/moderation/raid_guard/raid_admin.go.tmpl
 
 ```
 

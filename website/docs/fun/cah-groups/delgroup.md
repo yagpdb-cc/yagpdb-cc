@@ -23,7 +23,7 @@ If your group name has spaces in it, you need to put quotes around it: `-delgrou
 
 ## Code
 
-```go file=../../../../src/fun/cah_groups/delgroup.go.tmpl
+```gotmpl file=../../../../src/fun/cah_groups/delgroup.go.tmpl
 
 ```
 

@@ -59,6 +59,10 @@ module.exports = {
 				lightIcon: '☀️',
 			},
 		},
+		prism: {
+			theme: require('./src/prism-themes/github-light'),
+			darkTheme: require('./src/prism-themes/ayu-dark'),
+		},
 		navbar: {
 			title: 'YAGPDB Custom Commands',
 			logo: {

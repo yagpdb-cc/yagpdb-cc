@@ -20,7 +20,7 @@ This command displays information about messages. In particular, it shows parts 
 
 ## Code
 
-```go file=../../../src/utilities/json.go.tmpl
+```gotmpl file=../../../src/utilities/json.go.tmpl
 
 ```
 
