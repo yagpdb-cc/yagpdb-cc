@@ -1,5 +1,4 @@
-// Converted automatically using ./tools/themeFromVsCode
-var theme = {
+const theme = {
 	plain: {
 		color: '#b3b1ad',
 		backgroundColor: '#191F26',
