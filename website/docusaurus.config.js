@@ -148,4 +148,18 @@ module.exports = {
 			},
 		],
 	],
+	plugins: [
+		[
+			'@easyops-cn/docusaurus-search-local',
+			{
+				hashed: true,
+				docsRouteBasePath: ['/'],
+
+				// Workaround for docs base path being /.
+				// See https://github.com/easyops-cn/docusaurus-search-local/issues/42.
+				indexPages: true,
+				indexBlog: false,
+			},
+		],
+	],
 };
