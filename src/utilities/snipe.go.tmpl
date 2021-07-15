@@ -1,8 +1,8 @@
 {{/* 
-    Retrieves the most recent deleted message in the past hour (non-premium) / 12 hours (premium).
+	Retrieves the most recent deleted message in the past hour (non-premium) / 12 hours (premium).
 	See <https://yagpdb-cc.github.io/utilities/snipe-message> for more information.
 
-    Author: zen | ゼン#0008 <https://github.com/z3nn13/>
+	Author: zen | ゼン#0008 <https://github.com/z3nn13/>
 */}}
 
 {{/* Global Variables */}}
@@ -13,37 +13,37 @@
 {{ $undelete := execAdmin "ud -a" }}
 
 {{ with reFindAllSubmatches $regex $undelete }}
-        {{ $time := printf "%s%s" (index . 0 1) (index . 0 2) | toDuration }}
-        {{ $member := (index . 0 3 | toInt64 | getMember) }}
-        {{ $message := index (reSplit $regex $undelete 3) 1 }}
+		{{ $time := printf "%s%s" (index . 0 1) (index . 0 2) | toDuration }}
+		{{ $member := (index . 0 3 | toInt64 | getMember) }}
+		{{ $message := index (reSplit $regex $undelete 3) 1 }}
 
-        {{ $file := "" }}{{ $image_url := "" }}
-        {{ if $image_url = reFind $imgRegex  $message }}
-                {{ $split := reSplit $imgRegex $message 2 }}
-                {{ $message = print "> ⚠️ An image link is detected\n" (joinStr "" $split) }}
-        {{ end }}
-        {{ if gt (toRune $message|len) 2000 }}{{/* Preventing 2k limit error */}}
-                {{ $file = $message }}
-                {{ $message = "*Message exceeded 2k limit. Contents sent as file instead*"}}
-        {{ else if not $message }}
-                {{ $message = "> ⚠️ An attachment/embed was deleted" }} 
-        {{ end }}
+		{{ $file := "" }}{{ $image_url := "" }}
+		{{ if $image_url = reFind $imgRegex  $message }}
+				{{ $split := reSplit $imgRegex $message 2 }}
+				{{ $message = print "> ⚠️ An image link is detected\n" (joinStr "" $split) }}
+		{{ end }}
+		{{ if gt (toRune $message|len) 2000 }}{{/* Preventing 2k limit error */}}
+				{{ $file = $message }}
+				{{ $message = "*Message exceeded 2k limit. Contents sent as file instead*"}}
+		{{ else if not $message }}
+				{{ $message = "> ⚠️ An attachment/embed was deleted" }} 
+		{{ end }}
 
-        {{ $col := 0 }}{{ $p := 0 }}{{ $r := $member.Roles }}
-        {{ range $.Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $p .Position)}}{{$p = .Position}}{{$col = .Color}}{{end}}{{end }}
+		{{ $col := 0 }}{{ $p := 0 }}{{ $r := $member.Roles }}
+		{{ range $.Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $p .Position)}}{{$p = .Position}}{{$col = .Color}}{{end}}{{end }}
 
-        {{ $embed := cembed "author" (sdict "name" (print $member.User.String " (ID " $member.User.ID ")") "icon_url" ($member.User.AvatarURL "256"))
-            "description" $message 
-            "color" $col 
-            "image" (sdict "url" $image_url)
-            "footer" (sdict "text" (printf "%s %s ago" (index . 0 1) (index . 0 2)) "icon_url" $icon) 
-            "timestamp" (currentTime.Add (mult $time -1|toDuration)) }}
+		{{ $embed := cembed "author" (sdict "name" (print $member.User.String " (ID " $member.User.ID ")") "icon_url" ($member.User.AvatarURL "256"))
+			"description" $message 
+			"color" $col 
+			"image" (sdict "url" $image_url)
+			"footer" (sdict "text" (printf "%s %s ago" (index . 0 1) (index . 0 2)) "icon_url" $icon) 
+			"timestamp" (currentTime.Add (mult $time -1|toDuration)) }}
 
-        {{ with $file }}
-            {{ sendMessage nil (complexMessage "file" . "embed" $embed) }}
-        {{ else }}
-            {{ sendMessage nil $embed }}
-        {{ end }}
+		{{ with $file }}
+			{{ sendMessage nil (complexMessage "file" . "embed" $embed) }}
+		{{ else }}
+			{{ sendMessage nil $embed }}
+		{{ end }}
 {{ else }}
-        {{ sendMessage nil "Nothing to snipe here" }}
+		{{ sendMessage nil "Nothing to snipe here" }}
 {{ end }}

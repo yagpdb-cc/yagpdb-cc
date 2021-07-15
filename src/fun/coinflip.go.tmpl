@@ -15,88 +15,88 @@
 
 {{ $prefix := index (reFindAllSubmatches `Prefix of \x60\d+\x60: \x60(.+)\x60` (exec "prefix")) 0 1 }}{{ $cp := "" }}{{ $m := 0 }}{{ $bet := "" }}{{ $err := false }}{{ $img := "https://cdn.discordapp.com/attachments/707661790443733022/782710794634264616/d74906d39a1964e7d07555e7601b06ad.gif" }}{{ $cap := "https://cdn.discordapp.com/attachments/707661790443733022/782713935341027358/cap.png" }}{{ $pajura := "https://cdn.discordapp.com/attachments/707661790443733022/782713937979637760/pajura.png" }}{{ $embed:= sdict }}{{ $fields := cslice }}{{ $embed.Set "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "256"))}}
 {{ if not .ExecData }}
-    {{ if eq (len .CmdArgs) 2 }}
-        {{ with reFind `\A(?i)(heads|tails)\z` (index .CmdArgs 0) }}
-            {{ $cp = . | lower }}
-            {{ with reFindAll `\d+` (index $.CmdArgs 1) }}
-                {{ $bet = index . 0 | toInt }}
-                {{ if ge $bet $minbet }}
-                    {{ if le $bet $maxbet }}
-                        {{ if not (dbGet $.User.ID "cd_coinflip") }}
-                            {{ if ge (toInt (dbGet $.User.ID $db).Value) $bet }}
-                                {{ if not (dbGet $.User.ID "isrolling_cf") }}
-                                    {{ dbSet $.User.ID "isrolling_cf" true }}
-                                    {{ $embed.Set "image" (sdict "url" $img) }}
-                                    {{ $embed.Set "color" 16765696 }}
-                                    {{ $embed.Set "description" "**The coin is rolling... Wait...**" }}
-                                    {{ $m = sendMessageRetID $c (cembed $embed) }}
-                                    {{ execCC $.CCID nil 3 (sdict "m" $m "b" $bet "c" $cp )}}
-                                {{ else }}
-                                    {{ $embed.Set "description" "You can use this command when the last coin stopped rolling!" }}
-                                    {{ $embed.Set "color" 16488706 }}
-                                    {{ $err = true }}
-                                {{ end }}
-                            {{ else }}
-                                {{ $embed.Set "description" (printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet (toInt (dbGet $.User.ID $db).Value)) }}
-                                {{ $embed.Set "color" 16488706 }}
-                                {{ $err = true }}
-                            {{ end }}
-                        {{ else }}
-                            {{ $embed.Set "description" (print "You need to wait **" (humanizeDurationSeconds ((dbGet $.User.ID "cd_coinflip").ExpiresAt.Sub currentTime)) "** to use this command again.") }}
-                            {{ $embed.Set "color" 16488706 }}
-                            {{ $err = true }}
-                        {{ end }}
-                    {{ else }}
-                        {{ $embed.Set "description" (printf "Maximum bet can only be **%d**!" $maxbet) }}
-                        {{ $embed.Set "color" 16488706 }}
-                        {{ $err = true }}
-                    {{ end }}
-                {{ else }}
-                    {{ $embed.Set "description" (printf "Minimum bet can only be **%d**!" $minbet) }}
-                    {{ $embed.Set "color" 16488706 }}
-                    {{ $err = true }}
-                {{ end }}
-            {{ else }}
-                {{ $embed.Set "description" (printf "`%s` is not a valid number." (index $.CmdArgs 1)) }}
-                {{ $embed.Set "color" 16488706 }}
-                {{ $err = true }}
-            {{ end }}
-        {{ else }}
-            {{ $embed.Set "description" "You can only choose from **heads** or **tails**." }}
-            {{ $embed.Set "color" 16488706 }}
-            {{ $err = true }}
-        {{ end }}
-    {{ else }}
-        {{ $embed.Set "description" (printf "Syntax: **%scoinflip <heads/tails> <money>**" $prefix) }}
-        {{ $embed.Set "color" 16488706 }}
-        {{ $err = true }}
-    {{ end }}
-    {{ if $err }}
-        {{ sendMessage nil (cembed $embed) }}
-    {{ end }}
+	{{ if eq (len .CmdArgs) 2 }}
+		{{ with reFind `\A(?i)(heads|tails)\z` (index .CmdArgs 0) }}
+			{{ $cp = . | lower }}
+			{{ with reFindAll `\d+` (index $.CmdArgs 1) }}
+				{{ $bet = index . 0 | toInt }}
+				{{ if ge $bet $minbet }}
+					{{ if le $bet $maxbet }}
+						{{ if not (dbGet $.User.ID "cd_coinflip") }}
+							{{ if ge (toInt (dbGet $.User.ID $db).Value) $bet }}
+								{{ if not (dbGet $.User.ID "isrolling_cf") }}
+									{{ dbSet $.User.ID "isrolling_cf" true }}
+									{{ $embed.Set "image" (sdict "url" $img) }}
+									{{ $embed.Set "color" 16765696 }}
+									{{ $embed.Set "description" "**The coin is rolling... Wait...**" }}
+									{{ $m = sendMessageRetID $c (cembed $embed) }}
+									{{ execCC $.CCID nil 3 (sdict "m" $m "b" $bet "c" $cp )}}
+								{{ else }}
+									{{ $embed.Set "description" "You can use this command when the last coin stopped rolling!" }}
+									{{ $embed.Set "color" 16488706 }}
+									{{ $err = true }}
+								{{ end }}
+							{{ else }}
+								{{ $embed.Set "description" (printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet (toInt (dbGet $.User.ID $db).Value)) }}
+								{{ $embed.Set "color" 16488706 }}
+								{{ $err = true }}
+							{{ end }}
+						{{ else }}
+							{{ $embed.Set "description" (print "You need to wait **" (humanizeDurationSeconds ((dbGet $.User.ID "cd_coinflip").ExpiresAt.Sub currentTime)) "** to use this command again.") }}
+							{{ $embed.Set "color" 16488706 }}
+							{{ $err = true }}
+						{{ end }}
+					{{ else }}
+						{{ $embed.Set "description" (printf "Maximum bet can only be **%d**!" $maxbet) }}
+						{{ $embed.Set "color" 16488706 }}
+						{{ $err = true }}
+					{{ end }}
+				{{ else }}
+					{{ $embed.Set "description" (printf "Minimum bet can only be **%d**!" $minbet) }}
+					{{ $embed.Set "color" 16488706 }}
+					{{ $err = true }}
+				{{ end }}
+			{{ else }}
+				{{ $embed.Set "description" (printf "`%s` is not a valid number." (index $.CmdArgs 1)) }}
+				{{ $embed.Set "color" 16488706 }}
+				{{ $err = true }}
+			{{ end }}
+		{{ else }}
+			{{ $embed.Set "description" "You can only choose from **heads** or **tails**." }}
+			{{ $embed.Set "color" 16488706 }}
+			{{ $err = true }}
+		{{ end }}
+	{{ else }}
+		{{ $embed.Set "description" (printf "Syntax: **%scoinflip <heads/tails> <money>**" $prefix) }}
+		{{ $embed.Set "color" 16488706 }}
+		{{ $err = true }}
+	{{ end }}
+	{{ if $err }}
+		{{ sendMessage nil (cembed $embed) }}
+	{{ end }}
 {{ else }}
-    {{ $m = .ExecData.m }}
-    {{ $bet = .ExecData.b }}
-    {{ $cp = .ExecData.c }}
-    {{ $chance := randInt 1 3 }}
-    {{ $choosen := "" }}
-    {{ if eq $chance 1 }}
-        {{ $choosen = "heads" }}
-        {{ $embed.Set "image" (sdict "url" $cap) }}
-    {{ else }}
-        {{ $choosen = "tails" }}
-        {{ $embed.Set "image" (sdict "url" $pajura)}}
-    {{ end }}
-    {{ if eq $cp $choosen }}
-        {{ $k := dbIncr $.User.ID $db $bet }}
-        {{ $embed.Set "description" (printf "**----------**\nYou choose: **%s** | The coin rolled: **%s**.\nYou won **%d** credits.\nNow you have **%d** credits.\n**----------**" $cp $choosen (mult $bet 2) (toInt $k)) }}
-        {{ $embed.Set "color" 40811 }}
-    {{ else }}
-        {{ $k := dbIncr $.User.ID $db (mult $bet -1) }}
-        {{ $embed.Set "description" (printf "**----------**\nYou choose: **%s** | The coin rolled: **%s**.\nYou lost **%d** credits.\nNow you have **%d** credits.\n**----------**" $cp $choosen $bet (toInt $k)) }}
-        {{ $embed.Set "color" 16488706 }}
-    {{ end }}
-    {{ dbSetExpire $.User.ID "cd_coinflip" true $cooldown }}
-    {{ dbDel $.User.ID "isrolling_cf" }}
-    {{ editMessage $c $m (cembed $embed) }}
+	{{ $m = .ExecData.m }}
+	{{ $bet = .ExecData.b }}
+	{{ $cp = .ExecData.c }}
+	{{ $chance := randInt 1 3 }}
+	{{ $choosen := "" }}
+	{{ if eq $chance 1 }}
+		{{ $choosen = "heads" }}
+		{{ $embed.Set "image" (sdict "url" $cap) }}
+	{{ else }}
+		{{ $choosen = "tails" }}
+		{{ $embed.Set "image" (sdict "url" $pajura)}}
+	{{ end }}
+	{{ if eq $cp $choosen }}
+		{{ $k := dbIncr $.User.ID $db $bet }}
+		{{ $embed.Set "description" (printf "**----------**\nYou choose: **%s** | The coin rolled: **%s**.\nYou won **%d** credits.\nNow you have **%d** credits.\n**----------**" $cp $choosen (mult $bet 2) (toInt $k)) }}
+		{{ $embed.Set "color" 40811 }}
+	{{ else }}
+		{{ $k := dbIncr $.User.ID $db (mult $bet -1) }}
+		{{ $embed.Set "description" (printf "**----------**\nYou choose: **%s** | The coin rolled: **%s**.\nYou lost **%d** credits.\nNow you have **%d** credits.\n**----------**" $cp $choosen $bet (toInt $k)) }}
+		{{ $embed.Set "color" 16488706 }}
+	{{ end }}
+	{{ dbSetExpire $.User.ID "cd_coinflip" true $cooldown }}
+	{{ dbDel $.User.ID "isrolling_cf" }}
+	{{ editMessage $c $m (cembed $embed) }}
 {{ end }}

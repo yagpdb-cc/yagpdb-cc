@@ -1,8 +1,8 @@
 {{/*
-    Ghost-ping detector v2.
+	Ghost-ping detector v2.
 	See <https://yagpdb-cc.github.io/utilities/ghost-ping-v2> for more information.
 
-    Author: Devonte <https://github.com/devnote-dev>
+	Author: Devonte <https://github.com/devnote-dev>
 */}}
 
 {{/* Configurable values */}}
@@ -11,66 +11,66 @@
 {{/* End of configurable values */}}
 
 {{ if .ExecData }}
-    {{ $mentions := "" }} {{ $ping := false }}
-    {{ if ($m := getMessage nil .ExecData.message) }}
-        {{ if not $m.Mentions }}
-            {{ $ping = true }}
-        {{ end }}
-    {{ else }}
-        {{ $ping = true }}
-    {{ end }}
+	{{ $mentions := "" }} {{ $ping := false }}
+	{{ if ($m := getMessage nil .ExecData.message) }}
+		{{ if not $m.Mentions }}
+			{{ $ping = true }}
+		{{ end }}
+	{{ else }}
+		{{ $ping = true }}
+	{{ end }}
 
-    {{ if $ping }}
-        {{ if gt (len .ExecData.mentions) 1 }}
-            {{ range .ExecData.mentions }}
-                {{- $mentions = joinStr ">, <@" $mentions . -}}
-            {{ end }}
-        {{ else }}
-            {{ $mentions = index .ExecData.mentions 0 }}
-        {{ end }}
+	{{ if $ping }}
+		{{ if gt (len .ExecData.mentions) 1 }}
+			{{ range .ExecData.mentions }}
+				{{- $mentions = joinStr ">, <@" $mentions . -}}
+			{{ end }}
+		{{ else }}
+			{{ $mentions = index .ExecData.mentions 0 }}
+		{{ end }}
 
-        {{ $col := 16777215 }} {{ $p := 0 }} {{ $r := .Member.Roles }}
-        {{ range .Guild.Roles }}
-            {{- if and (in $r .ID) (.Color) (lt $p .Position) -}}
-                {{- $p = .Position -}}
-                {{- $col = .Color -}}
-            {{- end -}}
-        {{ end }}
+		{{ $col := 16777215 }} {{ $p := 0 }} {{ $r := .Member.Roles }}
+		{{ range .Guild.Roles }}
+			{{- if and (in $r .ID) (.Color) (lt $p .Position) -}}
+				{{- $p = .Position -}}
+				{{- $col = .Color -}}
+			{{- end -}}
+		{{ end }}
 
-        {{ $log := "" }}
-        {{ if $LOG }}
-            {{ $log = print "\n**Logs:** [Message Logs](" (exec "logs") ")" }}
-        {{ end }}
+		{{ $log := "" }}
+		{{ if $LOG }}
+			{{ $log = print "\n**Logs:** [Message Logs](" (exec "logs") ")" }}
+		{{ end }}
 
-        {{/* Embed Construct */}}
-        {{ $embed := cembed
-            "description" (print "**Channel:** <#" .Channel.ID ">\n**Message:**\n" .ExecData.content "\n\n**Mentioned Users:** <@" $mentions ">" $log)
-            "color" $col
-            "footer" (sdict "text" "Detector triggered")
-            "timestamp" currentTime }}
+		{{/* Embed Construct */}}
+		{{ $embed := cembed
+			"description" (print "**Channel:** <#" .Channel.ID ">\n**Message:**\n" .ExecData.content "\n\n**Mentioned Users:** <@" $mentions ">" $log)
+			"color" $col
+			"footer" (sdict "text" "Detector triggered")
+			"timestamp" currentTime }}
 
-        {{/* Content Format */}}
-        {{ $msgContent := print "Ghost ping detected by <@" .ExecData.author ">!" }}
+		{{/* Content Format */}}
+		{{ $msgContent := print "Ghost ping detected by <@" .ExecData.author ">!" }}
 
-        {{ sendMessage nil (complexMessage "content" $msgContent "embed" $embed) }}
-    {{ else }}
-        {{ if and $CHECK (not .ExecData.break) }}
-            {{ $ids := cslice }}
+		{{ sendMessage nil (complexMessage "content" $msgContent "embed" $embed) }}
+	{{ else }}
+		{{ if and $CHECK (not .ExecData.break) }}
+			{{ $ids := cslice }}
 
-            {{ range .Message.Mentions }}
-                {{- $ids = $ids.Append (str .ID) -}}
-            {{ end }}
+			{{ range .Message.Mentions }}
+				{{- $ids = $ids.Append (str .ID) -}}
+			{{ end }}
 
-            {{ execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "content" .Message.Content "break" true) }}
-        {{ end }}
-    {{ end }}
+			{{ execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "content" .Message.Content "break" true) }}
+		{{ end }}
+	{{ end }}
 {{ else }}
-    {{ if .Message.Mentions }}
-        {{ $ids := cslice }}
-        {{ range .Message.Mentions }}
-            {{ $ids = $ids.Append (str .ID) }}
-        {{ end }}
+	{{ if .Message.Mentions }}
+		{{ $ids := cslice }}
+		{{ range .Message.Mentions }}
+			{{ $ids = $ids.Append (str .ID) }}
+		{{ end }}
 
-        {{ execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "content" .Message.Content "break" false) }}
-    {{ end }}
+		{{ execCC .CCID nil 5 (sdict "message" .Message.ID "author" .Message.Author.ID "mentions" $ids "content" .Message.Content "break" false) }}
+	{{ end }}
 {{ end }}
