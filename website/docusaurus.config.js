@@ -47,6 +47,7 @@ module.exports = {
 	baseUrl: '/',
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'throw',
+	trailingSlash: false,
 	favicon: 'img/yag.ico',
 	organizationName: 'yagpdb-cc',
 	projectName: 'yagpdb-cc.github.io',
