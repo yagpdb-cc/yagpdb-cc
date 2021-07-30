@@ -13,7 +13,7 @@
 {{/* Configurable values end */}}
 
 {{/* ACTUAL CODE - DO NOT TOUCH */}}
-{{$newmem := .User }}
+{{$newmem := .User}}
 {{$l:=cslice}}
 
 {{with (dbGet 0 "raidlist").Value}}
@@ -29,13 +29,13 @@
 	"thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/565142262401728512.png" )}}
 
 {{if lt (currentUserAgeMinutes) $age}}
-	{{if not (dbGet $newmem "raidcooldown") }}
+	{{if not (dbGet $newmem.ID "raidcooldown") }}
 		{{$l = $l.Append $newmem}}
 		{{dbSet 0 "raidlist" $l}}
 		{{if eq (len $l) $len}}
 			{{sendMessageNoEscape $channel (complexMessage "content" (mentionRoleID $rolemention) "embed" $embed) }}
 		{{end}}
-		{{dbSetExpire $newmem "raidcooldown" true 3600}}
+		{{dbSetExpire $newmem.ID "raidcooldown" true 3600}}
 		{{dbSetExpire 0 "raidlistcool" true 1200 }}
 	{{end}}
 {{end}}
