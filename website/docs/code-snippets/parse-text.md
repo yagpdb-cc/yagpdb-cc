@@ -4,6 +4,8 @@ title: Parse Text
 
 Code snippet to parse text into a slice of arguments, much like how `.CmdArgs` is constructed.
 
+Licensed under the terms of the Unlicense.
+
 ## Code
 
 ```gotmpl file=../../../src/code_snippets/parse_text.go.tmpl

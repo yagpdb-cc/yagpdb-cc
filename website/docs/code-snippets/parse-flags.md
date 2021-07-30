@@ -17,6 +17,8 @@ flags:
 	f: true
 ```
 
+Licensed under the terms of the Unlicense.
+
 ## Code
 
 ```gotmpl file=../../../src/code_snippets/parse_flags.go.tmpl
