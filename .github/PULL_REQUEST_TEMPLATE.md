@@ -4,4 +4,4 @@
 
 - [ ] Code changes have been tested on an instance of YAGPDB, or there are no code changes
 - [ ] I have read and followed the [contribution guide](../CONTRIBUTING.md)
-- [ ] I have [written documentation](../WRITING-DOCUMENTATION) for my changes, or there is no need to
+- [ ] I have [written documentation](../WRITING-DOCUMENTATION.md) for my changes, or there is no need to
