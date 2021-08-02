@@ -11,7 +11,7 @@
 {{/* DONT TOUCH */}}
 {{/* Vars */}}
 {{$isMod := false}}{{$map := ""}}{{$error := ""}}{{$day := 0}}{{$month := 0}}{{$year := 0}}{{$isUnderAge := false}}{{$isValidDate := false}}{{$user := .User}}{{$checkDate := ""}}{{$insideMap := sdict}}{{$list := cslice}}{{$out := ""}}{{$send := false}}{{$userMonth := ""}}{{$today := sdict}}{{$delay := 86400}}{{$return := sdict}}
-{{$prefix := index (split .Cmd "") 0}}
+{{$prefix := index (split (print .Cmd) "") 0}}
 {{$commonError := "Correct date syntax is: `dd/mm/yyyy` - Example: `20/12/1998`"}}
 {{$commonErrorInverted := "Correct date syntax is: `mm/dd/yyyy` - Example: `12/20/1998`"}}
 {{if $yearOptional}}
@@ -122,7 +122,7 @@
 				{{end}}
 			{{else}}
 				{{if $invertedOrder}} {{$error = "Not enough arguments passed.\nCorrect usage is: `" $prefix "set 12/20/1998 @user`"}}
-				{{else}} {{$error = "Not enough arguments passed.\nCorrect usage is: `" $prefix "set 20/12/1998 @user`"}}
+				{{else}} {{$error = print "Not enough arguments passed.\nCorrect usage is: `" $prefix "set 20/12/1998 @user`"}}
 				{{end}}
 			{{end}}
 		{{else if reFind `(?i)stop` .Cmd}}
