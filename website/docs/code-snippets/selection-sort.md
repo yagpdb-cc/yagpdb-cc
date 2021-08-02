@@ -4,6 +4,8 @@ title: Selection Sort
 
 Code snippet for sorting an array/slice of comparable values of the same type in-place, using the [selection sort](https://en.wikipedia.org/wiki/Selection_sort) algorithm.
 
+Licensed under the terms of the Unlicense.
+
 :::danger
 
 Though this works fine for small slices/array, due to the inefficient nature of selection sort, running it on "large" slices/arrays (over 200-300 elements) will result in a runtime error. If you want to use this snippet, be careful and constrain your input sizes.

@@ -1,8 +1,8 @@
 {{/*
 	Manages "question of the day" channels for you and keeps track of some data regarding the current question of the day.
-    See <https://yagpdb-cc.github.io/fun/qotd> for more information.
+	See <https://yagpdb-cc.github.io/fun/qotd> for more information.
 
-    Author: SpecialEliteSNP <https://github.com/SpecialEliteSNP>
+	Author: SpecialEliteSNP <https://github.com/SpecialEliteSNP>
 */}}
 
 {{/* Configurable values */}}
@@ -18,36 +18,36 @@
 {{ $q := sdict }}{{ with (dbGet 20 "qotd").Value }}{{ $q = sdict . }}{{ end }}
 {{ $s := false }}{{ range .Member.Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
 {{ if not $q }}
-  {{ dbSet 20 "qotd" (sdict "l" (sdict "m" 0 "t" 0 "u" 0)) }}
-  {{ addReactions "☑" }}
-  {{ print .User.Mention ", <#" .Channel.ID "> is all set up as your QOTD channel!" }}
+	{{ dbSet 20 "qotd" (sdict "l" (sdict "m" 0 "t" 0 "u" 0)) }}
+	{{ addReactions "☑" }}
+	{{ print .User.Mention ", <#" .Channel.ID "> is all set up as your QOTD channel!" }}
 {{ else if and $s (in .Message.MentionRoles $qotd_role) }}
-  {{ $e := sdict "title" "No report available!" "description" "QOTD was deleted" "color" 16734296 }}
-  {{ with getMessage nil $q.l.m }}
-    {{ $u := getMember $q.l.u }}
-    {{ $e = sdict "title" "QOTD Report" "color" 49306
-      "description" (printf "[**Question:**](https://discord.com/channels/%d/%d/%d)\n%s\n\n**Answers:**\n%d" $.Guild.ID $.Channel.ID $q.l.m .Content $q.l.t)
-      "footer" (sdict "text" $u.User.String "icon_url" ($u.User.AvatarURL "128"))
-      "timestamp" .Timestamp }}
-  {{ end }}
-  {{ if $q.l.m }}
-    {{ sendMessage $report_channel (cembed $e) }}
-  {{ end }}
-  {{ deleteTrigger 1 }}
-  {{ $m := sendMessageNoEscapeRetID nil .Message.Content }}
-  {{ range $k, $v := $q }}
-    {{ if eq $k "l" }}{{ $q.Set $k (sdict "m" $m "t" 0 "u" $.User.ID) }}
-    {{ else }}{{ $q.Set $k (sdict "a" 0 "n" $v.n) }}{{ end }}
-  {{ end }}
-  {{ dbSet 20 "qotd" $q}}
+	{{ $e := sdict "title" "No report available!" "description" "QOTD was deleted" "color" 16734296 }}
+	{{ with getMessage nil $q.l.m }}
+		{{ $u := getMember $q.l.u }}
+		{{ $e = sdict "title" "QOTD Report" "color" 49306
+			"description" (printf "[**Question:**](https://discord.com/channels/%d/%d/%d)\n%s\n\n**Answers:**\n%d" $.Guild.ID $.Channel.ID $q.l.m .Content $q.l.t)
+			"footer" (sdict "text" $u.User.String "icon_url" ($u.User.AvatarURL "128"))
+			"timestamp" .Timestamp }}
+	{{ end }}
+	{{ if $q.l.m }}
+		{{ sendMessage $report_channel (cembed $e) }}
+	{{ end }}
+	{{ deleteTrigger 1 }}
+	{{ $m := sendMessageNoEscapeRetID nil .Message.Content }}
+	{{ range $k, $v := $q }}
+		{{ if eq $k "l" }}{{ $q.Set $k (sdict "m" $m "t" 0 "u" $.User.ID) }}
+		{{ else }}{{ $q.Set $k (sdict "a" 0 "n" $v.n) }}{{ end }}
+	{{ end }}
+	{{ dbSet 20 "qotd" $q}}
 {{ else }}
-  {{ if not ($q.Get (str .User.ID)).a }}
-    {{ $q.Set (str .User.ID) (sdict "a" 1 "n" (add ($q.Get (str .User.ID)).n 1)) }}
-    {{ $q.Set "l" (sdict "m" $q.l.m "t" (add $q.l.t 1) "u" $q.l.u) }}
-    {{ dbSet 20 "qotd" $q }}
-  {{ else if not $s }}
-    {{ deleteTrigger 1 }}
-    {{ print .User.Mention ", " $twice }}
-    {{ deleteResponse 5 }}
-  {{ end }}
+	{{ if not ($q.Get (str .User.ID)).a }}
+		{{ $q.Set (str .User.ID) (sdict "a" 1 "n" (add ($q.Get (str .User.ID)).n 1)) }}
+		{{ $q.Set "l" (sdict "m" $q.l.m "t" (add $q.l.t 1) "u" $q.l.u) }}
+		{{ dbSet 20 "qotd" $q }}
+	{{ else if not $s }}
+		{{ deleteTrigger 1 }}
+		{{ print .User.Mention ", " $twice }}
+		{{ deleteResponse 5 }}
+	{{ end }}
 {{ end }}

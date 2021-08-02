@@ -4,6 +4,8 @@ title: Ordinal
 
 This code snippet gets the ordinal corresponding to a given integer. For example, the ordinal of 1 would be `st`, `nd` for 122, and so on.
 
+Licensed under the terms of the Unlicense.
+
 :::tip
 
 This may be useful for join feeds - showing `You're the 5th member` is nicer than `You're member #5`.

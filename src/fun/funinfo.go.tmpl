@@ -2,7 +2,7 @@
 	Shows statistics connected to a user for the counting, qotd and x-word-story systems.
 	See <https://yagpdb-cc.github.io/fun/funinfo> for more information.
 	
-    Author: SpecialEliteSNP <https://github.com/SpecialEliteSNP>
+	Author: SpecialEliteSNP <https://github.com/SpecialEliteSNP>
 */}}
 
 {{/* Configurable values */}}
@@ -12,44 +12,44 @@
 
 {{/* CODE - Don't edit this part */}}
 {{ if dbGet .User.ID "funinfo" }}
-  {{ addReactions "⏳" }}
+	{{ addReactions "⏳" }}
 {{ else }}
-  {{ $e := sdict "color" $colour }}
-  {{ $u := str .User.ID }}
-  {{ if eq (len .Args) 2 }}
-    {{ $u = index .Args 1 }}
-    {{ if .Message.Mentions }}{{ $u = str (index .Message.Mentions 0).ID }}{{ end }}
-  {{ end }}
+	{{ $e := sdict "color" $colour }}
+	{{ $u := str .User.ID }}
+	{{ if eq (len .Args) 2 }}
+		{{ $u = index .Args 1 }}
+		{{ if .Message.Mentions }}{{ $u = str (index .Message.Mentions 0).ID }}{{ end }}
+	{{ end }}
 
-  {{ $c := sdict }}{{ with (dbGet 20 "counting").Value }}{{ $c = sdict . }}{{ end }}
-  {{ if $c }}
-    {{ $v := 0 }}{{ with ($c.Get $u) }}{{ $v = . }}{{ end }}
-    {{ $e.Set "description" (printf "🔢 Counts: `%d`" $v) }}
-  {{ end }}
+	{{ $c := sdict }}{{ with (dbGet 20 "counting").Value }}{{ $c = sdict . }}{{ end }}
+	{{ if $c }}
+		{{ $v := 0 }}{{ with ($c.Get $u) }}{{ $v = . }}{{ end }}
+		{{ $e.Set "description" (printf "🔢 Counts: `%d`" $v) }}
+	{{ end }}
 
-  {{ $q := sdict }}{{ with (dbGet 20 "qotd").Value }}{{ $q = sdict . }}{{ end }}
-  {{ if $q }}
-    {{ $v := 0 }}{{ with ($q.Get $u) }}{{ $v = .n }}{{ end }}
-    {{ $e.Set "description" (printf "%s\n❓ QOTD answers: `%d`" $e.description $v) }}
-  {{ end }}
+	{{ $q := sdict }}{{ with (dbGet 20 "qotd").Value }}{{ $q = sdict . }}{{ end }}
+	{{ if $q }}
+		{{ $v := 0 }}{{ with ($q.Get $u) }}{{ $v = .n }}{{ end }}
+		{{ $e.Set "description" (printf "%s\n❓ QOTD answers: `%d`" $e.description $v) }}
+	{{ end }}
 
-  {{ $s := sdict }}{{ with (dbGet 20 "story-channel").Value }}{{ $s = sdict . }}{{ end }}
-  {{ if $s }}
-    {{ $v := 0 }}{{ with ($s.Get $u) }}{{ $v = . }}{{ end }}
-    {{ $e.Set "description" (printf "%s\n📖 Story lines: `%d`" $e.description $v) }}
-  {{ end }}
+	{{ $s := sdict }}{{ with (dbGet 20 "story-channel").Value }}{{ $s = sdict . }}{{ end }}
+	{{ if $s }}
+		{{ $v := 0 }}{{ with ($s.Get $u) }}{{ $v = . }}{{ end }}
+		{{ $e.Set "description" (printf "%s\n📖 Story lines: `%d`" $e.description $v) }}
+	{{ end }}
 
-  {{ if not (or $c $q $s) }}
-    {{ $e.Set "title" "❌ No data found!"}}
-  {{ else if $n := getMember (toInt $u) }}
-    {{ $e.Set "title" (printf "💎 Funinfo for: *%s*" $n.User.String) }}
-    {{ $e.Set "color" 15344584 }}
-  {{ else }}
-    {{ $e.Set "title" "❌ Member not found!" }}
-    {{ $e.Del "description" }}
-  {{ end }}
+	{{ if not (or $c $q $s) }}
+		{{ $e.Set "title" "❌ No data found!"}}
+	{{ else if $n := getMember (toInt $u) }}
+		{{ $e.Set "title" (printf "💎 Funinfo for: *%s*" $n.User.String) }}
+		{{ $e.Set "color" 15344584 }}
+	{{ else }}
+		{{ $e.Set "title" "❌ Member not found!" }}
+		{{ $e.Del "description" }}
+	{{ end }}
 
-  {{ sendMessage nil (cembed $e) }}
+	{{ sendMessage nil (cembed $e) }}
 
-  {{ if $cooldown }}{{ dbSetExpire .User.ID "funinfo" 1 $cooldown }}{{ end }}
+	{{ if $cooldown }}{{ dbSetExpire .User.ID "funinfo" 1 $cooldown }}{{ end }}
 {{ end }}

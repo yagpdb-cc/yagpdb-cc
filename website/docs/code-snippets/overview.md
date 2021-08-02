@@ -6,8 +6,12 @@ This is a collection of useful "snippets", or parts of code, that you can implem
 
 :::note Licensing
 
-As this code is meant to be freely used as part of other code with restriction or need for attribution, all code snippets are licensed under the [Unlicense](https://unlicense.org/).
+As this code is meant to be freely used as part of other code with restriction or need for attribution, _most_ code snippets are licensed under the [Unlicense](https://unlicense.org/).
 In other words, feel free to do whatever. You don't need to attribute us, but we'd certainly be happy if you did!
+
+**Which snippets are under the Unlicense?**
+
+As some of the snippets were authored by people weren't contacted about the licensing change yet, anything not authored by [@jo3-l](https://github.com/jo3-l/) should still be considered subject to the terms of the MIT license.
 
 :::
 

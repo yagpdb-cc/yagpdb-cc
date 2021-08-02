@@ -33,24 +33,24 @@
 {{/* Fetching Dates */}}
 {{/* Fetching dates written in format dd.mm.yyyy or dd/mm/yyyy or dd-mm-yyyy or dd,mm,yyyy */}} 
 {{ with reFindAllSubmatches `((\s|^)((\d{1,2})(\-|\.|\/|\,)(\d{1,2})(\-|\.|\/|\,)(\d{1,4}))(\s|$))` $timeString }}
-      {{ $time.Set "Day" (toInt (index . 0 4)) }}
-      {{ $time.Set "Month" (toInt (index . 0 6)) }}
-      {{ $time.Set "Year" (toInt (index . 0 8)) }}
-      {{ $dateSet = true }}
+	{{ $time.Set "Day" (toInt (index . 0 4)) }}
+	{{ $time.Set "Month" (toInt (index . 0 6)) }}
+	{{ $time.Set "Year" (toInt (index . 0 8)) }}
+	{{ $dateSet = true }}
 {{ else }}
 
 {{/* Fetching dates written as a string with both long or short month names supported. Date , Month and Year need not be present together but year must be written in full form(with 4 digits) eg: 20 sept 1am ,2019 is supported */}}
-     {{ with (reFindAllSubmatches `(?:[^a-z]|^)(jan((uary)?)|feb((ruary)?)|mar((ch)?)|apr((il)?)|may|jun(e?)|jul(y?)|aug((ust)?)|sep((t(ember)?)?)|oct((ober)?)|nov((ember)?)|dec((ember)?))(?:[^a-z]|$)` $timeString) }}
-     {{ $time.Set "Month" ($months.Get (slice (index . 0 1) 0 3)) }}
-     {{ $temp:= reReplace `(([^:]|^)((\d+)((:(\d+)){1,2}))((\s?(am|pm))?))|(((\d+))(\s?(am|pm)))` $timeString "" }}
-     {{ with (reFindAllSubmatches `(?:\D|^)(\d{1,2})(?:\D|$)` $temp) }}
-     	{{ $time.Set "Day" (toInt (index . 0 1)) }}
-     {{ end }}
-     {{ with (reFindAllSubmatches `(?:\D|^)(\d{4})(?:\D|$)` $temp) }}
-     	{{ $time.Set "Year" (toInt (index . 0 1)) }}
-     {{ end }}
-     {{ $dateSet = true }}
-     {{ end }}
+	{{ with (reFindAllSubmatches `(?:[^a-z]|^)(jan((uary)?)|feb((ruary)?)|mar((ch)?)|apr((il)?)|may|jun(e?)|jul(y?)|aug((ust)?)|sep((t(ember)?)?)|oct((ober)?)|nov((ember)?)|dec((ember)?))(?:[^a-z]|$)` $timeString) }}
+	{{ $time.Set "Month" ($months.Get (slice (index . 0 1) 0 3)) }}
+	{{ $temp:= reReplace `(([^:]|^)((\d+)((:(\d+)){1,2}))((\s?(am|pm))?))|(((\d+))(\s?(am|pm)))` $timeString "" }}
+	{{ with (reFindAllSubmatches `(?:\D|^)(\d{1,2})(?:\D|$)` $temp) }}
+		{{ $time.Set "Day" (toInt (index . 0 1)) }}
+	{{ end }}
+	{{ with (reFindAllSubmatches `(?:\D|^)(\d{4})(?:\D|$)` $temp) }}
+		{{ $time.Set "Year" (toInt (index . 0 1)) }}
+	{{ end }}
+	{{ $dateSet = true }}
+	{{ end }}
 {{ end }}
 
 {{/* Fetching dates specified as today or tomorrow and assigning default values to invalid dates */}}

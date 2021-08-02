@@ -50,6 +50,7 @@ module.exports = {
 	favicon: 'img/yag.ico',
 	organizationName: 'yagpdb-cc',
 	projectName: 'yagpdb-cc.github.io',
+	trailingSlash: false,
 	themeConfig: {
 		colorMode: {
 			defaultMode: 'dark',
@@ -145,20 +146,6 @@ module.exports = {
 				theme: {
 					customCss: require.resolve('./src/css/index.css'),
 				},
-			},
-		],
-	],
-	plugins: [
-		[
-			'@easyops-cn/docusaurus-search-local',
-			{
-				hashed: true,
-				docsRouteBasePath: ['/'],
-
-				// Workaround for docs base path being /.
-				// See https://github.com/easyops-cn/docusaurus-search-local/issues/42.
-				indexPages: true,
-				indexBlog: false,
 			},
 		],
 	],

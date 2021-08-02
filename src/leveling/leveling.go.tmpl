@@ -12,7 +12,7 @@
 		"`leveling use-default`: Use the default settings"
 		"`leveling set <key> <value>`: Sets the given settings to the value provided. Valid keys are \"min\", \"max\", and \"cooldown\" (duration)."
 		"`leveling set-channel <channel|none>`: Sets the channel where level up messages will be sent (defaults to current channel). If you want to make it the current channel, use `leveling set-channel none`."
-        	"`leveling set-announcements`: Sets if you want to display the level up messages."
+			"`leveling set-announcements`: Sets if you want to display the level up messages."
 		"`leveling view`: Views the current settings."
 	)
 	"color" 14232643
@@ -23,7 +23,7 @@
 		"min" 15 
 		"max" 25 
 		"cooldown" .TimeMinute
-        	"announcements" true
+			"announcements" true
 	}} {{/* Defaults for level settings */}}
 	{{ with (dbGet 0 "xpSettings") }}
 		{{ $isSaved = true }} {{/* Settings are in DB */}}
@@ -70,19 +70,19 @@
 			That was not a valid channel. Try again.
 		{{ end }}
 
-    {{ else if eq (index .CmdArgs 0) "set-announcements" }}
-        {{ $input := index .CmdArgs 1 | lower }}
-        {{ if eq $input "true" "y" }}
-            {{ $currentSettings.Set "announcements" true }}
-            Successfully set the value for announcements to `true` 
-            {{ dbSet 0 "xpSettings" $currentSettings }}
-        {{ else if eq $input "false" "n" }}
-            {{ $currentSettings.Set "announcements" false }}
-            Successfully set the value for announcements to `false` 
-            {{ dbSet 0 "xpSettings" $currentSettings }}
-        {{ else }}
-            That was not a valid option. The only valid options are "true" and "false".
-        {{ end }}
+	{{ else if eq (index .CmdArgs 0) "set-announcements" }}
+		{{ $input := index .CmdArgs 1 | lower }}
+		{{ if eq $input "true" "y" }}
+			{{ $currentSettings.Set "announcements" true }}
+			Successfully set the value for announcements to `true`
+			{{ dbSet 0 "xpSettings" $currentSettings }}
+		{{ else if eq $input "false" "n" }}
+			{{ $currentSettings.Set "announcements" false }}
+			Successfully set the value for announcements to `false`
+			{{ dbSet 0 "xpSettings" $currentSettings }}
+		{{ else }}
+			That was not a valid option. The only valid options are "true" and "false".
+		{{ end }}
 
 	{{ else if eq (index .CmdArgs 0) "view" }}
 		{{ $channel := "*None set*" }}
@@ -92,7 +92,7 @@
 			$currentSettings.max
 			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration)) 
 			$channel
-           		$currentSettings.announcements
+			$currentSettings.announcements
 		}} {{/* Construct the embed description */}}
 		{{ if $isSaved }} {{/* If the settings are in DB */}}
 			{{ sendMessage nil (cembed "title" "Level Settings" "description" $formatted "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png")) }}

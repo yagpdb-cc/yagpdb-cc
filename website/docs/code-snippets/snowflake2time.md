@@ -6,6 +6,8 @@ This code snippet extracts the underlying time of snowflakes (Discord IDs).
 
 Sometimes, you want to get the time that, say, a user created their account / a channel was created. If you look in the documentation, that's not something that is accessible in templates. However, most Discord structures have an ID. Those IDs all have one thing in common - they use the _snowflake_ format. This format contains a timestamp, which you can extract to get the time when it was created.
 
+Licensed under the terms of the Unlicense.
+
 :::info
 
 For more information, see [this section](https://discord.com/developers/docs/reference#snowflakes) on the Discord developer documentation.

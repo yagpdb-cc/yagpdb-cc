@@ -113,50 +113,50 @@ You may now install the latest version as described above.
 
 ```gotmpl
 {{with .ExecData}}
-   {{if eq . "1"}}
-      {{range seq 0 10}}
-         {{dbDel . "bdays"}}
-      {{end}}
-      {{execCC $.CCID nil 2 "2"}}
-   {{else if eq . "2"}}
-      {{range seq 9 13}}
-         {{dbDel . "bdays"}}
-      {{end}}
-      {{execCC $.CCID nil 3 "3"}}
-   {{else if eq . "3"}}
-      Still running deletation...
-      {{$day := currentTime.Day}}
-      {{range seq (sub $day 3) (add $day 3)}}
-         {{dbDel . "bdayannounced"}}
-      {{end}}
-      {{execCC $.CCID nil 4 "4"}}
-   {{else if eq . "4"}}
-      {{$entries := dbTopEntries "bday" 9 0}}
-      {{if not $entries}}
-         All set, you can now use V2.0
-      {{else}}
-         {{range $entries}}
-            {{dbDel .UserID "bday"}}
-         {{end}}
-         {{if le (len $entries) 9}}
-            All set, you can now use V2.0
-         {{else}}
-            {{execCC $.CCID nil 5 "5"}}
-         {{end}}
-      {{end}}
-   {{else}}
-      {{$entries := dbTopEntries "bday" 9 0}}
-      {{if not $entries}}
-         All set, you can now use V2.0
-      {{else}}
-         {{range $entries}}
-            {{dbDel .UserID "bday"}}
-         {{end}}
-         {{execCC $.CCID nil 5 "5"}}
-      {{end}}
-   {{end}}
+	{{if eq . "1"}}
+		{{range seq 0 10}}
+			{{dbDel . "bdays"}}
+		{{end}}
+		{{execCC $.CCID nil 2 "2"}}
+	{{else if eq . "2"}}
+		{{range seq 9 13}}
+			{{dbDel . "bdays"}}
+		{{end}}
+		{{execCC $.CCID nil 3 "3"}}
+	{{else if eq . "3"}}
+		Still running deletation...
+		{{$day := currentTime.Day}}
+		{{range seq (sub $day 3) (add $day 3)}}
+			{{dbDel . "bdayannounced"}}
+		{{end}}
+		{{execCC $.CCID nil 4 "4"}}
+	{{else if eq . "4"}}
+		{{$entries := dbTopEntries "bday" 9 0}}
+		{{if not $entries}}
+			All set, you can now use V2.0
+		{{else}}
+			{{range $entries}}
+				{{dbDel .UserID "bday"}}
+			{{end}}
+			{{if le (len $entries) 9}}
+				All set, you can now use V2.0
+			{{else}}
+				{{execCC $.CCID nil 5 "5"}}
+			{{end}}
+		{{end}}
+	{{else}}
+		{{$entries := dbTopEntries "bday" 9 0}}
+		{{if not $entries}}
+			All set, you can now use V2.0
+		{{else}}
+			{{range $entries}}
+				{{dbDel .UserID "bday"}}
+			{{end}}
+			{{execCC $.CCID nil 5 "5"}}
+		{{end}}
+	{{end}}
 {{else}}
-   Please wait... deletion is in progress.
+	Please wait... deletion is in progress.
 	{{execCC .CCID nil 1 "1"}}
 {{end}}
 ```
