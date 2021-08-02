@@ -44,7 +44,7 @@
 {{end}}
 
 {{/* Initialising stuff */}}
-{{$conf := sdict (dbGet .Guild.ID "reportSettings").Value}}
+{{$conf := (dbGet .Guild.ID "reportSettings").Value}}
 {{$disc := $conf.reportDiscussion}}
 {{$logs := $conf.reportLog}}
 
