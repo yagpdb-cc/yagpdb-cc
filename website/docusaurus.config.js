@@ -118,7 +118,7 @@ module.exports = {
 							href: 'https://github.com/jonas747/yagpdb',
 						},
 						{
-							label: 'YAGPDB Discord',
+							label: 'YAGPDB Community Discord',
 							href: 'https://discord.com/invite/4udtcA5',
 						},
 					],
