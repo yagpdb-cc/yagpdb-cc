@@ -100,17 +100,25 @@ module.exports = {
 							label: 'YAGPDB CCs',
 							to: '/',
 						},
+						{
+							label: 'Documentation',
+							to: 'https://docs.yagpdb.xyz',
+						},
+						{
+							label: 'Learning Center',
+							to: 'https://learn.yagpdb.xyz',
+						},
 					],
 				},
 				{
 					title: 'Community',
 					items: [
 						{
-							label: 'YAGPDB Github',
+							label: 'YAGPDB Source',
 							href: 'https://github.com/jonas747/yagpdb',
 						},
 						{
-							label: 'Discord',
+							label: 'YAGPDB Community Discord',
 							href: 'https://discord.com/invite/4udtcA5',
 						},
 					],
