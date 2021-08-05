@@ -102,12 +102,12 @@ module.exports = {
 						},
 						{
 							label: 'Documentation',
-							to: 'https://docs.yagpdb.xyz'
+							to: 'https://docs.yagpdb.xyz',
 						},
 						{
 							label: 'Learning Center',
-							to: 'https://learn.yagpdb.xyz'
-						}
+							to: 'https://learn.yagpdb.xyz',
+						},
 					],
 				},
 				{
