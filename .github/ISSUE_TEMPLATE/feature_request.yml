@@ -1,6 +1,6 @@
 name: Feature request
 description: Suggest an idea for the repository
-title: "request: "
+title: 'request: '
 labels: [kind/feature]
 body:
   - type: markdown
@@ -10,8 +10,8 @@ body:
         If you found an already existing request similar or equal to yours, please "thumbs-up" that instead.
   - type: textarea
     attributes:
-        label: Description
-        description: Is your feature request related to a problem? Please describe.
+      label: Description
+      description: Is your feature request related to a problem? Please describe.
     validations:
       required: true
   - type: textarea
