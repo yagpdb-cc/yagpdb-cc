@@ -102,11 +102,11 @@ module.exports = {
 						},
 						{
 							label: 'Documentation',
-							to: 'https://docs.yagpdb.xyz',
+							href: 'https://docs.yagpdb.xyz',
 						},
 						{
 							label: 'Learning Center',
-							to: 'https://learn.yagpdb.xyz',
+							href: 'https://learn.yagpdb.xyz',
 						},
 					],
 				},
@@ -129,6 +129,10 @@ module.exports = {
 						{
 							label: 'YAGPDB CC GitHub',
 							href: 'https://github.com/yagpdb-cc/yagpdb-cc',
+						},
+						{
+							label: 'YAGPDB Subreddit',
+							href: 'https://reddit.com/r/YAGPDB',
 						},
 					],
 				},
