@@ -1,0 +1,30 @@
+name: Feature request
+description: Suggest an idea for the repository
+title: "request: "
+labels: [kind/feature]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please make sure to [search existing issues](https://github.com/yagpdb-cc/yagpdb-cc/issues) before creating a new one!
+        If you found an already existing request similar or equal to yours, please "thumbs-up" that instead.
+  - type: textarea
+    attributes:
+        label: Description
+        description: Is your feature request related to a problem? Please describe.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Solution
+      description: Explain the solution you would like to see. Please also provide alternatives to your solution.
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduc(../CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true
