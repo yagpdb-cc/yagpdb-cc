@@ -1,0 +1,56 @@
+name: Bug report
+description: Create a issue about a possible bug
+title: 'bug: '
+labels: [kind/bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please make sure to [search for existing issues](https://github.com/yagpdb-cc/yagpdb-cc/issues) before submitting a new one!
+  - type: textarea
+    attributes:
+      label: Expected behaviour
+      description: What were you expecting to see?
+      placeholder: Using foo, I expected bar to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behaviour
+      description: What happened instead?
+      placeholder: |
+        Instead, baz happened.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Bugs are reproducible - to make it easier for us to troubleshoot, please provide a way to reproduce your bug.
+        Additional information may be included in "Additional Context".
+  - type: textarea
+    attributes:
+      label: Steps to reproduce.
+      description: Provide steps to reproduce your observed bug.
+      placeholder: |
+        1. Write '...'
+        2. ...
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Provide additional context, if applicable.
+      placeholder: Command overrides, strange permissions, etc.
+  - type: checkboxes
+    attributes:
+      - label: Code of Conduct
+        description: By submitting this issue, you agree to follow our [Code of Conduct](../CODE_OF_CONDUCT.md)
+        options:
+          - label: I agree to follow this project's Code of Conduct.
+            required: true
+      - label: Existing issues
+        description: Please search to see if an issue already exists for the bug you are experiencing.
+        options:
+          - label: I have searched the existing issues.
+            required: true
