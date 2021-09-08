@@ -24,7 +24,7 @@
 	{{ $newXp := dbIncr .User.ID "xp" $amtToGive }} {{/* Increment the xp */}}
 	{{ $newLvl := roundFloor (mult 0.1 (sqrt $newXp)) }} {{/* Calculate new level */}}
 	{{ $channel := or $settings.channel .Channel.ID }}
-	{{ if not (getChannel $channel) }} {{ $channel = .Channel.ID }} {{ end }}
+	{{ if not (.Guild.GetChannel $channel) }} {{ $channel = .Channel.ID }} {{ end }}
 
 	{{ if ne $newLvl $currentLvl }} {{/* If the level changed / user ranked up */}}
 		{{ $type := $roleRewards.type }} {{/* Type of role giving (highest / stack) */}}
