@@ -5,7 +5,7 @@
     Author: Faculord <https://github.com/LattandiFacundo>
 */}}
 
-{{ $toFix := .StrippedMsg}}
+{{ $toFix := "Sentence here"}}
 
 {{ $splited := split $toFix "" }}
 {{ $before := "" }}
@@ -18,5 +18,3 @@
 	{{ $before = $e }}
 {{- end -}}
 {{ $toFix = $fixed }}
-
-{{ $toFix }}
