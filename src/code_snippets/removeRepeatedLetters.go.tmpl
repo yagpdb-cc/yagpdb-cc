@@ -7,14 +7,14 @@
 
 {{ $toFix := "Sentence here"}}
 
-{{ $splited := split $toFix "" }}
+{{ $splitted := split $toFix "" }}
 {{ $before := "" }}
 {{ $fixed := "" }}
-{{- range $i, $e := $splited -}}
-	{{/* If $e (Actual letter) not equals $before, add it  */}}
-	{{ if ne $e $before }}
-		{{ $fixed = joinStr ""  $fixed $e }}
-	{{ end }}
-	{{ $before = $e }}
-{{- end -}}
+{{ range $e := $splited }}
+	{{- /* If $e (Actual letter) not equals $before, add it  */}}
+	{{- if ne $e $before }}
+		{{- $fixed = print $fixed $e }}
+	{{- end }}
+	{{- $before = $e -}}
+{{ end }}
 {{ $toFix = $fixed }}
