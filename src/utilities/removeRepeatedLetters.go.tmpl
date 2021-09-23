@@ -1,0 +1,22 @@
+{{/*
+    This command removes the repeated letters in a text like 'byyeeee' => 'bye'
+    Not only useful alone, but, useful to add it in another more complex commands.
+
+    Author: Faculord <https://github.com/LattandiFacundo>
+*/}}
+
+{{ $msg := .StrippedMsg}}
+
+{{ $splited := split $msg "" }}
+{{ $before := "" }}
+{{ $fixed := "" }}
+{{- range $i, $e := $splited -}}
+	{{/* If $e (Actual letter) not equals $before, add it  */}}
+	{{ if ne $e $before }}
+		{{ $fixed = joinStr ""  $fixed $e }}
+	{{ end }}
+	{{ $before = $e }}
+{{- end -}}
+{{ $msg = $fixed }}
+
+{{ $msg }}
