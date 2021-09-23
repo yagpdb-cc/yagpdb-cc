@@ -5,16 +5,25 @@
     Author: Faculord <https://github.com/LattandiFacundo>
 */}}
 
-{{ $toFix := "Sentence here"}}
+{{ $toFix := "ooooooopppppppppppssssssss"}}
+{{ $exception := "o"}}
 
 {{ $splitted := split $toFix "" }}
-{{ $before := "" }}
-{{ $fixed := "" }}
-{{ range $e := $splited }}
-	{{- /* If $e (Actual letter) not equals $before, add it  */}}
-	{{- if ne $e $before }}
-		{{- $fixed = print $fixed $e }}
-	{{- end }}
+{{ $before := "" }} {{ $fixed := "" }} {{ $remaining := 0 }}
+
+{{ range $e := $splitted }}
+	{{- if lt $remaining 1 }}
+		{{- if ne $e $before }}
+			{{- if eq $e $exception }}
+				{{- $remaining = 2 }} {{-/* After subtraction would be 1 and skip the next characters*/}}
+				{{- $fixed = print $fixed $e $e }} {{-/* Print two characters */}}
+			{{- else }}
+				{{- $remaining = 1 }} {{-/* Would be 0 and skip nothing*/}}
+				{{- $fixed = print $fixed $e }}
+			{{- end }}
+		{{- end }}
 	{{- $before = $e -}}
+	{{- end }}
+	{{- $remaining = sub $remaining 1 }}
 {{ end }}
 {{ $toFix = $fixed }}
