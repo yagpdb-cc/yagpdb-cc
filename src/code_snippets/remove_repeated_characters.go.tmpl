@@ -12,18 +12,17 @@
 {{ $before := "" }} {{ $fixed := "" }} {{ $remaining := 0 }}
 
 {{ range $e := $splitted }}
-	{{- if lt $remaining 1 }}
-		{{- if ne $e $before }}
-			{{- if eq $e $exception }}
-				{{- $remaining = 2 }} {{/* After subtraction would be 1 and skip the next characters*/}}
-				{{- $fixed = print $fixed $e $e }} {{/* Print two characters */}}
-			{{- else }}
-				{{- $remaining = 1 }} {{/* Would be 0 and skip nothing*/}}
-				{{- $fixed = print $fixed $e }}
-			{{- end }}
+	{{- if ne $before $e }}
+		{{- if eq $e $exception }}
+			{{- $remaining = 2 }} 
+			{{- $fixed = print $fixed $e }} {{/*Print one now and one in the other iteration*/}}
+		{{- else }}
+			{{- $fixed = print $fixed $e }}
 		{{- end }}
-	{{- $before = $e -}}
+	{{- else if and (eq $e $exception) (eq $remaining 1) }} {{/*If in the befores iteration left an exception and matches now, print*/}}
+		{{- $fixed = print $fixed $e }}
 	{{- end }}
+	{{- $before = $e }}
 	{{- $remaining = sub $remaining 1 }}
 {{ end }}
 {{ $toFix = $fixed }}
