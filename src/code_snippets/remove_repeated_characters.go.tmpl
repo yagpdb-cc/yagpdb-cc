@@ -5,8 +5,8 @@
     Author: Faculord <https://github.com/LattandiFacundo>
 */}}
 
-{{ $toFix := "ooooooopppppppppppssssssss"}}
-{{ $exception := "o"}}
+{{ $toFix := "oooooooooooopppppppppppssssssss"}}
+{{ $exception := "o"}} {{/*Would keep two repeated characters if they matches the exception*/}}
 
 {{ $splitted := split $toFix "" }}
 {{ $before := "" }} {{ $fixed := "" }} {{ $remaining := 0 }}
@@ -15,10 +15,10 @@
 	{{- if lt $remaining 1 }}
 		{{- if ne $e $before }}
 			{{- if eq $e $exception }}
-				{{- $remaining = 2 }} {{-/* After subtraction would be 1 and skip the next characters*/}}
-				{{- $fixed = print $fixed $e $e }} {{-/* Print two characters */}}
+				{{- $remaining = 2 }} {{/* After subtraction would be 1 and skip the next characters*/}}
+				{{- $fixed = print $fixed $e $e }} {{/* Print two characters */}}
 			{{- else }}
-				{{- $remaining = 1 }} {{-/* Would be 0 and skip nothing*/}}
+				{{- $remaining = 1 }} {{/* Would be 0 and skip nothing*/}}
 				{{- $fixed = print $fixed $e }}
 			{{- end }}
 		{{- end }}
