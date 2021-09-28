@@ -21,7 +21,7 @@
 		{{- else if and ($id := $.Flags.Get $arg) (ne $i $lastIdx)}}
 			{{- $curFlag = $id}}
 		{{- else if $id := $.Switches.Get $arg}}
-			{{- $.Out.Flags.Set $id true}}
+			{{- $.Out.Switches.Set $id true}}
 		{{- else}}
 			{{- $.Out.Set "Positional" ($.Out.Positional.Append $arg)}}
 		{{- end -}}
