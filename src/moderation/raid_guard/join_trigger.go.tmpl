@@ -32,8 +32,10 @@
 	{{if not (dbGet $newmem.ID "raidcooldown") }}
 		{{$l = $l.Append $newmem}}
 		{{dbSet 0 "raidlist" $l}}
+		{{$mentions := cslice}}
+		{{range $rolemention}} {{- $mentions = $mentions.Append (print "<@&" . ">") -}} {{end}}
 		{{if eq (len $l) $len}}
-			{{sendMessageNoEscape $channel (complexMessage "content" (mentionRoleID $rolemention) "embed" $embed) }}
+			{{sendMessageNoEscape $channel (complexMessage "content" (joinStr ", " $mentions.StringSlice) "embed" $embed) }}
 		{{end}}
 		{{dbSetExpire $newmem.ID "raidcooldown" true 3600}}
 		{{dbSetExpire 0 "raidlistcool" true 1200 }}
