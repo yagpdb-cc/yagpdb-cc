@@ -9,17 +9,17 @@
 {{ $exception := "o"}} {{/*Would keep two repeated characters if they matches the exception*/}}
 
 {{ $splitted := split $toFix "" }}
-{{ $before := "" }} {{ $fixed := "" }} {{ $remaining := 0 }}
+{{ $before := "" }} {{ $fixed := "" }} {{ $remaining := 0 }} {{ $threshold := 2}}
 
 {{ range $e := $splitted }}
 	{{- if ne $before $e }}
 		{{- if eq $e $exception }}
-			{{- $remaining = 2 }} 
+			{{- $remaining = $threshold }}
 			{{- $fixed = print $fixed $e }} {{/*Print one now and one in the other iteration*/}}
 		{{- else }}
 			{{- $fixed = print $fixed $e }}
 		{{- end }}
-	{{- else if and (eq $e $exception) (eq $remaining 1) }} {{/*If in the befores iteration left an exception and matches now, print*/}}
+	{{- else if and (eq $e $exception) (ge $remaining 1) }} {{/*If in the befores iteration left an exception and matches now, print*/}}
 		{{- $fixed = print $fixed $e }}
 	{{- end }}
 	{{- $before = $e }}
