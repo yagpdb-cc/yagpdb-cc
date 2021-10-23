@@ -5,23 +5,37 @@
     Author: Faculord <https://github.com/LattandiFacundo>
 */}}
 
-{{ $toFix := "oooooooooooopppppppppppssssssss"}}
-{{ $exception := "o"}} {{/*Would keep two repeated characters if they matches the exception*/}}
+{{/*Configuration variables*/}}
+{{ $toFix := "oooooooooooooppppppppppppppppppppsssssssssssssssssss"}}
+{{ $exceptions := dict
+"o" 3
+"p" 2
+}}
+{{/*End of configuration variables*/}}
 
 {{ $splitted := split $toFix "" }}
-{{ $before := "" }} {{ $fixed := "" }} {{ $remaining := 0 }} {{ $threshold := 2}}
+{{ $before := "" }} {{ $fixed := "" }} {{ $remaining := 0 }} {{ $catchedException := false }}
 
 {{ range $e := $splitted }}
-	{{- if ne $before $e }}
-		{{- if eq $e $exception }}
-			{{- $remaining = $threshold }}
-			{{- $fixed = print $fixed $e }} {{/*Print one now and one in the other iteration*/}}
-		{{- else }}
+	{{ range $exception, $ignoreMe := $exceptions}}
+		{{- if ne $before $e }}
+			{{- if eq $e $exception }}
+				{{- $remaining = (toInt ($exceptions.Get $e)) }}
+				{{- $fixed = print $fixed $e }}
+				{{- $catchedException = true }}
+			{{- end }}
+		{{- else if and (eq $e $exception) (ge $remaining 1) }}
 			{{- $fixed = print $fixed $e }}
+			{{- $catchedException = true }}
+		{{ else }}
+			{{- $catchedException = false }}
 		{{- end }}
-	{{- else if and (eq $e $exception) (ge $remaining 1) }} {{/*If in the befores iteration left an exception and matches now, print*/}}
+	{{- end }}
+
+	{{- if and (ne $before $e) (eq $catchedException false) }}
 		{{- $fixed = print $fixed $e }}
 	{{- end }}
+
 	{{- $before = $e }}
 	{{- $remaining = sub $remaining 1 }}
 {{ end }}

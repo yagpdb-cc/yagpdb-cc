@@ -14,13 +14,42 @@ Useful addition to commands that needs to compare words.
 ## Usage
 
 Replace `$toFix` with the string you need to remove the repeated characters.
-and `$exception` with a letter you want to keep two.
+And in `$exceptions` dict you need to fill with a character and the threshold of each one.
+
+Like this:
+
+```
+{{ $exceptions := dict
+"o" 3
+"p" 2
+}}
+```
+
+This will leave the "o" three times and the "p" two times.
+
+:::caution
+
+Adding too much exceptions can cause the command to need a lot of time to execution.
+
+:::
 
 ## Example
 
-- `$toFix = "ooooooooooopppppppppppssssssss"`,
-`$exception = "o"` and `$threshold = 3` will output "ooops".
-- `$toFix = "heeeeelllllooooooo"`, `$exception = "l"` and `$threshold = 2` will output "hello".
+```
+{{ $toFix := "ooooooooooopppppppppppssssssss" }}
+{{ $exceptions := dict
+"o" 3
+"p" 2
+}}
+```
+will output `"ooopps"`.
+```
+{{ $toFix := "heeeeeellllllllllloooooooooo" }}
+{{ $exceptions := dict
+"l" 2
+}}
+```
+will output `"hello"`.
 
 ## Author
 
