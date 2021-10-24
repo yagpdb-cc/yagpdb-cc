@@ -14,7 +14,7 @@ Useful addition to commands that needs to compare words.
 ## Usage
 
 Replace `$toFix` with the string you need to remove the repeated characters.
-And in `$exceptions` dict you need to fill with a character and the threshold of each one.
+In `$exceptions` dict you need to fill with a character and the threshold of each one.
 
 Like this:
 
@@ -29,11 +29,13 @@ This will leave the "o" three times and the "p" two times.
 
 :::caution
 
-Adding too much exceptions can cause the command to need a lot of time to execution.
+Adding too much exceptions can cause the command to need a lot of time at execution.
 
 :::
 
-## Example
+Then in `$defaultThreshold` you can define the threshold for characters that have not exeptions.
+
+## Examples
 
 ```
 {{ $toFix := "ooooooooooopppppppppppssssssss" }}
@@ -41,6 +43,7 @@ Adding too much exceptions can cause the command to need a lot of time to execut
 "o" 3
 "p" 2
 }}
+{{ $defaultThreshold := 1 }}
 ```
 will output `"ooopps"`.
 ```
@@ -48,8 +51,18 @@ will output `"ooopps"`.
 {{ $exceptions := dict
 "l" 2
 }}
+{{ $defaultThreshold := 1 }}
 ```
 will output `"hello"`.
+
+```
+{{ $toFix := "heeeeeellllllllllloooooooooo" }}
+{{ $exceptions := dict
+"l" 3
+}}
+{{ $defaultThreshold := 2 }}
+```
+will output `"heellloo"`.
 
 ## Author
 

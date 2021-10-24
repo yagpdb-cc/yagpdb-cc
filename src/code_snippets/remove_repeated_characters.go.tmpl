@@ -6,11 +6,12 @@
 */}}
 
 {{/*Configuration variables*/}}
-{{ $toFix := "oooooooooooooppppppppppppppppppppsssssssssssssssssss"}}
+{{ $toFix := "ooooooppppppppppppppppppppsssssssssssssssssss"}}
 {{ $exceptions := dict
 "o" 3
 "p" 2
 }}
+{{ $defaultThreshold := 1 }}
 {{/*End of configuration variables*/}}
 
 {{ $splitted := split $toFix "" }}
@@ -18,21 +19,24 @@
 
 {{ range $e := $splitted }}
 	{{ range $exception, $ignoreMe := $exceptions}}
-		{{- if ne $before $e }}
-			{{- if eq $e $exception }}
-				{{- $remaining = (toInt ($exceptions.Get $e)) }}
-				{{- $fixed = print $fixed $e }}
-				{{- $catchedException = true }}
-			{{- end }}
+		{{- if and (ne $before $e) (eq $e $exception) }}
+			{{- $remaining = (toInt ($exceptions.Get $e)) }}
+			{{- $fixed = print $fixed $e }}
+			{{- $catchedException = true }}
 		{{- else if and (eq $e $exception) (ge $remaining 1) }}
 			{{- $fixed = print $fixed $e }}
 			{{- $catchedException = true }}
-		{{ else }}
+		{{- else if ne $before $e}}
 			{{- $catchedException = false }}
 		{{- end }}
 	{{- end }}
 
 	{{- if and (ne $before $e) (eq $catchedException false) }}
+		{{ if gt $defaultThreshold 0}}
+			{{- $fixed = print $fixed $e }}
+			{{- $remaining = $defaultThreshold }}
+		{{ end }}
+	{{- else if and (ge $remaining 1) (eq $catchedException false) }}
 		{{- $fixed = print $fixed $e }}
 	{{- end }}
 
