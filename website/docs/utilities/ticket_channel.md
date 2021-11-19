@@ -23,7 +23,7 @@ Make sure you have the tickets system set up first.
 
 ## Code
 
-```gotmpl file=/src/utilities/ticket_channel.go.tmpl
+```gotmpl file=/src/utilities/ticket-channel.go.tmpl
 
 ```
 
