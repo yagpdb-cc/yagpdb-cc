@@ -10,6 +10,11 @@ Make sure you have the tickets system set up first.
 
 :::
 
+:::note
+
+If you want a message in the tickets channel, send it before installing the custom command.
+
+:::
 ## Trigger
 
 **Type:** `Regex`<br />
@@ -23,7 +28,7 @@ Make sure you have the tickets system set up first.
 
 ## Code
 
-```gotmpl file=/src/utilities/ticket-channel.go.tmpl
+```gotmpl file=/src/utilities/ticket_channel.go.tmpl
 
 ```
 
