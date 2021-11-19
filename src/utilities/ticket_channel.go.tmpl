@@ -1,0 +1,10 @@
+{{/*
+	Takes all messages sent in a specified channel, creates a ticket owned by the user who sent it and witht the message as the reason, and deletes the original message.
+
+	Author: user.exe (mrhappyma) <https://github.com/mrhappyma>
+*/}}
+
+{{createTicket nil .Message.Content}}
+Ticket created
+{{deleteTrigger 0}}
+{{deleteResponse 0}}
