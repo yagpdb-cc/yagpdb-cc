@@ -11,7 +11,8 @@
 {{/* End of configurable values */}}
 
 {{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}{{ $desc := "" }}
-{{ if and (eq $prefix `"`) (reFind `\A"afk` (index .Args 0)) }}{{ $args = (cslice `"afk`).AppendSlice (split (slice (index $args 0) 1 (index $args 0|len)) " ") }} {{ end }}
+{{ if $args := .Args}}
+	{{ if and (eq $prefix `"`) (reFind `\A"afk` (index .Args 0)) }}{{ $args = (cslice `"afk`).AppendSlice (split (slice (index $args 0) 1 (index $args 0|len)) " ") }} {{ end }}
 	{{ if eq (lower (index $args 0)) (print $prefix "afk") }}
 		{{ if and (ge (len $args) 1) (not $afk) }}
 			{{ $message := "" }}
