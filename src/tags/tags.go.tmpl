@@ -35,7 +35,7 @@
 
 	{{ if and (eq $cmd "add") (ge (len $args) 2) }}
 		{{ if $isMod }}
-			{{ $tagName := index $args 0 | lower }}
+			{{ $tagName := reReplace `\n\z` (index $args 0 | lower) "" }}
 			{{ $tagContent := slice $args 1 | joinStr " " }}
 			{{ if reFind $safeName $tagName }}
 				{{ $data := sdict "Name" $tagName }}
