@@ -20,7 +20,7 @@ This is _not_ a custom command! Rather, it's meant to be added to your **Join Fe
 ## Configuration
 
 - `$age`<br />
-  Account age threshold for members to be added to the raid list.
+  Account age threshold for members to be added to the raid list **in minutes**.
 
 - `$len`<br />
   Length of the raid list at which a notification is sent.
