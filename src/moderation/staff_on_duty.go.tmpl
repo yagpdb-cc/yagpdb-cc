@@ -16,7 +16,7 @@
 {{if not (dbGet 0 "modOnDuty")}}{{dbSet 0 "modOnDuty" ""}}{{end}}{{/*creates initial database slot. you can delete this after first run if you know what you are doing*/}}
 
 {{$onDuty := ""}}
-{{if .ExecData}} 
+{{if .ExecData}}
 	{{if eq (str .ExecData) "update"}}
 		{{$current := 0}}{{$name := ""}}{{$member := ""}}{{$dutyList := ""}}
 		{{$onDuty = (dbGet 0 "modOnDuty").Value}}
@@ -24,7 +24,7 @@
 		{{if eq (len $dutySplit) 1}}{{$dutyList = "None"}}{{else}}
 		{{range $dutySplit}}
 			{{- $current = (toInt . ) -}}
-			{{if $current}} 
+			{{if $current}}
 				{{$member = getMember $current}}
 				{{$name = or $member.Nick $member.User.Username}}
 				{{- $dutyList = joinStr ", " $dutyList $name -}}
@@ -44,7 +44,7 @@
 				{{editChannelTopic $dutyChannel (print $curTopic)}}
 			{{end}}
 		{{end}}
-		
+
 	{{else}}
 		{{takeRoleID .ExecData $dutyRole 0}}
 		{{sendDM (print "You have been automatically removed from duty after (" $autoOff ") hour(s), if this is a mistake go back on duty.")}}
@@ -68,7 +68,7 @@
 		{{$onDuty = reReplace (print $idiotStaff ";") $onDuty ""}}
 		{{dbSet 0 "modOnDuty" $onDuty}}
 		{{if not (dbGet 0 "onDutyCD")}}
-			{{execCC 48 nil 305 "update"}}
+			{{execCC .CCID nil 305 "update"}}
 			{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
 		{{end}}
 	{{else}}
@@ -83,7 +83,7 @@
 		{{if eq (len $dutySplit) 1}}{{$dutyList = "None"}}{{else}}
 		{{range $dutySplit}}
 			{{- $current = (toInt . ) -}}
-			{{if $current}} 
+			{{if $current}}
 				{{$member = getMember $current}}
 				{{$name = or $member.Nick $member.User.Username}}
 				{{- $dutyList = joinStr ", " $dutyList $name -}}
@@ -105,16 +105,16 @@
 	{{else}}
 		{{sendMessage nil (print "You can't force other people on duty!")}}
 	{{end}}
-	
+
 {{else}}
 {{/*==================*/}}
 
 {{if and (hasRoleID $dutyRole) (eq .Cmd "-onduty")}}
 	{{sendMessage nil (print "You're already on duty! Send `-offduty` to take a break.")}}
-	
+
 {{else if and (not (hasRoleID $dutyRole)) (eq .Cmd "-offduty")}}
 	{{sendMessage nil (print "You're already off duty! Send `-onduty` to go on patrol.")}}
-	
+
 {{else if and (hasRoleID $dutyRole) (eq .Cmd "-offduty")}}
 	{{removeRoleID $dutyRole 0}}
 	{{sendMessage  nil (print "You are now off duty.")}}
@@ -126,7 +126,7 @@
 		{{execCC .CCID nil 305 "update"}}
 		{{dbSetExpire 0 "onDutyCD" "on CD" 306}}
 	{{end}}
-	
+
 {{else if and (not (hasRoleID $dutyRole)) (eq .Cmd "-onduty")}}
 	{{addRoleID $dutyRole}}
 	{{sendMessage nil (print "You are now on duty.")}}
