@@ -28,7 +28,7 @@
 	{{- if eq . "-description"}} {{$description = true}} {{else if in $flags .}} {{$description = false}} {{end -}}
 	{{- if and ($description) (not (eq . "-description"))}} {{$isEmbed = true}} {{$descriptionV = joinStr " " $descriptionV .}} {{end -}}
 	{{- if eq . "-channel"}} {{$channel = true}} {{else if in $flags .}} {{$channel = false}} {{end -}}
-	{{- if and ($channel) (not (eq . "-channel"))}} {{$checkChannel := reReplace `<|>|#` . ""}} {{with getChannel $checkChannel}} {{$channelV = .ID}} {{end}} {{end -}}
+	{{- if and ($channel) (not (eq . "-channel"))}} {{$checkChannel := reReplace `<|>|#` . ""}} {{with getChannelOrThread $checkChannel}} {{$channelV = .ID}} {{end}} {{end -}}
 	{{- if eq . "-title"}} {{$title = true}} {{else if in $flags .}} {{$title = false}} {{end -}}
 	{{- if and ($title) (not (eq . "-title"))}} {{$isEmbed = true}} {{$titleV = joinStr " " $titleV .}} {{end -}}
 	{{- if eq . "-image"}} {{$image = true}} {{else if in $flags .}} {{$image = false}} {{end -}}

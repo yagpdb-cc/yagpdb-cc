@@ -93,6 +93,7 @@ export const funcs = [
 	'deleteMessageReaction',
 	'getMember',
 	'getChannel',
+	'getChannelOrThread',
 	'reFindAll',
 	'addRoleName',
 	'scheduleUniqueCC',

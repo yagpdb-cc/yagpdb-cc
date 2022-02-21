@@ -17,7 +17,7 @@
 {{ $mainMessage := sendMessageRetID nil (cembed "description" "Converting Message... <a:loading:760219029620523008>") }}
 
 {{ if ne ($a.Get 0) "0" }}
-	{{ $chan = getChannel (or (reFind `\d+` ($a.Get 0)) ($a.Get 0)) }}
+	{{ $chan = getChannelOrThread (or (reFind `\d+` ($a.Get 0)) ($a.Get 0)) }}
 
 	{{ with $chan }} {{ $link = joinStr "/" "https://discordapp.com/channels" $.Guild.ID .ID ($a.Get 1) }}
 	{{ else }} {{ $ce = false }}

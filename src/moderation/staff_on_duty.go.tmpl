@@ -32,7 +32,7 @@
 			{{end}}{{end}}
 		{{end}}
 		{{if $chanEdit}}
-			{{$curTopic := index (reSplit `(-\s)?Staff on duty:` (getChannel $dutyChannel).Topic) 0}}
+			{{$curTopic := index (reSplit `(-\s)?Staff on duty:` (.Guild.GetChannel $dutyChannel).Topic) 0}}
 			{{if $curTopic}}
 				{{$curTopic = print $curTopic " - Staff on duty: " $dutyList}}
 			{{else}}

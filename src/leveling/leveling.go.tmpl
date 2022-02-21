@@ -19,9 +19,9 @@
 }}
 {{ if .CmdArgs }}
 	{{ $isSaved := false }} {{/* Whether the settings are saved */}}
-	{{ $currentSettings := sdict 
-		"min" 15 
-		"max" 25 
+	{{ $currentSettings := sdict
+		"min" 15
+		"max" 25
 		"cooldown" .TimeMinute
 			"announcements" true
 	}} {{/* Defaults for level settings */}}
@@ -33,7 +33,7 @@
 	{{ if eq (index .CmdArgs 0) "use-default" }}
 		{{ $s := dbSet 0 "xpSettings" $currentSettings }} {{/* Set defaults */}}
 		Done! You are now using the default settings for the leveling system.
-	
+
 	{{ else if and (eq (index .CmdArgs 0) "set") (ge (len .CmdArgs) 3) }}
 		{{ $key := index .CmdArgs 1 }} {{/* The key of the setting being set */}}
 		{{ $value := slice .CmdArgs 2 | joinStr " " }} {{/* The value of the new setting */}}
@@ -57,7 +57,7 @@
 	{{ else if and (eq (index .CmdArgs 0) "set-channel") (ge (len .CmdArgs) 2) }}
 		{{ $input := index .CmdArgs 1 }}
 		{{ with reFindAllSubmatches `<#(\d+)>` $input }} {{ $input = toInt64 (index . 0 1) }} {{ end }}
-		{{ $channel := getChannel $input }}
+		{{ $channel := .Guild.GetChannel $input }}
 		{{ if $channel }}
 			{{ $currentSettings.Set "channel" $channel.ID }}
 			{{ $s := dbSet 0 "xpSettings" $currentSettings }}
@@ -90,7 +90,7 @@
 		{{ $formatted := printf "**❯ Minimum XP:** %d\n**❯ Maximum XP:** %d\n**❯ Cooldown:** %s\n**❯ Level-up Channel:** %s\n**❯ Announcements:** %v\n"
 			$currentSettings.min
 			$currentSettings.max
-			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration)) 
+			(humanizeDurationSeconds ($currentSettings.cooldown | toDuration))
 			$channel
 			$currentSettings.announcements
 		}} {{/* Construct the embed description */}}
@@ -100,7 +100,7 @@
 			This server has not set up the leveling system. Run `-leveling use-default` to use the default settings or customize it using `-leveling set <key> <value>`.
 		{{ end }}
 	{{ else }} {{/* Send help messages */}}
-		{{ sendMessage nil $helpMsg }} 
+		{{ sendMessage nil $helpMsg }}
 	{{ end }}
 {{ else }}
 	{{ sendMessage nil $helpMsg }}

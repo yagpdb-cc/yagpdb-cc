@@ -38,7 +38,7 @@
 		{{if eq (lower $channel) "nil"}} {{$channel = .Channel.ID}}
 		{{else if reFind `\d{17,19}` $channel}} {{$channel = toInt $channel}}
 		{{end}}
-		{{if getChannel $channel}}
+		{{if getChannelOrThread $channel}}
 			{{if not (reFind `^-un` (lower .Cmd))}}
 				{{if eq (len $split) 3}}
 					{{$amount := (toInt (index $split 2))}}
