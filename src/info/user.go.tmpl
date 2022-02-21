@@ -5,6 +5,14 @@
 	Author: jo3-l <https://github.com/jo3-l>
 */}}
 
+{{/*
+	Maximum number of roles to show before truncating the rest.
+
+	Suppose each role contributes ~30 characters. 30 roles is then 900 characters,
+	relatively close to the limit of 1024 characters per field value.
+*/}}
+{{ $ROLE_TRUNCATION_THRESHOLD := 30 }}
+
 {{ $member := .Member }}
 {{ $user := .User }}
 {{ $args := parseArgs 0 "**Syntax:** `-userinfo [user]`" (carg "member" "target") }}
@@ -13,11 +21,20 @@
 	{{ $user = $member.User }}
 {{ end }}
 
-{{ $roles := "" }}
-{{ range $k, $v := $member.Roles }}
-	{{- if eq $k 0 }} {{- $roles = printf "<@&%d>" . }}
-	{{- else }} {{- $roles = printf "%s, <@&%d>" $roles . }} {{- end -}}
+{{ $roleMentions := cslice }}
+{{ range $member.Roles }} {{- $roleMentions = $roleMentions.Append (print "<@&" . ">") -}} {{ end }}
+
+{{ $omittedCount := 0 }}
+{{ if gt (len $roleMentions) $ROLE_TRUNCATION_THRESHOLD }}
+	{{ $omittedCount = sub (len $roleMentions) $ROLE_TRUNCATION_THRESHOLD }}
+	{{ $roleMentions = slice $roleMentions 0 $ROLE_TRUNCATION_THRESHOLD }}
 {{ end }}
+
+{{ $roleDisplay := joinStr ", " $roleMentions.StringSlice }}
+{{ if $omittedCount }}
+	{{ $roleDisplay = print $roleDisplay " [" $omittedCount " roles not shown]" }}
+{{ end }}
+
 {{ $bot := "No" }}
 {{ if $user.Bot }} {{ $bot = "Yes" }} {{ end }}
 {{ $createdAt := div $user.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
@@ -28,7 +45,7 @@
 		(sdict "name" "❯ Nickname" "value" (or $member.Nick "*None set*"))
 		(sdict "name" "❯ Joined At" "value" ($member.JoinedAt.Parse.Format "Jan 02, 2006 3:04 AM"))
 		(sdict "name" "❯ Created At" "value" ($createdAt.Format "Monday, January 2, 2006 at 3:04 AM"))
-		(sdict "name" (printf "❯ Roles (%d Total)" (len $member.Roles)) "value" (or $roles "n/a"))
+		(sdict "name" (printf "❯ Roles (%d Total)" (len $member.Roles)) "value" (or $roleDisplay "n/a"))
 		(sdict "name" "❯ Bot" "value" $bot)
 	)
 	"color" 14232643
