@@ -3,7 +3,9 @@ slug: /
 title: Introduction
 ---
 
-A curated collection of over custom commands for the [YAGPDB Discord Bot](https://yagpdb.xyz) to enhance your server. It is:
+A curated collection of over 60 custom commands for the [YAGPDB Discord Bot](https://yagpdb.xyz) to enhance your server.
+
+It is:
 
 - **Extensive:** There are over 60 custom commands (and we're adding more regularly!), meaning that it's likely that you'll be able to find what you're looking for.
 - **Official:** This collection of commands is [maintained by a group of YAGPDB staff members](#contributors) and has official support.

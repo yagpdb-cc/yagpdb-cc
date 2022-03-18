@@ -115,7 +115,7 @@ module.exports = {
 					items: [
 						{
 							label: 'YAGPDB Source',
-							href: 'https://github.com/jonas747/yagpdb',
+							href: 'https://github.com/botlabs-gg/yagpdb',
 						},
 						{
 							label: 'YAGPDB Community Discord',
