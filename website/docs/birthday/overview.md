@@ -80,7 +80,7 @@ All commands can be used with `bday` or `birthday`, such as `-getbday` or `-getb
   **Use:** Stops announcing birthdays immediately.
 
 - `setbirthday`<br />
-  **Syntax:** `setbirthday <user>`  
+  **Syntax:** `setbirthday <date> <user>`  
   **Use:** Set the birthday date of the mentioned user. Can only be used by users with at least one role in `$mods`.
 
 - `getbirthday`<br />
