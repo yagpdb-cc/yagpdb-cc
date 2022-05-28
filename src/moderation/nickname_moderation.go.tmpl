@@ -12,7 +12,7 @@
 {{/* End of configurable values */}}
 
 {{$mod := in (split (index (split (exec "viewperms") "\n") 2) ", ") $modPerms}}
-{{$prefix := index (reFindAllSubmatches `Prefix of \x60\d+\x60: \x60(.+)\x60` (exec "prefix")) 0 1}}
+{{$prefix := .ServerPrefix}}
 {{if .CmdArgs}}
 	{{if eq (lower (index .CmdArgs 0)) (print $prefix "modnick")}}
 		{{if ge (len .CmdArgs) 2}}

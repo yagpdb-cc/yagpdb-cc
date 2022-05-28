@@ -13,7 +13,7 @@
 {{ $cooldown := 5 }}
 {{/* Configuration variables end */}}
 
-{{ $prefix := index (reFindAllSubmatches `Prefix of \x60\d+\x60: \x60(.+)\x60` (exec "prefix")) 0 1 }}{{ $cp := "" }}{{ $m := 0 }}{{ $bet := "" }}{{ $err := false }}{{ $img := "https://cdn.discordapp.com/attachments/707661790443733022/782710794634264616/d74906d39a1964e7d07555e7601b06ad.gif" }}{{ $cap := "https://cdn.discordapp.com/attachments/707661790443733022/782713935341027358/cap.png" }}{{ $pajura := "https://cdn.discordapp.com/attachments/707661790443733022/782713937979637760/pajura.png" }}{{ $embed:= sdict }}{{ $fields := cslice }}{{ $embed.Set "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "256"))}}
+{{ $cp := "" }}{{ $m := 0 }}{{ $bet := "" }}{{ $err := false }}{{ $img := "https://cdn.discordapp.com/attachments/707661790443733022/782710794634264616/d74906d39a1964e7d07555e7601b06ad.gif" }}{{ $cap := "https://cdn.discordapp.com/attachments/707661790443733022/782713935341027358/cap.png" }}{{ $pajura := "https://cdn.discordapp.com/attachments/707661790443733022/782713937979637760/pajura.png" }}{{ $embed:= sdict }}{{ $fields := cslice }}{{ $embed.Set "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "256"))}}
 {{ if not .ExecData }}
 	{{ if eq (len .CmdArgs) 2 }}
 		{{ with reFind `\A(?i)(heads|tails)\z` (index .CmdArgs 0) }}
@@ -67,7 +67,7 @@
 			{{ $err = true }}
 		{{ end }}
 	{{ else }}
-		{{ $embed.Set "description" (printf "Syntax: **%scoinflip <heads/tails> <money>**" $prefix) }}
+		{{ $embed.Set "description" (printf "Syntax: **%scoinflip <heads/tails> <money>**" .ServerPrefix) }}
 		{{ $embed.Set "color" 16488706 }}
 		{{ $err = true }}
 	{{ end }}
