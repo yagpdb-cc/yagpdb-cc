@@ -21,7 +21,7 @@
 
 {{/* CODE - Don't edit this part */}}
 {{ $c := sdict }}{{ with (dbGet 20 "counting").Value }}{{ $c = sdict . }}{{ end }}
-{{ $e := execAdmin "prefix" }}{{ $p := reReplace `[*\\_\~]` (slice $e (add 15 (len (str .Guild.ID))) (sub (len $e) 1)) `\$0` }}
+{{ $p := .ServerPrefix }}
 {{ $r := 0 }}{{ with (dbGet .User.ID "resetcount").Value }}{{ $r = . }}{{ end }}
 {{ $s := false }}{{ range .Member.Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
 {{ if not $c }}

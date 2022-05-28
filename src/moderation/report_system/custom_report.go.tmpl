@@ -11,9 +11,7 @@
 {{/* End of configurable values */}}
 
 {{/* ACTUAL CODE */}}
-{{$p := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "prefix")) 0 1}}
-{{$Escaped_Prefix := reReplace `[\.\[\]\-\?\!\\\*\{\}\(\)\|\+]` $p `\${0}`}}
-{{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}
+{{if not (reFind (print `\A` .ServerPrefix `|<@!?204255221017214977>`) .Message.Content)}}
 Did not set regex to match Server Prefix!{{deleteTrigger}}
 {{else}}
 {{if and .CmdArgs (lt (len .CmdArgs) 2)}}
