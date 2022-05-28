@@ -10,9 +10,9 @@
 {{ $removeAfkOnMessage := true}}
 {{/* End of configurable values */}}
 
-{{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $prefix := .ServerPrefix }}{{ $desc := "" }}
+{{ $time := 0 }}{{ $afk := dbGet .User.ID "afk" }}{{ $desc := "" }}
 {{ if $args := .Args }}
-	{{ if eq (lower (index $args 0)) (print $prefix "afk") }}
+	{{ if eq (lower (index $args 0)) (print .ServerPrefix "afk") }}
 		{{ if and (ge (len $args) 1) (not $afk) }}
 			{{ $message := "" }}
 			{{ $duration := 0 }}

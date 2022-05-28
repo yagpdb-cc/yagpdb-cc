@@ -21,14 +21,13 @@
 
 {{/* CODE - Don't edit this part */}}
 {{ $c := sdict }}{{ with (dbGet 20 "counting").Value }}{{ $c = sdict . }}{{ end }}
-{{ $p := .ServerPrefix }}
 {{ $r := 0 }}{{ with (dbGet .User.ID "resetcount").Value }}{{ $r = . }}{{ end }}
 {{ $s := false }}{{ range .Member.Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
 {{ if not $c }}
 	{{ addReactions "☑" }}
 	{{ dbSet 20 "counting" (sdict "l" (sdict "c" 1 "m" 0 "u" 0 "w" 0)) }}
 	{{ print .User.Mention ", <#" .Channel.ID "> is all set up as your counting channel!" }}
-{{ else if and $s (eq (print $p "resetcount") .Message.Content) }}
+{{ else if and $s (eq (print .ServerPrefix "resetcount") .Message.Content) }}
 	{{ deleteTrigger 1 }}
 	{{ if $s }}
 		{{ if not $r }}
