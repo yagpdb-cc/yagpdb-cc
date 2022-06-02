@@ -17,7 +17,7 @@
 {{/* End of configurable values */}}
 
 {{$globalDict:=dict "chans" (dict $Suggestion_Channel true $Approved_Channel true $Implemented_Channel true) "msg" .nil}}
-{{$Escaped_Prefix:=reReplace `[\$\^\.\[\]\-\?\!\\\*\{\}\(\)\|\+]` .ServerPrefix `\${0}`}}
+{{$Escaped_Prefix:=reQuoteMeta .ServerPrefix}}
 {{$error:=""}}
 {{$Syntax:=""}}
 {{$IS_Mod:=false}}
