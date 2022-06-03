@@ -17,17 +17,17 @@
 {{/* End of configurable values */}}
 
 {{$globalDict:=dict "chans" (dict $Suggestion_Channel true $Approved_Channel true $Implemented_Channel true) "msg" .nil}}
-{{$Prefix:=.ServerPrefix}}
+{{$Escaped_Prefix:=reQuoteMeta .ServerPrefix}}
 {{$error:=""}}
 {{$Syntax:=""}}
 {{$IS_Mod:=false}}
 {{if in (slice (exec "viewperms") (add 25 (len .User.Username))) `Administrator`}}{{$IS_Mod =true}}{{else}}{{range $Mod_Roles}}{{if in $.Member.Roles .}}{{$IS_Mod =true}}{{end}}{{end}}{{end}}
 {{$Attachments:=""}}{{$Img_Set:=false}}
 
-{{if not (reFind (print `\A` $Prefix `|<@!?204255221017214977>`) .Message.Content)}}{{$error ="Did not set regex to match Server Prefix"}}{{$Syntax =`Prefix/Yag Mention <Command> <Args>`}}{{else}}
+{{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}{{$error ="Did not set regex to match Server Prefix"}}{{$Syntax =`Prefix/Yag Mention <Command> <Args>`}}{{else}}
 {{if reFind `(?i)\bsuggest(ion)?\b` .Cmd}}
 	{{$Syntax =print .Cmd " <Suggestion_Here>"}}
-	{{$col:=16777215}}{{$pos:=0}}{{$r:=.Member.Roles}}{{range .Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $pos .Position)}}{{$pos =.Position}}{{$col =.Color}}{{end}}{{end}}	
+	{{$col:=16777215}}{{$pos:=0}}{{$r:=.Member.Roles}}{{range .Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $pos .Position)}}{{$pos =.Position}}{{$col =.Color}}{{end}}{{end}}
 	{{if or .StrippedMsg .Message.Attachments}}
 		{{with (dbGet .User.ID "suggestCld")}}
 			{{$error =print "This command is on cooldown for " (humanizeDurationSeconds (.ExpiresAt.Sub currentTime)) " to avoid spam."}}
@@ -41,23 +41,23 @@
 						"timestamp"  currentTime
 						"footer" (sdict "text" (print "Author ID - " $.User.ID))
 			}}
-			
+
 			{{range .Message.Attachments}}{{if and (not $Img_Set) .Width}}{{$Img_Set =true}}{{$embed.Set "image" (sdict "url" .ProxyURL)}}{{else}}{{$Attachments =print $Attachments "\n[" .Filename "](" .ProxyURL ")"}}{{end}}{{end}}
 			{{if $Attachments}}{{$embed.Set "description" (print $embed.description "\n\n**__Attachments:__**" $Attachments)}}{{end}}
 			{{$ID:=sendMessageRetID $Suggestion_Channel (cembed $embed)}}
 			{{addMessageReactions $Suggestion_Channel $ID $Upvote $Downvote}}
-			{{sendDM "Suggestion submitted successfully. If you want to delete your suggestion, do so with `" $Prefix "deletesuggestion " $ID "` on the " $.Guild.Name " server."}}
+			{{sendDM "Suggestion submitted successfully. If you want to delete your suggestion, do so with `" .ServerPrefix "deletesuggestion " $ID "` on the " $.Guild.Name " server."}}
 			{{addReactions $Upvote}}
 		{{end}}
 	{{else}}
 		{{$error ="Insufficient Arguments."}}
 	{{end}}
-	
+
 {{else}}
 	{{$authorID:=0}}{{$message:=.nil}}{{$channel:=.nil}}{{$rest:=""}}{{$command:=""}}{{$type:=""}}{{$SNum:=0}}
 	{{$Syntax =print .Cmd " <Suggestion_ID> <Message/Arguments>"}}
 
-	{{with reFindAllSubmatches (print `(?si)\A(?:` $Prefix `\s?|\S+\s*)(?:(del|edit)\w+|\w+\s+(\w+))\s+(\d+)\s*(.*)`) .Message.Content}}
+	{{with reFindAllSubmatches (print `(?si)\A(?:` $Escaped_Prefix `\s?|\S+\s*)(?:(del|edit)\w+|\w+\s+(\w+))\s+(\d+)\s*(.*)`) .Message.Content}}
 		{{$command =lower (or (index . 0 1) (index . 0 2))}}
 		{{$mID:=index . 0 3}}
 		{{$rest =index . 0 4}}
@@ -109,9 +109,9 @@
 			{{end}}
 			{{$embed.Set "Title" (print $command " Suggestion #" $SNum)}}
 			{{end}}
-				
+
 			{{if eq $command "Dupe"}}
-				{{$Syntax ="<Suggestion_ID> <Original_Suggestion_ID>"}} 
+				{{$Syntax ="<Suggestion_ID> <Original_Suggestion_ID>"}}
 				{{with $rest}}
 					{{$globalDict.Set "mID" .}}{{$globalDict.Set "msg" $.nil}}
 					{{template "process-suggest-msg" $globalDict}}
@@ -171,7 +171,7 @@ Done :+1:
 	{{range $k,$v:=.chans}}
 		{{if not $.msg}}{{with getMessage $k $.mID}}{{$.Set "msg" .}}{{$.Set "chan" $k}}{{end}}{{end}}
 	{{end}}
-	
+
 	{{with .msg}}
 		{{with .Embeds}}
 			{{with (index . 0).Footer}}
@@ -179,7 +179,7 @@ Done :+1:
 					{{$.Set "authorID" (toInt64 (index . 0 1))}}
 				{{else}}
 					 {{$err ="Not a valid Suggestion Message"}}
-				{{end}}			
+				{{end}}
 			{{else}}
 				{{$err ="Not a valid Suggestion Message"}}
 			{{end}}

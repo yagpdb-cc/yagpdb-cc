@@ -6,7 +6,8 @@
 */}}
 
 {{/*ACTUAL CODE*/}}
-{{if not (reFind (print `\A` .ServerPrefix `|<@!?204255221017214977>`) .Message.Content)}}
+{{$Escaped_Prefix := reQuoteMeta .ServerPrefix}}
+{{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}
 Did not set regex to match Server Prefix! {{deleteTrigger}}
 {{else}}
 {{if lt (len .CmdArgs) 3}}
