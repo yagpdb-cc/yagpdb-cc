@@ -1,0 +1,213 @@
+
+{{/*
+        This custom command adds staff note functionality to your server.
+
+        See <https://yagpdb-cc.github.io/moderation/notes>
+
+        Author: Luca Zeuch <https://github.com/l-zeuch>
+*/}}
+
+{{/* CONFIGURATION START */}}
+{{$NUKE_PERMISSION := .Permissions.ManageServer}}
+{{$BASE_PERMISSION := .Permissions.ManageMessages}}
+{{$DELETE_TIMEOUT := toDuration "2m"}}
+{{$PASSWD_CHARSET := toRune "AaBbCcDdEeFfGgHhIiJjKkLiMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789@€<>(){}[]!$%&?"}}
+{{/* CONFIGURATION END */}}
+
+{{/* ACTUAL CODE, DO NOT TOUCH */}}
+{{if not .ExecData}}
+{{$subcommand := ""}}
+{{$target := userArg nil}}
+{{$note := ""}}
+
+{{if ge (len .CmdArgs) 1}}
+{{$subcommand = index .CmdArgs 0}}
+{{end}}
+
+{{if ge (len .CmdArgs) 2}}
+{{$target = (getMember (index .CmdArgs 1))}}
+{{end}}
+
+{{if ge (len .CmdArgs) 3}}
+{{$note = joinStr " " (slice .CmdArgs 2)}}
+{{$note = reReplace `\n|\r|\r\n` $note " "}}
+{{end}}
+
+{{$valid_subcommands := cslice "help" "set" "get" "del" "delall" "nuke"}}
+{{$subcommands_string := joinStr "`, `" $valid_subcommands.StringSlice}}
+
+{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "prefix")) 0 1}}
+
+{{$err := ""}}
+{{$out := sdict}}
+
+{{$helper_embed := cembed "title" "Notes Help Page"
+        "fields" (cslice
+                (sdict "name" "• Basic Usage" "value" (printf "Valid subcommands are:`%s`.\nIf none are given, this page is shown instead.```%snote <subcommand> (Arguments)```" $subcommands_string $prefix))
+                (sdict "name" "• Help" "value" (printf "Shows this text!```%snote help```" $prefix))
+                (sdict "name" "• Set" "value" (printf "Sets a note on a user with optional duration provided by `-duration` flag.```%snote set <User:Mention/ID> <Note:Text>```" $prefix))
+                (sdict "name" "• Get" "value" (printf "Gets all notes of a user.```%snote get <User:Mention/ID>```" $prefix))
+                (sdict "name" "• Del" "value" (printf "Deletes a given note of given user.```%snote del <User:Mention/ID> <NoteID:Whole Number>```The note ID can be obtained by running the `get` subcommand. The deleted note will be shown, in case you accidentally deleted the wrong one." $prefix))
+                (sdict "name" "• Delall" "value" (printf "Deletes all notes of the given user.\n:warning: **This action is irreversible.** :warning:```%snote delall <User:Mention/ID>```" $prefix))
+                (sdict "name" "• Nuke" "value" (printf "Deletes all notes server-wide. Useful when you wish to remove this system, or want to clean it up.\n:warning: **This action is irreversible. Don't run it \"to test\". It will work.** :warning:```%snote nuke```" $prefix))
+        )
+        "footer" (sdict "text" (printf "Triggered by %s" .User) "icon_url" (.User.AvatarURL "1024"))
+}}
+
+{{$has_perms := hasPermissions $BASE_PERMISSION)}}
+{{$note_id := 1}}
+{{$time_format := currentTime.Format "Mon 02 Jan 15:04"}}
+{{if $has_perms}}
+        {{if or (inFold "help" $subcommand) (not $subcommand)}}
+                {{sendMessage nil $helper_embed}}
+        {{else}}
+                {{if or $target (inFold "nuke" $subcommand)}}
+                        {{if not (inFold "nuke" $subcommand)}}
+                        {{$target = $target.User}}
+                        {{$out = sdict "footer" (sdict "text" (printf "Triggered by %s" .User) "icon_url" (.User.AvatarURL "1024")) "thumbnail" (sdict "url" ($target.AvatarURL "1024")) "color" 0x00ff00}}
+                        {{end}}
+                        {{if inFold "set" $subcommand}}
+                                {{if le (len $note) 450}}
+                                        {{$db_old := dbGet $target.ID "notes"}}
+                                        {{if $db_old}}
+                                                {{$db_old_split := split $db_old.Value "\n"}}
+                                                {{$last_id := reFind `\A\d+\b` (index $db_old_split (sub (len $db_old_split) 1))|toInt}}
+                                                {{$note_id = add $last_id 1}}
+                                                {{if ge (len $db_old_split) 10}}
+                                                        {{$err = printf "This user currently has too many notes. Delete at least one to store a new one.\nI've remembered what you wanted to save:```%s```" $note}}
+                                                {{end}}
+                                        {{end}}
+                                        {{dbSet $target.ID "notes" (printf "%s\n%d %s: %s (%s)" (or $db_old.Value "") $note_id $time_format $note .User)}}
+                                        {{if not $err}}
+                                                {{$out.Set "title" (printf "Successfully set a new note for %s" $target)}}
+                                                {{$out.Set "fields" (cslice
+                                                (sdict "name" "• User:" "value" (printf "`%s` (ID `%d`)" $target $target.ID))
+                                                (sdict "name" "• Note:" "value" (printf "ID: `%d`\nText: %s (%s)" $note_id $note .User)))
+                                                }}
+                                        {{end}}
+                                {{else}}
+                                        {{$err = printf "This note is too long (max 450 characters). Please try to shorten it, this is not a writing club.```%s```" $note}}
+                                {{end}}
+                        {{else if inFold "get" $subcommand}}
+                                {{$notes := (dbGet $target.ID "notes").Value}}
+                                {{$out.Set "title" (printf "Notes for %s (ID %d)" $target $target.ID)}}
+                                {{$out.Set "description" "None recorded."}}
+                                {{if $notes}}
+                                        {{$out.Set "description" $notes}}
+                                        {{if gt (len $notes) 4000}}
+                                                {{$out.Set "description" (slice $notes 0 4000)}}
+                                                {{$out.Set "fields" (cslice (sdict "name" "Continued..." "value" (slice $notes 4000)))}}
+                                        {{end}}
+                                {{end}}
+                        {{else if inFold "del" $subcommand}}
+                                {{if eq (len .CmdArgs) 3}}
+                                        {{$note_id = index .CmdArgs 2|toInt}}
+                                        {{$db_old := split (dbGet $target.ID "notes").Value "\n"}}
+                                        {{$db_new := ""}}
+                                        {{$old_note := ""}}
+                                        {{range $db_old}}
+                                                {{- if not (reFind (printf `\A%d\b` $note_id) .)}}
+                                                        {{- $db_new =  (printf "%s\n%s" $db_new .)}}
+                                                {{- else}}
+                                                        {{- $old_note = slice (toString .) 19}}
+                                                {{- end -}}
+                                        {{end}}
+                                        {{dbSet $target.ID "notes" $db_new}}
+                                        {{$out.Set "title" (printf "Successfully delete a note for %s" $target)}}
+                                        {{$out.Set "description" (printf "Deleted note:```%s```" $old_note)}}
+                                {{else}}
+                                        {{$err = "No matching combo found / invalid argument count.```-note del <User:Mention/ID> <NoteID:Whole Number>```"}}
+                                {{end}}
+                        {{else if inFold "delall" $subcommand}}
+                                {{if eq (len .CmdArgs) 2}}
+                                        {{$passwd := ""}}
+                                        {{range seq 0 12}}
+                                                {{- $passwd = printf "%s%c" $passwd (index $PASSWD_CHARSET (randInt (len $PASSWD_CHARSET))) -}}
+                                        {{end}}
+                                        {{$out.Set "color" 0xffff00}}
+                                        {{$out.Set "title" "Warning!"}}
+                                        {{$out.Set "description" "You are about to delete **all** notes on that user. Did you perhaps meant to use `note del`?"}}
+                                        {{$out.Set "fields" (cslice
+                                                (sdict "name" "OK. I'm aware and take responsibility." "value" (printf "Good. Run the following command **within the next %s** to confirm your choice.\n```%snote delall %d %s```" (humanizeDurationSeconds $DELETE_TIMEOUT) $prefix $target.ID $passwd))
+                                                (sdict "name" "I'd like to think about it." "value" "That is also OK. Just let it expire.")
+                                        )}}
+                                        {{dbSetExpire .User.ID (printf "notes_delall_%d" $target.ID) $passwd (toInt $DELETE_TIMEOUT.Seconds)}}
+                                {{else}}
+                                        {{if $passwd := (dbGet .User.ID (printf "notes_delall_%d" $target.ID)).Value}}
+                                                {{if eq (index .CmdArgs 2) $passwd}}
+                                                        {{dbDel .User.ID (printf "notes_delall_%d" $target.ID)}}
+                                                        {{dbDel $target.ID "notes"}}
+                                                        {{$out.Set "title" (printf "Successfully deleted all notes for %s!" $target)}}
+                                                        {{$out.Set "description" (printf "I've deleted all notes on this user:\n%s (ID %d)" $target $target.ID)}}
+                                                {{else}}
+                                                        {{$err = "Wrong password. Run the `delall` command again to generate a new one."}}
+                                                        {{dbDel .User.ID (printf "notes_delall_%d" $target.ID)}}
+                                                {{end}}
+                                        {{end}}
+                                {{end}}
+                        {{else if inFold "nuke" $subcommand}}
+                                {{if $has_perms = (in (split (index (split (exec "viewperms") "\n") 2) ", ") $NUKE_PERMISSION)}}
+                                        {{if eq (len .CmdArgs) 1}}
+                                                {{$passwd := ""}}
+                                                {{$len := len $PASSWD_CHARSET}}
+                                                {{range seq 0 12}}
+                                                        {{- $passwd = printf "%s%c" $passwd (index $PASSWD_CHARSET (randInt $len)) -}}
+                                                {{end}}
+                                                {{$out.Set "color" 0xffff00}}
+                                                {{$out.Set "title" "Warning!"}}
+                                                {{$out.Set "description" "You are about to delete **all** notes on the server. Are you sure you want to do this? There is no going back."}}
+                                                {{$out.Set "fields" (cslice
+                                                (sdict "name" "OK. I'm aware and take responsibility." "value" (printf "Good. Run the following command **within the next %s** to confirm your choice.\n```%snote nuke %s```" (humanizeDurationSeconds $DELETE_TIMEOUT) $prefix $passwd))
+                                                (sdict "name" "I'd like to think about it." "value" "That is also OK. Just let it expire.")
+                                                )}}
+                                                {{dbSetExpire .User.ID "notes_nuke" $passwd (toInt $DELETE_TIMEOUT.Seconds)}}
+                                        {{else}}
+                                                {{if $passwd := (dbGet .User.ID "notes_nuke").Value}}
+                                                        {{if eq (index .CmdArgs 1) $passwd}}
+                                                                {{dbDel .User.ID "notes_nuke"}}
+                                                                {{$out.Set "title" "Started purging entire system."}}
+                                                                {{$out.Set "description" "I will notify you when I'm done."}}
+                                                                {{execCC .CCID nil 10 "exec"}}
+                                                        {{end}}
+                                                {{else}}
+                                                        {{$err = "Wrong password. Run the `nuke` command again to generate a new one."}}
+                                                {{end}}
+                                        {{end}}
+                                {{else}}
+                                        {{$err = printf "You silly, twisted boy, you. (Missing permissions)"}}
+                                {{end}}
+                        {{else}}
+                                {{$err = printf "`%s` is not a valid subcommand!\nValid subcommands are: `%s`.\nRun `%snotes help` for more information." $subcommand $subcommands_string $prefix}}
+                        {{end}}
+                {{else}}
+                        {{$err = "Member not found."}}
+                {{end}}
+        {{end}}
+{{else}}
+        {{$err = printf "Just what do you think you're doing Dave? (Missing permissions)" }}
+{{end}}
+
+{{if $err}}
+        {{$err = cembed "description" $err "author" (sdict "name" "An Error Occurred:") "color" 0xff0000
+                "footer" (sdict "text" (printf "Triggered by: %s" .User) "icon_url" (.User.AvatarURL "1024"))
+        }}
+        {{sendMessage nil $err}}
+{{end}}
+{{if and $out (not $err)}}
+        {{sendMessage nil (cembed $out)}}
+{{end}}
+
+{{else}}
+        {{$count := dbCount "notes"}}
+        {{if gt $count 0}}
+                {{if ge $count 100}}
+                        {{$dump := dbDelMultiple (sdict "pattern" "notes") 100 0}}
+                        {{execCC .CCID nil 10 "exec"}}
+                {{else}}
+                        {{$dump := dbDelMultiple (sdict "pattern" "notes") $count 0}}
+                        {{execCC .CCID nil 10 "exec"}}
+                {{end}}
+        {{else}}
+                {{sendMessage nil (cembed "title" "Successfully purged entire system.")}}
+        {{end}}
+{{end}}
