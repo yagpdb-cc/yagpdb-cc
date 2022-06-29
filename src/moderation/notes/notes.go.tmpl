@@ -54,7 +54,7 @@
         "footer" (sdict "text" (printf "Triggered by %s" .User) "icon_url" (.User.AvatarURL "1024"))
 }}
 
-{{$has_perms := hasPermissions $BASE_PERMISSION)}}
+{{$has_perms := hasPermissions $BASE_PERMISSION}}
 {{$note_id := 1}}
 {{$time_format := currentTime.Format "Mon 02 Jan 15:04"}}
 {{if $has_perms}}
