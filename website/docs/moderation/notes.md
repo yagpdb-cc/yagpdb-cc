@@ -10,16 +10,16 @@ import { AvailablePermissionsDisplay } from '../../src/components/AvailablePermi
 
 As it stands, there is no good way to share notes about users across server staff and the one Discord provides is heavily limited:
 
-* Notes can only be set on a per-user basis
-* Notes can only be 256 characters long
-* You cannot set multiple notes easily
+- Notes can only be set on a per-user basis
+- Notes can only be 256 characters long
+- You cannot set multiple notes easily
 
 On larger servers however, this may become an issue. This custom command aims to solve this problem.
 It provides every functionality a server may need, that is:
 
-* Server staff can set up to ten different notes on one individual user, maxing out at 500 characters each
-* Server staff can easily view notes of each user, as well as delete them when necessary
-* Server administrators can purge the entire system if need be
+- Server staff can set up to ten different notes on one individual user, maxing out at 500 characters each
+- Server staff can easily view notes of each user, as well as delete them when necessary
+- Server administrators can purge the entire system if need be
 
 ## Installation
 
@@ -38,7 +38,6 @@ Only change the variables surrounded by the two comments.
 
 Type: RegEx
 Case-Sensitive: false
-
 
 ```
 \A(?:\-|<@!?204255221017214977>)\s*notes?(?: +|\z)
@@ -66,7 +65,7 @@ This permission is quite a dangerous one: It grants the ability to purge the ent
 
 ##### $DELETE_TIMEOUT
 
-This variable sets the timeout when passwords for `delall` and `nuke` should expire. It is not recommended to extend this duration beyond 5 minutes and below 10 seconds. Time intervals are specified using the formatting characters `y` for *years*, `mo` for *months*, `w` for *weeks*, `d` for *days*, `h` for *hours*, and `s` for *seconds*. Do not remove the function `toDuration`.
+This variable sets the timeout when passwords for `delall` and `nuke` should expire. It is not recommended to extend this duration beyond 5 minutes and below 10 seconds. Time intervals are specified using the formatting characters `y` for _years_, `mo` for _months_, `w` for _weeks_, `d` for _days_, `h` for _hours_, and `s` for _seconds_. Do not remove the function `toDuration`.
 
 ##### $PASSWD_CHARSET
 
