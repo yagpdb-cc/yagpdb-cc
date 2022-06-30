@@ -5,32 +5,31 @@ title: Reaction Bookmark
 This command functions just like the bookmark command, but instead it uses a
 reaction as trigger.
 
-## Preview
-
-![reactionbookmark.png](/img/reactionbookmark.png)
+## Trigger
+**Type:** `Reaction added only` <br />
 
 ## Usage
 
 Just react with the specified emoji and see the magic happen.
 
-## Installation
+## Configuration
+
+#### $EMOJI
+
+The emoji used to trigger a bookmark. If it's a custom emoji, only use the
+emoji's name.
+
+## Code
 
 Copy the following code:
 ```gotmpl file=../../../src/utilities/reactionbookmark.go.tmpl
 
 ```
 
-## Configuration
+## Preview
 
-### Trigger
-**Type:** `Reaction added only` <br />
+![reactionbookmark.png](/img/reactionbookmark.png)
 
-### Variables
-
-#### $EMOJI
-
-The emoji used to trigger a bookmark. If it's a custom emoji, only use the
-emoji's name.
 
 ## Author
 
