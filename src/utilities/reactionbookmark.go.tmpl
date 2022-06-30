@@ -13,27 +13,26 @@
 
 {{/* Actual Code */}}
 {{ if and (eq .Reaction.Emoji.Name $EMOJI) .ReactionAdded }}
+    {{ $channel := .Channel.ID }}
+    {{ $message := .Message.ID }}
+    {{ $guild := .Guild.ID }}
 
-{{ $channel := .Channel.ID }}
-{{ $message := .Message.ID }}
-{{ $guild := .Guild.ID }}
+    {{ $author := (print .ReactionMessage.Author.Mention) }}
+    {{ $link := (printf "https://discord.com/channels/%d/%d/%d" $guild $channel $message) }}
 
-{{ $author := (print .ReactionMessage.Author.Mention) }}
-{{ $link := (printf "https://discord.com/channels/%d/%d/%d" $guild $channel $message) }}
+    {{/* Nicely trim the message content if it's too big, it's just a teaser */}}
+    {{ $contents := .Message.Content }}
+    {{ if gt (len $contents) 500 }}
+        {{  $contents = printf "%s..." (slice $contents 0 500) }}
+    {{ end }}
 
-{{/* Nicely trim the message content if it's too big, it's just a teaser */}}
-{{ $contents := .Message.Content }}
-{{ if gt (len $contents) 500 }}
-    {{  $contents = printf "%s..." (slice $contents 0 500) }}
-{{ end }}
-
-{{ $embed := cembed
-        "title" "Bookmark"
-        "description" "You asked me to bookmark this for you:"
-        "fields" (cslice
-            (sdict "name" "Info:" "value" (print "Author " $author (printf "\nChannel: <#%d>\nSource: [Jump!](%s)" .Channel.ID $link)) "inline" true)
-            (sdict "name" "Contents:" "value" $contents)
-        )
-     }}
-{{ sendDM $embed }}
+    {{ $embed := cembed
+            "title" "Bookmark"
+            "description" "You asked me to bookmark this for you:"
+            "fields" (cslice
+                (sdict "name" "Info:" "value" (print "Author " $author (printf "\nChannel: <#%d>\nSource: [Jump!](%s)" .Channel.ID $link)) "inline" true)
+                (sdict "name" "Contents:" "value" $contents)
+            )
+         }}
+    {{ sendDM $embed }}
 {{ end }}
