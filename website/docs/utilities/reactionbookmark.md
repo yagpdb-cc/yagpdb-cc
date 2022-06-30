@@ -16,7 +16,7 @@ Just react with the specified emoji and see the magic happen.
 
 ## Configuration
 
-- $EMOJI <br />
+- `$EMOJI` <br />
   The emoji used to trigger a bookmark. If it's a custom emoji, only use the
   emoji's name.
 
