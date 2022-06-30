@@ -47,7 +47,7 @@ Make sure to replace `-` with your prefix, should it be different.
 <AvailablePermissionsDisplay />
 
 - 📌 `$BASE_PERMISSION` <br />
-This permission should be the permission which all server staff have - on most servers, this is `ManageMessages`. If you want to lock this system behind a more exclusive permission, please view the full list under `$NUKE_PERMISSION` - it lists all of them.
+  This permission should be the permission which all server staff have - on most servers, this is `ManageMessages`. If you want to lock this system behind a more exclusive permission, please view the full list under `$NUKE_PERMISSION` - it lists all of them.
 
 - 📌 `$DELETE_TIMEOUT` <br />
   This variable sets the timeout when passwords for `delall` and `nuke` should expire. It is not recommended to extend this duration beyond 5 minutes and below 10 seconds. Time intervals are specified using the formatting characters `y` for _years_, `mo` for _months_, `w` for _weeks_, `d` for _days_, `h` for _hours_, and `s` for _seconds_. Do not remove the function `toDuration`.
