@@ -24,7 +24,7 @@
 {{/* Nicely trim the message content if it's too big, it's just a teaser */}}
 {{ $contents := .Message.Content }}
 {{ if gt (len $contents) 500 }}
-    {{  $contents = printf "%s..." (slice 0 500 .Message.Content) }}
+    {{  $contents = printf "%s..." (slice $contents 0 500) }}
 {{ end }}
 
 {{ $embed := cembed
