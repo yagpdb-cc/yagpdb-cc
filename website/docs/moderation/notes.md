@@ -35,15 +35,14 @@ Make sure to replace `-` with your prefix, should it be different.
 
 ## Usage
 
-* `notes help`: List all subcommands
-* `notes set <user> <text>`: set a note on user
-* `notes get <user>`: get all user's notes
-* `notes del <user> <id>`: delete given note on user
-* `notes delall <user>`: delete all notes on user
-* `notes nuke`: delete all ever recorded notes
+- `notes help`: List all subcommands
+- `notes set <user> <text>`: set a note on user
+- `notes get <user>`: get all user's notes
+- `notes del <user> <id>`: delete given note on user
+- `notes delall <user>`: delete all notes on user
+- `notes nuke`: delete all ever recorded notes
 
 ## Configuration
-
 
 <AvailablePermissionsDisplay />
 
@@ -51,13 +50,13 @@ Make sure to replace `-` with your prefix, should it be different.
 This permission should be the permission which all server staff have - on most servers, this is `ManageMessages`. If you want to lock this system behind a more exclusive permission, please view the full list under `$NUKE_PERMISSION` - it lists all of them.
 
 - 📌 $NUKE_PERMISSION <br />
-This permission is quite a dangerous one: It grants the ability to purge the entire system. Most servers consider users with `ManageServer` permission as an admin, hence this is the default. It is recommended to change this to a more exclusive permission rather than a common one. `Adminstrator` would be a fitting candidate, as it's a quite rarely given permission, `ManageRoles` however may not.
+  This permission is quite a dangerous one: It grants the ability to purge the entire system. Most servers consider users with `ManageServer` permission as an admin, hence this is the default. It is recommended to change this to a more exclusive permission rather than a common one. `Adminstrator` would be a fitting candidate, as it's a quite rarely given permission, `ManageRoles` however may not.
 
-- 📌 $DELETE_TIMEOUT <br />
-This variable sets the timeout when passwords for `delall` and `nuke` should expire. It is not recommended to extend this duration beyond 5 minutes and below 10 seconds. Time intervals are specified using the formatting characters `y` for _years_, `mo` for _months_, `w` for _weeks_, `d` for _days_, `h` for _hours_, and `s` for _seconds_. Do not remove the function `toDuration`.
+- 📌 $DELETE*TIMEOUT <br />
+  This variable sets the timeout when passwords for `delall` and `nuke` should expire. It is not recommended to extend this duration beyond 5 minutes and below 10 seconds. Time intervals are specified using the formatting characters `y` for \_years*, `mo` for _months_, `w` for _weeks_, `d` for _days_, `h` for _hours_, and `s` for _seconds_. Do not remove the function `toDuration`.
 
 - 📌 $PASSWD_CHARSET <br />
-This variable specifies the charset a password should be generated from. It is recommended to only add more characters rather than removing some. Please be advised that there should be always a reasonably large set available to pick from, otherwise passwords may become easy to guess. Do not separate individual characters by whitespaces, simply append them.
+  This variable specifies the charset a password should be generated from. It is recommended to only add more characters rather than removing some. Please be advised that there should be always a reasonably large set available to pick from, otherwise passwords may become easy to guess. Do not separate individual characters by whitespaces, simply append them.
 
 ## Code
 
