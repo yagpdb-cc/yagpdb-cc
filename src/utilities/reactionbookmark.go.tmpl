@@ -1,0 +1,39 @@
+{{/*
+	Allows you to bookmark messages via a reaction.
+	See <https://yagpdb-cc.github.io/utilities/reactionbookmark> for more information.
+
+        Author: TheHolyWatermelon <https://github.com/TheHolyWaterme1on>
+	Co-Author: Luca Zeuch <https://github.com/l-zeuch>
+
+*/}}
+
+{{/* Configuration start */}}
+{{ $EMOJI := "🔖" }} {{/* The emoji used to trigger a bookmark. use the emoji name when using a custom emoji. */}}
+{{/* Configuration end */}}
+
+{{/* Actual Code */}}
+{{ if and (eq .Reaction.Emoji.Name $EMOJI) .ReactionAdded }}
+
+{{ $channel := .Channel.ID }}
+{{ $message := .Message.ID }}
+{{ $guild := .Guild.ID }}
+
+{{ $author := (print .ReactionMessage.Author.Mention) }}
+{{ $link := (printf "https://discord.com/channels/%d/%d/%d" $guild $channel $message) }}
+
+{{/* Nicely trim the message content if it's too big, it's just a teaser */}}
+{{ $contents := .Message.Content }}
+{{ if gt (len $contents) 500 }}
+    {{  $contents = printf "%s..." (slice 0 500 .Message.Content) }}
+{{ end }}
+
+{{ $embed := cembed
+        "title" "Bookmark"
+        "description" "You asked me to bookmark this for you:"
+        "fields" (cslice
+            (sdict "name" "Info:" "value" (print "Author " $author (printf "\nChannel: <#%d>\nSource: [Jump!](%s)" .Channel.ID $link)) "inline" true)
+            (sdict "name" "Contents:" "value" $contents)
+        )
+     }}
+{{ sendDM $embed }}
+{{ end }}
