@@ -6,6 +6,7 @@ This command functions just like the bookmark command, but instead it uses a
 reaction as trigger.
 
 ## Trigger
+
 **Type:** `Reaction added only` <br />
 
 ## Usage
@@ -22,6 +23,7 @@ emoji's name.
 ## Code
 
 Copy the following code:
+
 ```gotmpl file=../../../src/utilities/reactionbookmark.go.tmpl
 
 ```
@@ -29,7 +31,6 @@ Copy the following code:
 ## Preview
 
 ![reactionbookmark.png](/img/reactionbookmark.png)
-
 
 ## Author
 
