@@ -6,15 +6,12 @@
 */}}
  
 {{/* Configurable values */}}
-{{ $bypassperms := "ManageMessages" }}
-{{ $usageperms := "ManageMessages" }}
+{{ $bypassperms := .Permissions.ManageMessages }}
+{{ $usageperms := .Permissions.ManageMessages }}
 {{/* End of configurable values */}}
  
 {{/* ACTUAL CODE */}}
-{{ $viewperms := (split (index (split (exec "viewperms") "\n") 2) ", ") }}
-{{ $usageaccess := in $viewperms $usageperms }}
-{{ $bypassaccess := in $viewperms $bypassperms }}
-{{ if $usageaccess }}
+{{ if hasPermissions $usageperms }}
 {{ if $matches := reFindAllSubmatches `\A-slowmode on (\d+)` .Message.Content }}
 {{ $slowmodeduration := (index $matches 0 1) }}
 {{ with (dbGet 660 "channels").Value }}
@@ -34,7 +31,7 @@ done! slowmode has been set to `{{ $slowmodeduration }}s`
 the slowmode has been removed from this channel
 {{ end }}
 {{ end }}
-{{ if not $bypassaccess }}
+{{ if not hasPermissions $bypassperms }}
 {{ if $db := (dbGet 660 "channels").Value }}
 {{ $value := sdict $db }}
 {{ $get := $value.Get (str .Channel.ID) }}
