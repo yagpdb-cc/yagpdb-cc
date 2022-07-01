@@ -8,10 +8,10 @@
 {{/* Configurable values */}}
 {{$name := "Moderated Nickname"}}
 {{$padding := "5"}}
-{{$modPerms := "ManageMessages"}}
+{{$modPerms := .Permissions.ManageMessages}}
 {{/* End of configurable values */}}
 
-{{$mod := in (split (index (split (exec "viewperms") "\n") 2) ", ") $modPerms}}
+{{$mod := hasPermissions $modPerms}}
 {{$prefix := .ServerPrefix}}
 {{if .CmdArgs}}
 	{{if eq (lower (index .CmdArgs 0)) (print $prefix "modnick")}}
