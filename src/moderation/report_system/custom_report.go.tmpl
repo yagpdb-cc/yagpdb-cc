@@ -17,7 +17,7 @@ Did not set regex to match Server Prefix!{{deleteTrigger}}
 {{else}}
 {{if and .CmdArgs (lt (len .CmdArgs) 2)}}
 	{{if eq (index .CmdArgs 0) "dbSetup"}}
-		{{if (in (split (index (split (exec "viewperms") "\n") 2) ", ") "ManageServer")}}
+		{{if hasPermissions .Permissions.ManageServer}}
 			{{dbSet .Guild.ID "reportSettings" (sdict "reportLog" $REPORT_LOG "reportDiscussion" $REPORT_DISCUSSION)}}
 			{{dbSet .Guild.ID "ReportNo" 0}}
 **Database primed, report count reset, system is ready to use!**
