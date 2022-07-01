@@ -49,7 +49,7 @@
 {{$logs := $conf.reportLog}}
 
 {{/* Validating that it is a report message, the user a mod, parsing the author from description */}}
-{{$isMod := in (split (index (split (exec "viewperms") "\n") 2) ", ") "ManageMessages"}}
+{{$isMod := hasPermissions .Permissions.ManageMessages}}
 {{if and ($embed := (index .ReactionMessage.Embeds 0)) (eq .Channel.ID $logs)}}
 	{{$report := (index .Message.Embeds 0|structToSdict)}}
 	{{range $k, $v := $report}}{{if eq (kindOf $v true) "struct"}}{{$report.Set $k (structToSdict $v)}}{{end}}{{end}}
