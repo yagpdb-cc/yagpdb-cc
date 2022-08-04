@@ -15,10 +15,14 @@
 	{{ $rank := $skip }}
 	{{ $display := "" }}
 	{{ range $users }}
+		{{- $usr := .User.String }}
+		{{- if eq $usr "#" }}
+		    {{- $usr = .UserID }}
+		{{- end }}
 		{{- $xp := toInt .Value }}
 		{{- $rank = add $rank 1 }}
 		{{- $display = printf "%s\n• **%d.** [%s](https://yagpdb.xyz) :: Level %d (%d XP)"
-			$display $rank .User.String (toInt (roundFloor (mult 0.1 (sqrt $xp)))) $xp -}}
+			$display $rank $usr (toInt (roundFloor (mult 0.1 (sqrt $xp)))) $xp -}}
 	{{ end }}
 	{{ $id := sendMessageRetID nil (cembed
 		"title" "❯ Leaderboard"
