@@ -15,7 +15,10 @@
 	{{ $rank := $skip }}
 	{{ $display := "" }}
 	{{ range $users }}
-	        {{- $usr := or ( and (ne .User.String "#") .User.String ) .UserID }}
+		{{- $usr := .User.String }}
+		{{- if eq $usr "#" }}
+		    {{- $usr = .UserID }}
+		{{- end }}
 		{{- $xp := toInt .Value }}
 		{{- $rank = add $rank 1 }}
 		{{- $display = printf "%s\n• **%d.** [%s](https://yagpdb.xyz) :: Level %d (%d XP)"
