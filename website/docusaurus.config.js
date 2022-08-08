@@ -52,6 +52,11 @@ module.exports = {
 	projectName: 'yagpdb-cc.github.io',
 	trailingSlash: false,
 	themeConfig: {
+		algolia: {
+			appId: '8CQ0QFY0BD',
+			apiKey: 'f618121f69348e02ce793bdcb3015196',
+			indexName: 'yagpdb-cc',
+		},
 		colorMode: {
 			defaultMode: 'dark',
 			respectPrefersColorScheme: true,
