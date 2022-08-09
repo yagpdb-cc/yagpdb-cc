@@ -1,0 +1,44 @@
+name: Regenerate syntax highlighting function list
+
+on:
+  schedule:
+    - cron: '0 0 * * 6'
+  workflow_dispatch:
+
+jobs:
+  regenerate-funcs:
+    name: Regenerate syntax highlighting function list
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Go v1.18
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Install Node v16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install lytfs
+        run: go install github.com/jo3-l/yagfuncdata/cmd/lytfs@latest
+
+      - name: Regenerate syntax highlighting function list
+        run: node bin/generate-syntax-highlighting-funcs.js
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          author: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
+          commit-message: 'chore(website): regenerate syntax highlighting function list'
+          title: 'chore(website): regenerate syntax highlighting function list'
+          body: |
+            🤖 *beep boop*, this is an automated PR to regenerate the list of template functions.
+            It may be prudent to tag a new version after merging this PR, which can be done from GitHub by triggering the release workflow from the Actions tab.
+          branch: 'chore/regenerate-funcs'
+          delete-branch: true
+          assignees: jo3-l
+          reviewers: jo3-l
