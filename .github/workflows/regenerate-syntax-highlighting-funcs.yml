@@ -29,6 +29,13 @@ jobs:
       - name: Regenerate syntax highlighting function list
         run: node bin/generate-syntax-highlighting-funcs.js
 
+      - name: Generate token through GitHub app
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Create pull request
         uses: peter-evans/create-pull-request@v4
         with:
@@ -41,3 +48,4 @@ jobs:
           delete-branch: true
           assignees: jo3-l
           reviewers: jo3-l, l-zeuch
+          token: ${{ steps.generate-token.outputs.token }}
