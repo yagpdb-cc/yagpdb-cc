@@ -10,10 +10,6 @@
 	</i>
 </p>
 
-# Stop!
-
-Are you looking to browse/possibly add some custom commands from this repository? If so, we highly suggest doing so on our [website](https://yagpdb-cc.github.io) instead. This GitHub repository's main purpose is to act as a place to develop custom commands, rather than as a place for users to view them.
-
 # Introduction
 
 A curated collection of custom commands for the [YAGPDB Discord Bot](https://yagpdb.xyz) to enhance your server. It is:
