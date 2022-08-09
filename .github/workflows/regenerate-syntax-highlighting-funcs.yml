@@ -40,4 +40,4 @@ jobs:
           branch: 'chore/regenerate-funcs'
           delete-branch: true
           assignees: jo3-l
-          reviewers: jo3-l
+          reviewers: jo3-l, l-zeuch
