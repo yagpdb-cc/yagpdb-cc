@@ -71,7 +71,6 @@ export const funcs = [
 	'getThread',
 	'giveRoleID',
 	'giveRoleName',
-	'gt',
 	'hasPermissions',
 	'hasPrefix',
 	'hasRoleID',
