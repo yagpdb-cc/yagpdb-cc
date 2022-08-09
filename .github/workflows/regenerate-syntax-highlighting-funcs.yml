@@ -36,8 +36,7 @@ jobs:
           commit-message: 'chore(website): regenerate syntax highlighting function list'
           title: 'chore(website): regenerate syntax highlighting function list'
           body: |
-            🤖 *beep boop*, this is an automated PR to regenerate the list of template functions.
-            It may be prudent to tag a new version after merging this PR, which can be done from GitHub by triggering the release workflow from the Actions tab.
+            🤖 *beep boop*, this is an automated PR to regenerate the list of template functions used for syntax highlighting.
           branch: 'chore/regenerate-funcs'
           delete-branch: true
           assignees: jo3-l
