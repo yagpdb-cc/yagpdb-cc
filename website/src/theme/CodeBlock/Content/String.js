@@ -37,7 +37,8 @@ export default function CodeBlockString({
 		language,
 		magicComments,
 	});
-	const code = originalCode.replace(/ {4}/g, '\t'); // Hacky workaround for MDX converting tabs to spaces in codeblocks
+	// Workaround MDX converting tabs to spaces in codeblocks
+	const code = originalCode.replace(/^\s+/gm, (leadingSpaces) => leadingSpaces.replace(/ {4}/g, '\t'));
 	const showLineNumbers = showLineNumbersProp ?? containsLineNumbers(metastring);
 	return (
 		<Container
