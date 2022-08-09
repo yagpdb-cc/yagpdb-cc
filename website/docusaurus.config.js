@@ -60,10 +60,6 @@ module.exports = {
 		colorMode: {
 			defaultMode: 'dark',
 			respectPrefersColorScheme: true,
-			switchConfig: {
-				darkIcon: '🌙',
-				lightIcon: '☀️',
-			},
 		},
 		prism: {
 			theme: require('./src/prism-themes/github-light'),
@@ -90,7 +86,7 @@ module.exports = {
 				},
 				{
 					href: 'https://github.com/yagpdb-cc/yagpdb-cc/tree/master',
-					label: 'GitHub',
+					className: 'header-github-link',
 					position: 'right',
 				},
 			],
