@@ -7,17 +7,11 @@
 	--ifm-color-primary-lighter: rgb(102, 212, 189);
 	--ifm-color-primary-lightest: rgb(146, 224, 208);
 	--ifm-code-font-size: 95%;
+	--docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 10%);
 }
 
-.docusaurus-highlight-code-line {
-	background-color: rgb(233, 233, 233);
-	display: block;
-	margin: 0 calc(-1 * var(--ifm-pre-padding));
-	padding: 0 var(--ifm-pre-padding);
-}
-
-html[data-theme='dark'] .docusaurus-highlight-code-line {
-	background-color: rgb(20, 20, 20);
+html[data-theme='dark'] {
+	--docusaurus-highlighted-code-line-bg: rgb(66 66 66 / 35%);
 }
 
 .header-github-link:hover {
