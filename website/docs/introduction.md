@@ -10,7 +10,7 @@ It is:
 - **Extensive:** There are over sixty custom commands (and we're adding more regularly!), meaning that it's likely that you'll be able to find what you're looking for.
 - **Official:** This collection of commands is [maintained by a group of YAGPDB staff members](#contributors) and has official support.
 - **Well tested:** We review all commands added and many commands have widespread usage, meaning that it's unlikely — [though not impossible](#disclaimer) — for there to be serious bugs in them.
-- **Well documented:** We take pride in our high quality of documentation, which makes it easy for anyone to figure out how to use a given command provided that they are willing to read.
+- **Well documented:** We take pride in our high quality of documentation, which makes it easy for anyone to figure out how to use a given command.
 
 Now that you know a little about the project, feel free to take a look around to see if there's something that you like. If you're not sure of how to add custom commands from here, please refer to [this page](adding-ccs).
 
