@@ -25,7 +25,7 @@ The YAGPDB developer, staff, and/or support are not responsible for any issues w
 
 # Need help?
 
-If you are experiencing issues with a custom command from this collection, please get in touch via the [YAGPDB Support Server](https://discord.com/invite/5uVyq2E), where we can provide further assistance. If you prefer, you can also [Open a GitHub Discussion](https://github.com/yagpdb-cc/yagpdb-cc/discussions).
+If you are experiencing issues with a custom command from this collection, please get in touch via the [YAGPDB Support Server](https://discord.com/invite/5uVyq2E), where we can provide further assistance. If you prefer, you can also [open a GitHub Discussion](https://github.com/yagpdb-cc/yagpdb-cc/discussions).
 
 If you believe you found a bug, please [open an issue](https://github.com/yagpdb-cc/yagpdb-cc/issues/new/choose).
 
