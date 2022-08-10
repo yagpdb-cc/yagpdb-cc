@@ -6,7 +6,7 @@ Thanks for considering a contribution to **yagpdb-cc**. We accept contributions 
 
 To understand how this repository is structured:
 
-- [`bin/`](./bin/) is a collection of short scripts for maintainers to help with keeping the repository tidy.
+- [`scripts/`](./scripts/) is a collection of short scripts for maintainers to help with keeping the repository tidy.
 - [`src/`](./src/) is where the custom command code is stored.
 - [`website/docs/`](./website/docs/) is where the documentation (part of the website) is stored.
 

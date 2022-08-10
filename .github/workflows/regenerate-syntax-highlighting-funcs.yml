@@ -27,7 +27,7 @@ jobs:
         run: go install github.com/jo3-l/yagfuncdata/cmd/lytfs@latest
 
       - name: Regenerate syntax highlighting function list
-        run: node bin/generate-syntax-highlighting-funcs.js
+        run: node scripts/generate-syntax-highlighting-funcs.js
 
       - name: Generate token through GitHub app
         uses: tibdex/github-app-token@v1
