@@ -32,7 +32,7 @@
 {{ $marker := "night" }}
 {{ $output := exec "weather" $location }}
 
-{{ if reFind `(?i)sorry, we are running out of queries to the weather service at the moment` $output }}
+{{ if inFold "sorry, we are running out of queries to the weather service at the moment" $output }}
     {{ $embed := cembed
             "title" "Error"
             "description" "weather API is down :("
