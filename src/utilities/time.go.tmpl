@@ -31,6 +31,17 @@
 
 {{ $marker := "night" }}
 {{ $output := exec "weather" $location }}
+
+{{ if reFind `(?i)sorry, we are running out of queries to the weather service at the moment` $output }}
+    {{ $embed := cembed
+            "title" "Error"
+            "description" "weather API is down :("
+            "color" 0xff0000
+    }}
+    {{ sendMessage nil $embed }}
+    {{ return }}
+{{ end }}
+
 {{ $output = reReplace `\x60+` $output "" }}
 {{ $res := split $output "\n" }}
 {{ $weather := slice (index $res 3) 15 }}
