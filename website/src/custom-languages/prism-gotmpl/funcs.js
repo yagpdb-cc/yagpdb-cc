@@ -162,6 +162,7 @@ export const funcs = [
 	'targetHasPermissions',
 	'targetHasRoleID',
 	'targetHasRoleName',
+	'timestampToTime',
 	'title',
 	'toByte',
 	'toDuration',
