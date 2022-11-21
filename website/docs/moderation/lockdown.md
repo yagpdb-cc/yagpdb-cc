@@ -16,7 +16,7 @@ This may change in the future, but for now, this command is the closest you can 
 ## Trigger
 
 **Type:** `Regex`<br />
-**Trigger:** `\A` or `.*`
+**Trigger:** `.*`
 
 ## Usage
 
