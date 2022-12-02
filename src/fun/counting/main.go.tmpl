@@ -27,7 +27,7 @@
 			"description" (print "<@" (dbGet 0 "LastUser").Value "> deleted their number which was correct!\nThe next number is " (dbGet 0 "Next").Value)
 			"color" 30654) }}
 	{{ return }}{{ end }}
-{{ end }}
+{{ return }}{{ end }}
 
 {{/* Initializing variables */}}
 {{ $LastUser := toInt (dbGet 0 "LastUser").Value }}
