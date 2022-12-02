@@ -69,7 +69,9 @@
 					"description" (print "<@" .User.ID "> sent an incorrect number of " $Number "\nCorrect number was " $Next "\nStart over at 1 🙃")
 					"color" 16711680) }}
 				{{ dbSet 0 "Next" "1" }}
-				{{ if eq $CountTwice false }}{{ dbSet 0 "LastUser" 0 }}{{ end }}
+				{{ if not $CountTwice }}
+				    {{ dbSet 0 "LastUser" 0 }}
+				{{ end }}
 				{{ dbSet 0 "CSecondChance" 0 }}
 				{{ if $Leaderboard }}{{ $Silence = dbIncr .User.ID "CCount" 1 }}{{ end }}
 			{{ end }}
