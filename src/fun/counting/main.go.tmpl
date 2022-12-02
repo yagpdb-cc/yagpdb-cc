@@ -30,9 +30,11 @@
 {{ $Number := "" }}{{ $Number = round (slice ($Number = (exec "calc" (index .Args 0))) 9 (len $Number | add -1)) }}
 {{ $Wrong := "" }}{{ if $SecondChance }}{{ $Wrong = (dbGet 0 "CSecondChance").Value }}{{ end }}{{ $Silence := "" }}
 
-{{ if and (hasRoleID $Admin) (eq (toInt $Number) 0) (lt (toInt (dbGet 0 "Admin").Value) 1) }}
-	{{ dbSet 0 "Channel" (toString .Channel.ID) }}{{ dbSet 0 "LastUser" (toString .User.ID) }}{{ dbSet 0 "Next1" 1 }}{{ dbIncr 0 "Admin" 1 }}{{ addReactions $CorrectEmoji }}
-{{ return }}{{ end }}
+{{ if and (hasRoleID $Admin) (eq (toInt $Number) 0) }}
+	{{ if lt (toInt (dbGet 0 "Admin").Value) 1 }}
+		{{dbSet 0 "Channel" (toString .Channel.ID) }}{{ dbSet 0 "LastUser" (toString .User.ID) }}{{ dbSet 0 "Next1" 1 }}{{ dbIncr 0 "Admin" 1 }}{{ addReactions $CorrectEmoji }}
+	{{ return }}{{ end }}
+{{ end }}
 
 {{ if or (ne (toString $LastUser) (toString .User.ID)) $CountTwice }} {{/* Checks user */}}
 	{{ if eq (toInt $Next) (toInt $Number) }} {{/* Checks if correct number */}}
