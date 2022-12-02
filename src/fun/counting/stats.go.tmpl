@@ -1,6 +1,8 @@
 {{/*
         Counting statistics
         
+	See <https://yagpdb-cc.github.io/fun/counting-v2>
+	
         Author: H1nr1 <https://github.com/H1nr1>
 */}}
 
@@ -28,7 +30,7 @@
 {{ else if (inFold (cslice "Me" "My" "0") ($Args.Get 0)) }} {{/* Triggering user's stats */}}
 	{{ sendMessage nil (cembed
 		"title" (print "**🔢 " .User.Username "'s Counting Statistics**")
-		"description" (print "<@" .User.ID "> has counted a __total__ of **" $CCount " times**\n<@" .User.ID "> has counted __correctly__ **" $CCorrect " times**\nThis makes <@" .User.ID ">'s __average__ **" (div (round (mult (div $CCorrect $CCount) 10000)) 100) "%**")
+		"description" (print .User.Mention " has counted a __total__ of **" $CCount " times**\n" .User.Mention " has counted __correctly__ **" $CCorrect " times**\nThis makes " .User.Mention "'s __average__ **" (div (round (mult (div $CCorrect $CCount) 10000)) 100) "%**")
 		"color" 30654
 		"timestamp" currentTime) }}
 
@@ -65,7 +67,7 @@
 {{ else }} {{/* Invalid syntax, gives syntax */}}
 	{{ sendMessage nil (cembed
 		"title" "Invalid Syntax"
-		"description" "For server counting statistics: `-CStats`\nFor your statistics: `-CStats <\"Me\"/\"My\"/\"0\">`\nFor another member's statistics: `-CStats <@/ID>`\nFor server leaderboard: `-CStats <\"Leaderboard\"/\"LB\">`"
+		"description" "For server counting statistics: `-CStats`\nFor your statistics: `-CStats [\"Me\"/\"My\"/\"0\"]`\nFor another member's statistics: `-CStats [@/ID]`\nFor server leaderboard: `-CStats [\"Leaderboard\"/\"LB\"]`"
 		"color" 16744192
 		"timestamp" currentTime) }}
 {{ end }}
