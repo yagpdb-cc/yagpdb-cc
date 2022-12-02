@@ -6,7 +6,7 @@ For more information about the counting system, see [this page](https://github.c
 
 Type: `Regex`
 
-Trigger: `^(\d{1,}|\()`
+Trigger: `^\d+|\(`
 
 ::: caution
 
