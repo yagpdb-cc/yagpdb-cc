@@ -55,7 +55,7 @@
 		{{ if $Reactions }}
 			{{ addReactions $CorrectEmoji }}
 		{{ end }}
-		{{ dbSet 0 "Next" (add $Next 1) }}
+		{{ dbIncr 0 "Next" 1 }}
 		{{ dbSet 0 "LastUser" (toString .User.ID) }}
 		{{ if not $RoleID }} {{/* Counting role */}}
 			{{ takeRoleID $LastUser $RoleID 1 }}
