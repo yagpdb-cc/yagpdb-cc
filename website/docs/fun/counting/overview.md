@@ -9,13 +9,13 @@
 
 ## Installation
 
-This package contains two custom commands: the [main command](main-cc), and [statistics](stats).
+This package contains two custom commands: the [main command](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/main.go.tmpl), and [statistics](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/stats.go.tmpl).
 
 *The statistics command is not neccesary to add, but is a bonus.*
 
 ## Main Command
 
-Add the [main command](main-cc) as a new custom command. The trigger is a regex trigger type with value `^(\d{1,}|\()`.
+Add the [main command](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/main.go.tmpl) as a new custom command. The trigger is a regex trigger type with value `^(\d{1,}|\()`.
 
 ::: caution
 
@@ -25,7 +25,7 @@ Use channel restrictions to restrict this custom command to your counting channe
 
 ## Statistics
 
-Add [statistics](stats) as a new custom command. The trigger is a command type with value `CStats`.
+Add [statistics](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/stats.go.tmpl) as a new custom command. The trigger is a command type with value `CStats`.
 
 :::info
 
@@ -35,9 +35,9 @@ If you would like to customize the commands, see [here](overview/#configuration)
 
 ### Configuration
 
-There are many configurable values in this package, none need to be changed for the command to work properly.
+There are many configurable values in this package, to which only one needs to be configured: `$Admin`
 
-Optional configuration values include: <sup>Main</sup> `$CountTwice` `$RoleID` `$Admin` `$SecondChance` `$Leaderboard` `$CorrectEmoji` `$WarningEmoji` `$IncorrectEmoji` <sup>Stats</sup> `$LBLength`
+Optional configuration values include: <sup>Main</sup> `$CountTwice` `$RoleID` `$SecondChance` `$Leaderboard` `$CorrectEmoji` `$WarningEmoji` `$IncorrectEmoji` <sup>Stats</sup> `$LBLength`
 
 *How each of these values can be customly configured is described in the command itself*
 
