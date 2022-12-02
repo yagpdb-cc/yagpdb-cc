@@ -33,13 +33,43 @@ If you would like to customize the commands, see [here](overview/#configuration)
 
 :::
 
-### Configuration
+## Configuration
 
-There are many configurable values in this package, to which only one needs to be configured: <sup>Main</sup> `$Admin`
+There are many configurable values in this package, to which only one must to be configured: [$Admin](https://github.com/H1nr1/yagpdb-cc/edit/master/website/docs/fun/counting/overview.md#list-of-configurable-variables)
 
-Optional configuration values include: <sup>Main</sup> `$CountTwice` `$RoleID` `$SecondChance` `$Leaderboard` `$CorrectEmoji` `$WarningEmoji` `$IncorrectEmoji` <sup>Stats</sup> `$LBLength`
+### List of Configurable Variables
 
-*How each of these values can be customly configured is described in the command itself*
+- `$Admin`<br />
+Administrator role ID; use for initializing command
+
+- `$CountTwice`<br />
+Allow users to count multiple times in a row; `true/false`
+
+- `$RoleID`<br />
+Counting role ID; set to `false` to disable
+
+- `$SecondChance`<br />
+Second chance if wrong; `true/false`
+
+- `$StatsCC`<br />
+If you added the [Stats CC](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/stats.go.tmpl); `true/false`
+
+- `$Reactions`<br />
+Allow confirmative reactions on message; `true/false`
+
+  - `$RDeleteDelay`<br />
+  Delay to remove reaction; set to `false` to disable
+  - `$CorrectEmoji`<br />
+  Emoji to react with if number is correct; if custom, use format `name:id`
+  - `$WarningEmoji`<br />
+  Emoji to react with if wrong number AND Second Chance is `true/on`; if custom, use format `name:id`
+  - `$IncorrectEmoji`<br />
+  Emoji to react with if number is incorrect; if custom, use format `name:id`
+
+- `$LBLength`<br />
+How many members to show on leaderboard; MAX OF 100
+
+*How each of these values can be customly configured is also described in the command itself*
 
 ## Usage
 
