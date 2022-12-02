@@ -22,8 +22,8 @@
 
 {{/* No Touchy */}}
 {{ with .ExecData }}
-	{{ if not (getMessage (toInt (dbGet 0 "Channel").Value) .) }} {{/* Check if number was deleted */}}
-		{{ sendMessage (toInt (dbGet 0 "Channel").Value) (cembed 
+	{{ if not (getMessage nil .) }} {{/* Check if number was deleted */}}
+		{{ sendMessage nil (cembed 
 			"description" (print "<@" (dbGet 0 "LastUser").Value "> deleted their number which was correct!\nThe next number is " (dbGet 0 "Next").Value)
 			"color" 30654) }}
 	{{ return }}{{ end }}
