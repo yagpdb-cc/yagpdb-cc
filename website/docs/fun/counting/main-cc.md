@@ -20,7 +20,7 @@ See the [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/websi
 
 ## Configuration
 
-See the [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to configure this command.
+See [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to configure this command.
 
 ## Code
 
