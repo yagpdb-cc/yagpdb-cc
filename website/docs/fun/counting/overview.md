@@ -47,10 +47,7 @@ Optional configuration values include: <sup>Main</sup> `$CountTwice` `$RoleID` `
 
 :::tip Initialization
 
-There are two ways to initialize this command: 
-
-1. Set `$Admin` to an administrator role ID in quotes, then send "0"
-2. Count incorrectly for a rotation (until wrong/count resets)
+Set `$Admin` to an administrator role ID, then send "0"
 
 This initializes all database values and sets the count to 1
 
