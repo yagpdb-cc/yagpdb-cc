@@ -15,7 +15,7 @@ This package contains two custom commands: the [main command](https://github.com
 
 ## Main Command
 
-Add the [main command](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/main.go.tmpl) as a new custom command. The trigger is a regex trigger type with value `^(\d{1,}|\()`.
+Add the [main command](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/main.go.tmpl) as a new custom command. The trigger is a regex trigger type with value `^\d+|\(`.
 
 ::: caution
 
