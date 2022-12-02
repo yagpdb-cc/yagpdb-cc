@@ -19,7 +19,7 @@
 {{ if not ($Args.IsSet 0) }} {{/* Server Stats */}}
 	{{ sendMessage nil (cembed 
 		"title" "**🔢 Counting Statistics**"
-		"description" (print "⌚ __Current Score:__ " $Current "\n🏅 __High Score:__ " (dbGet 0 "CHighScore").Value " on " (formatTime (dbGet 0 "CHighScore").UpdatedAt "01/02") " by " userArg (toInt (dbGet 0 "CHSUser").Value)) "\n⏮️ __Last Counter:__ " userArg (dbGet 0 "LastUser").Value "\n💾 __Saves Remaining:__ " $SecondChance)
+		"description" (print "⌚ __Current Score:__ " $Current "\n🏅 __High Score:__ " (dbGet 0 "CHighScore").Value " on " (formatTime (dbGet 0 "CHighScore").UpdatedAt "01/02") " by " (userArg (toInt (dbGet 0 "CHSUser").Value)) "\n⏮️ __Last Counter:__ " userArg (dbGet 0 "LastUser").Value "\n💾 __Saves Remaining:__ " $SecondChance)
 		"color" 30654
 		"timestamp" currentTime) }}
 	{{ deleteTrigger 3 }}
