@@ -1,7 +1,7 @@
 ## Features
 
 - Continuously count *forever*
-- Toggle whether users can count multiple time in a row; or just once, until another user counts
+- Toggle whether users can count multiple times in a row; or just once, until another user counts
 - Assign a counting role to the current user
 - Toggle second chance: one-time save of the count
 - Customizable correct, warning, and incorrect emojis for reaction
