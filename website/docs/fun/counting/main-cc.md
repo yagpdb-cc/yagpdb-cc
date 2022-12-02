@@ -1,6 +1,6 @@
 This command allows users to count in increments of one (by default) and has a highly customizable system.
 
-For more information about the counting system, see [this](overview) page.
+For more information about the counting system, see [this](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) page.
 
 ## Trigger
 
@@ -16,11 +16,11 @@ Use channel restrictions to restrict this custom command to your counting channe
 
 ## Usage
 
-See the [Counting Overview](overview) for more information about how to use this command.
+See the [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to use this command.
 
 ## Configuration
 
-See the [Counting Overview](overview) for more information about how to configure this command.
+See the [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to configure this command.
 
 ## Code
 
