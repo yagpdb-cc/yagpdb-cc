@@ -36,7 +36,7 @@
 	{{ return }}{{ end }}
 {{ end }}
 
-{{ if or (ne (toString $LastUser) (toString .User.ID)) $CountTwice }} {{/* Checks user */}}
+{{ if or (ne $LastUser .User.ID) $CountTwice }} {{/* Checks user */}}
 	{{ if eq (toInt $Next) (toInt $Number) }} {{/* Checks if correct number */}}
 		{{ addReactions $CorrectEmoji }}
 		{{ dbSet 0 "Next" (add $Next 1) }}
