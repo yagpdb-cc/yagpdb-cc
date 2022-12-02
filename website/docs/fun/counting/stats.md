@@ -18,7 +18,7 @@ See the [Counting Overview](overview) for more information about how to configur
 
 ## Code
 
-```
+```gotmplfile=../../../../src/fun/counting/stats.go.tmpl
 ```
 
 ## Author
