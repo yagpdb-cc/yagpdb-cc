@@ -16,7 +16,7 @@ Use channel restrictions to restrict this custom command to your counting channe
 
 ## Usage
 
-See the [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to use this command.
+See [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to use this command.
 
 ## Configuration
 
