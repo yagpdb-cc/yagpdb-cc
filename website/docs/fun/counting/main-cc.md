@@ -24,8 +24,7 @@ See the [Counting Overview](overview) for more information about how to configur
 
 ## Code
 
-```gotmpl
-file=../../../../src/fun/counting/main.go.tmpl
+```gotmplfile=../../../../src/fun/counting/main.go.tmpl
 ```
 
 ## Author
