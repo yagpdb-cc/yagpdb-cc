@@ -1,6 +1,6 @@
 This command allows users visualize server and user counting statistics.
 
-For more information about the counting system, see [this](overview) page.
+For more information about the counting system, see [this](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) page.
 
 ## Trigger
 
@@ -10,11 +10,11 @@ Trigger: `CStats`
 
 ## Usage
 
-See the [Counting Overview](overview) for more information about how to use this command.
+See the [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to use this command.
 
 ## Configuration
 
-See the [Counting Overview](overview) for more information about how to configure this command.
+See the [Counting Overview](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) for more information about how to configure this command.
 
 ## Code
 
