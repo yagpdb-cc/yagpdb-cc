@@ -1,0 +1,75 @@
+{{/*
+        Counting statistics
+        
+        See <https://yagpdb-cc.github.io/fun/counting>
+        
+        Author: H1nr1 <https://github.com/H1nr1>
+*/}}
+
+{{/* Configurable Values */}}
+{{ $LBLength := 10 }} {{/* How many members to show on leaderboard; MAX OF 100 */}}
+{{/* End of configuration values */}}
+
+{{/* No Touchy */}}
+{{/* Initializing variables */}}
+{{ $Current := sub (dbGet 0 "Next").Value 1 }}
+{{ $CCount := (dbGet .User.ID "CCount").Value }}{{ $CCorrect := (dbGet .User.ID "CCorrect").Value }}
+{{ $UserID := 0 }}
+{{ $SecondChance := "" }}{{ if eq (toInt (dbGet 0 "CSecondChance").Value) 0 }}{{ $SecondChance = "1" }}{{ else if ge (toInt (dbGet 0 "CSecondChance").Value) 1 }}{{ $SecondChance = "0" }}{{ end }}
+{{ $Args := parseArgs 0 "" (carg "string" "Who") }}
+
+{{ if not ($Args.IsSet 0) }} {{/* Server Stats */}}
+	{{ sendMessage nil (cembed 
+		"title" "**🔢 Counting Statistics**"
+		"description" (print "⌚ __Current Score:__ " $Current "\n<:GL_Leaderboard:1029154188057395210> __High Score:__ " (dbGet 0 "CHighScore").Value " on " (formatTime (dbGet 0 "CHighScore").UpdatedAt "01/02") " by " (getMember (toInt (dbGet 0 "CHSUser").Value)).User "\n⏮️ __Last Counter:__ " (getMember (dbGet 0 "LastUser").Value).User "\n💾 __Saves Remaining:__ " $SecondChance)
+		"color" 30654
+		"timestamp" currentTime) }}
+	{{ deleteTrigger 3 }}
+	{{ return }}
+
+{{ else if (inFold (cslice "Me" "My" "0") ($Args.Get 0)) }} {{/* Triggering user's stats */}}
+	{{ sendMessage nil (cembed
+		"title" (print "**🔢 " .User.Username "'s Counting Statistics**")
+		"description" (print "<@" .User.ID "> has counted a __total__ of **" $CCount " times**\n<@" .User.ID "> has counted __correctly__ **" $CCorrect " times**\nThis makes <@" .User.ID ">'s __average__ **" (div (round (mult (div $CCorrect $CCount) 10000)) 100) "%**")
+		"color" 30654
+		"timestamp" currentTime) }}
+
+{{ else if and (reFind `\d{17,19}` ($Args.Get 0)) }} {{/* User mentioned */}}
+	{{ if reFind `<@\d{17,19}>` ($Args.Get 0) }} {{/* if mention */}}
+		{{ $UserID = slice ($Args.Get 0) 2 (sub (len ($Args.Get 0)) 1) }}
+	{{ else if reFind `\d{17,19}` ($Args.Get 0) }} {{/* if user ID */}}
+		{{ $UserID = $Args.Get 0 }}{{ end }}
+	{{ if and (ne $UserID "0") (eq (dbCount (sdict "userID" (toInt64 $UserID) "pattern" "CCount")) 0) }} {{/* User found, no stats */}}
+		{{ sendMessage nil (cembed 
+			"title" (print "No available stats")
+			"description" (print (getMember $UserID).User " has yet to count ☹️\nMaybe give them a heads-up to come join?")) }}
+	{{ else }} {{/* Mentioned user's stats */}}
+		{{ $CCount = (dbGet (toInt64 $UserID) "CCount").Value }}
+		{{ $CCorrect = (dbGet (toInt64 $UserID) "CCorrect").Value }}
+		{{ sendMessage nil (cembed
+			"title" (print "**🔢 " (userArg ($UserID)) "'s Counting Statistics**")
+			"description" (print "<@" $UserID "> has counted a __total__ of **" $CCount " times**\n<@" $UserID "> has counted __correctly__ **" $CCorrect " times**\nThis makes <@" $UserID ">'s __average__ **" (div (round (mult (div $CCorrect $CCount) 10000)) 100) "%**")
+			"color" 30654
+			"timestamp" currentTime) }}
+	{{ end }}
+
+{{ else if (inFold (cslice "Leaderboard" "LB") ($Args.Get 0)) }} {{/* Server correct leaderboard */}}
+	{{ $Desc := "" }}{{ $Place := 1 }}
+	{{ range (dbTopEntries "CCorrect" $LBLength 0) }}
+		{{ $Desc = (joinStr "\n" $Desc (printf "#%-3d %4d - %-4s" $Place (toInt .Value) (getMember .UserID).User)) }}
+		{{ $Place = add $Place 1 }}
+	{{ end }}
+	{{ sendMessage nil (cembed 
+		"title" "**Counting Leaderboard**"
+		"description" (print "```Pos    ✅  User\n" $Desc "```")
+		"color" 30654) }}
+
+{{ else }} {{/* Invalid syntax, gives syntax */}}
+	{{ sendMessage nil (cembed
+		"title" "Invalid Syntax"
+		"description" "For server counting statistics: `-CStats`\nFor your statistics: `-CStats <\"Me\"/\"My\"/\"0\">`\nFor another member's statistics: `-CStats <@/ID>`\nFor server leaderboard: `-CStats <\"Leaderboard\"/\"LB\">`"
+		"color" 16744192
+		"timestamp" currentTime) }}
+{{ end }}
+
+{{ deleteTrigger 5 }}
