@@ -54,8 +54,8 @@
 {{ else if (inFold (cslice "Leaderboard" "LB") ($Args.Get 0)) }} {{/* Server correct leaderboard */}}
 	{{ $Desc := "" }}{{ $Place := 1 }}
 	{{ range (dbTopEntries "CCorrect" $LBLength 0) }}
-		{{ $Desc = (joinStr "\n" $Desc (printf "#%-3d %4d - %-4s" $Place (toInt .Value) (getMember .UserID).User)) }}
-		{{ $Place = add $Place 1 }}
+		{{- $Desc = (joinStr "\n" $Desc (printf "#%-3d %4d - %-4s" $Place (toInt .Value) (getMember .UserID).User)) -}}
+		{{- $Place = add $Place 1 -}}
 	{{ end }}
 	{{ sendMessage nil (cembed 
 		"title" "**Counting Leaderboard**"
