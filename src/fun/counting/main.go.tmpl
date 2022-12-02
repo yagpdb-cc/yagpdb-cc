@@ -1,0 +1,89 @@
+{{/*
+        Counting command. Count and have fun!
+        
+        See <https://yagpdb-cc.github.io/fun/counting>
+        
+        Author: H1nr1 <https://github.com/H1nr1>
+*/}}
+
+{{/* Configurable Values */}}
+{{ $CountTwice := true }} {{/* Allow users to count multiple times in a row; true/false */}}
+{{ $RoleID := "" }} {{/* Counting role ID in quotes; leave empty quotes to disable */}}
+{{ $Admin := "" }} {{/* Administrator role ID in quotes for initializing; EDIT THIS TO A ROLE ID YOU HAVE */}}
+{{ $SecondChance := true }} {{/* Second chance if wrong; true/false */}}
+{{ $Leaderboard := true }} {{/* If you added the leaderboard CC; true/false */}}
+{{ $CorrectEmoji := "✅" }} {{/* Emoji to react with if number is correct; if custom, use format name:id */}}
+{{ $WarningEmoji := "⚠️" }} {{/* Emoji to react with if wrong number AND Second Chance is true/on; if custom, use format name:id */}}
+{{ $IncorrectEmoji := "❌" }} {{/* Emoji to react with if number is incorrect; if custom, use format name:id */}}
+{{/* End of configuration values */}}
+
+{{/* No Touchy */}}
+{{ with .ExecData }}
+	{{ if not (getMessage 1035961860538769468 .) }} {{/* Check if number was deleted */}}
+		{{ sendMessage 1035961860538769468 (cembed 
+			"description" (print "<@" (dbGet 0 "LastUser").Value "> deleted their number which was correct!\nThe next number is " (dbGet 0 "Next").Value)
+			"color" 30654) }}
+	{{ return }}{{ end }}
+{{ end }}
+
+{{/* Initializing variables */}}
+{{ $LastUser := (dbGet 0 "LastUser").Value }}{{ $Next := (dbGet 0 "Next").Value }}
+{{ $Number := "" }}{{ $Number = round (slice ($Number = (exec "calc" (index .Args 0))) 9 (len $Number | add -1)) }}
+{{ $Wrong := "" }}{{ if $SecondChance }}{{ $Wrong = (dbGet 0 "CSecondChance").Value }}{{ end }}{{ $Silence := "" }}
+
+{{ if and (hasRoleID $Admin) (eq (toInt $Number) 0) (lt (dbGet 0 "Admin").Value 1) }}
+	{{ dbSet 0 "LastUser" (toString .User.ID) }}{{ dbSet 0 "Next1" 1 }}{{ dbIncr 0 "Admin" 1 }}{{ addReactions $CorrectEmoji }}
+{{ return }}{{ end }}
+
+{{ if or (ne (toString $LastUser) (toString .User.ID)) $CountTwice }} {{/* Checks user */}}
+	{{ if eq (toInt $Next) (toInt $Number) }} {{/* Checks if correct number */}}
+		{{ addReactions $CorrectEmoji }}
+		{{ dbSet 0 "Next" (add $Next 1) }}
+		{{ dbSet 0 "LastUser" (toString .User.ID) }}
+		{{ if ne $RoleID "" }} {{/* Counting role */}}
+			{{ takeRoleID $LastUser $RoleID }}
+			{{ giveRoleID .User.ID $RoleID }}
+		{{ end }}
+		{{ if $Leaderboard }} {{/* Updates leaderboard values */}}
+			{{ $Silence = dbIncr .User.ID "CCorrect" 1 }}
+			{{ $Silence = dbIncr .User.ID "CCount" 1 }}
+			{{ if gt (toInt $Number) (toInt (dbGet 0 "CHighScore").Value) }}
+				{{ dbSet 0 "CHighScore" (toInt $Number) }}
+				{{ dbSet 0 "CHSUser" (toString .User.ID) }}
+			{{ end }}
+		{{ end }}
+		{{ execCC .CCID nil 10 .Message.ID }} {{/* Check if number was deleted */}}
+	{{ else }} {{/* Wrong number */}}
+		{{ if $SecondChance }}
+			{{ $Wrong = dbIncr 0 "CSecondChance" 1 }}
+			{{ if eq (toInt $Wrong) 1 }} {{/* Saved count */}}
+				{{ addReactions $WarningEmoji }}
+				{{ sendMessage nil (cembed 
+					"description" (print "<@" .User.ID "> sent an incorrect number of " $Number "\n**But**, second chance saved the count!\nThe next number is " $Next)
+					"color" 16744192) }}
+			{{ else if ge (toInt $Wrong) 2 }} {{/* Reset count */}}
+				{{ addReactions $IncorrectEmoji }}
+				{{ sendMessage nil (cembed 
+					"description" (print "<@" .User.ID "> sent an incorrect number of " $Number "\nCorrect number was " $Next "\nStart over at 1 🙃")
+					"color" 16711680) }}
+				{{ dbSet 0 "Next" "1" }}
+				{{ if eq $CountTwice false }}{{ dbSet 0 "LastUser" 0 }}{{ end }}
+				{{ dbSet 0 "CSecondChance" 0 }}
+				{{ if $Leaderboard }}{{ $Silence = dbIncr .User.ID "CCount" 1 }}{{ end }}
+			{{ end }}
+		{{ else if or (ge (toInt $Wrong) 2) (not $SecondChance) }} {{/* Reset count */}}
+			{{ addReactions $IncorrectEmoji }}
+			{{ sendMessage nil (cembed 
+				"description" (print "<@" .User.ID "> sent an incorrect number of " $Number "\nCorrect number was " $Next "\nStart over at 1 🙃")
+				"color" 16711680) }}
+			{{ dbSet 0 "Next" "1" }}
+			{{ if not $CountTwice }}{{ dbSet 0 "LastUser" 0 }}{{ end }}
+			{{ if $SecondChance }}{{ dbSet 0 "CSecondChance" 0 }}{{ end }}
+			{{ if $Leaderboard }}{{ $Silence = dbIncr .User.ID "CCount" 1 }}{{ end }}
+		{{ end }}
+	{{ end }}
+{{ else }} {{/* Same user */}}
+	{{ sendMessage nil (cembed 
+		"description" (print "You can't count twice in a row 🥲\nThe next number is " $Next)
+		"color" 16744192) }}
+{{ end }}
