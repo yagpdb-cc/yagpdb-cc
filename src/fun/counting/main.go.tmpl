@@ -5,10 +5,10 @@
 */}}
 
 {{/* Configurable Values */}}
-{{ $Admin := "" }} {{/* Administrator role ID in quotes for initializing; EDIT THIS TO A ROLE ID YOU HAVE */}}
+{{ $Admin := EDITME }} {{/* Administrator role ID; EDIT THIS TO A ROLE ID YOU HAVE */}}
 {{/* Optional */}}
 {{ $CountTwice := true }} {{/* Allow users to count multiple times in a row; true/false */}}
-{{ $RoleID := "" }} {{/* Counting role ID in quotes; leave empty quotes to disable */}}
+{{ $RoleID := false }} {{/* Counting role ID; set to false to disable */}}
 {{ $SecondChance := true }} {{/* Second chance if wrong; true/false */}}
 {{ $Leaderboard := true }} {{/* If you added the leaderboard CC; true/false */}}
 {{ $CorrectEmoji := "✅" }} {{/* Emoji to react with if number is correct; if custom, use format name:id */}}
@@ -30,7 +30,7 @@
 {{ $Number := "" }}{{ $Number = round (slice ($Number = (exec "calc" (index .Args 0))) 9 (len $Number | add -1)) }}
 {{ $Wrong := "" }}{{ if $SecondChance }}{{ $Wrong = (dbGet 0 "CSecondChance").Value }}{{ end }}{{ $Silence := "" }}
 
-{{ if and (hasRoleID $Admin) (eq (toInt $Number) 0) (lt (dbGet 0 "Admin").Value 1) }}
+{{ if and (hasRoleID $Admin) (eq (toInt $Number) 0) (lt (toInt (dbGet 0 "Admin").Value) 1) }}
 	{{ dbSet 0 "Channel" (toString .Channel.ID) }}{{ dbSet 0 "LastUser" (toString .User.ID) }}{{ dbSet 0 "Next1" 1 }}{{ dbIncr 0 "Admin" 1 }}{{ addReactions $CorrectEmoji }}
 {{ return }}{{ end }}
 
@@ -39,7 +39,7 @@
 		{{ addReactions $CorrectEmoji }}
 		{{ dbSet 0 "Next" (add $Next 1) }}
 		{{ dbSet 0 "LastUser" (toString .User.ID) }}
-		{{ if ne $RoleID "" }} {{/* Counting role */}}
+		{{ if not $RoleID }} {{/* Counting role */}}
 			{{ takeRoleID $LastUser $RoleID }}
 			{{ giveRoleID .User.ID $RoleID }}
 		{{ end }}
