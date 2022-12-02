@@ -1,6 +1,6 @@
 This command allows users to count in increments of one (by default) and has a highly customizable system.
 
-For more information about the counting system, see [this](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) page.
+For more information about the counting system, see [this page](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md).
 
 ## Trigger
 
