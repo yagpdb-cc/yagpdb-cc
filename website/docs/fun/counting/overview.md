@@ -35,7 +35,7 @@ If you would like to customize the commands, see [here](overview/#configuration)
 
 ### Configuration
 
-There are many configurable values in this package, to which only one needs to be configured: `$Admin`
+There are many configurable values in this package, to which only one needs to be configured: <sup>Main</sup> `$Admin`
 
 Optional configuration values include: <sup>Main</sup> `$CountTwice` `$RoleID` `$SecondChance` `$Leaderboard` `$CorrectEmoji` `$WarningEmoji` `$IncorrectEmoji` <sup>Stats</sup> `$LBLength`
 
