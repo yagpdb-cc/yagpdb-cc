@@ -54,6 +54,10 @@
 	{{ if eq (toInt $Next) (toInt $Number) }} {{/* Checks if correct number */}}
 		{{ if $Reactions }}
 			{{ addReactions $CorrectEmoji }}
+			{{ if $RDeleteDelay }}
+				{{ sleep $RDeleteDelay }}
+				{{ deleteMessageReaction nil .Message.ID 204255221017214977 $CorrectEmoji }}
+			{{ end }}
 		{{ end }}
 		{{ dbIncr 0 "Next" 1 }}
 		{{ dbSet 0 "LastUser" (toString .User.ID) }}
@@ -77,6 +81,10 @@
 			{{ if eq (toInt $Wrong) 1 }} {{/* Saved count */}}
 				{{ if $Reactions }}
 					{{ addReactions $WarningEmoji }}
+					{{ if $RDeleteDelay }}
+						{{ sleep $RDeleteDelay }}
+						{{ deleteMessageReaction nil .Message.ID 204255221017214977 $WarningEmoji }}
+					{{ end }}
 				{{ end }}
 				{{ sendMessage nil (cembed 
 					"description" (print "<@" .User.ID "> sent an incorrect number of " $Number "\n**But**, second chance saved the count!\nThe next number is " $Next)
@@ -84,6 +92,10 @@
 			{{ else if ge (toInt $Wrong) 2 }} {{/* Reset count */}}
 				{{ if $Reactions }}
 					{{ addReactions $IncorrectEmoji }}
+					{{ if $RDeleteDelay }}
+						{{ sleep $RDeleteDelay }}
+						{{ deleteMessageReaction nil .Message.ID 204255221017214977 $IncorrectEmoji }}
+					{{ end }}
 				{{ end }}
 				{{ sendMessage nil (cembed 
 					"description" (print "<@" .User.ID "> sent an incorrect number of " $Number "\nCorrect number was " $Next "\nStart over at 1 🙃")
