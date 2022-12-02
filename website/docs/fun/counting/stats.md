@@ -1,4 +1,4 @@
-This command allows users visualize server and user counting statistics.
+This command allows users to visualize server and user counting statistics.
 
 For more information about the counting system, see [this](https://github.com/H1nr1/yagpdb-cc/blob/master/website/docs/fun/counting/overview.md) page.
 
