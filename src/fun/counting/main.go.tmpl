@@ -30,28 +30,30 @@
 {{ return }}{{ end }}
 
 {{/* Initializing variables */}}
-{{ $Last := (dbGet 0 "Last").Value }}
-	{{ $LastUser := toInt (index (split $Last " ") 0) }}
-	{{ $LastMsgID := toInt (index (split $Last " ") 1) }}
-{{ $Next := toInt (dbGet 0 "Next").Value }}
 {{ $Number := "" }}
 {{ $Number = toInt (round (slice ($Number = (exec "calc" (index .Args 0))) 9 (sub (len $Number) 1))) }}
-{{ $HighScoreValue := toInt (index (split (dbGet 0 "CountHighScore").Value " ") 0) }}
-{{ $Wrong := "" }}
-{{ if $SecondChance }}
-	{{ $Wrong = toInt (dbGet 0 "CSecondChance").Value }}
-{{ end }}
 {{ $Silence := "" }}
 
 {{ if and (hasRoleID $Admin) (eq $Number 0) }}
 	{{ if lt (toInt (dbGet 0 "Admin").Value) 1 }}
 		{{ dbSet 0 "Last" (joinStr " " .User.ID .Message.ID) }}
 		{{ dbSet 0 "Next" 1 }}
-		{{ dbIncr 0 "Admin" 1 }}
+		{{ dbSet 0 "CountHighScore" (joinStr " " 0 .User.ID) }}
+		{{ $Silence = dbIncr 0 "Admin" 1 }}
 		{{ addReactions $CorrectEmoji }}
 	{{ return }}
 	{{ end }}
 {{ return }}{{ end }}
+
+{{ $Last := toString (dbGet 0 "Last").Value }}
+	{{ $LastUser := toInt (index (split $Last " ") 0) }}
+	{{ $LastMsgID := toInt (index (split $Last " ") 1) }}
+{{ $Next := toInt (dbGet 0 "Next").Value }}
+{{ $HighScoreValue := toInt (index (split (dbGet 0 "CountHighScore").Value " ") 0) }}
+{{ $Wrong := "" }}
+{{ if $SecondChance }}
+	{{ $Wrong = toInt (dbGet 0 "CSecondChance").Value }}
+{{ end }}
 
 {{ if or (ne $LastUser .User.ID) $CountTwice }} {{/* Checks user */}}
 	{{ if eq $Next $Number }} {{/* Checks if correct number */}}
