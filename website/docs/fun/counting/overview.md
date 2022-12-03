@@ -69,7 +69,6 @@ Allow confirmative reactions on message; `true/false`
 - `$LBLength`<br />
 How many members to show on leaderboard; MAX OF 100
 
-*How each of these values can be customly configured is also described in the command itself*
 
 ## Usage
 
