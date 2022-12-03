@@ -11,7 +11,11 @@
 
 This package contains two custom commands: the [main command](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/main.go.tmpl), and [statistics](https://github.com/H1nr1/yagpdb-cc/blob/master/src/fun/counting/stats.go.tmpl).
 
-*The statistics command is not neccesary to add, but is a bonus.*
+::: tip
+
+The [statistics command](https://yagpdb-cc.github.io/fun/counting-v2/stats) is optional to add.
+
+:::
 
 ## Main Command
 
