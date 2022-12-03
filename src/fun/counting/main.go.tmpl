@@ -61,7 +61,7 @@
 				{{ deleteMessageReaction nil $LastMsgID 204255221017214977 $CorrectEmoji }}
 			{{ end }}
 		{{ end }}
-		{{ Silence = dbIncr 0 "Next" 1 }}
+		{{ $Silence = dbIncr 0 "Next" 1 }}
 		{{ dbSet 0 "Last" (joinStr " " .User.ID .Message.ID) }}
 		{{ if $RoleID }} {{/* Counting role */}}
 			{{ takeRoleID $LastUser $RoleID 1 }}
