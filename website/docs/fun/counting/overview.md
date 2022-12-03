@@ -57,8 +57,8 @@ If you added the [Stats CC](https://github.com/H1nr1/yagpdb-cc/blob/master/src/f
 - `$Reactions`<br />
 Allow confirmative reactions on message; `true/false`
 
-  - `$RDeleteDelay`<br />
-  Delay to remove reaction; set to `false` to disable
+  - `$ReactionDelete`<br />
+  Toggle for reactions to delete from last message; `true/false`
   - `$CorrectEmoji`<br />
   Emoji to react with if number is correct; if custom, use format `name:id`
   - `$WarningEmoji`<br />
