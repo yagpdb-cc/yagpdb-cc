@@ -35,11 +35,11 @@ If you would like to customize the commands, see [here](overview/#configuration)
 
 ## Configuration
 
-There are many configurable values in this package, to which only one must to be configured: [$Admin](https://github.com/H1nr1/yagpdb-cc/edit/master/website/docs/fun/counting/overview.md#list-of-configurable-variables)
+There are many configurable values in this package, to which **only one must to be configured**: [$Admin](https://github.com/H1nr1/yagpdb-cc/edit/master/website/docs/fun/counting/overview.md#list-of-configurable-variables)
 
 ### List of Configurable Variables
 
-- `$Admin`<br />
+- 📌 `$Admin`<br />
 Administrator role ID; use for initializing command
 
 - `$CountTwice`<br />
@@ -75,9 +75,9 @@ How many members to show on leaderboard; MAX OF 100
 
 ### Main Command
 
-:::tip Initialization
+:::caution Initialization
 
-Set `$Admin` to an administrator role ID, then send "0"
+Set `$Admin` to an administrator role ID, then send: 0
 
 This initializes all database values and sets the count to 1
 
