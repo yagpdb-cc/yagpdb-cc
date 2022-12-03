@@ -34,6 +34,7 @@
 	{{ sendMessage nil (cembed 
 		"title" "**🔢 Counting Statistics**"
 		"description" (print "⌚ __Current Score:__ " $Current "\n🏅 __High Score:__ " $HighScoreValue " on " $HighScoreDate " by " (userArg $HighScoreUser) "\n⏮️ __Last Counter:__ " (userArg $LastUser) "\n💾 __Saves Remaining:__ " $SecondChance)
+		"footer" (sdict "text" "Use this command: -CStats")
 		"color" 30654
 		"timestamp" currentTime) }}
 	{{ deleteTrigger 3 }}
@@ -43,6 +44,7 @@
 	{{ sendMessage nil (cembed
 		"title" (print "**🔢 " .User.Username "'s Counting Statistics**")
 		"description" (print .User.Mention " has counted a __total__ of **" $CCount " times**\n" .User.Mention " has counted __correctly__ **" $CCorrect " times**\nThis makes " .User.Mention "'s __average__ **" (div (round (mult (div $CCorrect $CCount) 10000)) 100) "%**")
+		"footer" (sdict "text" "Use this command: -CStats [\"Me\"/\"My\"/0]")
 		"color" 30654
 		"timestamp" currentTime) }}
 
@@ -50,13 +52,15 @@
 	{{ if and (ne $UserID "0") (eq (dbCount (sdict "userID" (toInt64 $UserID) "pattern" "CCount")) 0) }} {{/* No stats for user */}}
 		{{ sendMessage nil (cembed 
 			"title" (print "No available stats")
-			"description" (print (userArg $UserID) " has yet to count ☹️\nMaybe give them a heads-up to come join?")) }}
+			"description" (print (userArg $UserID) " has yet to count ☹️\nMaybe give them a heads-up to come join?")
+			"footer" (sdict "text" "Use this command: -CStats [User: @/ID]")) }}
 	{{ else }} {{/* Mentioned user's stats */}}
 		{{ $CCount = (dbGet (toInt64 $UserID) "CCount").Value }}
 		{{ $CCorrect = (dbGet (toInt64 $UserID) "CCorrect").Value }}
 		{{ sendMessage nil (cembed
 			"title" (print "**🔢 " (userArg ($UserID)) "'s Counting Statistics**")
 			"description" (print "<@" $UserID "> has counted a __total__ of **" $CCount " times**\n<@" $UserID "> has counted __correctly__ **" $CCorrect " times**\nThis makes <@" $UserID ">'s __average__ **" (div (round (mult (div $CCorrect $CCount) 10000)) 100) "%**")
+			"footer" (sdict "text" "Use this command: -CStats [User: @/ID]")
 			"color" 30654
 			"timestamp" currentTime) }}
 	{{ end }}
@@ -71,6 +75,7 @@
 	{{ sendMessage nil (cembed 
 		"title" "**Counting Leaderboard**"
 		"description" (print "```Pos    ✅  User\n" $Desc "```")
+		"footer" (sdict "text" "Use this command: -CStats [\"Leaderboard\"/\"LB\"]")
 		"color" 30654) }}
 
 {{ else }} {{/* Invalid syntax, gives syntax */}}
