@@ -13,22 +13,27 @@
 {{/* No Touchy */}}
 {{/* Initializing variables */}}
 {{ $Current := sub (dbGet 0 "Next").Value 1 }}
+{{ $LastUser := toInt (index (split (dbGet 0 "Last").Value " ") 0) }}
 {{ $CCount := (dbGet .User.ID "CCount").Value }}
 {{ $CCorrect := (dbGet .User.ID "CCorrect").Value }}
+{{ $HighScore := dbGet 0 "CountHighScore" }}
+	{{ $HighScoreValue := toInt (index (split $HighScore.Value " ") 0) }}
+	{{ $HighScoreDate := formatTime $HighScore.UpdatedAt "01/02" }}
+	{{ $HighScoreUser := toInt (index (split $HighScore.Value " ") 1) }}
 {{ $UserID := 0 }}
 {{ $SecondChance := toInt (dbGet 0 "CSecondChance").Value }}
 {{ if eq $SecondChance 0 }}
 	{{ $SecondChance = 1 }}
 {{ else if ge $SecondChance 1 }}
-	{{ $SecondChance = "0" }}
+	{{ $SecondChance = 0 }}
 {{ end }}
-{{ $Args := parseArgs 0 "" 
+{{ $Args := parseArgs 0 ""
 	(carg "string" "Who") }}
 
 {{ if not ($Args.IsSet 0) }} {{/* Server Stats */}}
 	{{ sendMessage nil (cembed 
 		"title" "**🔢 Counting Statistics**"
-		"description" (print "⌚ __Current Score:__ " $Current "\n🏅 __High Score:__ " (dbGet 0 "CHighScore").Value " on " (formatTime (dbGet 0 "CHighScore").UpdatedAt "01/02") " by " (userArg (toInt (dbGet 0 "CHSUser").Value)) "\n⏮️ __Last Counter:__ " (userArg (dbGet 0 "LastUser").Value) "\n💾 __Saves Remaining:__ " $SecondChance)
+		"description" (print "⌚ __Current Score:__ " $Current "\n🏅 __High Score:__ " $HighScoreValue " on " $HighScoreDate " by " (userArg $HighScoreUser) "\n⏮️ __Last Counter:__ " (userArg $LastUser) "\n💾 __Saves Remaining:__ " $SecondChance)
 		"color" 30654
 		"timestamp" currentTime) }}
 	{{ deleteTrigger 3 }}
@@ -41,8 +46,8 @@
 		"color" 30654
 		"timestamp" currentTime) }}
 
-{{ else if ($UserID = reFind `\d{17,19}` ($Args.Get 0)) }} {{/* User mentioned */}}
-	{{ if and (ne $UserID "0") (eq (dbCount (sdict "userID" (toInt64 $UserID) "pattern" "CCount")) 0) }} {{/* User found, no stats */}}
+{{ else if ($UserID = reFind `\d{17,19}` ($Args.Get 0)) }} {{/* User mentioned/ID */}}
+	{{ if and (ne $UserID "0") (eq (dbCount (sdict "userID" (toInt64 $UserID) "pattern" "CCount")) 0) }} {{/* No stats for user */}}
 		{{ sendMessage nil (cembed 
 			"title" (print "No available stats")
 			"description" (print (userArg $UserID) " has yet to count ☹️\nMaybe give them a heads-up to come join?")) }}
