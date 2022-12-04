@@ -1,0 +1,43 @@
+{{/*
+        View your wallet and bank balance!
+	
+        Author: H1nr1 <https://github.com/H1nr1>
+*/}}
+
+{{ $XP := dbIncr .User.ID "XP" 1 }}
+
+{{ if inFold (cslice "$balance" "$bal") (lower .Cmd) }}
+	{{ if not .CmdArgs }}
+		{{ $Wallet := toString (dbGet .User.ID "Wallet").Value }}
+		{{ if not $Wallet }}{{ $Wallet = "0" }}{{ end }}
+		{{ $Bank := toString (dbGet .User.ID "Bank").Value }}
+		{{ if not $Bank }}{{ $Bank = "0" }}{{ end }}
+		{{ sendMessage nil (cembed 
+			"author" (sdict "icon_url" (.User.AvatarURL "512") "name" (print (userArg .User.ID).Username "'s Balance 💰"))
+			"thumbnail" (sdict "url" "https://images-ext-2.discordapp.net/external/eAoHFLcu3a0t10HmcGLJMHN6vGB8icPn-Dg6XepbiQY/https/i.imgur.com/fYOtU81.gif")
+			"fields" (cslice 
+				(sdict "name" "👛 Wallet:" "value" (print $Wallet " 🪙") "inline" true)
+				(sdict "name" "🏧 Bank:" "value" (print $Bank "/" (mult $XP 100) " 🪙") "inline" true))
+			"color" (randInt 0xFFFFFF)
+			"footer" (sdict "text" "➤ https://yagpdb.xyz")
+			"timestamp" currentTime) }}
+	{{ else }}
+		{{ $Args := parseArgs 1 "Syntax is `$Balance [User: @/ID]`"
+			(carg "member" "user") }}
+		{{ $User := $Args.Get 0 }}
+		{{ $Wallet := toString (dbGet (toInt $User) "Wallet").Value }}
+		{{ if not $Wallet }}{{ $Wallet = "0" }}{{ end }}
+		{{ $Bank := toString (dbGet (toInt $User) "Bank").Value }}
+		{{ $XP = (dbGet (toInt $User) "XP").Value }}
+		{{ if not $Bank }}{{ $Bank = "0" }}{{ end }}
+		{{ sendMessage nil (cembed 
+			"author" (sdict "icon_url" ($User.User.AvatarURL "512") "name" (print $User.User.Username "'s Balance 💰"))
+			"thumbnail" (sdict "url" "https://images-ext-2.discordapp.net/external/eAoHFLcu3a0t10HmcGLJMHN6vGB8icPn-Dg6XepbiQY/https/i.imgur.com/fYOtU81.gif")
+			"fields" (cslice 
+				(sdict "name" "👛 Wallet:" "value" (print $Wallet " 🪙") "inline" true)
+				(sdict "name" "🏧 Bank:" "value" (print $Bank "/" (mult $XP 100) " 🪙") "inline" true))
+			"color" (randInt 0xFFFFFF)
+			"footer" (sdict "text" "➤ https://yagpdb.xyz")
+			"timestamp" currentTime) }}
+	{{ end }}
+{{ end }}
