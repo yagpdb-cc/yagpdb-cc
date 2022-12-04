@@ -14,7 +14,8 @@
 	{{ sendMessage nil (cembed 
 		"author" (sdict "icon_url" (.User.AvatarURL "512") "name" (print "Daily Reward 💹"))
 		"description" (print "✅ | You received 5000 Coins for your first daily! 💰")
-		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")
+		"color" 65280) }}
 	{{ dbSet .User.ID "DCooldown" true }}
 	{{ $Silence = dbIncr .User.ID "DStreak" 1 }}
 
@@ -23,7 +24,8 @@
 	{{ sendMessage nil (cembed 
 		"author" (sdict "icon_url" (.User.AvatarURL "512") "name" (print "Daily Reward 💹"))
 		"description" (print "✅ | You received " $Amount " Coins with a daily streak of " $DStreak " 💰")
-		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")
+		"color" 65280) }}
 	{{ dbSet .User.ID "DCooldown" true }}
 	{{ $Silence = dbIncr .User.ID "DStreak" 1 }}
 
@@ -32,12 +34,14 @@
 	{{ sendMessage nil (cembed 
 		"author" (sdict "icon_url" (.User.AvatarURL "512") "name" (print "Daily Reward 💹"))
 		"description" (print "Lost daily streak! 😭\n\nYou got **1000 coins**!💰")
-		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")
+		"color" 65280) }}
 	{{ dbSet .User.ID "DCooldown" true }}
 	{{ dbSet .User.ID "DStreak" 0 }}
 
 {{ else if lt $TimeSince 86400 }} {{/* Command usage is less then 1 day after last usage */}}
 	{{ sendMessage nil (cembed 
 		"description" (print "❌ | Please wait " (humanizeDurationSeconds (mult (sub 86400 $TimeSince) 1000000000)) " before claiming your Daily reward again ⚠️")
-		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")
+		"color" 16711680) }}
 {{ end }}
