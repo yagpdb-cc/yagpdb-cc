@@ -1,0 +1,43 @@
+{{/*
+        Collect your daily gift!
+	
+        Author: H1nr1 <https://github.com/H1nr1>
+*/}}
+
+{{ $Silence := dbIncr .User.ID "XP" 1 }}
+{{ $Amount := add (mult ($DStreak := toInt (add (dbGet .User.ID "DStreak").Value 1)) 500) 1000 }}
+{{ $DCooldown := dbGet .User.ID "DCooldown" }}
+{{ $TimeSince := "" }}{{ if $DCooldown }}{{ $TimeSince = toInt (toDuration (currentTime.Sub (or $DCooldown.UpdatedAt $DCooldown.CreatedAt))).Seconds }}{{ end }}
+
+{{ if not $DCooldown }} {{/* First command usage for user */}}
+	{{ $Silence = dbIncr .User.ID "Wallet" 5000 }}
+	{{ sendMessage nil (cembed 
+		"author" (sdict "icon_url" (.User.AvatarURL "512") "name" (print "Daily Reward 💹"))
+		"description" (print "✅ | You received 5000 Coins for your first daily! 💰")
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+	{{ dbSet .User.ID "DCooldown" true }}
+	{{ $Silence = dbIncr .User.ID "DStreak" 1 }}
+
+{{ else if and (ge $TimeSince 86400) (lt $TimeSince 172800) }} {{/* Command usage is between 1 (inclusively) and 2 (exclusively) days of last usage */}}
+	{{ $Silence = dbIncr .User.ID "Wallet" $Amount }}
+	{{ sendMessage nil (cembed 
+		"author" (sdict "icon_url" (.User.AvatarURL "512") "name" (print "Daily Reward 💹"))
+		"description" (print "✅ | You received " $Amount " Coins with a daily streak of " $DStreak " 💰")
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+	{{ dbSet .User.ID "DCooldown" true }}
+	{{ $Silence = dbIncr .User.ID "DStreak" 1 }}
+
+{{ else if ge $TimeSince 172800 }} {{/* Command usage is 2 or more days after last usage */}}
+	{{ $Silence = dbIncr .User.ID "Wallet" 1000 }}
+	{{ sendMessage nil (cembed 
+		"author" (sdict "icon_url" (.User.AvatarURL "512") "name" (print "Daily Reward 💹"))
+		"description" (print "Lost daily streak! 😭\n\nYou got **1000 coins**!💰")
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+	{{ dbSet .User.ID "DCooldown" true }}
+	{{ dbSet .User.ID "DStreak" 0 }}
+
+{{ else if lt $TimeSince 86400 }} {{/* Command usage is less then 1 day after last usage */}}
+	{{ sendMessage nil (cembed 
+		"description" (print "❌ | Please wait " (humanizeDurationSeconds (mult (sub 86400 $TimeSince) 1000000000)) " before claiming your Daily reward again ⚠️")
+		"footer" (sdict "text" "➤ Tip: Daily amount increases by 500 coins per consecutive day")) }}
+{{ end }}
