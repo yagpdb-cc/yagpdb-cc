@@ -19,8 +19,10 @@
 				(sdict "name" "👛 Wallet:" "value" (print $Wallet " 🪙") "inline" true)
 				(sdict "name" "🏧 Bank:" "value" (print $Bank "/" (mult $XP 100) " 🪙") "inline" true))
 			"color" (randInt 0xFFFFFF)
-			"footer" (sdict "text" "➤ https://yagpdb.xyz")
+			"footer" (sdict "text" "➤ https://yagpdb.xyz/")
 			"timestamp" currentTime) }}
+		{{ return }}
+
 	{{ else }}
 		{{ $Args := parseArgs 1 "Syntax is `$Balance [User: @/ID]`"
 			(carg "member" "user") }}
@@ -37,7 +39,7 @@
 				(sdict "name" "👛 Wallet:" "value" (print $Wallet " 🪙") "inline" true)
 				(sdict "name" "🏧 Bank:" "value" (print $Bank "/" (mult $XP 100) " 🪙") "inline" true))
 			"color" (randInt 0xFFFFFF)
-			"footer" (sdict "text" "➤ https://yagpdb.xyz")
+			"footer" (sdict "text" "➤ https://yagpdb.xyz/")
 			"timestamp" currentTime) }}
 	{{ end }}
 {{ end }}
