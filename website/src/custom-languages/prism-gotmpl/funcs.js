@@ -115,6 +115,7 @@ export const funcs = [
 	'onlineCountBots',
 	'or',
 	'parseArgs',
+	'parseTime',
 	'pastNicknames',
 	'pastUsernames',
 	'pinMessage',
