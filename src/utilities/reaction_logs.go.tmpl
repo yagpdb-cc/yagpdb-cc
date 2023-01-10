@@ -21,7 +21,8 @@
 	{{- range toRune .Reaction.Emoji.Name }}
 		{{- $emoji_U = joinStr "-" $emoji_U (printf "%04x" .) }}
 	{{- end -}}
-	{{ $reaction_url = print "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-google-136/" $emoji_U ".png" }}
+	{{/* Replaced original URL to fix Regional Indicators not showing in reaction log embed messages per https://github.com/successtheman/YAGPDB_reactionlog_regionalindicatorfix */}}
+	{{ $reaction_url = print "https://raw.githubusercontent.com/successtheman/YAGPDB_reactionlog_regionalindicatorfix/master/img-google-136/" $emoji_U ".png" }}
 {{end}}
 {{$addrem := "`Removed`"}}{{if .ReactionAdded}}{{$addrem = "`Added`"}}{{end}}
 
