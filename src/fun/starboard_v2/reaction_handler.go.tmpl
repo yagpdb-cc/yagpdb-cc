@@ -48,13 +48,13 @@
 			{{range $k, $v := $data}}{{- $dataSlice = $dataSlice.Append (cslice $k $v) -}}{{end}}
 			{{$lenCount := 0}}{{$toDel := cslice}}
 			{{range $dataSlice}}
-				{{if lt $lenCount 2000}}
+				{{- if lt $lenCount 2000}}
 					{{- $lenCount = add $lenCount (len (print .)) -}}
 					{{- $toDel = $toDel.Append (index . 0)}}
-			{{end}}{{end}}
+			{{- end -}}{{- end -}}
 			{{range $toDel}}
-				{{$data.Del . }}
-		{{end}}{{end}}
+				{{- $data.Del . -}}
+		{{- end -}}{{- end -}}
 
 		{{if and .ReactionAdded (eq .Reaction.Emoji.Name $starEmoji)}}
 			{{if reFind (print "PO" .User.ID ",") $starboardData.listID}}
