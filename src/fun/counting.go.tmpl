@@ -24,7 +24,7 @@
 {{ $r := 0 }}{{ with (dbGet .User.ID "resetcount").Value }}{{ $r = . }}{{ end }}
 {{ $s := false }}{{ range .Member.Roles }}{{ if in $staff_roles . }}{{ $s = true }}{{ end }}{{ end }}
 {{ if not $c }}
-	{{ addReactions "☑" }}
+  {{try}}{{ addReactions "☑" }}{{catch}}{{end}}
 	{{ dbSet 20 "counting" (sdict "l" (sdict "c" 1 "m" 0 "u" 0 "w" 0)) }}
 	{{ print .User.Mention ", <#" .Channel.ID "> is all set up as your counting channel!" }}
 {{ else if and $s (eq (print .ServerPrefix "resetcount") .Message.Content) }}
@@ -79,7 +79,7 @@
 		{{ deleteResponse 10 }}
 	{{ else }}
 		{{ deleteAllMessageReactions nil $c.l.m }}
-		{{ addReactions $emoji }}
+		{{try}}{{ addReactions $emoji }}{{catch}}{{end}}
 		{{ $c.Set (str .User.ID) (add ($c.Get (str .User.ID)) 1) }}
 		{{ $c.Set "l" (sdict "c" (add $c.l.c 1) "m" .Message.ID "u" .User.ID "w" 0) }}
 		{{ dbSet 20 "counting" $c }}
