@@ -137,6 +137,7 @@ export const funcs = [
 	'roundCeil',
 	'roundEven',
 	'roundFloor',
+	'sanitizeText',
 	'scheduleUniqueCC',
 	'sdict',
 	'sendDM',
