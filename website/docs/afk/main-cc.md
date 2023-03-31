@@ -9,7 +9,7 @@ For more information about the AFK system, please see [this](overview) page.
 ## Trigger
 
 **Type:** `Regex`<br />
-**Trigger:** `\A`
+**Trigger:** `\A` or `.*`
 
 ## Usage
 
