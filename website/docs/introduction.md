@@ -8,7 +8,7 @@ A curated collection of custom commands for the [YAGPDB Discord Bot](https://yag
 It is:
 
 - **Extensive:** There are over sixty custom commands (and we're adding more regularly!), meaning that it's likely that you'll be able to find what you're looking for.
-- **Official:** This collection of commands is [maintained by a group of YAGPDB staff members](#contributors) and has official support.
+- **Vetted:** This collection of commands is [maintained by a group of YAGPDB staff members](https://github.com/yagpdb-cc/yagpdb-cc#contributors).
 - **Well tested:** We review all commands added and many commands have widespread usage, meaning that it's unlikely — [though not impossible](#disclaimer) — for there to be serious bugs in them.
 - **Well documented:** We take pride in our high quality of documentation, which makes it easy for anyone to figure out how to use a given command.
 
@@ -20,7 +20,11 @@ The YAGPDB developer, staff, and/or support are not responsible for any issues w
 
 ## Need help?
 
-If you are experiencing issues with a custom command from this collection, please get in touch via the [YAGPDB Support Server](https://discord.com/invite/5uVyq2E), where we can provide further assistance. If you prefer, you can also [open a GitHub Discussion](https://github.com/yagpdb-cc/yagpdb-cc/discussions).
+If you are experiencing issues with a custom command from this collection, feel free to ask on the [YAGPDB Support Server](https://discord.com/invite/5uVyq2E).
+However, do keep in mind that not every staff member knows about every custom command present.
+
+With the above in mind, a better way to get in touch might be via opening a [GitHub Discussions](https://github.com/yagpdb-cc/yagpdb-cc/discussions), as these are
+also easily searchable.
 
 If you believe you found a bug, please [open an issue](https://github.com/yagpdb-cc/yagpdb-cc/issues/new/choose).
 
