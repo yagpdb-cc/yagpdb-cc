@@ -5,45 +5,56 @@
 	Author: zen | ゼン#0008 <https://github.com/z3nn13/>
 */}}
 
-{{/* Global Variables */}}
-{{ $ex := or (and (reFind "a_" .Guild.Icon) "gif" ) "png" }}
-{{ $icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024" }}
-{{ $regex := `\n\n\x60(\d{1,2}) (\w{5,7}) ago \((?:.{24})\)\x60 \*{2}(?:[^#]*)\*{2}\#\d{4} \(ID (\d{17,19})\)\: ` }}
-{{ $imgRegex := `(?i)https?:(?:\/\/(?:[^\/?#]*))?(?:[^?\n#\s]*?\/[^?\n#\s]+\.(?:jpg|jpeg|png|gif|tif|webp))(?:\?(?:[^?\n#\s]*))?(?:#(.*))?`}}
+{{ $re := `\n\n\x60(\d{1,2} \w{5,7}) ago \(.{24}\)\x60 \*\*[\w.#]+\*\* \(ID (\d{17,19})\)\: ` }}
 {{ $undelete := execAdmin "ud -a" }}
-
-{{ with reFindAllSubmatches $regex $undelete }}
-		{{ $time := printf "%s%s" (index . 0 1) (index . 0 2) | toDuration }}
-		{{ $member := (index . 0 3 | toInt64 | getMember) }}
-		{{ $message := index (reSplit $regex $undelete 3) 1 }}
-
-		{{ $file := "" }}{{ $image_url := "" }}
-		{{ if $image_url = reFind $imgRegex  $message }}
-				{{ $split := reSplit $imgRegex $message 2 }}
-				{{ $message = print "> ⚠️ An image link is detected\n" (joinStr "" $split) }}
-		{{ end }}
-		{{ if gt (toRune $message|len) 2000 }}{{/* Preventing 2k limit error */}}
-				{{ $file = $message }}
-				{{ $message = "*Message exceeded 2k limit. Contents sent as file instead*"}}
-		{{ else if not $message }}
-				{{ $message = "> ⚠️ An attachment/embed was deleted" }} 
-		{{ end }}
-
-		{{ $col := 0 }}{{ $p := 0 }}{{ $r := $member.Roles }}
-		{{ range $.Guild.Roles}}{{if and (in $r .ID) (.Color) (lt $p .Position)}}{{$p = .Position}}{{$col = .Color}}{{end}}{{end }}
-
-		{{ $embed := cembed "author" (sdict "name" (print $member.User.String " (ID " $member.User.ID ")") "icon_url" ($member.User.AvatarURL "256"))
-			"description" $message 
-			"color" $col 
-			"image" (sdict "url" $image_url)
-			"footer" (sdict "text" (printf "%s %s ago" (index . 0 1) (index . 0 2)) "icon_url" $icon) 
-			"timestamp" (currentTime.Add (mult $time -1|toDuration)) }}
-
-		{{ with $file }}
-			{{ sendMessage nil (complexMessage "file" . "embed" $embed) }}
-		{{ else }}
-			{{ sendMessage nil $embed }}
-		{{ end }}
-{{ else }}
-		{{ sendMessage nil "Nothing to snipe here" }}
+{{ $data := reFindAllSubmatches $re $undelete }}
+{{ if not $data }}
+	Nothing to snipe here
+	{{ return }}
 {{ end }}
+
+{{ $ex := or (and (reFind "a_" .Guild.Icon) "gif") "png" }}
+{{ $icon := printf "https://cdn.discordapp.com/icons/%d/%s.%s?size=1024" .Guild.ID .Guild.Icon $ex }}
+
+{{ $col := 0 }}
+{{ $pos := 0 }}
+{{ range $.Guild.Roles }}
+	{{- if not (and (in $.Member.Roles .ID) .Color (lt $pos .Position) ) }} {{- continue }} {{- end }}
+	{{- $pos = .Position }} {{- $col = .Color -}}
+{{ end }}
+
+{{ $dur := toDuration (index $data 0 1) }}
+{{ $member := getMember (index $data 0 2) }}
+{{ $msg := index (reSplit $re $undelete 3) 1 }}
+{{ $embed := sdict
+	"author" (sdict
+		"name" (printf "%s (ID %d)" $member.User.String $member.User.ID)
+		"icon_url" ($member.User.AvatarURL "256")
+	)
+	"description" $msg 
+	"footer" (sdict
+		"text" (print "Message from " (index $data 0 1) " ago")
+		"icon_url" $icon
+	)
+	"timestamp" (mult $dur -1 | toDuration | currentTime.Add)
+	"color" $col 
+}}
+{{ $send := sdict "reply" .Message.ID "embed" $embed }}
+
+{{ $imgRe := `\.(?i:jpe?g|png|gif|tif|webp)`}}
+{{ if and ($imgURL := reFind .LinkRegex $msg) (reFind $imgRe $imgURL) }}
+	{{ $embed.footer.Set "text" (print "⚠️ An image link was detected\n" $embed.footer.text) }}
+	{{ $embed.Set "image" (sdict "url" $imgURL) }}
+{{ end }}
+
+{{ if not $msg }}
+	{{ $embed.footer.Set "text" (print "⚠️ An attachment/embed was deleted\n" $embed.footer.text) }}
+{{ end }}
+
+{{ if gt (len $msg) 2000 }}
+	{{ $embed.footer.Set "text" (print "⚠️ Message exceeded 2k characters. Contents sent as file instead\n" $embed.footer.text) }}
+	{{ $embed.Del "description" }}
+	{{ $send.Set "file" $msg }}
+{{ end }}
+
+{{ sendMessage nil (complexMessage $send) }}
