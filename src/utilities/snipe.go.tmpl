@@ -7,13 +7,13 @@
 
 {{ $re := `\n\n\x60(\d{1,2} \w{5,7}) ago \(.{24}\)\x60 \*\*[\w.#]+\*\* \(ID (\d{17,19})\)\: ` }}
 {{ $undelete := execAdmin "ud -a" }}
-{{ $data := reFindAllSubmatches $re $undelete }}
+{{ $data := reFindAllSubmatches $re $undelete 1 }}
 {{ if not $data }}
 	Nothing to snipe here
 	{{ return }}
 {{ end }}
 
-{{ $ex := or (and (reFind "a_" .Guild.Icon) "gif") "png" }}
+{{ $ex := or (and (hasPrefix "a_" .Guild.Icon) "gif") "png" }}
 {{ $icon := printf "https://cdn.discordapp.com/icons/%d/%s.%s?size=1024" .Guild.ID .Guild.Icon $ex }}
 
 {{ $col := 0 }}
