@@ -123,6 +123,8 @@ export const funcs = [
 	'print',
 	'printf',
 	'println',
+	'publishMessage',
+	'publishResponse',
 	'randInt',
 	'reFind',
 	'reFindAll',
