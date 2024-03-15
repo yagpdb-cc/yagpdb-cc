@@ -26,6 +26,7 @@
 	15 "Forum"
 	16 "Media"
 }}
+{{/* $channel.Type is converted to json, then int as toInt unexpectedly returns 0 for .Channel.Type currently */}}
 {{ $type := $types.Get (toInt (json $channel.Type)) }}
 {{ $nsfw := "No" }}
 {{ $parent := "*None set*" }}
