@@ -22,14 +22,13 @@
 {{ end }}
 
 {{ $roles := $member.Roles }}
-{{ $rolesDict := dict }} {{ $rolesPos := cslice }}
+{{ $rolesPos := cslice }}
 {{ range $roles }}
 	{{- $role := $.Guild.GetRole . }}
-	{{- $rolesDict.Set $role.Position $role.ID }}
-	{{- $rolesPos = $rolesPos.Append $role.Position -}}
+	{{- $rolesPos = $rolesPos.Append (sdict "role" $role "position" $role.Position) }}
 {{ end }}
 
-{{ $rolesSorted := sort $rolesPos (sdict "reverse" true) }}
+{{ $rolesSorted := sort $rolesPos (sdict "reverse" true "key" "position") }}
 {{ $omittedCount := 0 }}
 {{ if gt (len $rolesPos) $ROLE_TRUNCATION_THRESHOLD }}
 	{{ $omittedCount = sub (len $rolesPos) $ROLE_TRUNCATION_THRESHOLD }}
@@ -39,9 +38,9 @@
 
 {{ $roleMentions := cslice }}
 {{ range $rolesPos }}
-	{{- $roleMentions = $roleMentions.Append (printf "<@&%d>" ($rolesDict.Get .)) -}}
+	{{- $roleMentions = $roleMentions.Append (printf "<@&%d>" .role.ID) -}}
 {{ end }}
-{{ $roleMentions = joinStr ", " $roleMentions.StringSlice }}
+{{ $roleMentions = joinStr ", " $roleMentions }}
 {{ if $omittedCount }}
 	{{ $roleMentions = printf "%s [%d roles not shown]" $roleMentions $omittedCount }}
 {{ end }}
@@ -60,7 +59,7 @@
 		(sdict "name" "❯ Joined At" "value" (printf "<t:%d:F>" $member.JoinedAt.Parse.Unix))
 		(sdict "name" "❯ Names" "value" (printf "Global: %s\nNick: %s" 
 			(or $user.Globalname "*None set*") (or $member.Nick "*None set*")
-		) )
+		))
 		(sdict "name" (printf "❯ Roles (%d Total)" (len $member.Roles)) "value" (or $roleMentions "*No roles*"))
 		(sdict "name" "❯ Bot" "value" $bot)
 	)
