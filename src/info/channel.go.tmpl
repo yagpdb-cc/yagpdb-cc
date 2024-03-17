@@ -11,12 +11,31 @@
 	{{ $channel = $args.Get 0 }}
 {{ end }}
 
-{{ $types := cslice "Text" "DM" "Voice" "Group DM" "Category" "News" "Store" }}
+{{ $types := dict 
+	0 "Text"
+	1 "DM"
+	2 "Voice"
+	3 "Group DM"
+	4 "Category"
+	5 "Announcement"
+	10 "Thread - Announcement"
+	11 "Thread - Public"
+	12 "Thread - Private"
+	13 "Stage"
+	14 "Directory"
+	15 "Forum"
+	16 "Media"
+}}
+{{/* $channel.Type is converted to json, then int as toInt unexpectedly returns 0 for .Channel.Type currently */}}
+{{ $type := $types.Get (toInt (json $channel.Type)) }}
 {{ $nsfw := "No" }}
 {{ $parent := "*None set*" }}
 {{ if $channel.NSFW }} {{ $nsfw = "Yes" }} {{ end }}
-{{ with $channel.ParentID }} {{ $parent = printf "<#%d>" . }} {{ end }}
-{{ $createdAt := div $channel.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
+{{ if $channel.ParentID }}
+	{{ $parent = printf "<#%d>" $channel.ParentID }}
+	{{ if (getChannel $channel.ParentID).IsForum }} {{ $type = "Thread - Forum" }} {{ end}}
+{{ end }}
+{{ $createdAt := snowflakeToTime $channel.ID }}
 {{ sendMessage nil (cembed
 	"title" (printf "❯ Info for #%s" $channel.Name)
 	"fields" (cslice
@@ -25,7 +44,7 @@
 		(sdict "name" "❯ Parent Channel" "value" $parent "inline" true)
 		(sdict "name" "❯ NSFW" "value" $nsfw "inline" true)
 		(sdict "name" "❯ Position" "value" (str (add $channel.Position 1)) "inline" true)
-		(sdict "name" "❯ Type" "value" (index $types $channel.Type) "inline" true)
+		(sdict "name" "❯ Type" "value" $type "inline" true)
 	)
 	"color" 14232643
 	"footer" (sdict "text" "Created at")

@@ -21,31 +21,46 @@
 	{{ $user = $member.User }}
 {{ end }}
 
-{{ $roleMentions := cslice }}
-{{ range $member.Roles }} {{- $roleMentions = $roleMentions.Append (print "<@&" . ">") -}} {{ end }}
-
-{{ $omittedCount := 0 }}
-{{ if gt (len $roleMentions) $ROLE_TRUNCATION_THRESHOLD }}
-	{{ $omittedCount = sub (len $roleMentions) $ROLE_TRUNCATION_THRESHOLD }}
-	{{ $roleMentions = slice $roleMentions 0 $ROLE_TRUNCATION_THRESHOLD }}
+{{ $roles := $member.Roles }}
+{{ $rolesPos := cslice }}
+{{ range $roles }}
+	{{- $role := $.Guild.GetRole . }}
+	{{- $rolesPos = $rolesPos.Append (sdict "role" $role "position" $role.Position) }}
 {{ end }}
 
-{{ $roleDisplay := joinStr ", " $roleMentions.StringSlice }}
+{{ $rolesSorted := sort $rolesPos (sdict "reverse" true "key" "position") }}
+{{ $omittedCount := 0 }}
+{{ if gt (len $rolesPos) $ROLE_TRUNCATION_THRESHOLD }}
+	{{ $omittedCount = sub (len $rolesPos) $ROLE_TRUNCATION_THRESHOLD }}
+	{{ $rolesSorted = slice $rolesSorted 0 $ROLE_TRUNCATION_THRESHOLD }}
+{{ end }}
+{{ $rolesPos = $rolesSorted }}
+
+{{ $roleMentions := cslice }}
+{{ range $rolesPos }}
+	{{- $roleMentions = $roleMentions.Append (printf "<@&%d>" .role.ID) -}}
+{{ end }}
+{{ $roleMentions = joinStr ", " $roleMentions }}
 {{ if $omittedCount }}
-	{{ $roleDisplay = print $roleDisplay " [" $omittedCount " roles not shown]" }}
+	{{ $roleMentions = printf "%s [%d roles not shown]" $roleMentions $omittedCount }}
 {{ end }}
 
 {{ $bot := "No" }}
 {{ if $user.Bot }} {{ $bot = "Yes" }} {{ end }}
-{{ $createdAt := div $user.ID 4194304 | add 1420070400000 | mult 1000000 | toDuration | (newDate 1970 1 1 0 0 0).Add }}
+{{ $createdAt := snowflakeToTime $user.ID }}
 
 {{ sendMessage nil (cembed
-	"author" (sdict "name" (printf "%s (%d)" $user.String $user.ID) "icon_url" ($user.AvatarURL "256"))
+	"author" (sdict 
+		"name" (printf "%s (%d)" $user.String $user.ID) 
+		"icon_url" ($user.AvatarURL "256")
+	)
 	"fields" (cslice
-		(sdict "name" "❯ Nickname" "value" (or $member.Nick "*None set*"))
-		(sdict "name" "❯ Joined At" "value" ($member.JoinedAt.Parse.Format "Jan 02, 2006 3:04 AM"))
-		(sdict "name" "❯ Created At" "value" ($createdAt.Format "Monday, January 2, 2006 at 3:04 AM"))
-		(sdict "name" (printf "❯ Roles (%d Total)" (len $member.Roles)) "value" (or $roleDisplay "n/a"))
+		(sdict "name" "❯ Created At" "value" (printf "<t:%d:F>" $createdAt.Unix))
+		(sdict "name" "❯ Joined At" "value" (printf "<t:%d:F>" $member.JoinedAt.Parse.Unix))
+		(sdict "name" "❯ Names" "value" (printf "Global: %s\nNick: %s" 
+			(or $user.Globalname "*None set*") (or $member.Nick "*None set*")
+		))
+		(sdict "name" (printf "❯ Roles (%d Total)" (len $member.Roles)) "value" (or $roleMentions "*No roles*"))
 		(sdict "name" "❯ Bot" "value" $bot)
 	)
 	"color" 14232643
