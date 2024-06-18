@@ -43,11 +43,11 @@ Now, it's time to configure your starboard system.
 
 ### List of configurable values
 
-- `$all_anon`<br />
-  Configured in the **main cc**. Whether or not to repost any messages sent in the anonymous channel anonymously.
+- `$ALL_ANON`<br />
+  Configured in the [main cc](main-cc). Whether or not to repost any messages sent in the anonymous channel anonymously.
 
-- 📌 `$main_cc_id`<br />
-  Configured in the **modal-handler cc**. The custom command ID of the main cc.
+- 📌 `$MAIN_CC_ID`<br />
+  Configured in the [modal handler cc](modal-handler). The custom command ID of the main cc.
 
 After you've configured all those variables, save again.
 

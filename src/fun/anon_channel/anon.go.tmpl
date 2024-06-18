@@ -5,7 +5,7 @@
 	Author: SoggySaussages <https://github.com/SoggySaussages>
 */}}
 
-{{ $all_anon := true }}
+{{ $ALL_ANON := true }}
 
 {{/* CONFIG ENDS */}}
 
@@ -13,7 +13,7 @@
 
 {{ $msg := .ExecData }}
 
-{{ if and ( not $msg ) ( or $all_anon ( hasPrefix .Message.Content ( print .ServerPrefix "anon" ) ) ) }}
+{{ if and ( not $msg ) ( or $ALL_ANON ( hasPrefix .Message.Content ( print .ServerPrefix "anon" ) ) ) }}
 	{{ deleteTrigger 0 }}
     {{ $msg = reReplace ( printf `\A\s*\Q%s\Eanon(ymous)?\s*` .ServerPrefix ) .Message.Content "" }}
 {{ end }}
@@ -22,9 +22,9 @@
 	{{ sendMessage nil ( cembed "author" ( sdict "name" "Anonymous" "icon_url" "https://i.imgur.com/9slnZlV.jpeg" ) "description" . ) }}
 {{ end }}
 
-{{ $message := complexMessage "buttons" ( sdict "label" "Send an anonymous messge" "custom_id" "anon_submit" "style" "grey" ) }}
+{{ $message := complexMessage "buttons" ( sdict "label" "Send an anonymous message" "custom_id" "anon_submit" "style" "grey" ) }}
 
-{{ if $db := dbGet .Channel.ID "stickymessage" }}
+{{ if $db := dbGet .Channel.ID "anon_stickymessage" }}
 	{{ deleteMessage nil ( toInt $db.Value ) 0 }}
 {{ end }}
 {{ $id := sendMessageRetID nil $message }}
