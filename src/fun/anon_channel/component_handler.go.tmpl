@@ -1,0 +1,8 @@
+{{/*
+	Handler for anon submit button.
+	See <https://yagpdb-cc.github.io/fun/anon-channel/component-handler> for more information.
+ 
+	Author: SoggySaussages <https://github.com/SoggySaussages>
+*/}}
+
+{{ sendModal ( sdict "title" "Submit anonymous message" "custom_id" "anon_submit" "fields" ( cslice ( sdict "label" "Message" "required" true "style" 2 "max_length" 2000 ) ) ) }}

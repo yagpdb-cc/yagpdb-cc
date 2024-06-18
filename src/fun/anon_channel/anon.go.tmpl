@@ -1,0 +1,31 @@
+{{/*
+	Sticky message with button to submit an anonymous message.
+	See <https://yagpdb-cc.github.io/fun/anon-channel/main-cc> for more information.
+
+	Author: SoggySaussages <https://github.com/SoggySaussages>
+*/}}
+
+{{ $all_anon := true }}
+
+{{/* CONFIG ENDS */}}
+
+{{ dbSet 0 "anon_main_cc_id" .CCID }}
+
+{{ $msg := .ExecData }}
+
+{{ if and ( not $msg ) ( or $all_anon ( hasPrefix .Message.Content ( print .ServerPrefix "anon" ) ) ) }}
+	{{ deleteTrigger 0 }}
+    {{ $msg = reReplace ( printf `\A\s*\Q%s\Eanon(ymous)?\s*` .ServerPrefix ) .Message.Content "" }}
+{{ end }}
+
+{{ with $msg }}
+	{{ sendMessage nil ( cembed "author" ( sdict "name" "Anonymous" "icon_url" "https://i.imgur.com/9slnZlV.jpeg" ) "description" . ) }}
+{{ end }}
+
+{{ $message := complexMessage "buttons" ( sdict "label" "Send an anonymous messge" "custom_id" "anon_submit" "style" "grey" ) }}
+
+{{ if $db := dbGet .Channel.ID "stickymessage" }}
+	{{ deleteMessage nil ( toInt $db.Value ) 0 }}
+{{ end }}
+{{ $id := sendMessageRetID nil $message }}
+{{ dbSet .Channel.ID "stickymessage" ( str $id ) }}

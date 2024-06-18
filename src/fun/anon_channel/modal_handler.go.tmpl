@@ -1,0 +1,22 @@
+{{/*
+	Handler for anon submit modal.
+	See <https://yagpdb-cc.github.io/fun/anon-channel/modal-handler> for more information.
+ 
+	Author: SoggySaussages <https://github.com/SoggySaussages>
+*/}}
+
+{{ $main_cc_id := 0 }}
+
+{{/* CONFIG ENDS */}}
+
+{{ if not $main_cc_id }}
+    {{ with dbGet 0 "anon_main_cc_id" }}
+        {{ $main_cc_id = toInt .Value }}
+    {{ else }}
+An error occurred, config variables not set correctly. Please contact a server admin.
+        {{ return }}
+    {{ end }}
+{{ end }}
+{{ execCC $main_cc_id nil 0 ( index .Values 0 ) }}
+{{ ephemeralResponse }}
+Your message has been sent!
