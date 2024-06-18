@@ -16,18 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Install Node v16
-        uses: actions/setup-node@v2
+      - name: Install Node v20
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/yarn.lock') }}
+          node-version: 20
+          cache: yarn
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -42,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run Prettier on code
         uses: creyD/prettier_action@v3.3
@@ -55,10 +50,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Check template syntax
-        uses: jo3-l/action-check-yag-tmpl-syntax@v2.2.0
+        uses: jo3-l/action-check-yag-tmpl-syntax@v2.3.0
         with:
           include: '**/*.go.tmpl'
 
@@ -73,18 +68,13 @@ jobs:
         working-directory: ./website
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Install Node v16
-        uses: actions/setup-node@v2
+      - name: Install Node v20
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/yarn.lock') }}
+          node-version: 20
+          cache: yarn
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
