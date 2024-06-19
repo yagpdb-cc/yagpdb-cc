@@ -19,7 +19,8 @@
 {{ end }}
 
 {{ with $msg }}
-	{{ sendMessage nil ( cembed "author" ( sdict "name" "Anonymous" "icon_url" "https://i.imgur.com/9slnZlV.jpeg" ) "description" . ) }}
+	{{ $anonymousIcon := "https://i.imgur.com/9slnZlV.jpeg" }}
+	{{ sendMessage nil ( cembed "author" ( sdict "name" "Anonymous" "icon_url" $anonymousIcon ) "description" . ) }}
 {{ end }}
 
 {{ $message := complexMessage "buttons" ( sdict "label" "Send an anonymous message" "custom_id" "anon_submit" "style" "grey" ) }}
