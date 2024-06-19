@@ -36,7 +36,7 @@ Set this command to _only run_ in your QOTD channel in the channel restrictions.
 
 ## Code
 
-```gotmpl file=../../../src/fun/qotd.go.tmpl
+```gotmpl file=../../../../src/fun//qotd/basic/qotd.go.tmpl
 
 ```
 

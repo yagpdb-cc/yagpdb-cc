@@ -1,0 +1,16 @@
+{{/*
+	Triggers daily QOTD posting.
+	See <https://yagpdb-cc.github.io/fun/qotd/interval> for more information.
+ 
+	Author: SoggySaussages <https://github.com/SoggySaussages>
+*/}}
+
+{{ $config := dbGet 0 "qotd-config" }}
+{{ with $config }}
+	{{ $config = .Value }}
+{{ else }}
+	Something went wrong, please run `{{ .ServerPrefix }}qotd setup` again.
+	{{ return }}
+{{ end }}
+
+{{ execCC $config.MainCC nil 0 ( sdict "Type" "push" ) }}

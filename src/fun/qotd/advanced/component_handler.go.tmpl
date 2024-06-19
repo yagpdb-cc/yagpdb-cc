@@ -1,0 +1,216 @@
+{{ define "MissingPerms" }}
+  {{ $yPerms := getTargetPermissionsIn 204255221017214977 .CID }}
+  {{ $missing := cslice }}
+  {{ range $k, $v := .AllPerms }}
+    {{ if and (in $.ReqPerms $v) (ne (bitwiseAnd $yPerms $v) $v) }}
+      {{ $missing = $missing.Append $k }}
+    {{ end }}
+  {{ end }}
+  {{ return joinStr ", " $missing }}
+{{ end }}
+{{ define "ClearCfg" }}
+  {{ $ = . }}
+  {{ $.Del "SuggestionsOpen" }}
+  {{ $.Del "MentionRole" }}
+  {{ $.Del "Sticky" }}
+  {{ $.Del "Publish" }}
+  {{ $.Del "UseThreads" }}
+  {{ $.Set "Xtras" cslice }}
+  {{ return $ }}
+{{ end }}
+
+{{ if eq .StrippedID "suggest" }}
+  {{ $placeholder := print "Ex: " (slice (execAdmin "topic") 2) }}
+  {{ if gt (len $placeholder) 100 }}
+    {{ $placeholder = slice $placeholder 0 101 }}
+  {{ end }}
+  {{ sendModal (sdict "title" "Suggest a question!" "custom_id" "qotd-submit" "fields" (cslice (sdict "label" "Question" "required" true "placeholder" $placeholder))) }}
+{{ else }}
+  {{ $cfg := dbGet 0 "qotd-config" }}
+  {{ with $cfg }}
+    {{ $cfg = .Value }}
+  {{ else }}
+    Sorry, please run `{{ .ServerPrefix }}qotd setup` again.
+    {{ return }}
+  {{ end }}
+
+  {{ $id := slice .StrippedID 6 }}
+  {{ $msg := "" }}
+  {{ $comps := cslice }}
+  {{ $err := "" }}
+  {{ $missingPermsErr := "YAGPDB is missing the following permissions: %s in <#%d>. Please fix the permissions and try again, or choose a different channel." }}
+  {{ $allPerms := .Permissions }}
+  {{ $basicPerms := cslice $allPerms.ViewChannel $allPerms.SendMessages $allPerms.EmbedLinks }}
+  {{ $mainChannel := sdict "Msg" "Select channel for QOTD announcements." "Comps" (cslice (cmenu "type" "channel" "custom_id" "qotd-setup-main_channel" "channel_types" (cslice 0 2 5 10 11 12 15))) }}
+  {{ $mainCfg := sdict "Msg" "Choose config options." "Comps" (cslice (sdict "type" "text" "custom_id" "qotd-setup-main_cfg" "placeholder" "Choose config options..." "options" (cslice (sdict "label" "Open Suggestions" "description" "Allow members to suggest questions." "value" "suggestions_open") (sdict "label" "Mention a Role" "description" "Mention a role with QOTDs." "value" "mention_role_bool") (sdict "label" "Sticky Message" "description" "Post a sticky message with current QOTD in QOTD channel/thread." "value" "sticky") (sdict "label" "None" "value" "no_config")))) }}
+  {{ $xtraCfg := sdict "Msg" "Select additional configuration." }}
+  {{ $publishOpt := sdict "label" "Publish QOTD" "description" "Publish each QOTD." "value" "publish" }}
+  {{ $useThreadsOpt := sdict "label" "Use Threads" "description" "Create thread for each QOTD" "value" "use_threads" }}
+  {{ $queueChannelMenu := cmenu "type" "channel" "custom_id" "qotd-setup-queue_channel" "placeholder" "Select channel for question queue." "channel_types" (cslice 0 2 5 10 11 12 15) }}
+  {{ $mentionRoleMenu := cmenu "type" "role" "custom_id" "qotd-setup-mention_role" "placeholder" "Select role to mention with QOTDs." }}
+
+  {{ if in $id "back" }}
+    {{ $cfg.Del "Complete" }}
+  {{ end }}
+  {{ if in $id "main_channel" }}
+    {{ $msg = $mainChannel.Msg }}
+    {{ $comps = $mainChannel.Comps }}
+    {{ $cfg.Del "PrevCfg" }}
+    {{ if not (hasSuffix $id "-back") }}
+      {{ with getChannel (index .Values 0) }}
+        {{ $missing := execTemplate "MissingPerms" (sdict "CID" .ID "ReqPerms" $basicPerms "AllPerms" $allPerms) }}
+        {{ if $missing }}
+          {{ $err = printf $missingPermsErr $missing .ID }}
+        {{ else }}
+          {{ $cfg.Set "MainChannel" .ID }}
+          {{ $cfg.Set "PrevCfg" "main_channel" }}
+          {{ $cfg.Del "ActiveThread" }}
+          {{ $xtraOpts := cslice }}
+          {{ if eq .Type 15 }}
+            {{ $cfg.Set "ForumMode" true }}
+          {{ else }}
+            {{ $cfg.Del "ForumMode" }}
+            {{ $xtraOpts = $xtraOpts.Append $useThreadsOpt }}
+            {{ if eq .Type 5 }}
+              {{ $xtraOpts = $xtraOpts.Append $publishOpt }}
+            {{ end }}
+          {{ end }}
+          {{ $msg = $mainCfg.Msg }}
+          {{ $comps = $mainCfg.Comps }}
+          {{ $menu := index $comps 0 }}
+          {{ $menu.Set "options" ($xtraOpts.AppendSlice $menu.options) }}
+          {{ $menu.Set "max_values" (len $menu.options) }}
+          {{ $comps.Set 0 (cmenu $menu) }}
+        {{ end }}
+      {{ else }}
+        {{ $err = "Sorry, please try again." }}
+      {{ end }}
+    {{ end }}
+  {{ else if in $id "main_cfg" }}
+    {{ $msg = $mainCfg.Msg }}
+    {{ $comps = $mainCfg.Comps }}
+    {{ $xtraOpts := cslice }}
+    {{ if not $cfg.ForumMode }}
+      {{ $xtraOpts = $xtraOpts.Append $useThreadsOpt }}
+      {{ if eq (getChannel $cfg.MainChannel).Type 5 }}
+        {{ $xtraOpts = $xtraOpts.Append $publishOpt }}
+      {{ end }}
+    {{ end }}
+    {{ $menu := index $comps 0 }}
+    {{ $menu.Set "options" ($xtraOpts.AppendSlice $menu.options) }}
+    {{ $menu.Set "max_values" (len $menu.options) }}
+    {{ $comps.Set 0 (cmenu $menu) }}
+    {{ $cfg.Set "PrevCfg" "main_channel" }}
+    {{ if not (hasSuffix $id "-back") }}
+      {{ $xtraCfgComps := cslice }}
+      {{ $cfg = execTemplate "ClearCfg" $cfg }}
+      {{ range $v := .Values }}
+        {{ if eq $v "suggestions_open" }}
+          {{ $cfg.Set "SuggestionsOpen" true }}
+          {{ $cfg.Del "QueueChannel" }}
+          {{ $cfg.Del "QueueMessage" }}
+          {{ $xtraCfgComps = $xtraCfgComps.Append $queueChannelMenu }}
+          {{ $cfg.Set "Xtras" ($cfg.Xtras.Append "queue_channel") }}
+        {{ else if eq $v "mention_role_bool" }}
+          {{ $cfg.Del "MentionRole" }}
+          {{ $xtraCfgComps = $xtraCfgComps.Append $mentionRoleMenu }}
+          {{ $cfg.Set "Xtras" ($cfg.Xtras.Append "mention_role") }}
+        {{ else if eq $v "sticky" }}
+            {{ $cfg.Set "Sticky" (sdict "ID" 0 "ExpiresAt" currentTime "Message" (slice (execAdmin "topic") 2) "Color" (randInt 0x000000 0xFFFFFF) "Cooldown" 30) }}
+        {{ else if eq $v "publish" }}
+          {{ $cfg.Set "Publish" true }}
+        {{ else if eq $v "use_threads" }}
+          {{ $missing := execTemplate "MissingPerms" (sdict "CID" $cfg.MainChannel "ReqPerms" (cslice $allPerms.UsePublicThreads $allPerms.SendMessagesInThreads) "AllPerms" $allPerms) }}
+          {{ if $missing }}
+            {{ $err = printf $missingPermsErr $missing $cfg.MainChannel }}
+          {{ else }}
+            {{ $cfg.Set "UseThreads" true }}
+          {{ end }}
+        {{ else if eq $v "no_config" }}
+          {{ $xtraCfgComps = cslice }}
+          {{ $cfg = execTemplate "ClearCfg" $cfg }}
+          {{ $err = "" }}
+          {{ break }}
+        {{ end }}
+      {{ end }}
+      {{ if not $err }}
+        {{ if $xtraCfgComps }}
+          {{ $cfg.Set "PrevCfg" "main_cfg" }}
+          {{ $msg = $xtraCfg.Msg }}
+          {{ $comps = $xtraCfgComps }}
+        {{ else }}
+          {{ $cfg.Set "Complete" true }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ else if in $id "queue_channel" }}
+    {{ $cfg.Set "PrevCfg" "main_cfg" }}
+    {{ $msg = $xtraCfg.Msg }}
+    {{ if in $cfg.Xtras "queue_channel" }}
+      {{ $comps = $comps.Append $queueChannelMenu }}
+    {{ end }}
+    {{ if in $cfg.Xtras "mention_role" }}
+      {{ $comps = $comps.Append $mentionRoleMenu }}
+    {{ end }}
+    {{ with getChannel (index .Values 0) }}
+      {{ $missing := execTemplate "MissingPerms" (sdict "CID" .ID "ReqPerms" ($basicPerms.Append $allPerms.ManageMessages) "AllPerms" $allPerms) }}
+      {{ if $missing }}
+        {{ $err = printf $missingPermsErr $missing $cfg.MainChannel }}
+      {{ else }}
+        {{ $cfg.Set "QueueChannel" .ID }}
+        {{ dbSet 0 "qotd-config" $cfg }}
+        {{ execCC $cfg.MainCC nil 0 (sdict "Type" "refresh") }}
+        {{ if or $cfg.MentionRole (not (in $cfg.Xtras "mention_role")) }}
+          {{ $cfg.Set "Complete" true }}
+        {{ end }}
+      {{ end }}
+    {{ else }}
+      {{ $err = "Sorry, please try again." }}
+    {{ end }}
+  {{ else if in $id "mention_role" }}
+      {{ $cfg.Set "PrevCfg" "main_cfg" }}
+    {{ $msg = $xtraCfg.Msg }}
+    {{ if in $cfg.Xtras "queue_channel" }}
+      {{ $comps = $comps.Append $queueChannelMenu }}
+    {{ end }}
+    {{ if in $cfg.Xtras "mention_role" }}
+      {{ $comps = $comps.Append $mentionRoleMenu }}
+    {{ end }}
+    {{ $canPingAll := eq (bitwiseAnd (getTargetPermissionsIn $.BotUser.ID $cfg.MainChannel) $allPerms.MentionEveryone) $allPerms.MentionEveryone }}
+    {{ with getRole (index .Values 0) }}
+      {{ if or .Mentionable $canPingAll }}
+        {{ $cfg.Set "MentionRole" .ID }}
+        {{ if or $cfg.QueueChannel (not (in $cfg.Xtras "queue_channel")) }}
+          {{ $cfg.Set "Complete" true }}
+        {{ end }}
+      {{ else }}
+        {{ $err = printf "YAGPDB cannot mention <@&%d>. Give YAGPDB MentionEveryone in <#%d> or allow the role to be mentioned by anyone." .ID $cfg.MainChannel }}
+      {{ end }}
+    {{ else }}
+      {{ $err = "Sorry, please try again." }}
+    {{ end }}
+  {{ else if eq $id "delete" }}
+    {{ deleteTrigger 0 }}
+    {{ ephemeralResponse }}
+    Done!
+    {{ return }}
+  {{ end }}
+  {{ $embed := sdict "title" "QOTD Setup" "color" 0x93e9be }}
+  {{ if $err }}
+    {{ $embed.Set "description" (printf "%s\n\n%s" (trimSpace $err) $msg) }}
+    {{ $embed.Set "color" 0xcc0000 }}
+  {{ else }}
+    {{ $embed.Set "description" $msg }}
+  {{ end }}
+  {{ if $cfg.Complete }}
+    {{ $embed.Set "description" "Done setup! Run setup again any time to reconfigure." }}
+    {{ $embed.Set "color" 0x527826 }}
+    {{ $comps = $comps.Append (cbutton "label" "Finish" "custom_id" "qotd-setup-delete" "style" "green") }}
+  {{ end }}
+  {{ with $cfg.PrevCfg }}
+    {{ $comps = $comps.Append (cbutton "label" "Back" "custom_id" (print "qotd-setup-" . "-back") "style" "grey") }}
+  {{ end }}
+  {{ $m := sdict "embed" $embed "components" $comps }}
+  {{ updateMessage (complexMessageEdit $m) }}
+  {{ dbSet 0 "qotd-config" $cfg }}
+{{ end }}
