@@ -23,7 +23,7 @@ See the [anonymous channel overview](overview/#configuration) for more informati
 
 ## Code
 
-```gotmpl file=../../../../src/fun/anon_channel/anon_channel.go.tmpl
+```gotmpl file=../../../../src/fun/anon_channel/anon.go.tmpl
 
 ```
 
