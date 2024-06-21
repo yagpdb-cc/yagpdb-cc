@@ -24,7 +24,7 @@ system. See the [QOTD system overview](overview/#configuration) for more informa
 
 ## Code
 
-```gotmpl file=../../../../src/fun/qotd/advanced/component_handler.go.tmpl
+```gotmpl file=../../../../../src/fun/qotd/advanced/component_handler.go.tmpl
 
 ```
 

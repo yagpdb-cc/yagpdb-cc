@@ -31,7 +31,7 @@ system. See the [QOTD system overview](overview/#configuration) for more informa
 
 ## Code
 
-```gotmpl file=../../../../src/fun/qotd/advanced/interval.go.tmpl
+```gotmpl file=../../../../../src/fun/qotd/advanced/interval.go.tmpl
 
 ```
 
