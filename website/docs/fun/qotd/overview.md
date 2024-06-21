@@ -14,7 +14,7 @@ Engage your community with questions of the day!
 
 ## Packages
 
-- [Basic](basic/overview) - A simple and compressed command for a QOTD channel restricting users from answering twice
+- [Basic](basic/qotd) - A simple and compressed command for a QOTD channel restricting users from answering twice
   and allowing staff to post custom questions at their leisure.
 - [Advanced](advanced/overview) - A much more advanced QOTD system allowing server members to submit their own
   questions, and automatically posting a question daily.
