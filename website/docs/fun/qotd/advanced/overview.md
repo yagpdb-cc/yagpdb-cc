@@ -95,7 +95,7 @@ your question into.
 :::danger
 
 It is recommended that you either remove `Send Messages` permissions from your server members in your Queue channel, or
-set a substantial slowmode to prevent users from spamming questions.
+set an appropriate slowmode to prevent users from spamming questions.
 
 :::
 
