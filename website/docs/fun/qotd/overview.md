@@ -7,10 +7,9 @@ Engage your community with questions of the day!
 ## Features
 
 - Manually or automatically post a new question each day.
-- Ask your own custom questions.
-- Post a random pre-made question if you don't have any.
+- Allow users to submit their own questions, or automatically generate a random one.
 - Limit users to one answer per question or let them speak freely.
-- Delegate a question of the day channel or integrate it into an existing general chat.
+- Configure a separate question of the day channel or integrate it into an existing general chat.
 
 ## Packages
 

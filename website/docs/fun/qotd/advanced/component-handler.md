@@ -19,7 +19,7 @@ For best results, do not restrict this command's channels or roles.
 
 ## Configuration
 
-All configuration is done via the `qotd setup` command. Only run this command after installing all four CCs in the QOTD
+All configuration is done via the `qotd setup` command. Only run the setup command after installing all four CCs in the QOTD
 system. See the [QOTD system overview](overview/#configuration) for more information.
 
 ## Code

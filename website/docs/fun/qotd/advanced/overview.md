@@ -47,9 +47,13 @@ Custom ID set to `\A0?qotd-`.
 
 ### Interval Trigger
 
-Finally, add the [interval command](interval) as a new custom command. The trigger is an hourly interval type with the
-interval set to `24` (or whatever interval you'd like). Set the `channel` menu to any channel. Then, disable the command
-*before saving it*. This will prevent it from running before we've configured the QOTD system, which would cause it to error.
+Finally, add the [interval command](interval) as a new custom command. Configure this custom command to use the hourly interval trigger type, set to `24h` (or any other interval of your choice) in an arbitrary channel.
+
+:::note
+
+Before saving the interval command, *disable it*, and do not enable again until after you have completed the [interactive setup](overview/#configuration).
+
+:::
 
 ## Configuration
 
@@ -64,25 +68,29 @@ YAGPDB must have `View Channel`, `Send Messages`, and `Embed Links` permission i
 
 :::info
 
-Once you are finished with setup, you may now enable your [interval cc](#interval-trigger). If you forget to do this,
+Once you are finished with setup, you can enable your [interval cc](#interval-trigger). If you forget to do this,
 your questions will not automatically post.
 
 :::
 
 ## Usage
 
-Commands:
-`qotd setup` - Starts the interactive setup. Run this at any time to reconfigure QOTD.
-`qotd suggest [new question]` - Adds a question to the suggestion queue (if Suggestions Open is enabled during setup)
-`qotd push` - Pushes a new question immediately
-`qotd delete [ID or -all]` - Deletes a question from the queue by ID or resets the queue to blank. ID is the question's
-place in the queue.
+### Administration
 
-Suggesting:
-`qotd setup` Command: Adds a new question to the queue. Can be run anywhere YAGPDB has view messages permission.
-Buttons: Buttons are located under each question, and under the question queue message. Tap them to open a modal to type
+- `qotd setup` - Starts the interactive setup. Run this at any time to reconfigure QOTD.
+- `qotd push` - Pushes a new question immediately
+- `qotd delete [ID or -all]` - Deletes a question from the queue by ID or resets the queue to blank. ID is the
+  question's place in the queue.
+
+### Suggesting Questions
+
+Any of the below methods will work if "Suggestions Open" was enabled during interactive setup.
+
+- `qotd suggest [new question]` - Adds a question to the suggestion queue. Can be run anywhere YAGPDB has view and send
+  messages permission.
+- Buttons: Buttons are located under each question, and under the question queue message. Tap them to open a modal to type
 your question into.
-Queue Channel: Sending any message in the queue channel will add a question to the queue.
+- Queue Channel: Sending any message in the queue channel will add a question to the queue.
 
 :::danger
 
