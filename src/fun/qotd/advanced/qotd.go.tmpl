@@ -1,0 +1,273 @@
+{{/*
+	QOTD posts a question every day, allowing users to submit their own as well.
+	See <https://yagpdb-cc.github.io/fun/qotd/overview> for more information.
+ 
+	Author: SoggySaussages <https://github.com/SoggySaussages>
+*/}}
+
+{{ $suggestion := false }}
+{{ $push := false }}
+{{ $refreshQueue := false }}
+{{ $newQuestion := false }}
+{{ $updateSticky := false }}
+
+{{ $setupErr := printf "QOTD hasn't been setup yet, please use `%sqotd setup` to get started!" .ServerPrefix }}
+
+{{ $config := dbGet 0 "qotd-config" }}
+{{ with $config }}
+  {{ $config = .Value }}
+{{ else }}
+  {{ $config = sdict "Complete" false }}
+{{ end }}
+
+{{ if not .ExecData }}
+  {{ if hasPrefix .Message.Content ( print .ServerPrefix "qotd" ) }}
+    {{ if eq .Message.Content ( print .ServerPrefix "qotd" ) }}
+      {{ if $config.Complete }}
+        Check out today's question in <#{{ or $config.ActiveThread $config.MainChannel }}>!
+        {{ return }}
+      {{ else }}
+        {{ $setupErr }}
+        {{ return }}
+      {{ end }}
+    {{ end }}
+
+    {{ $args := parseArgs 2 ""
+      ( carg "string" "Command (qotd)" )
+      ( carg "string" "Subcommand (suggest|setup|push|delete)" )
+      ( carg "string" "Additional Values" ) }}
+
+    {{ $subCmd := $args.Get 1 }}
+    {{ if eq $subCmd "suggest" }}
+      {{ if not $config.Complete }}
+        {{ $setupErr }}
+        {{ return }}
+      {{ end }}
+      {{ if not $config.SuggestionsOpen }}
+        Sorry, a server admin has disabled question suggestions.
+        {{ return }}
+      {{ end }}
+      {{ if $args.IsSet 2 }}
+        {{ $suggestion = $args.Get 2 }}
+        Your suggestion was submitted!
+      {{ else }}
+        Missing a question suggestion!\nSyntax is `{{ .ServerPrefix }}qotd suggest {{ slice ( execAdmin "topic" ) 2 }}`
+        {{ return }}
+      {{ end }}
+    {{ else if eq $subCmd "push" }}
+      {{ if not $config.Complete }}
+        {{ $setupErr }}
+        {{ return }}
+      {{ end }}
+      {{ $push = hasPermissions .Permissions.ManageMessages }}
+    {{ else if hasPrefix $subCmd "del" }}
+      {{ if not $config.Complete }}
+        {{ $setupErr }}
+        {{ return }}
+      {{ end }}
+      {{ if not ( hasPermissions .Permissions.ManageServer ) }}
+        You can't run that command!
+        {{ return }}
+      {{ end }}
+      {{ if $args.IsSet 2 }}
+        {{ with toInt ( $args.Get 2 ) }}
+          {{ $int := sub . 1 }}
+          {{ if not $config.QuestionsQueue }}
+            There are no questions in the queue!
+            {{ return }}
+          {{ end }}
+          {{ $newQuestions := cslice }}
+          {{ range $i, $q := $config.QuestionsQueue }}
+            {{ if eq $i $int }}
+              Deleted `{{ $q.Question }}`!
+            {{ else }}
+              {{ $newQuestions = $newQuestions.Append $q }}
+            {{ end }}
+          {{ end }}
+          {{ $config.Set "QuestionsQueue" $newQuestions }}
+          {{ $refreshQueue = true }}
+        {{ else if hasPrefix ( $args.Get 2 ) "-a" }}
+          {{ $config.Set "QuestionsQueue" cslice }}
+          Reset question queue. 
+          {{ $refreshQueue = true }}
+        {{ end }}
+      {{ else }}
+        Please use ID or -all.
+      {{ end }}
+    {{ else if eq $subCmd "setup" }}
+      {{ if not ( hasPermissions .Permissions.ManageServer ) }}
+        You can't run that command!
+        {{ return }}
+      {{ end }}
+      {{ $config.Set "MainCC" ( toInt .CCID ) }}
+      {{ $config.Set "Complete" false }}
+      {{ dbSet 0 "qotd-config" $config }}
+      {{ $embed := cembed "title" "QOTD Setup" "color" 0x93e9be "description" "Welcome to QOTD setup! For starters, please select the channel for QOTD announcements (supports forum channels, announcement channels, and other text channels)." }}
+      {{ $menu := cmenu "type" "channel" "custom_id" "qotd-setup-main_channel" "channel_types" (cslice 0 2 5 10 11 12 15) }}
+      {{ sendMessage nil ( complexMessage "embed" $embed "menus" $menu ) }}
+      {{ return }}
+    {{ end }}
+  {{ else if $config.Complete }}
+    {{ if eq .Channel.ID ( toInt64 $config.ActiveThread ) $config.MainChannel }}
+      {{ $updateSticky = true }}
+    {{ else if eq .Channel.ID $config.QueueChannel }}
+      {{ if not $config.SuggestionsOpen }}
+        {{ return }}
+      {{ end }}
+      {{ $suggestion = .Message.Content }}
+      {{ deleteTrigger 0 }}
+    {{ end }}
+  {{ end }}
+{{ else }}
+  {{ if .ExecData.Suggestion }}
+    {{ if not $config.SuggestionsOpen }}
+      {{ return }}
+    {{ end }}
+    {{ $suggestion = .ExecData.Suggestion }}
+  {{ else if eq .ExecData.Type "push" }}
+    {{ $push = true }}
+  {{ else if eq .ExecData.Type "refresh" }}
+    {{ $refreshQueue = true }}
+  {{ end }}
+{{ end }}
+
+{{ if $suggestion }}
+  {{/* Author: buthed010203 <https://github.com/buthed010203> */}}
+
+  {{ $col := 16777215 }}
+  {{ $p := 0 }}
+  {{ $r := .Member.Roles }}
+  {{ range .Guild.Roles }}
+  	{{- if and ( in $r .ID ) .Color ( lt $p .Position ) }}
+  		{{- $p = .Position }}
+  		{{- $col = .Color }}
+  	{{- end -}}
+  {{ end }}
+
+  {{ $newQuestion = sdict
+    "Question" $suggestion
+    "Author" ( sdict "ID" .User.ID "Color" $col )
+  }}
+{{ end }}
+
+{{ if $push }}
+  {{ $questions := cslice }}
+  {{ with $config.QuestionsQueue }}
+    {{ $questions = . }}
+  {{ end }}
+
+  {{ $chosenQuestion := sdict
+    "Custom" false
+    "Question" ( slice ( execAdmin "topic" ) 2 ) }}
+  {{ if and ( gt ( len $questions ) 0 ) $config.SuggestionsOpen }}
+    {{ $question := index $questions 0 }}
+    {{ $chosenQuestion = sdict
+      "Custom" true
+      "Question" $question.Question
+      "Author" $question.Author }}
+  {{ end }}
+
+  {{ $embed := sdict
+    "title" "Question of the day!" }}
+  {{ $pattern := printf "# %s\n\nQuestion chosen %%s." $chosenQuestion.Question }}
+
+  {{ if $chosenQuestion.Custom }}
+    {{ $embed.Set "description" ( printf $pattern ( printf "by <@%d>" $chosenQuestion.Author.ID ) ) }}
+    {{ $embed.Set "color" $chosenQuestion.Author.Color }}
+    {{ $newQuestions := cslice }}
+    {{ if gt ( len $questions ) 1 }}
+      {{ $newQuestions = slice $questions 1 }}
+    {{ end }}
+    {{ $config.Set "QuestionsQueue" $newQuestions }}
+    {{ $refreshQueue = true }}
+  {{ else }}
+    {{ $embed.Set "description" ( printf $pattern "at random" ) }}
+    {{ $embed.Set "color" ( randInt 0x000000 0xFFFFFF ) }}
+  {{ end }}
+
+  {{ $msg := sdict "embed" $embed }}
+  {{ with $config.MentionRole }}
+    {{ $msg.Set "content" ( printf "<@&%d>" . ) }}
+  {{ end }}
+  {{ if $config.SuggestionsOpen }}
+    {{ $msg.Set "buttons" ( cbutton "label" "Suggest a question!" "custom_id" "qotd-suggest" ) }}
+  {{ end }}
+  {{ $questionMessageID := 0 }}
+  {{ $trimmedQuestion := $chosenQuestion.Question }}
+  {{ if gt ( len $trimmedQuestion ) 100 }}
+    {{ $trimmedQuestion = slice $trimmedQuestion 0 100 }}
+  {{ end }}
+  {{ if $config.ForumMode }}
+    {{ $msg.Del "content" }}
+    {{ $thread := createForumPost $config.MainChannel $trimmedQuestion ( complexMessage $msg ) }}
+    {{ $config.Set "ActiveThread" $thread.ID }}
+    {{ with $config.MentionRole }}
+      {{ sendMessageNoEscape $thread.ID ( printf "<@&%d>" . ) }}
+    {{ end }}
+  {{ else }}
+    {{ $qMID := sendMessageNoEscapeRetID $config.MainChannel ( complexMessage $msg ) }}
+    {{ if $config.UseThreads }}
+      {{ $thread := createThread $config.MainChannel $qMID $trimmedQuestion }}
+      {{ $config.Set "ActiveThread" $thread.ID }}
+    {{ end }}
+    {{ if $config.Publish }}
+      {{ publishMessage $config.MainChannel $qMID }}
+    {{ end }}
+  {{ end }}
+  {{ with $config.Sticky }}
+    {{ $newSticky := sdict . }}
+    {{ $newSticky.Set "Message" $chosenQuestion.Question }}
+    {{ $newSticky.Set "Color" $msg.embed.color }}
+    {{ $newSticky.Set "ID" 0 }}
+    {{ $newSticky.Set "ExpiresAt" currentTime }}
+    {{ $config.Set "Sticky" $newSticky }}
+  {{ end }}
+{{ end }}
+
+{{ if and ( or $newQuestion $refreshQueue ) $config.SuggestionsOpen }}
+  {{ $questions := cslice }}
+  {{ with $config.QuestionsQueue }}
+    {{ $questions = . }}
+  {{ end }}
+
+  {{ if $newQuestion }}
+    {{ $questions = $questions.Append $newQuestion }}
+    {{ $config.Set "QuestionsQueue" $questions }}
+  {{ end }}
+
+  {{ if $config.QueueChannel }}
+    {{ $msg := sdict
+      "title" "Question Queue:"
+      "color" 5832643 }}
+    {{ range $i, $q := $questions }}
+      {{ $msg.Set "description" ( printf "%s\n%d. %s (by <@%d>)" ( or $msg.description "" ) $i $q.Question $q.Author.ID ) }}
+    {{ end }}
+
+    {{ if getMessage $config.QueueChannel ( or $config.QueueMessage 0 ) }}
+      {{ editMessage $config.QueueChannel $config.QueueMessage ( complexMessageEdit
+        "embed" ( cembed $msg )
+        "buttons" ( cbutton "label" "Suggest a question!" "custom_id" "qotd-suggest" ) ) }}
+    {{ else }}
+      {{ $config.Set "QueueMessage" ( sendMessageRetID $config.QueueChannel ( complexMessage
+      "embed" ( cembed $msg )
+      "buttons" ( cbutton "label" "Suggest a question!" "custom_id" "qotd-suggest" ) ) ) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ if and $updateSticky $config.Sticky }}
+  {{ if gt ( $config.Sticky.ExpiresAt.Sub currentTime | toInt64 ) 0 }}
+    {{ return }}
+  {{ end }}
+
+  {{ $id := sendMessageRetID ( or $config.ActiveThread $config.MainChannel ) ( cembed "description" $config.Sticky.Message "color" $config.Sticky.Color ) }}
+  {{ with $config.Sticky.ID }}
+    {{ deleteMessage ( or $config.ActiveThread $config.MainChannel ) . 0 }}
+  {{ end }}
+  {{ $newSticky := sdict $config.Sticky }}
+  {{ $newSticky.Set "ID" $id }}
+  {{ $newSticky.Set "ExpiresAt" ( currentTime.Add ( mult .TimeSecond $config.Sticky.Cooldown | toDuration )  ) }}
+  {{ $config.Set "Sticky" $newSticky }}
+{{ end }}
+
+{{ dbSet 0 "qotd-config" $config }}

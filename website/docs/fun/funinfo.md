@@ -2,7 +2,7 @@
 title: Fun Info
 ---
 
-This command shows statistics connected to a user for the [counting](counting), [qotd](qotd) and [x-word-story](x-word-story) systems.
+This command shows statistics connected to a user for the [counting](counting), [qotd](qotd/overview) and [x-word-story](x-word-story) systems.
 
 ## Trigger
 

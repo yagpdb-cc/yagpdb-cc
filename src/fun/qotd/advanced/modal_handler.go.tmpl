@@ -1,0 +1,23 @@
+{{/*
+	Handles modals during QOTD usage.
+	See <https://yagpdb-cc.github.io/fun/qotd/modal-handler> for more information.
+ 
+	Author: SoggySaussages <https://github.com/SoggySaussages>
+*/}}
+
+{{ ephemeralResponse }}
+
+{{ $config := dbGet 0 "qotd-config" }}
+{{ with $config }}
+	{{ $config = .Value }}
+{{ else }}
+	Something went wrong, please run `{{ .ServerPrefix }}qotd setup` again.
+	{{ return }}
+{{ end }}
+
+{{ if not $config.SuggestionsOpen }}
+	Sorry, a server admin has disabled question suggestions.
+{{ end }}
+
+{{ execCC $config.MainCC nil 0 ( sdict "Suggestion" ( index .Values 0 ) ) }}
+Done!
