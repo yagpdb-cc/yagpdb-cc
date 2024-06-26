@@ -47,6 +47,7 @@
 	{{ $toAdd := 0 }}
 	{{ $dist := -1 }}
 	{{ range $level, $reward := $roleRewards }}
+	    {{- if eq $level "type" }} {{- continue }} {{- end }}
 		{{- if and (le (toInt $level) (toInt $newLvl)) (or (gt $dist (sub (toInt $newLvl) (toInt $level))) (eq $dist -1)) (eq $type "highest") }}
 			{{- $dist = sub (toInt $newLvl) (toInt $level) }} {{- $toAdd = $reward }}
 		{{- end }}
