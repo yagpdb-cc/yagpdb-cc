@@ -10,9 +10,7 @@ This command controls the counting game and the statistics command.
 **Trigger:** `.+`
 
 :::note Restrictions
-
 Set this command to _only run_ in your counting channel in the channel restrictions.
-
 :::
 
 ## Usage
@@ -21,6 +19,10 @@ Set this command to _only run_ in your counting channel in the channel restricti
 - `-CountingStatistics` - Show server stats for counting
 - `-CountingStatistics <user>` - Show user stats for counting
 - `-CountingStatistics Leaderboard` - Show server leaderboard for number of times counted correct by each user
+
+:::tip Math Functionality
+To view all available math functions, see [Supported Functions, Operators, and Constants](https://github.com/ei14/calc#supported-functions-operators-and-constants)
+:::
 
 ## Configuration
 
