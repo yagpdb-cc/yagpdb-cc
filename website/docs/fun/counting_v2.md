@@ -8,7 +8,7 @@ A unique feature of this command is that, besides decimal numbers, it also accep
 
 Also included are statistics for the server and each user for how many times they have counted and how many times they've been correct.
 
-Messages without text are ignored by the system, effectively allowing unrelated content. However, messages including text which cannot be translated into a math expression will be quoted as invalid, but not deleted.
+Unlike some other counting systems, this command does not delete invalid numbers to allow counting and other conversation to take place concurrently. Messages that include text which do not correspond to valid numbers will, however, trigger a warning message.
 
 ## Trigger
 
