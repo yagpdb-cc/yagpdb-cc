@@ -4,7 +4,7 @@ title: Counting System
 
 This command implements a counting game with detailed statistics and a leaderboard.
 
-This version of a counting command allows for the usage of base 10 and roman numerals, optionally joined by the usage of math functions and/or operators to count from 1, incrementing by 1, until failure.
+A unique feature of this command is that, besides decimal numbers, it also accepts roman numerals and mathematical expressions as valid inputs. So if the next number is 2, `II` and `2*sin(pi/2)` would be considered correct as well.
 
 Also included are statistics for the server and each user for how many times they have counted and how many times they've been correct.
 
