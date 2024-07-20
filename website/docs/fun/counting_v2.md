@@ -4,6 +4,12 @@ title: Counting System
 
 This command controls the counting game and the statistics command.
 
+This version of a counting command allows for the usage of base 10 and roman numerals, optionally joined by the usage of math functions and/or operators to count from 1, incrementing by 1, until failure.
+
+Also included are statistics for the server and each user for how many times they have counted and how many times they've been correct.
+
+Messages without text are ignored by the system, effectively allowing unrelated content. However, messages including text which cannot be translated into a math expression will be quoted as invalid, but not deleted.
+
 ## Trigger
 
 **Type:** `Regex`<br />
@@ -43,7 +49,7 @@ To view all available math functions, see [Supported Functions, Operators, and C
   ID of channel for any error output.
 
 - `$saves`<br />
-  Amount of saves from incorrect counts before the count resets.
+  Amount of incorrect expressions which can be sent before the count resets.
 
 - `$reactions`<br />
   Whether to enable or disable reaction confirmation.
