@@ -29,14 +29,14 @@
 	{{$msg:=getMessage nil .}}
 	{{if not $msg}} {{/* check if message was deleted */}}
 		{{sendMessage nil (cembed 
-			"description" (printf "%s deleted their expression which was correct!\nThe next number is %d" 
-				(userArg $db.last.user).Mention $db.next
+			"description" (printf "<@%d> deleted their expression which was correct!\nThe next number is %d" 
+				$db.last.user $db.next
 			) 
 			"color" 30654
 		)}}
 	{{else if $msg.EditedTimestamp}} {{/* check if message was edited */}}
 		{{sendMessage nil (cembed 
-			"description" (printf "%s edited their expression, be careful" (userArg $db.last.user).Mention) 
+			"description" (printf "<@%d> edited their expression, be careful" $db.last.user) 
 			"color" 30654
 		)}}
 	{{end}}
@@ -121,7 +121,7 @@
 {{end}}
 
 {{$invalid:=false}}
-{{$re:=reFindAll `\+|\-|\*|\/|\^|\%|a?sin|a?cos|a?tan|a?cot|a?sec|a?csc|sqrt|l(o?g|n)|abs|e|pi|π|\(|\)|\d+|M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})` .Cmd}}
+{{$re:=reFindAll `[+-*/^%]|a?sin|a?cos|a?tan|a?cot|a?sec|a?csc|sqrt|l(o?g|n)|abs|e|pi|π|\(|\)|\d+|M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})` .Cmd}}
 {{if ne .Cmd (joinStr "" $re)}}
 	{{$invalid =true}}
 {{end}}
@@ -195,14 +195,14 @@
 			{{if eq (mod $number 100|toInt) 0}}{{addReactions "💯"}}{{end}}
 		{{catch}}
 			{{with getRole $incorrectRID}}
-				{{addRoleID .ID}}{{(toDuration "1d").Seconds|toInt|removeRoleID .ID}}
+				{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
 			{{end}}
 			{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
 		{{end}}
 	{{end}}
 	{{with getRole $correctRID}}
-		{{takeRoleID $db.last.user .ID}}
-		{{addRoleID .ID}}
+		{{takeRoleID $db.last.user .}}
+		{{addRoleID .}}
 	{{end}}
 	{{$db.Set "last" (sdict 
 		"user" .User.ID 
@@ -223,17 +223,17 @@
 {{else}} {{/* incorrect */}}
 	{{$db.Set "saves" (sub $db.saves 1)}}
 	{{with getRole $correctRID}}
-		{{takeRoleID $db.last.user .ID}}
+		{{takeRoleID $db.last.user .}}
 	{{end}}
 	{{with getRole $incorrectRID}}
-		{{addRoleID .ID}}{{(toDuration "3d").Seconds|toInt|removeRoleID .ID}}
+		{{addRoleID .}}{{(toDuration "3d").Seconds|toInt|removeRoleID .}}
 	{{end}}
 	{{if ge $db.saves 0}} {{/* progress saved */}}
 		{{if $reactions}}
 			{{try}}{{addReactions $warningEmoji}}
 			{{catch}}
 				{{with getRole $incorrectRID}}
-					{{addRoleID .ID}}{{(toDuration "1d").Seconds|toInt|removeRoleID .ID}}
+					{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
 				{{end}}
 				{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
 			{{end}}
@@ -259,7 +259,7 @@
 			{{try}}{{addReactions $incorrectEmoji}}
 			{{catch}}
 				{{with getRole $incorrectRID}}
-					{{addRoleID .ID}}{{(toDuration "1d").Seconds|toInt|removeRoleID .ID}}
+					{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
 				{{end}}
 				{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
 			{{end}}
