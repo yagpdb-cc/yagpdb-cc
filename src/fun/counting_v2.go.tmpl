@@ -15,9 +15,9 @@
 {{ $reactions := true }} {{/* allow confirmative reactions on message; true/false */}}
 	{{ $reactionDelete := true }} {{/* toggle for reactions to delete from last message; true/false */}}
 	{{ $correctEmoji := "✅" }} {{/* emoji to react with if number is correct; if custom, use format name:id */}}
-	{{ $warningEmoji := "⚠️" }} {{/* emoji to react with if wrong number AND Second Chance is true/on; if custom, use format name:id */}}
+	{{ $warningEmoji := "⚠️" }} {{/* emoji to react with if wrong number with available saves; if custom, use format name:id */}}
 	{{ $incorrectEmoji := "❌" }} {{/* emoji to react with if number is incorrect; if custom, use format name:id */}}
-{{ $leaderboardLength := 10 }} {{/* how many members to show on leaderboard; MAX OF 100 */}}
+{{ $leaderboardLength := 10 }} {{/* how many members to show on leaderboard; max of 100 */}}
 {{/* end of configurable values */}}
 
 {{$db:=or 
