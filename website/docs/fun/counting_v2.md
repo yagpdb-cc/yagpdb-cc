@@ -2,7 +2,7 @@
 title: Counting System
 ---
 
-This command controls the counting game and the statistics command.
+This command implements a counting game with detailed statistics and a leaderboard.
 
 This version of a counting command allows for the usage of base 10 and roman numerals, optionally joined by the usage of math functions and/or operators to count from 1, incrementing by 1, until failure.
 
