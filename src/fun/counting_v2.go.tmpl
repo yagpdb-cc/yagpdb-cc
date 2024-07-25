@@ -87,10 +87,9 @@
 		{{end}}
 
 	{{else if eq (index $re2 0 2|lower) "leaderb" "lb"}} {{/* leaderboard */}}
-		{{$desc:=""}}{{$pos:=1}}
-		{{range dbTopEntries "countingCorrect" $leaderboardLength 0}}
-			{{- $desc =printf "%s\n#%-3d %4d - %-4s" $desc $pos (toInt .Value) (or (userArg .UserID) (str .UserID))}}
-			{{- $pos =add $pos 1 -}}
+		{{$desc:=""}}
+		{{range $i,$v:=dbTopEntries "countingCorrect" $leaderboardLength 0}}
+			{{- $desc =printf "%s\n#%-3d %4d - %-4s" $desc (add $i 1) (toInt $v.Value) (or (userArg $v.UserID) (str $v.UserID)) -}}
 		{{end}}
 		{{sendMessage nil (cembed 
 			"author" (sdict 
