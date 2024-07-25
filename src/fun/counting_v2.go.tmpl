@@ -147,7 +147,7 @@
 	{{- if $lastNumeral}}
 		{{$invalid =true}}{{- break}}
 	{{- end}}
-	{{- $values:=cslice}}{{- $value:=0}}{{- $skip:=false}}
+	{{- $values:=cslice}}{{$value:=0}}{{$skip:=false}}
 	{{- range $roman}}
 		{{- $values =$values.Append ($convertRN.Get .)}}
 	{{- end}}
