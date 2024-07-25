@@ -132,7 +132,7 @@
 {{$convertRN:=sdict "I" 1 "V" 5 "X" 10 "L" 50 "C" 100 "D" 500 "M" 1000}}
 {{$exp:=""}}{{$lastNumeral:=false}}
 {{range $re}}
-	{{- $roman:=reFindAll `I|V|X|L|C|D|M` .}}
+	{{- $roman:=reFindAll `[IVXLCDM]` .}}
 	{{- if eq (len $roman) 0}}
 		{{- $exp =printf "%s%s" $exp .}}
 		{{- if reFind `\d+` .}}
