@@ -44,7 +44,7 @@
 {{end}}
 
 {{if ($re2:=reFindAllSubmatches (print `(?i)\A(?:-|<@!?` .BotUser.ID `>)\s*C(?:ount)?(?:ing)?Stat(?:istic)?s?\s*(?:(?:<@!?)?(\d{17,})|(l(?:eader)?b))?`) .Cmd)}}
-	{{if and (index $re2 0 1|eq "") (index $re2 0 2|eq "")}} {{/* general stats */}}
+	{{if not (or (index $re2 0 1) (index $re2 0 2))}} {{/* general stats */}}
 		{{sendMessage nil (cembed 
 			"author" (sdict 
 				"icon_url" (.Guild.IconURL "512") 
