@@ -133,7 +133,7 @@
 {{$exp:=""}}{{$lastNumeral:=false}}
 {{range $re}}
 	{{- $roman:=reFindAll `[IVXLCDM]` .}}
-	{{- if eq (len $roman) 0}}
+	{{- if not $roman}}
 		{{- $exp =printf "%s%s" $exp .}}
 		{{- if reFind `\d+` .}}
 			{{- if $lastNumeral}}
