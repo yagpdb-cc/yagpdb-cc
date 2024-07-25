@@ -136,7 +136,7 @@
 		{{- $exp =printf "%s%s" $exp .}}
 		{{- if reFind `\d+` .}}
 			{{- if $lastNumeral}}
-				{{$invalid =true}}{{- break}}
+				{{- $invalid =true}}{{break}}
 			{{- end}}
 			{{- $lastNumeral =true}}
 		{{- else}}
