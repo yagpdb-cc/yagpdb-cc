@@ -20,23 +20,23 @@
 {{ $leaderboardLength := 10 }} {{/* how many members to show on leaderboard; max of 100 */}}
 {{/* end of configurable values */}}
 
-{{$db:=or 
-	(dbGet 0 "counting").Value 
+{{$db:=or
+	(dbGet 0 "counting").Value
 	(sdict "last" (sdict "user" .BotUser.ID "msg" 0) "next" 1 "highscore" (sdict "user" .BotUser.ID "num" 0 "time" currentTime) "saves" $saves)
 }}
 
 {{with .ExecData}}
 	{{$msg:=getMessage nil .}}
 	{{if not $msg}} {{/* check if message was deleted */}}
-		{{sendMessage nil (cembed 
-			"description" (printf "<@%d> deleted their expression which was correct!\nThe next number is %d" 
+		{{sendMessage nil (cembed
+			"description" (printf "<@%d> deleted their expression which was correct!\nThe next number is %d"
 				$db.last.user $db.next
-			) 
+			)
 			"color" 30654
 		)}}
 	{{else if $msg.EditedTimestamp}} {{/* check if message was edited */}}
-		{{sendMessage nil (cembed 
-			"description" (printf "<@%d> edited their expression, be careful" $db.last.user) 
+		{{sendMessage nil (cembed
+			"description" (printf "<@%d> edited their expression, be careful" $db.last.user)
 			"color" 30654
 		)}}
 	{{end}}
@@ -45,18 +45,18 @@
 
 {{if ($re2:=reFindAllSubmatches (print `(?i)\A(?:-|<@!?` .BotUser.ID `>)\s*C(?:ount)?(?:ing)?Stat(?:istic)?s?\s*(?:(?:<@!?)?(\d{17,})|(l(?:eader)?b))?`) .Cmd)}}
 	{{if not (or (index $re2 0 1) (index $re2 0 2))}} {{/* general stats */}}
-		{{sendMessage nil (cembed 
-			"author" (sdict 
-				"icon_url" (.Guild.IconURL "512") 
+		{{sendMessage nil (cembed
+			"author" (sdict
+				"icon_url" (.Guild.IconURL "512")
 				"name" "🔢 Counting Statistics"
-			) 
-			"description" (printf "⌚ __Current Score__: %d\n🏅 __High Score__: %d on %v by `%s` (%d)\n⏮️ __Last Counter__: `%s` (%d)\n💾 __Saves Remaining__: %d" 
-				(sub $db.next 1) 
-				$db.highscore.num (formatTime $db.highscore.time "01/02") ($user:=userArg $db.highscore.user).Username $user.ID 
-				($user =userArg $db.last.user).Username $user.ID 
+			)
+			"description" (printf "⌚ __Current Score__: %d\n🏅 __High Score__: %d on %v by `%s` (%d)\n⏮️ __Last Counter__: `%s` (%d)\n💾 __Saves Remaining__: %d"
+				(sub $db.next 1)
+				$db.highscore.num (formatTime $db.highscore.time "01/02") ($user:=userArg $db.highscore.user).Username $user.ID
+				($user =userArg $db.last.user).Username $user.ID
 				$db.saves
-			) 
-			"footer" (sdict "text" "Use this command: -CStats [User/\"Leaderboard\"]") 
+			)
+			"footer" (sdict "text" "Use this command: -CStats [User/\"Leaderboard\"]")
 			"color" 30654
 		)}}
 		{{return}}
@@ -65,23 +65,23 @@
 	{{if ($user:=index $re2 0 1|toInt|userArg)}} {{/* user stats */}}
 		{{$userCount:=dbGet $user.ID "counting"}}
 		{{if not $userCount}}
-			{{sendMessage nil (cembed 
-				"title" (print "No available stats") 
-				"description" (printf "`%s` has yet to count ☹️\nMaybe give them a heads-up to come join?" 
+			{{sendMessage nil (cembed
+				"title" (print "No available stats")
+				"description" (printf "`%s` has yet to count ☹️\nMaybe give them a heads-up to come join?"
 					$user.Username
-				) 
-				"footer" (sdict "text" "Use this command: -CStats [User: @/ID]") 
+				)
+				"footer" (sdict "text" "Use this command: -CStats [User: @/ID]")
 				"color" 16711680
 			)}}
 		{{else}}
 			{{$userCount:=toInt $userCount.Value}}
 			{{$userCorrect:=(dbGet $user.ID "countingCorrect").Value}}
-			{{sendMessage nil (cembed 
-				"title" (printf "🔢 %s's Counting Statistics" $user.Username) 
-				"description" (printf "%s has counted **%d times**\n**%d** have been correct\nThis makes their average **%.2f%%**" 
+			{{sendMessage nil (cembed
+				"title" (printf "🔢 %s's Counting Statistics" $user.Username)
+				"description" (printf "%s has counted **%d times**\n**%d** have been correct\nThis makes their average **%.2f%%**"
 					$user.Mention $userCount (toInt $userCorrect) (div $userCorrect $userCount|mult 100.0)
-				) 
-				"footer" (sdict "text" "Use this command: -CStats [User: @/ID]") 
+				)
+				"footer" (sdict "text" "Use this command: -CStats [User: @/ID]")
 				"color" 30654
 			)}}
 		{{end}}
@@ -91,20 +91,20 @@
 		{{range $i,$v:=dbTopEntries "countingCorrect" $leaderboardLength 0}}
 			{{- $desc =printf "%s\n#%-3d %4d - %-4s" $desc (add $i 1) (toInt $v.Value) (or (userArg $v.UserID) (str $v.UserID)) -}}
 		{{end}}
-		{{sendMessage nil (cembed 
-			"author" (sdict 
-				"icon_url" (.Guild.IconURL "512") 
+		{{sendMessage nil (cembed
+			"author" (sdict
+				"icon_url" (.Guild.IconURL "512")
 				"name" "Counting Leaderboard"
-			) 
-			"description" (printf "```Pos    ✅  User%s```" $desc) 
-			"footer" (sdict "text" "Use this command: -CStats Leaderboard") 
+			)
+			"description" (printf "```Pos    ✅  User%s```" $desc)
+			"footer" (sdict "text" "Use this command: -CStats Leaderboard")
 			"color" 30654
 		)}}
 
 	{{else}}
-		{{sendMessage nil (cembed 
-			"title" "Invalid Syntax" 
-			"description" "For server counting statistics: `-CStats`\nFor a members' statistics: `-CStats <User: @/ID>`\nFor server leaderboard: `-CStats Leaderboard`" 
+		{{sendMessage nil (cembed
+			"title" "Invalid Syntax"
+			"description" "For server counting statistics: `-CStats`\nFor a members' statistics: `-CStats <User: @/ID>`\nFor server leaderboard: `-CStats Leaderboard`"
 			"color" 16744192
 		)}}
 	{{end}}
@@ -112,8 +112,8 @@
 {{end}}
 
 {{if and (eq $db.last.user .User.ID) (not $countTwice)}}
-	{{sendMessage nil (cembed 
-		"description" (printf "You can't count twice in a row 🥲\nThe next number is %d" $db.next) 
+	{{sendMessage nil (cembed
+		"description" (printf "You can't count twice in a row 🥲\nThe next number is %d" $db.next)
 		"color" 16744192
 	)}}
 	{{return}}
@@ -177,8 +177,8 @@
 {{catch}}{{$invalid =true}}{{end}}
 
 {{if $invalid}}
-	{{sendMessage nil (cembed 
-		"description" (printf "`%s` sent an invalid expression, `%s`\nNext number is `%d`" .User.Username .Cmd $db.next) 
+	{{sendMessage nil (cembed
+		"description" (printf "`%s` sent an invalid expression, `%s`\nNext number is `%d`" .User.Username .Cmd $db.next)
 		"color" 16711680
 	)}}
 	{{return}}
@@ -206,8 +206,8 @@
 		{{takeRoleID $db.last.user .}}
 		{{addRoleID .}}
 	{{end}}
-	{{$db.Set "last" (sdict 
-		"user" .User.ID 
+	{{$db.Set "last" (sdict
+		"user" .User.ID
 		"msg" .Message.ID
 	)}}
 
@@ -242,14 +242,14 @@
 		{{end}}
 		{{$db.Set "last" (sdict "user" .User.ID "msg" .Message.ID)}}
 		{{dbSet 0 "counting" $db}}
-		{{sendMessage nil (cembed 
-			"description" (printf "%s sent an incorrect number of %d\n**But**, the count was saved! %d saves remaining\nThe next number is %d" .User.Username $number $db.saves $db.next) 
+		{{sendMessage nil (cembed
+			"description" (printf "%s sent an incorrect number of %d\n**But**, the count was saved! %d saves remaining\nThe next number is %d" .User.Username $number $db.saves $db.next)
 			"color" 16744192
 		)}}
 
 	{{else}} {{/* reset count */}}
-		{{sendMessage nil (cembed 
-			"description" (printf "%s sent an incorrect number of %d\nCorrect number was %d\nStart over at 1 🙃" .User.Mention $number $db.next) 
+		{{sendMessage nil (cembed
+			"description" (printf "%s sent an incorrect number of %d\nCorrect number was %d\nStart over at 1 🙃" .User.Mention $number $db.next)
 			"color" 16711680
 		)}}
 		{{$db.Set "last" (sdict "user" .BotUser.ID "msg" 0)}}
