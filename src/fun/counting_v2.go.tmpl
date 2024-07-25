@@ -145,7 +145,7 @@
 		{{- continue}}
 	{{- end}}
 	{{- if $lastNumeral}}
-		{{$invalid =true}}{{- break}}
+		{{- $invalid =true}}{{break}}
 	{{- end}}
 	{{- $values:=cslice}}{{$value:=0}}{{$skip:=false}}
 	{{- range $roman}}
