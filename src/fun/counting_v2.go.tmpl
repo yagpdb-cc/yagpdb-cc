@@ -121,7 +121,7 @@
 {{end}}
 
 {{$invalid:=false}}
-{{$re:=reFindAll `\b([%e]|abs|pi)(\b|$)|[+\-*/^π()]|a?sin|a?cos|a?tan|a?cot|a?sec|a?csc|sqrt|l(o?g|n)|\d+|[MDCLXVI]M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})` .Cmd}}
+{{$re:=reFindAll `\b([%e]|abs|pi)(\b|$)|[+\-*/^π()]|a?(sin|cos|tan|cot|sec|csc)|sqrt|l(o?g|n)|\d+|[MDCLXVI]M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})` .Cmd}}
 {{if not (joinStr "" $re)}}
 	{{return}}
 {{end}}
