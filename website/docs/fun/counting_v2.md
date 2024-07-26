@@ -8,9 +8,11 @@ A unique feature of this command is that, besides decimal numbers, it also accep
 
 :::note
 
-Unlike some other counting systems, this command does not delete invalid numbers to allow counting and other conversation to take place concurrently. Messages that include text which do not correspond to valid numbers will, however, trigger a warning message.
+Unlike some other counting systems, this command does not delete invalid expressions to allow counting and other conversation to take place concurrently. Expressions which include unaccepted terms or are invalid will, however, trigger a warning message.
 
 :::
+
+The expression must appear on the first line entirely on its own for the count to increase.
 
 ## Trigger
 
