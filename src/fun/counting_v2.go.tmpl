@@ -1,0 +1,270 @@
+{{/*
+	Count up from 1 using base 10 and/or roman numerals with availability of math
+	View counting statistics with the -cstats command
+	See <https://yagpdb-cc.github.io/fun/counting_v2> for more information.
+	
+	Author: H1nr1 <https://github.com/H1nr1>
+*/}}
+
+{{/* configurable values */}}
+{{ $countTwice := false }} {{/* allow users to count multiple times in a row; true/false */}}
+{{ $correctRID := false }} {{/* correct counting role ID; set to false to disable */}}
+{{ $incorrectRID := false }} {{/* incorrect/blacklist counting role ID; set to false to disable */}}
+{{ $errorCID := .Channel.ID }} {{/* ID of channel to send error reports to; .Channel.ID for current channel */}}
+{{ $saves := 1 }} {{/* how many wrong numbers before reset; set to 0 for no saves */}}
+{{ $reactions := true }} {{/* allow confirmative reactions on message; true/false */}}
+	{{ $reactionDelete := true }} {{/* toggle for reactions to delete from last message; true/false */}}
+	{{ $correctEmoji := "✅" }} {{/* emoji to react with if number is correct; if custom, use format name:id */}}
+	{{ $warningEmoji := "⚠️" }} {{/* emoji to react with if wrong number with available saves; if custom, use format name:id */}}
+	{{ $incorrectEmoji := "❌" }} {{/* emoji to react with if number is incorrect; if custom, use format name:id */}}
+{{ $leaderboardLength := 10 }} {{/* how many members to show on leaderboard; max of 100 */}}
+{{/* end of configurable values */}}
+
+{{$db:=or
+	(dbGet 0 "counting").Value
+	(sdict "last" (sdict "user" .BotUser.ID "msg" 0) "next" 1 "highscore" (sdict "user" .BotUser.ID "num" 0 "time" currentTime) "saves" $saves)
+}}
+
+{{with .ExecData}}
+	{{$msg:=getMessage nil .}}
+	{{if not $msg}} {{/* check if message was deleted */}}
+		{{sendMessage nil (cembed
+			"description" (printf "<@%d> deleted their expression which was correct!\nThe next number is %d"
+				$db.last.user $db.next
+			)
+			"color" 30654
+		)}}
+	{{else if $msg.EditedTimestamp}} {{/* check if message was edited */}}
+		{{sendMessage nil (cembed
+			"description" (printf "<@%d> edited their expression, be careful" $db.last.user)
+			"color" 30654
+		)}}
+	{{end}}
+	{{return}}
+{{end}}
+
+{{if ($re2:=reFindAllSubmatches (print `(?i)\A(?:-|<@!?` .BotUser.ID `>)\s*C(?:ount)?(?:ing)?Stat(?:istic)?s?\s*(?:(?:<@!?)?(\d{17,})|(l(?:eader)?b))?`) .Cmd)}}
+	{{if not (or (index $re2 0 1) (index $re2 0 2))}} {{/* general stats */}}
+		{{sendMessage nil (cembed
+			"author" (sdict
+				"icon_url" (.Guild.IconURL "512")
+				"name" "🔢 Counting Statistics"
+			)
+			"description" (printf "⌚ __Current Score__: %d\n🏅 __High Score__: %d on %v by `%s` (%d)\n⏮️ __Last Counter__: `%s` (%d)\n💾 __Saves Remaining__: %d"
+				(sub $db.next 1)
+				$db.highscore.num (formatTime $db.highscore.time "01/02") ($user:=userArg $db.highscore.user).Username $user.ID
+				($user =userArg $db.last.user).Username $user.ID
+				$db.saves
+			)
+			"footer" (sdict "text" "Use this command: -CStats [User/\"Leaderboard\"]")
+			"color" 30654
+		)}}
+		{{return}}
+	{{end}}
+
+	{{if ($user:=index $re2 0 1|toInt|userArg)}} {{/* user stats */}}
+		{{$userCount:=dbGet $user.ID "counting"}}
+		{{if not $userCount}}
+			{{sendMessage nil (cembed
+				"title" (print "No available stats")
+				"description" (printf "`%s` has yet to count ☹️\nMaybe give them a heads-up to come join?"
+					$user.Username
+				)
+				"footer" (sdict "text" "Use this command: -CStats [User: @/ID]")
+				"color" 16711680
+			)}}
+		{{else}}
+			{{$userCount:=toInt $userCount.Value}}
+			{{$userCorrect:=(dbGet $user.ID "countingCorrect").Value}}
+			{{sendMessage nil (cembed
+				"title" (printf "🔢 %s's Counting Statistics" $user.Username)
+				"description" (printf "%s has counted **%d times**\n**%d** have been correct\nThis makes their average **%.2f%%**"
+					$user.Mention $userCount (toInt $userCorrect) (div $userCorrect $userCount|mult 100.0)
+				)
+				"footer" (sdict "text" "Use this command: -CStats [User: @/ID]")
+				"color" 30654
+			)}}
+		{{end}}
+
+	{{else if eq (index $re2 0 2|lower) "leaderb" "lb"}} {{/* leaderboard */}}
+		{{$desc:=""}}
+		{{range $i,$v:=dbTopEntries "countingCorrect" $leaderboardLength 0}}
+			{{- $desc =printf "%s\n#%-3d %4d - %-4s" $desc (add $i 1) (toInt $v.Value) (or (userArg $v.UserID) (str $v.UserID)) -}}
+		{{end}}
+		{{sendMessage nil (cembed
+			"author" (sdict
+				"icon_url" (.Guild.IconURL "512")
+				"name" "Counting Leaderboard"
+			)
+			"description" (printf "```Pos    ✅  User%s```" $desc)
+			"footer" (sdict "text" "Use this command: -CStats Leaderboard")
+			"color" 30654
+		)}}
+
+	{{else}}
+		{{sendMessage nil (cembed
+			"title" "Invalid Syntax"
+			"description" "For server counting statistics: `-CStats`\nFor a members' statistics: `-CStats <User: @/ID>`\nFor server leaderboard: `-CStats Leaderboard`"
+			"color" 16744192
+		)}}
+	{{end}}
+	{{return}}
+{{end}}
+
+{{if and (eq $db.last.user .User.ID) (not $countTwice)}}
+	{{sendMessage nil (cembed
+		"description" (printf "You can't count twice in a row 🥲\nThe next number is %d" $db.next)
+		"color" 16744192
+	)}}
+	{{return}}
+{{end}}
+
+{{$invalid:=false}}
+{{$re:=reFindAll `\b([%e]|abs|pi)(\b|$)|[+\-*/^π()]|a?(sin|cos|tan|cot|sec|csc)|sqrt|l(o?g|n)|\d+|[MDCLXVI]M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})` .Cmd}}
+{{if not (joinStr "" $re)}}
+	{{return}}
+{{end}}
+{{if ne .Cmd (joinStr "" $re)}}
+	{{$invalid =true}}
+{{end}}
+
+{{$convertRN:=sdict "I" 1 "V" 5 "X" 10 "L" 50 "C" 100 "D" 500 "M" 1000}}
+{{$exp:=""}}{{$lastNumeral:=false}}
+{{range $re}}
+	{{- $roman:=reFindAll `[IVXLCDM]` .}}
+	{{- if not $roman}}
+		{{- $exp =printf "%s%s" $exp .}}
+		{{- if reFind `\d+` .}}
+			{{- if $lastNumeral}}
+				{{- $invalid =true}}{{break}}
+			{{- end}}
+			{{- $lastNumeral =true}}
+		{{- else}}
+			{{- $lastNumeral =false}}
+		{{- end}}
+		{{- continue}}
+	{{- end}}
+	{{- if $lastNumeral}}
+		{{- $invalid =true}}{{break}}
+	{{- end}}
+	{{- $values:=cslice}}{{$value:=0}}{{$skip:=false}}
+	{{- range $roman}}
+		{{- $values =$values.Append ($convertRN.Get .)}}
+	{{- end}}
+	{{- range $i,$v:=$values}}
+		{{- $i =add $i 1}}
+		{{- if $skip}}
+			{{- $skip =false}}
+			{{- continue}}
+		{{- end}}
+		{{- if le (len $values) $i}}
+			{{- $value =add $value .}}
+			{{- continue}}
+		{{- end}}
+		{{- if ge . (index $values $i)}}
+			{{- $value =add $value .}}
+		{{- else}}
+			{{- $value =sub (add $value (index $values $i)) .}}
+			{{- $skip =true}}
+		{{- end}}
+	{{- end}}
+	{{- $exp =printf "%s%d" $exp $value}}
+	{{- $lastNumeral =true}}
+{{end}}
+
+{{$number:=0}}
+{{try}}{{$number =slice ($number =exec "calc" $exp) 9 (len $number|add -1)|toFloat|toInt}}
+{{catch}}{{$invalid =true}}{{end}}
+
+{{if $invalid}}
+	{{sendMessage nil (cembed
+		"description" (printf "`%s` sent an invalid expression, `%s`\nNext number is `%d`" .User.Username .Cmd $db.next)
+		"color" 16711680
+	)}}
+	{{return}}
+{{end}}
+
+{{$errFormat:="Counting Error: `%s`\nMessage: %s\nUser: `%s` (%d)"}}
+
+{{if eq $db.next $number}} {{/* correct */}}
+	{{$db.Set "next" (add $db.next 1)}}
+	{{if $reactions}}
+		{{try}}
+			{{addReactions $correctEmoji}}
+			{{if and $reactionDelete $db.last.msg}}
+				{{deleteMessageReaction nil $db.last.msg .BotUser.ID $correctEmoji}}
+			{{end}}
+			{{if eq (mod $number 100|toInt) 0}}{{addReactions "💯"}}{{end}}
+		{{catch}}
+			{{with getRole $incorrectRID}}
+				{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
+			{{end}}
+			{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
+		{{end}}
+	{{end}}
+	{{with getRole $correctRID}}
+		{{takeRoleID $db.last.user .}}
+		{{addRoleID .}}
+	{{end}}
+	{{$db.Set "last" (sdict
+		"user" .User.ID
+		"msg" .Message.ID
+	)}}
+
+	{{$s:=dbIncr .User.ID "countingCorrect" 1}}
+	{{$s =dbIncr .User.ID "counting" 1}}
+	{{if gt $number $db.highscore.num}}
+		{{if $reactions}}
+			{{try}}{{addReactions "🏆"}}{{catch}}{{end}}
+		{{end}}
+		{{$db.Set "highscore" (sdict "user" .User.ID "num" $number "time" currentTime)}}
+	{{end}}
+	{{dbSet 0 "counting" $db}}
+	{{execCC .CCID nil 15 .Message.ID}}
+		
+{{else}} {{/* incorrect */}}
+	{{$db.Set "saves" (sub $db.saves 1)}}
+	{{with getRole $correctRID}}
+		{{takeRoleID $db.last.user .}}
+	{{end}}
+	{{with getRole $incorrectRID}}
+		{{addRoleID .}}{{(toDuration "3d").Seconds|toInt|removeRoleID .}}
+	{{end}}
+	{{if ge $db.saves 0}} {{/* progress saved */}}
+		{{if $reactions}}
+			{{try}}{{addReactions $warningEmoji}}
+			{{catch}}
+				{{with getRole $incorrectRID}}
+					{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
+				{{end}}
+				{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
+			{{end}}
+		{{end}}
+		{{$db.Set "last" (sdict "user" .User.ID "msg" .Message.ID)}}
+		{{dbSet 0 "counting" $db}}
+		{{sendMessage nil (cembed
+			"description" (printf "%s sent an incorrect number of %d\n**But**, the count was saved! %d saves remaining\nThe next number is %d" .User.Username $number $db.saves $db.next)
+			"color" 16744192
+		)}}
+
+	{{else}} {{/* reset count */}}
+		{{sendMessage nil (cembed
+			"description" (printf "%s sent an incorrect number of %d\nCorrect number was %d\nStart over at 1 🙃" .User.Mention $number $db.next)
+			"color" 16711680
+		)}}
+		{{$db.Set "last" (sdict "user" .BotUser.ID "msg" 0)}}
+		{{$db.Set "next" 1}}
+		{{$db.Set "saves" $saves}}
+		{{dbSet 0 "counting" $db}}
+		{{$s:=dbIncr .User.ID "counting" 1}}
+		{{if $reactions}}
+			{{try}}{{addReactions $incorrectEmoji}}
+			{{catch}}
+				{{with getRole $incorrectRID}}
+					{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
+				{{end}}
+				{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
+			{{end}}
+		{{end}}
+	{{end}}
+{{end}}
