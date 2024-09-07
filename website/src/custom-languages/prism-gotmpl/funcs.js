@@ -81,6 +81,7 @@ export const funcs = [
 	'getChannelOrThread',
 	'getChannelPins',
 	'getMember',
+	'getMemberVoiceState',
 	'getMessage',
 	'getPinCount',
 	'getResponse',
