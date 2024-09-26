@@ -5,7 +5,7 @@
 	Author: zen | ゼン#0008 <https://github.com/z3nn13/>
 */}}
 
-{{ $re := `\n\n\x60(\d{1,2} \w{5,7}) ago \(.{24}\)\x60 \*\*[\w.#]+\*\* \(ID (\d{17,19})\)\: ` }}
+{{ $re := `\n\n(<t:(\d+):f> \(<t:\d+:R>\)) \*\*[\w.#]+\*\* \(ID (\d{17,19})\)\:` }}
 {{ $undelete := execAdmin "ud -a" }}
 {{ $data := reFindAllSubmatches $re $undelete 1 }}
 {{ if not $data }}
@@ -23,21 +23,20 @@
 	{{- $pos = .Position }} {{- $col = .Color -}}
 {{ end }}
 
-{{ $dur := toDuration (index $data 0 1) }}
-{{ $member := getMember (index $data 0 2) }}
-{{ $msg := index (reSplit $re $undelete 3) 1 }}
+{{ $member := getMember (index $data 0 3) }}
+{{ $msg := index (reSplit $re $undelete 2) 1|trimSpace }}
+{{ $time := timestampToTime (index $data 0 2) }}
 {{ $embed := sdict
 	"author" (sdict
 		"name" (printf "%s (ID %d)" $member.User.String $member.User.ID)
 		"icon_url" ($member.User.AvatarURL "256")
 	)
-	"description" $msg 
+	"description" (printf "Message from <t:%d:R>:\n%s" $time.Unix $msg)
 	"footer" (sdict
-		"text" (print "Message from " (index $data 0 1) " ago")
 		"icon_url" $icon
 	)
-	"timestamp" (mult $dur -1 | toDuration | currentTime.Add)
-	"color" $col 
+	"timestamp" $time
+	"color" $col
 }}
 {{ $send := sdict "reply" .Message.ID "embed" $embed }}
 
@@ -51,9 +50,9 @@
 	{{ $embed.footer.Set "text" (print "⚠️ An attachment/embed was deleted\n" $embed.footer.text) }}
 {{ end }}
 
-{{ if gt (len $msg) 2000 }}
+{{ if gt (len (printf "Message from <t:%d:R>:\n%s" $time.Unix $msg)) 2000 }}
 	{{ $embed.footer.Set "text" (print "⚠️ Message exceeded 2k characters. Contents sent as file instead\n" $embed.footer.text) }}
-	{{ $embed.Del "description" }}
+	{{ $embed.Set "description" (printf "Message from <t:%d:R>") }}
 	{{ $send.Set "file" $msg }}
 {{ end }}
 
