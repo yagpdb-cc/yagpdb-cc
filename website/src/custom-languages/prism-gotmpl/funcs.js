@@ -52,6 +52,7 @@ export const funcs = [
 	'decodeBase64',
 	'deleteAllMessageReactions',
 	'deleteForumPost',
+	'deleteInteractionResponse',
 	'deleteMessage',
 	'deleteMessageReaction',
 	'deleteResponse',
