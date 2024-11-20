@@ -1,0 +1,25 @@
+{{/*
+	Replies with fixupx.com links to messages containing x.com links.
+
+	Author: laforcem <https://github.com/laforcem>
+*/}}
+
+{{/* Find all x.com links in the message */}}
+{{ $links := reFindAll `https:\/\/x\.com(?:\/[^\s]*)?` .Message.Content }}
+{{ $fixedLinks := "" }}
+
+{{/* Loop through each found link, replace it, and append to the message */}}
+{{ range $link := $links }}
+  {{ $fixedLinks = (print $fixedLinks "\n" (reReplace `https:\/\/x\.com` $link `https://fixupx.com`)) }}
+{{ end }}
+
+{{/* Use correct grammar depending on no. of links */}}
+{{ $linkText := "" }}
+{{ if eq (len $links) 1 }}
+  {{ $linkText = "a link" }}
+{{ else if gt (len $links) 1 }}
+  {{ $linkText = (print (len $links) " links") }}
+{{ end }}
+
+{{/* Reply with the fixed links, adjusting the grammar */}}
+{{ sendMessage nil (complexMessage "reply" .Message.ID "content" (print "It looks like you posted " $linkText " to `x.com`. To make the experience better for people without an account, please use `fixupx.com` instead.\n" $fixedLinks)) }}
