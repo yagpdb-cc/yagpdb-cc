@@ -103,11 +103,11 @@ module.exports = {
 						},
 						{
 							label: 'Documentation',
-							href: 'https://docs.yagpdb.xyz',
+							href: 'https://help.yagpdb.xyz/docs/welcome/introduction',
 						},
 						{
 							label: 'Learning Center',
-							href: 'https://learn.yagpdb.xyz',
+							href: 'https://help.yagpdb.xyz/learn/welcome/introduction',
 						},
 					],
 				},
