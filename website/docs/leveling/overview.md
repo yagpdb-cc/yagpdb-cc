@@ -79,7 +79,8 @@ As these are custom commands, you can modify them however you wish if you are fa
 
 :::danger
 
-Changing the formula used for levels is a fairly involved change which will require modifying several commands and some mathematical knowledge. If you do it incorrectly unexpected behaviour can easily occur. Proceed with caution.
+Changing the formula used for levels is a fairly involved change which will require modifying several commands and a bit of math.
+If you do it incorrectly, unexpected behaviour can occur. Proceed with caution.
 
 :::
 
@@ -87,9 +88,9 @@ The default formula used for levels is `f(x) = 100x^2` where `f(x)` is a functio
 
 - Come up with an alternative function. In this example, we will change it to a simple linear function: `f(x) = 50x`. We would write this in YAGPDB templates as `mult 50 $level`.
 
-- Derive the [_inverse function_](https://en.wikipedia.org/wiki/Inverse_function) of the function you found above. The leveling system needs this to compute the level of a user given their experience - _if user x has y xp, what is their level?_.
+- Find the [_inverse function_](https://en.wikipedia.org/wiki/Inverse_function) of the function you found above. The leveling system needs this to compute the level of a user given their experience--_if user x has y xp, what is their level?_.
 
-  In our case, the inverse function would be `f'(x) = x / 50`. Since levels must be integers, we round the result down to get our final function: `g(x) = floor(x / 50)`. We would write this in YAGPDB templates as `roundFloor (fdiv $xp 50)`.
+  In our case, the inverse function would be `f^{-1}(x) = x / 50`. Since levels must be integers, we round the result down to get our final function: `g(x) = floor(x / 50)`. We would write this in YAGPDB templates as `roundFloor (fdiv $xp 50)`.
 
 - Now, you need to modify the following scripts to use your new formulae:
   - The [message handler](message-handler), so that it can check whether a user has leveled up.
