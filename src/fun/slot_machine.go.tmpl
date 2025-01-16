@@ -19,11 +19,11 @@
 {{ $helper := "Usage" }}
 {{ $helpText := "-bet <amount>\nFor example: **-bet 10**\nThis way you would be betting 10 credits." }}
 {{ $notEnough := "Insuficient credits" }}
-{{ $betBelow1 := "You have to bet 1 credit at least" }}
 {{ $bettingChannel := 640790412986023949 }}
 {{ $minMax := true }}
 {{ $minBet := 100 }}
 {{ $maxBet := 200 }}
+{{ $betBelow1 := printf "You have to bet %v credit at least" $minBet }}
 {{ $outOfRange := printf "You have to bet between %v and %v!" $minBet $maxBet}}
 {{ $channels := cslice
 	650881854722932746
