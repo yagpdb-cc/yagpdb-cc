@@ -24,7 +24,7 @@
 {{ $minMax := true }}
 {{ $minBet := 100 }}
 {{ $maxBet := 200 }}
-{{ $outOfRange := "You have to bet between 100 and 200!" }}
+{{ $outOfRange := printf "You have to bet between %v and %v!" $minBet $maxBet}}
 {{ $channels := cslice
 	650881854722932746
 	663411278139883520
