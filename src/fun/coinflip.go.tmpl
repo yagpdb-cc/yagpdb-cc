@@ -6,7 +6,7 @@
 */}}
 
 {{/* Configuration variables start */}}
-{{ $c := 815223392114180096 }}
+{{ $channel := .Channel.ID }}
 {{ $minbet := 100 }}
 {{ $maxbet := 500 }}
 {{ $db := "CREDITS" }}
@@ -45,7 +45,7 @@
 									{{ $embed.Set "image" (sdict "url" $img) }}
 									{{ $embed.Set "color" 16765696 }}
 									{{ $embed.Set "description" "**The coin is rolling... Wait...**" }}
-									{{ $m = sendMessageRetID $c (cembed $embed) }}
+									{{ $m = sendMessageRetID $channel (cembed $embed) }}
 									{{ scheduleUniqueCC $.CCID (index (shuffle $channels) 0) 3 $.User.ID (sdict "m" $m "b" $bet "c" $cp )}}
 								{{ else }}
 									{{ $embed.Set "description" "You can use this command when the last coin stopped rolling!" }}
@@ -116,5 +116,5 @@
 	{{ end }}
 	{{ dbSetExpire $.User.ID "cd_coinflip" true $cooldown }}
 	{{ dbDel $.User.ID "isrolling_cf" }}
-	{{ editMessage $c $m (cembed $embed) }}
+	{{ editMessage $channel $m (cembed $embed) }}
 {{ end }}
