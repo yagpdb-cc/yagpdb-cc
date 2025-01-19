@@ -22,56 +22,42 @@
 
 {{ if not .ExecData }}
 	{{ if not (eq (len .CmdArgs) 2) }}
-		{{ $embed.Set "description" (printf "Syntax: **%scoinflip <heads/tails> <money>**" .ServerPrefix) }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = printf "Syntax: **%scoinflip <heads/tails> <money>**" .ServerPrefix }}
 	{{ end }}
 
 	{{ $choice := reFind `\A(?i)(heads|tails)\z` (index .CmdArgs 0) }}
 	{{ if not $choice }}
-		{{ $embed.Set "description" "You can only choose from **heads** or **tails**." }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = "You can only choose from **heads** or **tails**." }}
 	{{ end }}
 
 	{{ $bet := reFind `\d+` (index .CmdArgs 1) | toInt }}
 	{{ if not $bet }}
-		{{ $embed.Set "description" (printf "`%s` is not a valid number." (index .CmdArgs 1)) }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = printf "`%s` is not a valid number." (index .CmdArgs 1) }}
 	{{ end }}
 
 	{{ if lt $bet $MIN_BET }}
-		{{ $embed.Set "description" (printf "Minimum bet can only be **%d**!" $MIN_BET) }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = printf "Minimum bet can only be **%d**!" $MIN_BET }}
 	{{ end }}
 
 	{{ if gt $bet $MAX_BET }}
-		{{ $embed.Set "description" (printf "Maximum bet can only be **%d**!" $MAX_BET) }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = printf "Maximum bet can only be **%d**!" $MAX_BET }}
 	{{ end }}
 
 	{{ if dbGet .User.ID "cd_coinflip" }}
-		{{ $embed.Set "description" (print "You need to wait **" (humanizeDurationSeconds ((dbGet .User.ID "cd_coinflip").ExpiresAt.Sub currentTime)) "** to use this command again.") }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = print "You need to wait **" (humanizeDurationSeconds ((dbGet .User.ID "cd_coinflip").ExpiresAt.Sub currentTime)) "** to use this command again." }}
 	{{ end }}
 
 	{{ if lt (toInt (dbGet .User.ID $DB_KEY).Value) $bet }}
-		{{ $embed.Set "description" (printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet (toInt (dbGet .User.ID $DB_KEY).Value)) }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet (toInt (dbGet .User.ID $DB_KEY).Value) }}
 	{{ end }}
 
 	{{ if dbGet .User.ID "isrolling_cf" }}
-		{{ $embed.Set "description" "You can use this command when the last coin stopped rolling!" }}
-		{{ $embed.Set "color" 16488706 }}
-		{{ $err = true }}
+		{{ $err = "You can use this command when the last coin stopped rolling!" }}
 	{{ end }}
 
 	{{ if $err }}
+		{{ $embed.Set "description" $err }}
+		{{ $embed.Set "color" 16488706 }}
 		{{ $message := sendMessageRetID nil (cembed $embed) }}
 		{{ deleteMessage .Channel.ID $message 5 }}
 		{{ deleteTrigger }}
