@@ -7,11 +7,11 @@
 */}}
 
 {{/* Configuration variables start */}}
-{{ $channel := .Channel.ID }}
-{{ $minBet := 100 }}
-{{ $maxBet := 500 }}
-{{ $db := "CREDITS" }}
-{{ $cooldown := 5 }}
+{{ $CHANNEL := .Channel.ID }}
+{{ $MIN_BET := 100 }}
+{{ $MAX_BET := 500 }}
+{{ $DB_KEY := "CREDITS" }}
+{{ $COOLDOWN := 5 }}
 {{/* Configuration variables end */}}
 
 {{ $err := false }}
@@ -41,14 +41,14 @@
 		{{ $err = true }}
 	{{ end }}
 
-	{{ if lt $bet $minBet }}
-		{{ $embed.Set "description" (printf "Minimum bet can only be **%d**!" $minBet) }}
+	{{ if lt $bet $MIN_BET }}
+		{{ $embed.Set "description" (printf "Minimum bet can only be **%d**!" $MIN_BET) }}
 		{{ $embed.Set "color" 16488706 }}
 		{{ $err = true }}
 	{{ end }}
 
-	{{ if gt $bet $maxBet }}
-		{{ $embed.Set "description" (printf "Maximum bet can only be **%d**!" $maxBet) }}
+	{{ if gt $bet $MAX_BET }}
+		{{ $embed.Set "description" (printf "Maximum bet can only be **%d**!" $MAX_BET) }}
 		{{ $embed.Set "color" 16488706 }}
 		{{ $err = true }}
 	{{ end }}
@@ -59,8 +59,8 @@
 		{{ $err = true }}
 	{{ end }}
 
-	{{ if lt (toInt (dbGet .User.ID $db).Value) $bet }}
-		{{ $embed.Set "description" (printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet (toInt (dbGet .User.ID $db).Value)) }}
+	{{ if lt (toInt (dbGet .User.ID $DB_KEY).Value) $bet }}
+		{{ $embed.Set "description" (printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet (toInt (dbGet .User.ID $DB_KEY).Value)) }}
 		{{ $embed.Set "color" 16488706 }}
 		{{ $err = true }}
 	{{ end }}
@@ -83,12 +83,12 @@
 	{{ $embed.Set "image" (sdict "url" $img) }}
 	{{ $embed.Set "color" 16765696 }}
 	{{ $embed.Set "description" "**The coin is rolling... Wait...**" }}
-	{{ $m := sendMessageRetID $channel (cembed $embed) }}
+	{{ $m := sendMessageRetID $CHANNEL (cembed $embed) }}
 	{{ $randChannel := (index .Guild.Channels (randInt (len .Guild.Channels))).ID }}
-	{{ scheduleUniqueCC .CCID $randChannel 3 .User.ID (sdict "channel" $channel "m" $m "b" $bet "c" $choice )}}
+	{{ scheduleUniqueCC .CCID $randChannel 3 .User.ID (sdict "channel" $CHANNEL "m" $m "b" $bet "c" $choice )}}
 
 {{ else }}
-	{{ $channel = .ExecData.channel }}
+	{{ $channel := .ExecData.channel }}
 	{{ $m := .ExecData.m }}
 	{{ $bet := .ExecData.b }}
 	{{ $choice := .ExecData.c }}
@@ -104,16 +104,16 @@
 	{{ end }}
 
 	{{ if eq $choice $choosen }}
-		{{ $k := dbIncr .User.ID $db $bet }}
+		{{ $k := dbIncr .User.ID $DB_KEY $bet }}
 		{{ $embed.Set "description" (printf "**----------**\nYou chose: **%s** | The coin rolled: **%s**.\nYou won **%d** credits.\nNow you have **%d** credits.\n**----------**" $choice $choosen (mult $bet 2) (toInt $k)) }}
 		{{ $embed.Set "color" 40811 }}
 	{{ else }}
-		{{ $k := dbIncr .User.ID $db (mult $bet -1) }}
+		{{ $k := dbIncr .User.ID $DB_KEY (mult $bet -1) }}
 		{{ $embed.Set "description" (printf "**----------**\nYou chose: **%s** | The coin rolled: **%s**.\nYou lost **%d** credits.\nNow you have **%d** credits.\n**----------**" $choice $choosen $bet (toInt $k)) }}
 		{{ $embed.Set "color" 16488706 }}
 	{{ end }}
 
-	{{ dbSetExpire .User.ID "cd_coinflip" true $cooldown }}
+	{{ dbSetExpire .User.ID "cd_coinflip" true $COOLDOWN }}
 	{{ dbDel .User.ID "isrolling_cf" }}
 	{{ editMessage $channel $m (cembed $embed) }}
 {{ end }}
