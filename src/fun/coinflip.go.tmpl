@@ -43,12 +43,14 @@
 		{{ $err = printf "Maximum bet can only be **%d**!" $MAX_BET }}
 	{{ end }}
 
-	{{ if dbGet .User.ID "cd_coinflip" }}
-		{{ $err = print "You need to wait **" (humanizeDurationSeconds ((dbGet .User.ID "cd_coinflip").ExpiresAt.Sub currentTime)) "** to use this command again." }}
+	{{ $cd := dbGet .User.ID "cd_coinflip" }}
+	{{ if $cd }}
+		{{ $err = print "You need to wait **" ($cd.ExpiresAt.Sub currentTime | humanizeDurationSeconds) "** to use this command again." }}
 	{{ end }}
 
-	{{ if lt (toInt (dbGet .User.ID $DB_KEY).Value) $bet }}
-		{{ $err = printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet (toInt (dbGet .User.ID $DB_KEY).Value) }}
+	{{ $userBalance := (dbGet .User.ID $DB_KEY).Value | toInt }}
+	{{ if lt $userBalance $bet }}
+		{{ $err = printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet $userBalance }}
 	{{ end }}
 
 	{{ if dbGet .User.ID "isrolling_cf" }}
@@ -64,7 +66,7 @@
 		{{ return }}
 	{{ end }}
 
-	{{/* roll may proceed */}}
+	{{/* flip may proceed */}}
 	{{ dbSet .User.ID "isrolling_cf" true }}
 	{{ $embed.Set "image" (sdict "url" $img) }}
 	{{ $embed.Set "color" 16765696 }}
