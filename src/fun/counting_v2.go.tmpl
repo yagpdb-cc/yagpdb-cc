@@ -203,7 +203,7 @@
 		{{end}}
 	{{end}}
 	{{with getRole $correctRID}}
-		{{takeRoleID $db.last.user .}}
+		{{takeRole $db.last.user .}}
 		{{addRole .}}
 	{{end}}
 	{{$db.Set "last" (sdict
@@ -225,7 +225,7 @@
 {{else}} {{/* incorrect */}}
 	{{$db.Set "saves" (sub $db.saves 1)}}
 	{{with getRole $correctRID}}
-		{{takeRoleID $db.last.user .}}
+		{{takeRole $db.last.user .}}
 	{{end}}
 	{{with getRole $incorrectRID}}
 		{{addRole .}}{{removeRole . ((toDuration "3d").Seconds|toInt)}}
