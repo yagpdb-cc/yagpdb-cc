@@ -121,7 +121,7 @@
 
 {{$invalid:=false}}
 {{$re:=reFindAll `\b([%e]|abs|pi)(\b|$)|[+\-*/^π()]|a?(sin|cos|tan|cot|sec|csc)|sqrt|l(o?g|n)|\d+|[MDCLXVI]M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})` .Cmd}}
-{{if not (joinStr "" $re)}}
+{{if not $re}}
 	{{return}}
 {{end}}
 {{if ne .Cmd (joinStr "" $re)}}
@@ -197,14 +197,14 @@
 			{{if eq (mod $number 100|toInt) 0}}{{addReactions "💯"}}{{end}}
 		{{catch}}
 			{{with getRole $incorrectRID}}
-				{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
+				{{addRole .}}{{removeRole . ((toDuration "1d").Seconds|toInt)}}
 			{{end}}
 			{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
 		{{end}}
 	{{end}}
 	{{with getRole $correctRID}}
 		{{takeRoleID $db.last.user .}}
-		{{addRoleID .}}
+		{{addRole .}}
 	{{end}}
 	{{$db.Set "last" (sdict
 		"user" .User.ID
@@ -228,14 +228,14 @@
 		{{takeRoleID $db.last.user .}}
 	{{end}}
 	{{with getRole $incorrectRID}}
-		{{addRoleID .}}{{(toDuration "3d").Seconds|toInt|removeRoleID .}}
+		{{addRole .}}{{removeRole . ((toDuration "3d").Seconds|toInt)}}
 	{{end}}
 	{{if ge $db.saves 0}} {{/* progress saved */}}
 		{{if $reactions}}
 			{{try}}{{addReactions $warningEmoji}}
 			{{catch}}
 				{{with getRole $incorrectRID}}
-					{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
+					{{addRole .}}{{removeRole . ((toDuration "1d").Seconds|toInt)}}
 				{{end}}
 				{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
 			{{end}}
@@ -261,7 +261,7 @@
 			{{try}}{{addReactions $incorrectEmoji}}
 			{{catch}}
 				{{with getRole $incorrectRID}}
-					{{addRoleID .}}{{(toDuration "1d").Seconds|toInt|removeRoleID .}}
+					{{addRole .}}{{removeRole . ((toDuration "1d").Seconds|toInt)}}
 				{{end}}
 				{{sendMessage $errorCID (printf $errFormat . $.Message.Link $.User.Username $.User.ID)}}
 			{{end}}
