@@ -80,27 +80,27 @@
 	{{ $m := .ExecData.m }}
 	{{ $bet := .ExecData.b }}
 	{{ $choice := .ExecData.c }}
-	{{ $chance := randInt 1 3 }}
-	{{ $choosen := "" }}
 
-	{{ if eq $chance 1 }}
-		{{ $choosen = "heads" }}
-		{{ $embed.Set "image" (sdict "url" $heads) }}
-	{{ else }}
-		{{ $choosen = "tails" }}
-		{{ $embed.Set "image" (sdict "url" $tails)}}
-	{{ end }}
+	{{ $result := (dict 
+		0 (sdict "side" "heads" "img" $heads)
+		1 (sdict "side" "tails" "img" $tails)
+	).Get (randInt 2) }}
 
-	{{ if eq $choice $choosen }}
-		{{ $k := dbIncr .User.ID $DB_KEY $bet }}
-		{{ $embed.Set "description" (printf "**----------**\nYou chose: **%s** | The coin rolled: **%s**.\nYou won **%d** credits.\nNow you have **%d** credits.\n**----------**" $choice $choosen (mult $bet 2) (toInt $k)) }}
+	{{ $embed.Set "image" (sdict "url" $result.img) }}
+
+	{{ if eq $choice $result.side }}
+		{{ $result.Set "WL" "won" }}
+		{{ $result.Set "diff" (mult $bet 2) }}
 		{{ $embed.Set "color" 40811 }}
 	{{ else }}
-		{{ $k := dbIncr .User.ID $DB_KEY (mult $bet -1) }}
-		{{ $embed.Set "description" (printf "**----------**\nYou chose: **%s** | The coin rolled: **%s**.\nYou lost **%d** credits.\nNow you have **%d** credits.\n**----------**" $choice $choosen $bet (toInt $k)) }}
+		{{ $result.Set "WL" "lost" }}
+		{{ $result.Set "diff" $bet }}
+		{{ $bet = mult $bet -1 }}
 		{{ $embed.Set "color" 16488706 }}
 	{{ end }}
 
+	{{ $balance := dbIncr .User.ID $DB_KEY $bet | toInt }}
+	{{ $embed.Set "description" (printf "**----------**\nYou chose: **%s** | The coin rolled: **%s**.\nYou %s **%d** credits.\nNow you have **%d** credits.\n**----------**" $choice $result.side $result.WL $result.diff $balance) }}
 	{{ dbSetExpire .User.ID "cd_coinflip" true $COOLDOWN }}
 	{{ dbDel .User.ID "isrolling_cf" }}
 	{{ editMessage $channel $m (cembed $embed) }}
