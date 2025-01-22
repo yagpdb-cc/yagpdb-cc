@@ -22,7 +22,7 @@
 
 {{ if not .ExecData }}
 	{{ if not (eq (len .CmdArgs) 2) }}
-		{{ $err = printf "Syntax: **%scoinflip <heads/tails> <money>**" .ServerPrefix }}
+		{{ $err = printf "Syntax: **%scoinflip <heads/tails> <bet>**" .ServerPrefix }}
 	{{ end }}
 
 	{{ $choice := reFind `\A(?i)(heads|tails)\z` (index .CmdArgs 0) }}
