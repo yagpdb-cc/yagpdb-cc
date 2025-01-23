@@ -21,39 +21,31 @@
 {{ $embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "256")) }}
 
 {{ if not .ExecData }}
+	{{ $choice := reFind `(?i)head|tail` .StrippedMsg | lower }}
+	{{ $bet := reFind `\d+` .StrippedMsg | toInt }}
+
 	{{ if not (eq (len .CmdArgs) 2) }}
 		{{ $err = printf "Syntax: **%scoinflip <heads/tails> <bet>**" .ServerPrefix }}
-	{{ end }}
 
-	{{ $choice := reFind `\A(?i)(heads|tails)\z` (index .CmdArgs 0) }}
-	{{ if not $choice }}
+	{{ else if not $choice }}
 		{{ $err = "You can only choose from **heads** or **tails**." }}
-	{{ end }}
 
-	{{ $bet := reFind `\d+` (index .CmdArgs 1) | toInt }}
-	{{ if not $bet }}
+	{{ else if not $bet }}
 		{{ $err = printf "`%s` is not a valid number." (index .CmdArgs 1) }}
-	{{ end }}
 
-	{{ if lt $bet $MIN_BET }}
+	{{ else if lt $bet $MIN_BET }}
 		{{ $err = printf "Minimum bet can only be **%d**!" $MIN_BET }}
-	{{ end }}
 
-	{{ if gt $bet $MAX_BET }}
+	{{ else if gt $bet $MAX_BET }}
 		{{ $err = printf "Maximum bet can only be **%d**!" $MAX_BET }}
-	{{ end }}
 
-	{{ $cd := dbGet .User.ID "cd_coinflip" }}
-	{{ if $cd }}
+	{{ else if $cd := dbGet .User.ID "cd_coinflip" }}
 		{{ $err = print "You need to wait **" ($cd.ExpiresAt.Sub currentTime | humanizeDurationSeconds) "** to use this command again." }}
-	{{ end }}
 
-	{{ $userBalance := (dbGet .User.ID $DB_KEY).Value | toInt }}
-	{{ if lt $userBalance $bet }}
+	{{ else if lt ($userBalance := (dbGet .User.ID $DB_KEY).Value | toInt) $bet }}
 		{{ $err = printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet $userBalance }}
-	{{ end }}
 
-	{{ if dbGet .User.ID "isrolling_cf" }}
+	{{ else if dbGet .User.ID "isrolling_cf" }}
 		{{ $err = "You can use this command when the last coin stopped rolling!" }}
 	{{ end }}
 
