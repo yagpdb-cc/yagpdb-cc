@@ -28,10 +28,10 @@
 		{{ $err = printf "Syntax: **%scoinflip <heads/tails> <bet>**" .ServerPrefix }}
 
 	{{ else if not $choice }}
-		{{ $err = "You can only choose from **heads** or **tails**." }}
+		{{ $err = "You can only choose from **heads** or **tails**" }}
 
 	{{ else if not $bet }}
-		{{ $err = printf "`%s` is not a valid number." (index .CmdArgs 1) }}
+		{{ $err = printf "Please provide a bet between **%d** and **%d**" $MIN_BET $MAX_BET }}
 
 	{{ else if lt $bet $MIN_BET }}
 		{{ $err = printf "Minimum bet can only be **%d**!" $MIN_BET }}
