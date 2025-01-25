@@ -71,7 +71,7 @@
 	{{ $channel := .ExecData.channel }}
 	{{ $m := .ExecData.m }}
 	{{ $bet := .ExecData.b }}
-	{{ $choice := .ExecData.c }}
+	{{ $choice := print .ExecData.c "s" }}
 
 	{{ $result := (dict 
 		0 (sdict "side" "heads" "img" $heads)
@@ -92,7 +92,7 @@
 	{{ end }}
 
 	{{ $balance := dbIncr .User.ID $DB_KEY $bet | toInt }}
-	{{ $embed.Set "description" (printf "**----------**\nYou chose **%ss** | The coin landed on **%s**.\nYou %s **%d** %s.\nNow you have **%d** %s.\n**----------**" $choice $result.side $result.WL $result.diff (lower $DB_KEY) $balance (lower $DB_KEY)) }}
+	{{ $embed.Set "description" (printf "**----------**\nYou chose **%s** | The coin landed on **%s**.\nYou %s **%d** %s.\nNow you have **%d** %s.\n**----------**" $choice $result.side $result.WL $result.diff (lower $DB_KEY) $balance (lower $DB_KEY)) }}
 	{{ dbSetExpire .User.ID "CF_cooldown" true $COOLDOWN }}
 	{{ dbDel .User.ID "CF_isFlipping" }}
 	{{ editMessage $channel $m (cembed $embed) }}
