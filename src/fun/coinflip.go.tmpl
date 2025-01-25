@@ -92,8 +92,8 @@
 	{{ end }}
 
 	{{ $balance := dbIncr .User.ID $DB_KEY $bet | toInt }}
-	{{ $embed.Set "description" (printf "**----------**\nYou chose: **%s** | The coin rolled: **%s**.\nYou %s **%d** credits.\nNow you have **%d** credits.\n**----------**" $choice $result.side $result.WL $result.diff $balance) }}
-	{{ dbSetExpire .User.ID "cd_coinflip" true $COOLDOWN }}
-	{{ dbDel .User.ID "isrolling_cf" }}
+	{{ $embed.Set "description" (printf "**----------**\nYou chose **%s** | The coin landed on **%s**.\nYou %s **%d** %s.\nNow you have **%d** %s.\n**----------**" $choice $result.side $result.WL $result.diff (lower $DB_KEY) $balance (lower $DB_KEY)) }}
+	{{ dbSetExpire .User.ID "CF_cooldown" true $COOLDOWN }}
+	{{ dbDel .User.ID "CF_isFlipping" }}
 	{{ editMessage $channel $m (cembed $embed) }}
 {{ end }}
