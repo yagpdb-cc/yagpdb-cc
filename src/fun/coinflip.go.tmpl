@@ -39,7 +39,7 @@
 	{{ else if gt $bet $MAX_BET }}
 		{{ $err = printf "Maximum bet can only be **%d**!" $MAX_BET }}
 
-	{{ else if $cd := dbGet .User.ID "cd_coinflip" }}
+	{{ else if $cd := dbGet .User.ID "CF_cooldown" }}
 		{{ $err = print "You need to wait **" ($cd.ExpiresAt.Sub currentTime | humanizeDurationSeconds) "** to use this command again." }}
 
 	{{ else if lt ($userBalance := (dbGet .User.ID $DB_KEY).Value | toInt) $bet }}
