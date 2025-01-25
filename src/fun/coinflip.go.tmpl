@@ -45,8 +45,8 @@
 	{{ else if lt ($userBalance := (dbGet .User.ID $DB_KEY).Value | toInt) $bet }}
 		{{ $err = printf "You dont have **%d** credits.\nYou only have **%d** credits." $bet $userBalance }}
 
-	{{ else if dbGet .User.ID "isrolling_cf" }}
-		{{ $err = "You can use this command when the last coin stopped rolling!" }}
+	{{ else if dbGet .User.ID "CF_isFlipping" }}
+		{{ $err = "You can use this command once your last coin has landed!" }}
 	{{ end }}
 
 	{{ if $err }}
