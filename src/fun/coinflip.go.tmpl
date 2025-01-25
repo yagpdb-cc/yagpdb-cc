@@ -59,7 +59,7 @@
 	{{ end }}
 
 	{{/* flip may proceed */}}
-	{{ dbSet .User.ID "isrolling_cf" true }}
+	{{ dbSet .User.ID "CF_isFlipping" true }}
 	{{ $embed.Set "image" (sdict "url" $img) }}
 	{{ $embed.Set "color" 16765696 }}
 	{{ $embed.Set "description" "**The coin is rolling... Please wait...**" }}
