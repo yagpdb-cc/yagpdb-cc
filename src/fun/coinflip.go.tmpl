@@ -62,7 +62,7 @@
 	{{ dbSet .User.ID "CF_isFlipping" true }}
 	{{ $embed.Set "image" (sdict "url" $img) }}
 	{{ $embed.Set "color" 16765696 }}
-	{{ $embed.Set "description" "**The coin is rolling... Please wait...**" }}
+	{{ $embed.Set "description" "**The coin is in the air... Please wait for it to land...**" }}
 	{{ $m := sendMessageRetID $CHANNEL (cembed $embed) }}
 	{{ $randChannel := (index .Guild.Channels (randInt (len .Guild.Channels))).ID }}
 	{{ scheduleUniqueCC .CCID $randChannel 3 .User.ID (sdict "channel" $CHANNEL "m" $m "b" $bet "c" $choice )}}
