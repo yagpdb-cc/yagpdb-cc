@@ -33,11 +33,8 @@
 	{{ else if not $bet }}
 		{{ $err = printf "Please provide a bet between **%d** and **%d**" $MIN_BET $MAX_BET }}
 
-	{{ else if lt $bet $MIN_BET }}
-		{{ $err = printf "Minimum bet can only be **%d**!" $MIN_BET }}
-
-	{{ else if gt $bet $MAX_BET }}
-		{{ $err = printf "Maximum bet can only be **%d**!" $MAX_BET }}
+	{{ else if or (lt $bet $MIN_BET) (gt $bet $MAX_BET) }}
+		{{ $err = printf "Bet must be minimum **%d** and maximum **%d**!" $MIN_BET $MAX_BET }}
 
 	{{ else if $cd := dbGet .User.ID "CF_cooldown" }}
 		{{ $err = print "You need to wait **" ($cd.ExpiresAt.Sub currentTime | humanizeDurationSeconds) "** to use this command again." }}
