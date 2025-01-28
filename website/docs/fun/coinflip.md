@@ -4,6 +4,12 @@ title: Coin Flip
 
 This command flips a coin landing on heads or tails to lose or double the bet.
 
+:::caution
+
+This command assumes that you have an existing currency system set up.
+
+:::
+
 ## Trigger
 
 **Type:** `Command`<br />
