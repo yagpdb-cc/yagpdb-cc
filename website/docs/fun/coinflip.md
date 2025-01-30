@@ -2,7 +2,13 @@
 title: Coin Flip
 ---
 
-This command is a game of heads or tails which users can play.
+This command flips a coin landing on heads or tails to lose or double the bet.
+
+:::caution
+
+This command assumes that you have an existing currency system set up.
+
+:::
 
 ## Trigger
 
@@ -15,19 +21,19 @@ This command is a game of heads or tails which users can play.
 
 ## Configuration
 
-- 📌 `$c`<br />
-  Channel ID where the game is played.
+- 📌 `$CHANNEL`<br />
+  Channel ID where the game is played. Set to `.Channel.ID` to allow play in any channel.
 
-- `$minbet`<br />
-  Minimum amount people can bet.
+- `$MIN_BET`<br />
+  Minimum amount users can bet.
 
-- `$maxbet`<br />
-  Maximum amount people can bet.
+- `$MAX_BET`<br />
+  Maximum amount users can bet.
 
-- 📌 `$db`<br />
-  Database entry name where the credits are stored.
+- 📌 `$DB_KEY`<br />
+  Database entry name where the currency is stored.
 
-- `$cooldown`<br />
+- `$COOLDOWN`<br />
   Cooldown for the command in seconds.
 
 ## Code
@@ -38,4 +44,4 @@ This command is a game of heads or tails which users can play.
 
 ## Author
 
-This custom command was written by [@DaviiD1337](https://github.com/DaviiD1337).
+This custom command was written by [@DaviiD1337](https://github.com/DaviiD1337) with contributions from [@H1nr1](https://github.com/H1nr1).
