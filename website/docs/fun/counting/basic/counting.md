@@ -52,7 +52,7 @@ Set this command to _only run_ in your counting channel in the channel restricti
 
 ## Code
 
-```gotmpl file=../../../../src/fun/counting/basic/counting.go.tmpl
+```gotmpl file=../../../../../src/fun/counting/basic/counting.go.tmpl
 
 ```
 
