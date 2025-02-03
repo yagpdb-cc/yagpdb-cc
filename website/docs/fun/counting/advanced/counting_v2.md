@@ -75,7 +75,7 @@ To view all available math functions, see [Supported Functions, Operators, and C
 
 ## Code
 
-```gotmpl file=../../../src/fun/counting_v2.go.tmpl
+```gotmpl file=../../../src/fun/counting/advanced/counting_v2.go.tmpl
 
 ```
 
