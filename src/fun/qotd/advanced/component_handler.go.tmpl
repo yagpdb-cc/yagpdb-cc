@@ -214,4 +214,12 @@
 {{ end }}
 {{ $m := sdict "embed" $embed "components" $comps }}
 {{ updateMessage (complexMessageEdit $m) }}
+{{ if in $id "queue_channel" }}
+  {{/* Prevent an execCC race condition when configuring queue channel message */}}
+  {{ sleep 3 }}
+  {{ $maybeNewCfg := dbGet 0 "qotd-config" }}
+  {{ if ne ( $n := $maybeNewCfg.Value.QueueMessage | toInt64 ) ( $o := $cfg.QueueMessage | toInt64 ) }}
+    {{ $cfg.Set "QueueMessage" ( or $n $o ) }}
+  {{ end }}
+{{ end }}
 {{ dbSet 0 "qotd-config" $cfg }}
