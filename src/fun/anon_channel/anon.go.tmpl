@@ -29,4 +29,4 @@
 	{{ deleteMessage nil ( toInt $db.Value ) 0 }}
 {{ end }}
 {{ $id := sendMessageRetID nil $message }}
-{{ dbSet .Channel.ID "stickymessage" ( str $id ) }}
+{{ dbSet .Channel.ID "anon_stickymessage" ( str $id ) }}
