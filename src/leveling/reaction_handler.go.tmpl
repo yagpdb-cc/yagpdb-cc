@@ -9,7 +9,7 @@
 {{ $validEmojis := cslice "▶️" "◀️" }} {{/* Valid emojis */}}
 {{ $isValid := false }} {{/* Whether this is actually a valid embed / leaderboard embed */}}
 {{ $page := 0 }} {{/* The current page */}}
-{{ with and (eq .ReactionMessage.Author.ID 204255221017214977) .ReactionMessage.Embeds }} {{/* Checks for validity */}}
+{{ with and (eq .ReactionMessage.Author.ID .BotUser.ID) .ReactionMessage.Embeds }} {{/* Checks for validity */}}
 	{{ $embed := index . 0 }} {{/* The first embed */}}
 	{{ if and (eq $embed.Title "❯ Leaderboard") $embed.Footer }} {{/* More checks */}}
 		{{ $page = reFind `\d+` $embed.Footer.Text }} {{/* We presume that this is valid, and get the page num */}}
