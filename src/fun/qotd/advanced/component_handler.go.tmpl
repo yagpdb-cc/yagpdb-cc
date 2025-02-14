@@ -1,5 +1,5 @@
 {{ define "MissingPerms" }}
-  {{ $yPerms := getTargetPermissionsIn 204255221017214977 .CID }}
+  {{ $yPerms := getTargetPermissionsIn .BotUser.ID .CID }}
   {{ $missing := cslice }}
   {{ range $k, $v := .AllPerms }}
     {{ if and (in $.ReqPerms $v) (ne (bitwiseAnd $yPerms $v) $v) }}
