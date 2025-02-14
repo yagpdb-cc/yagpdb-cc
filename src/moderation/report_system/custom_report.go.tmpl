@@ -12,7 +12,7 @@
 
 {{/* ACTUAL CODE */}}
 {{$Escaped_Prefix := reQuoteMeta .ServerPrefix}}
-{{if not (reFind (print `\A` $Escaped_Prefix `|<@!?204255221017214977>`) .Message.Content)}}
+{{if not (reFind (print `\A` $Escaped_Prefix `|` .BotUser.Mention) .Message.Content)}}
 Did not set regex to match Server Prefix!{{deleteTrigger}}
 {{else}}
 {{if and .CmdArgs (lt (len .CmdArgs) 2)}}
