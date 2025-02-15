@@ -9,7 +9,7 @@
 {{ $validEmojis := cslice "▶️" "◀️" }}
 {{ $isValid := false }}
 {{ $page := 0 }} {{/* The current page */}}
-{{ with and (eq .ReactionMessage.Author.ID 204255221017214977) .ReactionMessage.Embeds }}
+{{ with and (eq .ReactionMessage.Author.ID .BotUser.ID) .ReactionMessage.Embeds }}
 	{{ $embed := index . 0 }}
 	{{ if and (eq $embed.Title "❯ Tags") $embed.Footer }}
 		{{ $page = reFind `\d+` $embed.Footer.Text }}
