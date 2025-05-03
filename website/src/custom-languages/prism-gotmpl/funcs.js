@@ -1,4 +1,5 @@
 export const funcs = [
+	'abs',
 	'add',
 	'addMessageReactions',
 	'addReactions',
