@@ -1,5 +1,5 @@
 {{ define "MissingPerms" }}
-  {{ $yPerms := getTargetPermissionsIn .BotUser.ID .CID }}
+  {{ $yPerms := getTargetPermissionsIn .Bot .CID }}
   {{ $missing := cslice }}
   {{ range $k, $v := .AllPerms }}
     {{ if and (in $.ReqPerms $v) (ne (bitwiseAnd $yPerms $v) $v) }}
@@ -60,7 +60,7 @@
   {{ $cfg.Del "PrevCfg" }}
   {{ if not (hasSuffix $id "-back") }}
     {{ with getChannel (index .Values 0) }}
-      {{ $missing := execTemplate "MissingPerms" (sdict "CID" .ID "ReqPerms" $basicPerms "AllPerms" $allPerms) }}
+      {{ $missing := execTemplate "MissingPerms" (sdict "CID" .ID "ReqPerms" $basicPerms "AllPerms" $allPerms "Bot" $.BotUser.ID) }}
       {{ if $missing }}
         {{ $err = printf $missingPermsErr $missing .ID }}
       {{ else }}
