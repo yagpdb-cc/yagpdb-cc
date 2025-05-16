@@ -3,57 +3,58 @@
 	See <https://yagpdb-cc.github.io/utilities/snipe-message> for more information.
 
 	Author: zen | ゼン#0008 <https://github.com/z3nn13/>
+	Co-Author: H1nr1 <https://github.com/H1nr1>
 */}}
 
-{{ $re := `\n\n(<t:(\d+):f> \(<t:\d+:R>\)) \*\*[\w.#]+\*\* \(ID (\d{17,19})\)\:` }}
+{{ $re := `<t:(\d+):R>\) \*{2}[\w.]+\*{2} \(ID (\d{17,})\): (.*)` }}
 {{ $undelete := execAdmin "ud -a" }}
 {{ $data := reFindAllSubmatches $re $undelete 1 }}
+
 {{ if not $data }}
 	Nothing to snipe here
 	{{ return }}
 {{ end }}
-
-{{ $ex := or (and (hasPrefix "a_" .Guild.Icon) "gif") "png" }}
-{{ $icon := printf "https://cdn.discordapp.com/icons/%d/%s.%s?size=1024" .Guild.ID .Guild.Icon $ex }}
+{{ $data = index $data 0 }}
 
 {{ $col := 0 }}
 {{ $pos := 0 }}
-{{ range $.Guild.Roles }}
-	{{- if not (and (in $.Member.Roles .ID) .Color (lt $pos .Position) ) }} {{- continue }} {{- end }}
-	{{- $pos = .Position }} {{- $col = .Color -}}
+{{ range .Guild.Roles }}
+	{{- if not (and (in $.Member.Roles .ID) .Color (lt $pos .Position)) }} {{- continue }} {{- end }}
+	{{- $pos = .Position }}
+	{{- $col = .Color -}}
 {{ end }}
 
-{{ $member := getMember (index $data 0 3) }}
-{{ $msg := index (reSplit $re $undelete 2) 1|trimSpace }}
-{{ $time := timestampToTime (index $data 0 2) }}
+{{ $time := index $data 1 | timestampToTime }}
+{{ $member := index $data 2 | getMember }}
+{{ $msg := index $data 3 }}
+{{ $msg = reReplace `(?:https?:\/\/)?(?:www\.)?(?:dsc\.gg|invite\.gg+|discord\.link)\/[\w\d-_]+|(?:https?:\/\/)?(?:www\.|ptb\.|canary\.)?(?:discord(?:app)?\.(?:(?:com|gg)\/invite\/[\w\d-_]+)|discord\.gg\/[\w\d-_]+)|(?:https?:\/\/)?(?:www\.|ptb\.|canary\.)?(?:discord(?:app)?\.(?:(?:com|gg)\/(?:invite|servers)\/+[\w-_]+)|discord\.gg\/+[\w-_]+)|(?:https?:\/\/)?(?:www\.)?(?:dsc\.gg|invite\.gg+|discord\.link|(?:discord\.(gg|io|me|li|id))|disboard\.org)\/[\w\d-_/]+` $msg "<*redacted invite link*>" }}
+
+{{ $send := sdict "reply" .Message.ID }}
 {{ $embed := sdict
 	"author" (sdict
-		"name" (printf "%s (ID %d)" $member.User.String $member.User.ID)
 		"icon_url" ($member.User.AvatarURL "256")
+		"name" (printf "%s (ID %d)" $member.User.Username $member.User.ID)
 	)
-	"description" (printf "Message from <t:%d:R>:\n%s" $time.Unix $msg)
-	"footer" (sdict
-		"icon_url" $icon
-	)
+	"footer" (sdict "icon_url" (.Guild.IconURL "256"))
 	"timestamp" $time
 	"color" $col
 }}
-{{ $send := sdict "reply" .Message.ID "embed" $embed }}
+
+{{ $embed.Set "description" (printf "Message from <t:%d:R>" $time.Unix) }}
+{{ if not $msg }}
+	{{ $embed.Set "description" (printf "%s\n⚠️ An attachment/embed was deleted" $embed.description) }}
+{{ else if gt (len $msg) 1950 }}
+	{{ $embed.Set "description" (printf "%s\n⚠️ Message exceeded 2k characters. Contents sent as file instead" $embed.description) }}
+	{{ $send.Set "file" $msg }}
+{{ else }}
+	{{ $embed.Set "description" (printf "%s\n%s" $embed.description $msg) }}
+{{ end }}
 
 {{ $imgRe := `\.(?i:jpe?g|png|gif|tif|webp)`}}
 {{ if and ($imgURL := reFind .LinkRegex $msg) (reFind $imgRe $imgURL) }}
-	{{ $embed.footer.Set "text" (print "⚠️ An image link was detected\n" $embed.footer.text) }}
+	{{ $embed.footer.Set "text" "⚠️ An image link was detected" }}
 	{{ $embed.Set "image" (sdict "url" $imgURL) }}
 {{ end }}
 
-{{ if not $msg }}
-	{{ $embed.footer.Set "text" (print "⚠️ An attachment/embed was deleted\n" $embed.footer.text) }}
-{{ end }}
-
-{{ if gt (len (printf "Message from <t:%d:R>:\n%s" $time.Unix $msg)) 2000 }}
-	{{ $embed.footer.Set "text" (print "⚠️ Message exceeded 2k characters. Contents sent as file instead\n" $embed.footer.text) }}
-	{{ $embed.Set "description" (printf "Message from <t:%d:R>") }}
-	{{ $send.Set "file" $msg }}
-{{ end }}
-
+{{ $send.Set "embed" $embed }}
 {{ sendMessage nil (complexMessage $send) }}
