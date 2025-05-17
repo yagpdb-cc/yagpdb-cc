@@ -13,6 +13,11 @@ Retrieves the most recently deleted message in the past hour (non-premium) / 12 
 
 - `-snipe` - Retrieves the most recently deleted message in the past hour (non-premium) / 12 hours (premium).
 
+## Configuration
+
+- `$REDACT_INVITES` <br />
+  Whether or not to remove invites from messages when displaying deleted message.
+
 ## Code
 
 ```gotmpl file=../../../src/utilities/snipe.go.tmpl
