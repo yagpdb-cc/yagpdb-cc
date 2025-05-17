@@ -31,7 +31,7 @@
 {{ $msg := index $data 3 }}
 
 {{ if $REDACT_INVITES }}
-	{{ $msg = reReplace `(?:https?:\/\/)?(?:www\.)?(?:dsc\.gg|invite\.gg+|discord\.link)\/[\w\d-_]+|(?:https?:\/\/)?(?:www\.|ptb\.|canary\.)?(?:discord(?:app)?\.(?:(?:com|gg)\/invite\/[\w\d-_]+)|discord\.gg\/[\w\d-_]+)|(?:https?:\/\/)?(?:www\.|ptb\.|canary\.)?(?:discord(?:app)?\.(?:(?:com|gg)\/(?:invite|servers)\/+[\w-_]+)|discord\.gg\/+[\w-_]+)|(?:https?:\/\/)?(?:www\.)?(?:dsc\.gg|invite\.gg+|discord\.link|(?:discord\.(gg|io|me|li|id))|disboard\.org)\/[\w\d-_/]+` $msg "<*redacted invite link*>" }}
+	{{ $msg = reReplace `(?:https?://)?(?:www\.|ptb\.|canary\.)?(?i:discord(?:app)?|dsc|invite|disboard)\.(?i:gg|com|io|me|li|id|org)/\S+` $msg "<*redacted invite link*>" }}
 {{ end }}
 
 {{ $send := sdict "reply" .Message.ID }}
