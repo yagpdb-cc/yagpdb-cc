@@ -38,5 +38,10 @@ Trigger Type: Message Component
 Component Custom ID Regex: Copy the value of **$ModalDigestPrefix**
 
 
+## How to begin
+
+Simply run whatever you set as the trigger for [confess_init](https://github.com/yagpdb-cc/yagpdb-cc/tree/master/src/fun/confess_init.go.tmpl) in the channel you want it to run and you're done! The "Submit a confession!" button will show up. You can safely rerun this command if you want to create another button.
+
 **Author**
+
 This custom command was written by [creature-features](https://github.com/creature-features).
