@@ -19,7 +19,6 @@
 	"ModalPromptPrefix" $ModalPromptPrefix
 	"modalDigestPrefix" $ModalDigestPrefix
 }}
-{{$config := (dbGet 0 "confessConfig").Value}}
 {{$DBID := $config.DBID}}
 {{$perms := $config.RequiredPerms}}
 {{$ppfx := $config.ModalPromptPrefix}}
@@ -36,4 +35,5 @@
 	{{$warnMsg := sendMessageRetID nil (complexMessage "content" "You lack the required permissions to use this command." "allowed_mentions" (sdict "replied_user" true) "reply" .Message.ID )}}
 	{{deleteMessage .Channel.ID $warnMsg 5}}
 	{{deleteTrigger}}
+
 {{end}}
