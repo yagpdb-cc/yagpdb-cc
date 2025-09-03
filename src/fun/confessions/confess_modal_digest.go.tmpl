@@ -1,62 +1,47 @@
 {{/*
 	Creates/modifies confession messages based on modal input.
 
-	See <https://github.com/yagpdb-cc/yagpdb-cc/tree/master/Website/docs/confessions.md>
+	See <https://yagpdb-cc.github.io/fun/confessions> for more info.
 
-	Author: creature.features on Discord, <creature-features on Git https://github.com/creature-features>
+	Author: creature-features <https://github.com/creature-features>
 */}}
 	
-{{$c := (dbGet 0 "confessConfig").Value}}
-{{$DBID := $c.DBID}}
-{{$perms := $c.RequiredPerms}}
-{{$ppfx := $c.ModalPromptPrefix}}
-{{$dpfx := $c.modalDigestPrefix}}
+{{$c := (dbGet .Guild.ID "confessConfig").Value}}
 
 {{define "log_confession"}}
-	{{$msgID := .msgID}}
-	{{$invocationData := .invocationData}}
-	{{$confessionsRaw := .confessionsRaw}}
-	{{$confessions := $confessionsRaw.Value}}
-	{{if not $confessionsRaw.Value}}
-		{{$confessions = sdict (toString $msgID) $invocationData}}
-		{{return $confessions}}
-	{{else}}
-		{{$keyCount := len $confessions}}
-		{{if gt $keyCount 300}}
-			{{$keys := cslice}}
-			{{range $k, $v := $confessions}}
-				{{$keys = $keys.Append $k}}
-			{{end}}
-			{{$keys = sort $keys}}
-			{{$confessions.Del (toString (index $keys 0) )}}
-		{{end}}
-		{{$confessions.Set (toString $msgID) $invocationData}}
+	{{$invocationData := sdict 
+		"UserHash" .UserHash
+		"InteractionToken" .IntToken
+	}}
+	{{if not .ConfessionsRaw}}
+		{{$confessions := sdict (toString .MsgID) $invocationData}}
 		{{return $confessions}}
 	{{end}}
+	{{$confessions := .ConfessionsRaw.Value}}
+	{{$keyCount := len $confessions}}
+	{{if gt $keyCount 300}}
+		{{$keys := cslice}}
+		{{range $k, $v := $confessions}}
+			{{$keys = $keys.Append $k}}
+		{{end}}
+		{{$keys = sort $keys}}
+		{{$confessions.Del (toString (index $keys 0) )}}
+	{{end}}
+	{{$confessions.Set (toString .MsgID) $invocationData}}
+	{{return $confessions}}
 {{end}}
 
 {{define "modify_buttons"}}
-	{{$channelID := .ChannelID}}
-	{{$messageID := .MessageID}}
-	{{$removeRaw := .Remove}}
-
 	{{$toRemove := cslice}}
-	{{range (split (print $removeRaw) ",")}}
-		{{$r := reReplace `^\s+|\s+$` . ""}}
-		{{if ne $r ""}}
+	{{range (split (print .Remove) ",")}}
+		{{$r := trimSpace .}}
+		{{if $r}}
 			{{$toRemove = $toRemove.Append $r}}
 		{{end}}
 	{{end}}
 
-	{{$msg := ""}}
-	{{try}}
-		{{$msg = getMessage $channelID $messageID}}
-	{{catch}}
-		{{return}}
-	{{end}}
-
-	{{$content := $msg.Content}}
-
+	{{$msg := getMessage .ChID .MsgID}}
+	
 	{{$builtEmbed := ""}}
 	{{if and $msg.Embeds (gt (len $msg.Embeds) 0)}}
 		{{$e := index $msg.Embeds 0}}
@@ -65,214 +50,123 @@
 			{{end}}
 		{{end}}
 
-		{{$newRows := cslice}}
-		{{if $msg.Components}}
-			{{range $ar := $msg.Components}}
-				{{$rowButtons := cslice}}
-				{{range $comp := $ar.Components}}
-					{{$customID := (print $comp.CustomID)}}
-					{{$label := (print $comp.Label)}}
-					{{$url := (print $comp.URL)}}
-					{{$style := $comp.Style}}
+	{{$newRows := cslice}}
+	{{if $msg.Components}}
+		{{range $ar := $msg.Components}}
+			{{$rowButtons := cslice}}
+			{{range $comp := $ar.Components}}
 
-					{{$emojiVal := ""}}
-					{{with $comp.Emoji}}
-						{{if ne (print .ID) ""}}
-							{{$emojiVal = (print .Name ":" .ID)}}
-						{{else if ne (print .Name) ""}}
-							{{$emojiVal = .Name}}
-						{{end}}
-					{{end}}
-
-					{{$skip := false}}
-
-					{{if ne (print $customID) ""}}
-						{{range $r := $toRemove}}
-							{{$rClean := reReplace `^\s+|\s+$` (print $r) ""}}
-							{{$cidClean := reReplace `^\s+|\s+$` (print $customID) ""}}
-							{{if eq $rClean $cidClean}}
-								{{$skip = true}}
-							{{end}}
-						{{end}}
-					{{end}}
-
-					{{if not $skip}}
-						{{if ne $url ""}}
-							{{ $btn := "" }}
-							{{if ne $emojiVal ""}}
-								{{$btn = cbutton "label" $label "emoji" $emojiVal "url" $url "style" 5}}
-							{{else}}
-								{{$btn = cbutton "label" $label "url" $url "style" 5}}
-							{{end}}
-							{{$rowButtons = $rowButtons.Append $btn}}
-						{{else}}
-							{{if ne (print $customID) ""}}
-								{{$s := 2}}
-								{{with $style}}
-									{{$s = toInt .}}
-								{{end}}
-								{{ $btn := "" }}
-								{{if ne $emojiVal ""}}
-									{{$btn = cbutton "label" $label "emoji" $emojiVal "custom_id" $customID "style" $s}}
-								{{else}}
-									{{$btn = cbutton "label" $label "custom_id" $customID "style" $s}}
-								{{end}}
-								{{$rowButtons = $rowButtons.Append $btn}}
-							{{end}}
+				{{$skip := false}}
+				{{if ne (print $comp.CustomID) ""}}
+					{{range $r := $toRemove}}
+						{{$rClean := reReplace `^\s+|\s+$` (print $r) ""}}
+						{{$cidClean := reReplace `^\s+|\s+$` (print $comp.CustomID) ""}}
+						{{if eq $rClean $cidClean}}
+							{{$skip = true}}
 						{{end}}
 					{{end}}
 				{{end}}
 
-				{{if gt (len $rowButtons) 0}}
-					{{$newRows = $newRows.Append $rowButtons}}
+				{{if $skip}}
+					{{continue}}
+				{{end}}
+				{{if ne (print $comp.CustomID) ""}}
+					{{ $btn := "" }}
+					{{if $comp.Emoji}}
+						{{$btn = cbutton "label" $comp.Label "emoji" $comp.Emoji "custom_id" $comp.CustomID "style" $comp.Style}}
+					{{else}}
+						{{$btn = cbutton "label" $comp.Label "custom_id" $comp.CustomID "style" $comp.Style}}
+					{{end}}
+					{{$rowButtons = $rowButtons.Append $btn}}
 				{{end}}
 			{{end}}
-		{{end}}
 
-		{{$hasRows := gt (len $newRows) 0}}
-
-		{{if $hasRows}}
-			{{editMessage $channelID $messageID (complexMessageEdit "embed" $builtEmbed "components" $newRows "content" $content)}}
-		{{else if not $hasRows}}
-			{{editMessage $channelID $messageID (complexMessageEdit "embed" $builtEmbed "components" nil "content" $content)}}
+			{{if $rowButtons}}
+				{{$newRows = $newRows.Append $rowButtons}}
+			{{end}}
 		{{end}}
+	{{end}}
+
+
+	{{if $newRows}}
+		{{editMessage .ChID .MsgID (complexMessageEdit "embed" $builtEmbed "components" $newRows "content" $msg.Content)}}
+	{{else}}
+		{{editMessage .ChID .MsgID (complexMessageEdit "embed" $builtEmbed "content" $msg.Content)}}
+	{{end}}
 {{end}}
 
-{{$csbt := cbutton "label" "Submit a confession!" "custom_id" (print $ppfx "confessSubmit")}}
-{{$crbt := cbutton "label" "Reply" "custom_id" (print $ppfx "confessReply") "style" 2}}
-{{$rtbt := cbutton "label" "Reply" "custom_id" (print $ppfx "confessReplyThread") "style" 2}}
-{{$bcbt := cbutton "label" "Ban" "custom_id" (print $ppfx "confessBanConfirm") "style" 4}}
+{{$csbt := cbutton "label" "Submit a confession!" "custom_id" "modalprompt-confessSubmit"}}
+{{$crbt := cbutton "label" "Reply" "custom_id" "modalprompt-confessReply" "style" 2}}
+{{$rtbt := cbutton "label" "Reply" "custom_id" "modalprompt-confessReplyThread" "style" 2}}
+{{$bcbt := cbutton "label" "Ban" "custom_id" "modalprompt-confessBanConfirm" "style" 4}}
 {{$conmsg := complexMessage "content" (print "✅ Your confession has been added to <#" .Channel.ID ">") "ephemeral" true}}
 {{$orig := getResponse nil nil}}
-{{if eq .StrippedID "confessSubmit"}}
+{{$userHash := hash (toString .User.ID)}}
 
-	{{$confessCount := dbIncr 1 "confessCount" 1}}
+{{if ne .StrippedID "confessBan"}}
+
+	{{$confessCount := dbIncr .Guild.ID "confessCount" 1|toInt}}
 	{{$confessTitle := print "Anonymous Confession (#" $confessCount ")"}}
 	{{$confessText := index .Values 0}}
+
 	{{$embed := cembed
 		"title" $confessTitle
 		"description" $confessText
 		"color" (randInt 0 16777216)}}
-	{{$message := complexMessage	"embed" $embed "buttons" (cslice $csbt $crbt $bcbt)}}
-	
-	{{$data := dbGet $DBID "SubmitButton"}}
-	{{if $data}}
-	{{$invocation := $data.Value}}
-	{{$passData := sdict
-		"ChannelID" $invocation.ChannelID
-		"MessageID" $invocation.MessageID
-		"InteractionToken" $invocation.InteractionToken
-		"Remove" "templates-modalprompt-confessSubmit"
+
+	{{$responseConfession := ""}}
+	{{$confessionChannel := .Channel.ID}}
+	{{$remove := ""}}
+
+	{{if eq .StrippedID "confessSubmit"}}
+		{{$responseConfession = complexMessage "embed" $embed "buttons" (cslice $csbt $crbt $bcbt)}}
+		{{$remove = "templates-modalprompt-confessSubmit"}}
+	{{else if eq .StrippedID "confessReply"}}
+		{{$responseConfession = complexMessage "embed" $embed "buttons" (cslice $rtbt $bcbt)}}
+		{{$confessionChannel = (createThread .Channel.ID $orig.ID (index $orig.Embeds 0).Title).ID}}
+		{{$remove = "templates-modalprompt-confessReply"}}
+	{{else if eq .StrippedID "confessReplyThread"}}
+		{{$responseConfession = complexMessage "embed" $embed "buttons" (cslice $rtbt $bcbt) "reply" .Message.ID}}
+	{{end}}
+
+	{{$msgID := sendMessageRetID $confessionChannel $responseConfession}}
+
+	{{if and (ne $remove "") ($orig.Embeds)}}
+		{{$modifyButtonData := sdict
+			"ChID" (toString $orig.ChannelID)
+			"MsgID" (toString $orig.ID)
+			"Remove" $remove
 		}}
-	{{$silent := execTemplate "modify_buttons" $passData}}
+		{{$silent := execTemplate "modify_buttons" $modifyButtonData}}
+	{{end}}
+
+	{{$confessionsRaw := dbGet .Guild.ID "confessions"}}
+	{{$confessions := execTemplate "log_confession" (sdict 
+		"ChID" .Channel.ID
+		"MsgID" $msgID
+		"UserHash" $userHash
+		"IntToken" (toString .Interaction.Token)
+		"ConfessionsRaw" $confessionsRaw)
+	}}
+	{{dbSet .Guild.ID "confessions" $confessions}}
+	{{return}}
+{{end}}
+
+{{$days := (index .Values 0)}}
+{{if (toInt $days)}}
+	{{$confessionsRaw := dbGet .Guild.ID "confessions"}}
+	{{if not $confessionsRaw}}
+		{{sendResponse nil (complexMessage "content" "**Ban failed!** Database has no confession data." "ephemeral" true)}}
 	{{else}}
-	{{$msg := getMessage $orig.ChannelID $orig.ID}}
-	{{if $msg.Embeds}}
-		{{$passData := sdict
-		"ChannelID" (toString $orig.ChannelID)
-		"MessageID" (toString $orig.ID)
-		"InteractionToken" (toString .Interaction.Token)
-		"Remove" "templates-modalprompt-confessSubmit"
-		}}
-		{{$silent := execTemplate "modify_buttons" $passData}}
-	{{end}}
-	{{end}}
-	
-	{{$msgID := sendMessageRetID nil $message}}
-	{{$userHash := hash (toString .User.ID)}}
-	{{$invocationData := sdict 
-	"UserHash" $userHash
-	"InteractionToken" (toString .Interaction.Token)
-	}}
-	{{$invocationDataSubmit := sdict
-	"ChannelID" (toString $orig.ChannelID)
-	"MessageID" (toString $msgID)
-	"UserHash" $userHash
-	"InteractionToken" (toString .Interaction.Token)
-	}}
-	{{dbSet $DBID "SubmitButton" $invocationDataSubmit}}
-	
-	{{$confessionsRaw := dbGet $DBID "confessions"}}
-	{{$confessions := execTemplate "log_confession" (sdict "cid" .ChannelID "msgID" $msgID "invocationData" $invocationData "confessionsRaw" $confessionsRaw)}}
-	{{dbSet $DBID "confessions" $confessions}}
-	{{sendResponse nil $conmsg}}
-{{else if eq .StrippedID "confessReply"}}
-	
-	{{$confessCount := dbIncr 1 "confessCount" 1}}
-	{{$confessTitle := print "Anonymous Confession (#" $confessCount ")"}}
-	{{$confessText := index .Values 0}}
-	{{$embed := cembed
-		"title" $confessTitle
-		"description" $confessText
-		"color" (randInt 0 16777216)}}
-	{{$message := complexMessage "embed" $embed "buttons" (cslice $rtbt $bcbt)}}
-	
-	{{$orig := getResponse nil nil}}
-
-	{{$channelID := (toString $orig.ChannelID)}}
-	{{$messageID := (toString $orig.ID)}}
-	{{$interactionToken := (toString .Interaction.Token)}}
-	{{$remove := "templates-modalprompt-confessReply"}}
-	{{$passData := sdict
-	"ChannelID" .Channel.ID
-	"MessageID" .Message.ID
-	"InteractionToken" $interactionToken
-	"Remove" $remove
-	}}
-	{{$silent := execTemplate "modify_buttons" $passData}}
-	
-	{{$thread := createThread $channelID $messageID (index $orig.Embeds 0).Title}}
-	{{$msgID := sendMessageRetID $thread.ID $message}}
-	{{$userHash := hash (toString .User.ID)}}
-	{{$invocationData := sdict 
-	"UserHash" $userHash
-	"InteractionToken" (toString .Interaction.Token)
-	}}
-	
-	{{$confessionsRaw := dbGet $DBID "confessions"}}
-	{{$confessions := execTemplate "log_confession" (sdict "cid" .ChannelID "msgID" $msgID "invocationData" $invocationData "confessionsRaw" $confessionsRaw)}}
-
-	{{dbSet $DBID "confessions" $confessions}}
-	{{sendResponse nil (complexMessage "content" (print "✅ Your confession has been added to <#" $thread.ID ">") "ephemeral" true)}} 
-{{else if eq .StrippedID "confessReplyThread"}}
-	
-	{{$confessCount := dbIncr 1 "confessCount" 1}}
-	{{$confessTitle := print "Anonymous Confession (#" $confessCount ")"}}
-	{{$confessText := index .Values 0}}
-	{{$embed := cembed
-		"title" $confessTitle
-		"description" $confessText
-		"color" (randInt 0 16777216)}}
-	{{$message := complexMessage "embed" $embed "buttons" (cslice $rtbt $bcbt) "reply" .Message.ID}}
-	
-	{{$msgID := sendMessageRetID .Channel.ID $message}}
-	{{$userHash := hash (toString .User.ID)}}
-	{{$invocationData := sdict 
-	"UserHash" $userHash
-	"InteractionToken" (toString .Interaction.Token)
-	}}
-	{{$confessionsRaw := dbGet $DBID "confessions"}}
-	{{$confessions := execTemplate "log_confession" (sdict "cid" .ChannelID "msgID" $msgID "invocationData" $invocationData "confessionsRaw" $confessionsRaw)}}
-	{{dbSet $DBID "confessions" $confessions}}
-	{{sendResponse nil $conmsg}}
-
-{{else if eq .StrippedID "confessBan"}}
-	{{$days := (index .Values 0)}}
-	{{if (toInt $days)}}
-		{{$confessionsRaw := dbGet $DBID "confessions"}}
-		{{if not $confessionsRaw}}
-			{{sendResponse nil (complexMessage "content" "**Ban failed!** Database has no confession data." "ephemeral" true)}}
+		{{$confessions := $confessionsRaw.Value}}
+		{{$userHash := ($confessions.Get (toString .Message.ID)).UserHash}}
+		{{if eq (toString $userHash) ""}}
+			{{sendResponse nil (complexMessage "content" "**Ban failed!** No data available for this message." "ephemeral" true)}}
 		{{else}}
-			{{$confessions := $confessionsRaw.Value}}
-			{{$userHash := ($confessions.Get (toString .Message.ID)).UserHash}}
-			{{if eq (toString $userHash) ""}}
-				{{sendResponse nil (complexMessage "content" "**Ban failed!** No data available for this message." "ephemeral" true)}}
-			{{else}}
-				{{dbSetExpire $DBID (print "confessBan::" $userHash) (sdict "Time" currentTime "Duration" (index .Values 0)) ( mult (toInt (index .Values 0) ) 86400 )}}
-				{{sendResponse nil (complexMessage "content" "User has been banned from Confessions." "ephemeral" true)}}
-			{{end}}
+			{{dbSetExpire .Guild.ID (print "confessBan::" $userHash) (sdict "Time" currentTime "Duration" (index .Values 0)) ( mult (toInt (index .Values 0) ) 86400 )}}
+			{{sendResponse nil (complexMessage "content" "User has been banned from Confessions." "ephemeral" true)}}
 		{{end}}
-	{{else}}
-		{{sendResponse nil (complexMessage "content" "**Ban failed!** Days field must only contain numbers." "ephemeral" true) }}
 	{{end}}
+{{else}}
+	{{sendResponse nil (complexMessage "content" "**Ban failed!** Days field must only contain numbers." "ephemeral" true) }}
 {{end}}
