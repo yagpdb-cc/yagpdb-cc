@@ -59,9 +59,7 @@
 				{{$skip := false}}
 				{{if ne (print $comp.CustomID) ""}}
 					{{range $r := $toRemove}}
-						{{$rClean := reReplace `^\s+|\s+$` (print $r) ""}}
-						{{$cidClean := reReplace `^\s+|\s+$` (print $comp.CustomID) ""}}
-						{{if eq $rClean $cidClean}}
+						{{if eq $r $comp.CustomID}}
 							{{$skip = true}}
 						{{end}}
 					{{end}}
@@ -133,8 +131,8 @@
 
 	{{if and (ne $remove "") ($orig.Embeds)}}
 		{{$modifyButtonData := sdict
-			"ChID" (toString $orig.ChannelID)
-			"MsgID" (toString $orig.ID)
+			"ChID" $orig.ChannelID
+			"MsgID" $orig.ID
 			"Remove" $remove
 		}}
 		{{$silent := execTemplate "modify_buttons" $modifyButtonData}}
