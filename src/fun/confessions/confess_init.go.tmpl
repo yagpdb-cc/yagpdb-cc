@@ -1,39 +1,29 @@
 {{/*
 	Sets up the confessions commands and creates the confession button in the channel it's ran in.
 
-	See <https://github.com/yagpdb-cc/yagpdb-cc/tree/master/Website/docs/confessions.md>
+	See <https://yagpdb-cc.github.io/fun/confessions> for more info.
 
-	Author: creature.features on Discord, <creature-features on Git https://github.com/creature-features>
+	Author: creature-features <https://github.com/creature-features>
 */}}
 
 {{/* Configuration values */}}
-{{$DBID := (toInt64 1)}}	{{/* This is the database UserID, set it to something you don't use */}}
-{{$RequiredPerms := "ManageServer"}}	{{/* This is the permission to check for ban actions */}}
-{{$ModalPromptPrefix := "modalprompt-"}} 	{{/* This should match the Component Custom ID Regex of modal_prompt.go.tmpl */}}
-{{$ModalDigestPrefix := "modaldigest-"}} 	{{/* This should match the Component Custom ID Regex of modal_digest.go.tmpl */}}
+{{$REQUIRED_PERMISSIONS := bitwiseOr .Permissions.ManageServer}}	{{/* This is the permission to check for ban actions */}}
 {{/* End of configuration values */}}
 
 {{$config := sdict 
-	"DBID" $DBID
-	"RequiredPerms" $RequiredPerms
-	"ModalPromptPrefix" $ModalPromptPrefix
-	"modalDigestPrefix" $ModalDigestPrefix
+	"DBID" 13579
+	"RequiredPerms" (toString $REQUIRED_PERMISSIONS)
 }}
-{{$DBID := $config.DBID}}
-{{$perms := $config.RequiredPerms}}
-{{$ppfx := $config.ModalPromptPrefix}}
-{{$dpfx := $config.modalDigestPrefix}}
+{{dbSet .Guild.ID "confessConfig" $config}}
 
+{{deleteTrigger}}
 
-{{dbSet 0 "confessConfig" $config}}
-{{$perms := $config.RequiredPerms}}
-{{if (in (split (index (split (exec "viewperms") "\n") 2) ", ") $perms )}}
-	{{$btn1 := cbutton "label" "Submit a confession!" "custom_id" "modalprompt-confessSubmit"}}
-	{{$message := complexMessage "buttons" (cslice $btn1)}}
-	{{$msgID := sendMessageRetID nil $message}}
-{{else}}
+{{if not (hasPermissions $REQUIRED_PERMISSIONS)}}
 	{{$warnMsg := sendMessageRetID nil (complexMessage "content" "You lack the required permissions to use this command." "allowed_mentions" (sdict "replied_user" true) "reply" .Message.ID )}}
 	{{deleteMessage .Channel.ID $warnMsg 5}}
-	{{deleteTrigger}}
-
+	{{return}}
 {{end}}
+
+{{$btn1 := cbutton "label" "Submit a confession!" "custom_id" "modalprompt-confessSubmit"}}
+{{$message := complexMessage "buttons" $btn1}}
+{{sendMessage nil $message}}
