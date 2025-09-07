@@ -13,7 +13,7 @@
 {{$userBanned := false}}
 
 {{$userHash := hash (toString .User.ID)}}
-{{$authorHash := ((dbGet .Guild.ID "confessions").Value.Get .Message.ID).UserHash}}
+{{$authorHash := (dbGet .Guild.ID "confessions").Value.Get .Message.ID}}
 
 {{$bannedUsersDB := (dbGetPattern .Guild.ID "confessBan::%" 100 0)}}
 {{$bannedUsers := cslice}}
@@ -34,7 +34,7 @@
 	{{$banInfo := $banInfoRaw.Value}}
 	{{$msg := complexMessage "content" (print "A confession you made on <t:" $banInfoRaw.CreatedAt.Unix ":F> was banned by a moderator. You are banned from making confessions for " $banInfo.Duration " days. They don't know who they banned, so your identity is still secret.\n\nBan ends <t:" $banInfoRaw.ExpiresAt.Unix ":F>" ) "ephemeral" true}}
 	{{sendResponse nil $msg}}
-	{{return}}}}
+	{{return}}
 {{end}}
 {{if eq .StrippedID "confessBanConfirm"}}
 	{{if not (hasPermissions $perms) }}
@@ -49,7 +49,7 @@
 	{{sendModal $modal}}
 	{{return}}
 {{end}}
-	{{$customID := "modaldigest-confessSubmit"}}
+{{$customID := "modaldigest-confessSubmit"}}
 {{if eq .StrippedID "confessReply"}}
 	{{$customID = "modaldigest-confessReply"}}
 {{else if eq .StrippedID "confessReplyThread"}}
