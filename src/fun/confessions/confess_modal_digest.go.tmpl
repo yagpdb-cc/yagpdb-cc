@@ -42,7 +42,8 @@
 		{{range $ar := $msg.Components}}
 			{{$rowButtons := cslice}}
 			{{range $comp := $ar.Components}}
-				{{if in $.Remove $comp.CustomID}}
+				
+				{{if eq $.Remove $comp.CustomID}}
 					{{continue}}
 				{{end}}
 
@@ -68,6 +69,27 @@
 	{{end}}
 {{end}}
 
+{{if eq .StrippedID "confessBan"}}
+	{{if not (index .Values 0|toInt)}}
+		{{sendResponse nil (complexMessage "content" "**Ban failed!** Days field must only contain numbers." "ephemeral" true) }}
+		{{return}}
+	{{end}}
+	{{$confessionsRaw := dbGet .Guild.ID "confessions"}}
+	{{if not $confessionsRaw}}
+		{{sendResponse nil (complexMessage "content" "**Ban failed!** Database has no confession data." "ephemeral" true)}}
+		{{return}}
+	{{end}}
+	{{$confessions := $confessionsRaw.Value}}
+	{{$userHash := ($confessions.Get .Message.ID)}}
+	{{if not $userHash}}
+		{{sendResponse nil (complexMessage "content" "**Ban failed!** No data available for this message." "ephemeral" true)}}
+		{{return}}
+	{{end}}
+	{{dbSetExpire .Guild.ID (print "confessBan::" $userHash) (sdict "Time" currentTime "Duration" (index .Values 0)) ( mult (toInt (index .Values 0) ) 86400 )}}
+	{{sendResponse nil (complexMessage "content" "User has been banned from Confessions." "ephemeral" true)}}
+	{{return}}
+{{end}}
+
 {{$csbt := cbutton "label" "Submit a confession!" "custom_id" "modalprompt-confessSubmit"}}
 {{$crbt := cbutton "label" "Reply" "custom_id" "modalprompt-confessReply" "style" 2}}
 {{$rtbt := cbutton "label" "Reply" "custom_id" "modalprompt-confessReplyThread" "style" 2}}
@@ -87,19 +109,17 @@
 
 {{$responseConfession := ""}}
 {{$confessionChannel := .Channel.ID}}
-{{$remove := cslice}}
+{{$remove := ""}}
 
 {{if eq .StrippedID "confessSubmit"}}
 	{{$responseConfession = complexMessage "embed" $embed "buttons" (cslice $csbt $crbt $bcbt)}}
-	{{$remove = $remove.Append "templates-modalprompt-confessSubmit"}}
+	{{$remove = "templates-modalprompt-confessSubmit"}}
 {{else if eq .StrippedID "confessReply"}}
 	{{$responseConfession = complexMessage "embed" $embed "buttons" (cslice $rtbt $bcbt)}}
 	{{$confessionChannel = (createThread .Channel.ID $orig.ID (index $orig.Embeds 0).Title).ID}}
-	{{$remove = $remove.Append "templates-modalprompt-confessReply"}}
+	{{$remove = "templates-modalprompt-confessReply"}}
 {{else if eq .StrippedID "confessReplyThread"}}
 	{{$responseConfession = complexMessage "embed" $embed "buttons" (cslice $rtbt $bcbt) "reply" .Message.ID}}
-{{else if eq .StrippedID "confessBan"}}
-	{{$remove = $remove.Append "templates-modalprompt-confessBanConfirm"}}
 {{end}}
 
 {{$msgID := sendMessageRetID $confessionChannel $responseConfession}}
@@ -113,33 +133,10 @@
 	{{$silent := execTemplate "modify_buttons" $modifyButtonData}}
 {{end}}
 
-{{if ne .StrippedID "confessBan"}}
-
-	{{$confessionsRaw := dbGet .Guild.ID "confessions"}}
-	{{$confessions := execTemplate "log_confession" (sdict 
-		"MsgID" $msgID
-		"UserHash" $userHash
-		"ConfessionsRaw" $confessionsRaw)
-	}}
-	{{dbSet .Guild.ID "confessions" $confessions}}
-	{{return}}
-{{end}}
-
-{{/* ban state */}}
-{{if not (index .Values 0|toInt)}}
-	{{sendResponse nil (complexMessage "content" "**Ban failed!** Days field must only contain numbers." "ephemeral" true) }}
-	{{return}}
-{{end}}
 {{$confessionsRaw := dbGet .Guild.ID "confessions"}}
-{{if not $confessionsRaw}}
-	{{sendResponse nil (complexMessage "content" "**Ban failed!** Database has no confession data." "ephemeral" true)}}
-	{{return}}
-{{end}}
-{{$confessions := $confessionsRaw.Value}}
-{{$userHash := ($confessions.Get (toString .Message.ID)).UserHash}}
-{{if not $userHash}}
-	{{sendResponse nil (complexMessage "content" "**Ban failed!** No data available for this message." "ephemeral" true)}}
-	{{return}}
-{{end}}
-{{dbSetExpire .Guild.ID (print "confessBan::" $userHash) (sdict "Time" currentTime "Duration" (index .Values 0)) ( mult (toInt (index .Values 0) ) 86400 )}}
-{{sendResponse nil (complexMessage "content" "User has been banned from Confessions." "ephemeral" true)}}
+{{$confessions := execTemplate "log_confession" (sdict 
+	"MsgID" $msgID
+	"UserHash" $userHash
+	"ConfessionsRaw" $confessionsRaw)
+}}
+{{dbSet .Guild.ID "confessions" $confessions}}
