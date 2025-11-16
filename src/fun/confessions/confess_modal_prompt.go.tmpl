@@ -1,0 +1,65 @@
+{{/*
+	Handles button presses that generate modals
+
+	See <https://yagpdb-cc.github.io/fun/confessions> for more info.
+
+	Author: creature-features <https://github.com/creature-features>
+*/}}
+
+{{$config := (dbGet .Guild.ID "confessConfig").Value}}
+{{$perms := (toInt64 $config.RequiredPerms)}}
+
+{{$authorBanned := false}}
+{{$userBanned := false}}
+
+{{$userHash := hash (toString .User.ID)}}
+{{$authorHash := (dbGet .Guild.ID "confessions").Value.Get .Message.ID}}
+
+{{$bannedUsersDB := (dbGetPattern .Guild.ID "confessBan::%" 100 0)}}
+{{$bannedUsers := cslice}}
+{{range $bannedUsersDB}}
+	{{$bannedUsers = $bannedUsers.Append (index (split .Key "confessBan::") 1)}}
+{{end}}
+
+{{if in $bannedUsers $authorHash}}
+	{{$authorBanned = true}}
+{{end}}
+
+{{if in $bannedUsers $userHash}}
+	{{$userBanned = true}}
+{{end}}
+
+{{if $userBanned}}
+	{{$banInfoRaw := dbGet .Guild.ID (print "confessBan::" $userHash)}}
+	{{$banInfo := $banInfoRaw.Value}}
+	{{$msg := complexMessage "content" (print "A confession you made on <t:" $banInfoRaw.CreatedAt.Unix ":F> was banned by a moderator. You are banned from making confessions for " $banInfo.Duration " days. They don't know who they banned, so your identity is still secret.\n\nBan ends <t:" $banInfoRaw.ExpiresAt.Unix ":F>" ) "ephemeral" true}}
+	{{sendResponse nil $msg}}
+	{{return}}
+{{end}}
+{{if eq .StrippedID "confessBanConfirm"}}
+	{{if not (hasPermissions $perms) }}
+		{{sendResponse nil (complexMessage "content" "You lack the permissons required to ban users from Confessions." "ephemeral" true)}}
+		{{return}}
+	{{end}}
+	{{$modal := cmodal
+		"title" "Confirm ban?"
+		"custom_id" "modaldigest-confessBan"
+		"fields" (cslice (sdict "label" "Days" "value" "3" "required" true))
+	}}
+	{{sendModal $modal}}
+	{{return}}
+{{end}}
+{{$customID := "modaldigest-confessSubmit"}}
+{{if eq .StrippedID "confessReply"}}
+	{{$customID = "modaldigest-confessReply"}}
+{{else if eq .StrippedID "confessReplyThread"}}
+	{{$customID = "modaldigest-confessReplyThread"}}
+{{else if eq .StrippedID "confessBanConfirm"}}
+	{{$customID = "modaldigest-confessBanConfirm"}}
+{{end}}
+{{$modal := cmodal
+	"title" "Submit a Confession"
+	"custom_id" $customID
+	"fields" (cslice (sdict "label" "Confession Content" "min_length" 1 "style" 2 "required" true))
+}}
+{{sendModal $modal}}
