@@ -8,7 +8,8 @@ You can specify more than one ID or trigger, and the bot will generate one file 
 
 :::note
 
-The built-in `cc` command received a recent update that allows it to show code in file format as well: see the `-file` switch. However, it does not support showing multiple custom commands, which is where this command comes in handy.
+The built-in `cc` command can send CC responses as files with the `-file` switch, however it does not support showing multiple custom commands.
+There is a [dedicated CC](export-ccs) to send *all* server custom commands as files, this CC instead allows specifying up to 5 to send.
 
 :::
 
