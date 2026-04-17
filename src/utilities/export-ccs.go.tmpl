@@ -1,0 +1,126 @@
+{{/*
+	Export all server CCs as files.
+	See <https://yagpdb-cc.github.io/utilities/export-ccs> for more information.
+
+	Author: galen8183 <https://github.com/galen8183>
+*/}}
+
+{{/* Configuration values */}}
+{{$permissions := bitwiseOr .Permissions.Administrator .Permissions.ManageServer}}
+{{/* End of configuration values */}}
+
+{{if not .ExecData}}
+    {{if not (hasPermissions $permissions)}}
+		You don't have permission to run this command!
+		{{return}}
+	{{end}}
+
+	{{$lines := split (exec "cc") "\n"}}
+	{{$ccs := slice $lines 1 (len $lines | add -1)}}
+
+	{{/* safety against unintentional invocation */}}
+	{{if not (dbGet .Channel.ID "CC export timer")}}
+		{{dbSetExpire .Channel.ID "CC export timer" true 60}}
+⚠️ **Warning**
+Are you sure you want to do this?
+All {{len $ccs}} CCs in this server will be sent as individual files, to this channel!
+If yes, run the command again within the next minute (60s).
+		{{return}}
+	{{end}}
+
+	{{dbDel .Channel.ID "CC export timer"}}
+
+	{{sendMessage nil (cembed
+		"title" "Export CCs"
+		"url" "https://yagpdb-cc.github.io/utilities/export-ccs"
+		"description" "Beginning CC export in 5 seconds!"
+	)}}
+
+	{{/* get metadata from the inbuilt `customcommands` command */}}
+	{{$meta := cslice}}
+	{{range $ccs}}
+		{{- $c := sdict}}
+		{{- range reFindAllSubmatches `\x60#\s*(\d+):\x60|(?:- (\w+): \x60(.+?)\x60)(?: |$)` .}}
+			{{- if index . 1}}
+				{{- $c.Set "CCID" (index . 1 | toInt)}}
+			{{- else}}
+				{{- $c.Set (index . 2) (index . 3)}}
+			{{- end}}
+		{{- end}}
+
+		{{- $meta = $meta.Append $c}}
+	{{end}}
+
+	{{execCC .CCID nil 5 (sdict
+		"Meta" $meta
+		"Groups" sdict
+		"Count" (len $ccs)
+	)}}
+	{{return}}
+{{end}}
+
+{{/* start sending files */}}
+
+{{$meta := .ExecData.Meta}}
+{{$groups := .ExecData.Groups}}
+
+{{/* export 5 CCs at a time (exec function limit) */}}
+{{range 5}}
+	{{- if le (len $meta) .}}
+		{{- break }}
+	{{- end}}
+
+	{{- $c := index $meta .}}
+
+	{{- /* get just the response content, no preamble or code block */}}
+	{{- $lines := split (exec "cc" $c.CCID "-raw").Content "\n"}}
+	{{- $response := slice $lines 2 (len $lines | add -1)}}
+	{{- $msg := sendMessageRetID nil (complexMessage
+		"file" (joinStr "\n" $response)
+		"filename" (printf "%03d-%s" $c.CCID (or $c.Name $c.Trigger))
+	)}}
+
+	{{- $c.Set "URL" (index (getMessage nil $msg).Attachments 0).URL}}
+	{{- $groups.Set $c.Group ((or ($groups.Get $c.Group) cslice).Append $c)}}
+{{end}}
+
+{{/* more CCs to export? */}}
+{{if gt (len $meta) 5}}
+	{{.ExecData.Set "Meta" (slice $meta 5)}}
+	{{execCC .CCID nil 10 .ExecData}}
+	{{return}}
+{{end}}
+
+{{$chars := 0}}
+{{$total := 0}}
+{{$fields := cslice}}
+{{range $n, $v := $groups}}
+	{{- $g := ""}}
+	{{- range $v}}
+		{{- $g = printf "%s[#%d](%s) - %s\n" $g .CCID .URL .Trigger}}
+	{{- end}}
+
+	{{- $chars = len $g}}
+	{{- $total = add $total $chars}}
+	{{- if gt $chars 1000}}
+		{{- break}}
+	{{- end}}
+
+	{{- $fields = $fields.Append (sdict "name" $n "value" $g)}}
+{{end}}
+
+{{$m := sdict
+	"file" (json $groups true)
+	"filename" "cc-export-metadata"
+	"embed" (sdict
+		"title" "CC Export Complete!"
+		"fields" $fields
+	)
+}}
+
+{{if or (gt $chars 1000) (gt $total 5000) (gt (len $fields) 25)}}
+	{{$m.embed.Del "fields"}}
+	{{$m.embed.Set "description" "Pretty text grew too long, please refer to the attached metadata file!"}}
+{{end}}
+
+{{sendMessage nil (complexMessage $m)}}
