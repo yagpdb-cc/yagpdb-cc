@@ -5,9 +5,17 @@
 	Author: galen8183 <https://github.com/galen8183>
 */}}
 
+{{/* Configuration values */}}
+{{$permissions := cslice .Permissions.Administrator .Permissions.ManageServer}}
+{{/* End of configuration values */}}
+
 {{if not .ExecData}}
-	{{if not (hasPermissions .Permissions.Administrator)}}
-		This command requires administrator permission!
+	{{$hasPerms := false}}
+	{{range $permissions}}
+		{{- $hasPerms = or $hasPerms (hasPermissions .) -}}
+	{{end}}
+	{{if not $hasPerms}}
+		You don't have permission to run this command!
 		{{return}}
 	{{end}}
 

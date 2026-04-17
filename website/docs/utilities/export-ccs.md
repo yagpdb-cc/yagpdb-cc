@@ -4,7 +4,7 @@ title: Export CCs
 
 Export all custom commands in the server as files with additional metadata.
 
-:::note
+:::tip
 
 Executing this script in a ticket channel allows you to instruct YAGPDB.xyz to bundle all of the exported files in a zip archive!
 
@@ -14,6 +14,11 @@ Executing this script in a ticket channel allows you to instruct YAGPDB.xyz to b
 
 **Type:** `Command`<br />
 **Trigger:** `export-ccs`
+
+## Configuration
+
+- `$permissions`<br />
+  The triggering user must have at least one of the listed permissions to run the export CCs command.
 
 ## Code
 
