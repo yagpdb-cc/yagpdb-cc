@@ -6,15 +6,11 @@
 */}}
 
 {{/* Configuration values */}}
-{{$permissions := cslice .Permissions.Administrator .Permissions.ManageServer}}
+{{$permissions := bitwiseOr .Permissions.Administrator .Permissions.ManageServer}}
 {{/* End of configuration values */}}
 
 {{if not .ExecData}}
-	{{$hasPerms := false}}
-	{{range $permissions}}
-		{{- $hasPerms = or $hasPerms (hasPermissions .) -}}
-	{{end}}
-	{{if not $hasPerms}}
+    {{if not (hasPermissions $permissions)}}
 		You don't have permission to run this command!
 		{{return}}
 	{{end}}
