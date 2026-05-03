@@ -44,7 +44,7 @@
 						{{else if (or (not $error) (eq $error "Invalid User."))}} {{$error = print $error "\nInvalid Date (usually day 31 on a 30 day month, or 29 of Feb in a non leap year)"}}
 						{{end}}
 						{{if eq $counter 4}} {{$isValidDate = true}}
-							{{if lt ((currentTime.Sub $checkDate).Hours | toInt) 113880}} {{$isUnderAge = true}} {{end}}
+							{{if ($checkDate.AddDate 13 0 0).After currentTime}} {{$isUnderAge = true}} {{end}}
 						{{end}}
 					{{else}}
 						{{if $invertedOrder}} {{$error = $commonErrorInverted}}
@@ -66,6 +66,7 @@
 		{{end}}
 	{{end}}
 {{end}}
+
 {{if $isValidDate}}
 	{{$userMonth = printf "%d" $checkDate.Month | toInt}}
 	{{with (dbGet $userMonth "bdays").Value}}
@@ -76,9 +77,11 @@
 {{/* Work */}}
 {{if and $isUnderAge $kickUnderAge (not $banUnderAge) (not $isMod)}} {{execAdmin "kick" $user "We do not allow users under 13 in this server."}} {{end}}
 {{if and $isUnderAge $banUnderAge (not $isMod)}} {{execAdmin "ban" $user "We do not allow users under 13 in this server."}} {{end}}
+
 {{with .ExecData}}
-	{{if eq (printf "%T" .) "int64"}} {{scheduleUniqueCC $.CCID $channelID . "bdays" true}} {{else}} {{scheduleUniqueCC $.CCID $channelID 86400 "bdays" true}} {{end}}
-	{{dbDel (currentTime.Add (mult -24 $.TimeHour | toDuration)).Day "bdayannounced"}}
+	{{scheduleUniqueCC $.CCID $channelID 86400 "bdays" true}}
+	{{dbDel (currentTime.AddDate 0 0 -1).Day "bdayannounced"}}
+	
 	{{with (dbGet (printf "%d" currentTime.Month | toInt) "bdays").Value}} {{$today = sdict .}} {{end}}
 	{{range (index $today (str currentTime.Day))}}
 		{{- if getMember .}}
@@ -86,7 +89,7 @@
 			{{- $send = true}}
 		{{- end -}}
 	{{end}}
-	{{if and $send (not (dbGet currentTime.Day "bdayannounced"))}} {{dbSet currentTime.Day "bdayannounced" true}} {{sendMessageNoEscape nil $bdayMsg}} {{end}}
+	{{if and $send (not (dbGet currentTime.Day "bdayannounced"))}}{{dbSet currentTime.Day "bdayannounced" true}}{{sendMessageNoEscape nil $bdayMsg}}{{end}}
 {{else}}
 	{{if $isMod}}
 		{{if and (reFind `(?i)set` .Cmd) $isValidDate (not $error)}}
@@ -116,42 +119,42 @@
 				{{end}}
 				{{if not $error}}
 					{{dbSet $user.ID "bday" $checkDate.UTC}}
-					{{if $invertedOrder}} {{$out = print "The bday of " $user.Mention " was set to be " ($checkDate.Format "01/02/2006")}}
-					{{else}} {{$out = print "The bday of " $user.Mention " was set to be " ($checkDate.Format "02/01/2006")}}
-					{{end}}
+					{{$f := "02/01/2006"}} {{if $invertedOrder}} {{$f = "01/02/2006"}} {{end}}
+					{{$out = print "The bday of " $user.Mention " was set to be " ($checkDate.Format $f)}}
 				{{end}}
 			{{else}}
-				{{if $invertedOrder}} {{$error = "Not enough arguments passed.\nCorrect usage is: `" $prefix "set 12/20/1998 @user`"}}
-				{{else}} {{$error = print "Not enough arguments passed.\nCorrect usage is: `" $prefix "set 20/12/1998 @user`"}}
-				{{end}}
+				{{$error = "Not enough arguments passed.\nCorrect usage is: `"}}{{if $invertedOrder}}{{$error = print $error $prefix "set 12/20/1998 @user`"}}{{else}}{{$error = print $error $prefix "set 20/12/1998 @user`"}}{{end}}
 			{{end}}
 		{{else if reFind `(?i)stop` .Cmd}}
 			{{cancelScheduledUniqueCC .CCID "bdays"}}
 			{{$out = "I will no longer congratulate people on their birthday."}}
 		{{else if reFind `start` .Cmd}}
 			{{with .CmdArgs}} {{with index . 0 | toDuration}} {{$delay = add $delay .Seconds}} {{end}} {{end}}
-			{{if or (ne (currentTime.Add (mult 1000000000 $delay | toDuration)).Day ((currentTime.Add (mult 24 .TimeHour | toDuration)).Day)) (ge $delay 172800)}} {{$error = "Too long delay to start sending bday messages. You can only set delays up to tommorrow at 00:00 UTC"}}
+			{{$target := currentTime.Add (mult 1000000000 $delay | toDuration)}}
+			{{$tomorrow := currentTime.AddDate 0 0 1}}
+			{{if or (ne $target.Day $tomorrow.Day) (ge $delay 172800)}}
+				{{$error = "Too long delay to start sending bday messages. You can only set delays up to tommorrow at 00:00 UTC"}}
 			{{else}}
-				{{execCC .CCID $channelID 1 $delay}}
-				{{$out = print "All set! Every day at **" ((currentTime.Add (mult 1000000000 $delay | toDuration)).Format "15:04 UTC") "** I will congratulate users if its their birthday."}}
+				{{scheduleUniqueCC .CCID $channelID $delay "bdays" true}}
+				{{$out = print "All set! Every day at **" ($target.Format "15:04 UTC") "** I will congratulate users if its their birthday."}}
 			{{end}}
-		{{else if reFind `(?i)get` .Cmd}}
-			{{with .CmdArgs}}
-				{{with index . 0 | userArg}}
-					{{$user = .}}
-					{{with (dbGet .ID "bday").Value}}
-						{{if $invertedOrder}} {{$out = print "The bday of " $user.Mention " is " (.UTC.Format "01/02/2006")}}
-						{{else}} {{$out = print "The bday of " $user.Mention " is " (.UTC.Format "02/01/2006")}}
-						{{end}}
-					{{else}}
-						{{$error = "This user does not have a bday set."}}
-					{{end}}
+		{{end}}
+	{{end}}
+	{{if and (reFind `(?i)get` .Cmd) (not $error)}}
+		{{with .CmdArgs}}
+			{{with index . 0 | userArg}}
+				{{$user = .}}
+				{{with (dbGet .ID "bday").Value}}
+					{{$f := "02/01/2006"}} {{if $invertedOrder}} {{$f = "01/02/2006"}} {{end}}
+					{{$out = print "The bday of " $user.Mention " is " (.UTC.Format $f)}}
 				{{else}}
-					{{$error = $synt}}
+					{{$error = "This user does not have a bday set."}}
 				{{end}}
 			{{else}}
 				{{$error = $synt}}
 			{{end}}
+		{{else}}
+			{{$error = $synt}}
 		{{end}}
 	{{end}}
 	{{if and (reFind `(?i)my` .Cmd) $isValidDate (not $out) (or (and (or $kickUnderAge $banUnderAge) (not $isUnderAge)) (and (not $kickUnderAge) (not $banUnderAge)))}}
@@ -169,9 +172,8 @@
 				{{dbSet $userMonth "bdays" $insideMap}}
 			{{end}}
 			{{dbSet .User.ID "bday" $checkDate.UTC}}
-			{{if $invertedOrder}} {{$out = print "Your birthday was set to be " ($checkDate.Format "01/02/2006")}}
-			{{else}} {{$out = print "Your birthday was set to be " ($checkDate.Format "02/01/2006")}}
-			{{end}}
+			{{$f := "02/01/2006"}} {{if $invertedOrder}} {{$f = "01/02/2006"}} {{end}}
+			{{$out = print "Your birthday was set to be " ($checkDate.Format $f)}}
 		{{else}}
 			{{$error = "Your birthday has already been set."}}
 		{{end}}
@@ -203,8 +205,16 @@
 				{{- $listIn = $listIn.Append .}}
 			{{- end -}}
 		{{end}}
-		{{$map.Set $.Day $listIn}}
-		{{dbSet $.Month "bdays" $map}}
+		{{if eq (len $listIn) 0}}
+			{{$map.Del $.Day}}
+		{{else}}
+			{{$map.Set $.Day $listIn}}
+		{{end}}
+		{{if eq (len $map) 0}}
+			{{dbDel $.Month "bdays"}}
+		{{else}}
+			{{dbSet $.Month "bdays" $map}}
+		{{end}}
 	{{end}}
 {{end}}
 
