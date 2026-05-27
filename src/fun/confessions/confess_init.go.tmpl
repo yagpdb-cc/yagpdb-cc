@@ -1,0 +1,28 @@
+{{/*
+	Sets up the confessions commands and creates the confession button in the channel it's ran in.
+
+	See <https://yagpdb-cc.github.io/fun/confessions> for more info.
+
+	Author: creature-features <https://github.com/creature-features>
+*/}}
+
+{{/* Configuration values */}}
+{{$REQUIRED_PERMISSIONS := bitwiseOr .Permissions.ManageServer}}	{{/* This is the permission to check for ban actions */}}
+{{/* End of configuration values */}}
+
+{{$config := sdict 
+	"RequiredPerms" (toString $REQUIRED_PERMISSIONS)
+}}
+{{dbSet .Guild.ID "confessConfig" $config}}
+
+{{deleteTrigger}}
+
+{{if not (hasPermissions $REQUIRED_PERMISSIONS)}}
+	{{$warnMsg := sendMessageRetID nil (complexMessage "content" "You lack the required permissions to use this command." "allowed_mentions" (sdict "replied_user" true) "reply" .Message.ID )}}
+	{{deleteMessage .Channel.ID $warnMsg 5}}
+	{{return}}
+{{end}}
+
+{{$btn1 := cbutton "label" "Submit a confession!" "custom_id" "modalprompt-confessSubmit"}}
+{{$message := complexMessage "buttons" $btn1}}
+{{sendMessage nil $message}}
