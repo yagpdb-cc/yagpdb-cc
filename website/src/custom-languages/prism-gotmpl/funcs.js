@@ -205,6 +205,7 @@ export const funcs = [
 	'sendTemplateDM',
 	'seq',
 	'setRoles',
+	'setVoiceStatus',
 	'shuffle',
 	'sleep',
 	'slice',
